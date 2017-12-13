@@ -4,7 +4,8 @@
     angular.module('znk.infra-web-app.znkLessonNotes')
         .component('znkMultipleChoice', {
             bindings: {
-                lesson: '='
+                lesson: '=',
+                lessonSummary: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-rating-popup/lesson-rating/znk-multiple-choice/multiple-choice.component.html',
             controllerAs: 'vm',
@@ -15,14 +16,14 @@
                 this.choicesArr = [];
 
                 this.$onInit = () => {
-                    this.lesson.studentFeedback.multipleChoice = this.lesson.studentFeedback.multipleChoice || [];
+                    this.lessonSummary.studentFeedback.multipleChoice = this.lessonSummary.studentFeedback.multipleChoice || [];
                     this.getTranslations().then((translations) => {
                         this.choicesArr = Object.keys(translations).map(key => {
                             return { name: translations[key], active: false };
                         });
 
-                        if (this.lesson.studentFeedback.multipleChoice.length) {
-                            this.lesson.studentFeedback.multipleChoice.forEach(studentChoice => {
+                        if (this.lessonSummary.studentFeedback.multipleChoice.length) {
+                            this.lessonSummary.studentFeedback.multipleChoice.forEach(studentChoice => {
                                 this.choicesArr.forEach(choiceObj => {
                                     if (choiceObj.name === studentChoice) {
                                         choiceObj.active = true;
@@ -42,16 +43,17 @@
                         `${this.nameSpace}.CHOICE5`,
                         `${this.nameSpace}.CHOICE6`,
                         `${this.nameSpace}.CHOICE7`,
+                        `${this.nameSpace}.CHOICE8`,
                     ]);
                 };
 
                 this.updateChoice = (choice) => {
                     choice.active = !choice.active;
                     if (choice.active) {
-                        this.lesson.studentFeedback.multipleChoice.push(choice.name);
+                        this.lessonSummary.studentFeedback.multipleChoice.push(choice.name);
                     } else {
-                        this.lesson.studentFeedback.multipleChoice =
-                            this.lesson.studentFeedback.multipleChoice.filter(item => item !== choice.name);
+                        this.lessonSummary.studentFeedback.multipleChoice =
+                            this.lessonSummary.studentFeedback.multipleChoice.filter(item => item !== choice.name);
                     }
                 };
 

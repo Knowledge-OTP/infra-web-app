@@ -10,7 +10,7 @@
         </svg-icon>
     </div>
 
-    <div class="bad-rating-wrapper" ng-if="vm.lesson.studentFeedback.rating <= vm.MIN_STATR_FOR_RATING_FEEDBACK">
+    <div class="bad-rating-wrapper" ng-if="vm.lessonSummary.studentFeedback.rating <= vm.MIN_STATR_FOR_RATING_FEEDBACK">
 
         <znk-multiple-choice lesson="vm.lesson" ng-if="!vm.isAdmin"></znk-multiple-choice>
 
@@ -20,11 +20,11 @@
             <div class="lato-14-n other">{{'LESSON_NOTES.LESSON_RATING_POPUP.OTHER' | translate}}</div>
             <textarea class="lato-14-n note-txt"
                       placeholder="{{'LESSON_NOTES.LESSON_RATING_POPUP.FREE_TEXT_PLACEHOLDER' | translate}}"
-                      ng-model="vm.lesson.studentFeedback.studentFreeText"></textarea>
+                      ng-model="vm.lessonSummary.studentFeedback.studentFreeText"></textarea>
         </div>
 
     </div>
 
-    <znk-lesson-started-late lesson="vm.lesson" user-context="vm.userContext"></znk-lesson-started-late>
+    <znk-lesson-started-late lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-started-late>
 
 </div>

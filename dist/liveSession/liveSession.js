@@ -50,14 +50,14 @@
                                   UserProfileService, LiveSessionUiSrv, StudentService, UtilitySrv) {
                 'ngInject';
 
-                let SESSION_DURATION = {
+                let SESSION_SETTINGS = {
                     marginBeforeSessionStart: ENV.liveSession.marginBeforeSessionStart,
                     marginAfterSessionStart: ENV.liveSession.marginAfterSessionStart,
-                    length: ENV.liveSession.sessionLength,
+                    length: ENV.liveSession.length,
                     queryLessonStart: ENV.liveSession.queryLessonStart,
+                    queryLessonMultipleByNum: ENV.queryLessonMultipleByNum // multiple this number by the lesson length for the getScheduledLesson query
                 };
-                let queryLessonNum = 4; // multiple this number by the lesson length for the getScheduledLesson query
-                let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
+                let liveSessionSettingsProm = ZnkLessonNotesSrv.getGlobalVariables().then(globalVariables => globalVariables.liveSession);
                 let educatorProfileProm = UserProfileService.getProfile();
 
                 this.$onInit = () => {
@@ -122,7 +122,7 @@
                                     LiveSessionUiSrv.closePopup();
                                     this.showSessionModal();
                                 }
-                            });
+                            }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
                     });
                 };
 
@@ -144,10 +144,10 @@
                     return $q.all(dataPromMap).then(dataMap => {
                         this.liveSessionSettings = dataMap.liveSessionSettings;
                         this.educatorProfile = dataMap.educatorProfile;
-                        SESSION_DURATION = this.liveSessionSettings ? this.liveSessionSettings : SESSION_DURATION;
+                        SESSION_SETTINGS = this.liveSessionSettings ? this.liveSessionSettings : SESSION_SETTINGS;
                         let now = Date.now();
-                        let calcStartTime = now - SESSION_DURATION.queryLessonStart;
-                        let calcEndTime = now + (SESSION_DURATION.length * queryLessonNum);
+                        let calcStartTime = now - SESSION_SETTINGS.queryLessonStart;
+                        let calcEndTime = now + (SESSION_SETTINGS.length * SESSION_SETTINGS.queryLessonMultipleByNum);
                         let dateRange = {
                             startDate: calcStartTime,
                             endDate: calcEndTime
@@ -155,7 +155,12 @@
 
                         return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid)
                             .then(lessons => {
-                                return this.getLessonInRange(lessons.data);
+                                if (lessons && lessons.length) {
+                                    lessons.sort(UtilitySrv.array.sortByField('date'));
+                                    return this.getLessonInRange(lessons);
+                                } else {
+                                    return null;
+                                }
                             }, err => $log.error('getScheduledLesson: getLessonsByStudentIds Error: ', err));
                     });
 
@@ -168,7 +173,7 @@
                         // No multiple lesson return single lesson
                         if (lessons.length === 1) {
                             scheduledLessonMap.scheduledLesson = lessons.pop();
-                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_DURATION.length;
+                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
                         } else {
                             $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
                             scheduledLessonMap = this.checkBack2BackLesson(lessons);
@@ -184,15 +189,15 @@
                     let back2BackLessons = [];
                     let now = Date.now();
                     lessons.forEach(lesson => {
-                        let startTimeRange = lesson.date - SESSION_DURATION.marginBeforeSessionStart;
-                        let endTimeRange = lesson.date + SESSION_DURATION.length + SESSION_DURATION.marginAfterSessionStart;
+                        let startTimeRange = lesson.date - SESSION_SETTINGS.marginBeforeSessionStart;
+                        let endTimeRange = lesson.date + SESSION_SETTINGS.length + SESSION_SETTINGS.marginAfterSessionStart;
                         if ((startTimeRange < now < endTimeRange) && !scheduledLessonMap.scheduledLesson) {
                             scheduledLessonMap.scheduledLesson = lesson;
                             back2BackLessons.push(lesson);
-                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_DURATION.length;
+                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
                         } else if (scheduledLessonMap.scheduledLesson) {
                             // must be second iteration or above
-                            if ((back2BackLessons[back2BackLessons.length-1].date + SESSION_DURATION.length) === lesson.date) {
+                            if ((back2BackLessons[back2BackLessons.length-1].date + SESSION_SETTINGS.length) === lesson.date) {
                                 $log.debug(`checkBack2BackLesson: b2b lesson found. lessonId: ${lesson.id}`);
                                 // scenario when the second lesson in the array is the actual scheduledLesson and not the first one
                                 if (lesson.date < now) {
@@ -200,18 +205,22 @@
                                     scheduledLessonMap.scheduledLesson = lesson;
                                 }
                                 back2BackLessons.push(lesson);
-                                scheduledLessonMap.expectedSessionEndTime = lesson.date + SESSION_DURATION.length;
+                                scheduledLessonMap.expectedSessionEndTime = lesson.date + SESSION_SETTINGS.length;
                             } else {
                                 $log.debug(`checkBack2BackLesson: this lesson isn't b2b lesson.`);
                             }
                         }
                     });
 
+                    // add lessonSummaryId to scheduledLesson or all back2BackLessons if there isn't
+                    let newLessonSummaryId = UtilitySrv.general.createGuid();
+
                     if (back2BackLessons.length > 1) {
                         if (!back2BackLessons[0].backToBackId) {
                             let newB2BLessonId = UtilitySrv.general.createGuid();
                             let updateB2BLessonProms = [];
                             back2BackLessons.forEach(b2bLesson => {
+                                b2bLesson.lessonSummaryId = b2bLesson.lessonSummaryId || newLessonSummaryId;
                                 b2bLesson.backToBackId = newB2BLessonId;
                                 updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
                             });
@@ -219,10 +228,11 @@
                                 .then(() => $log.debug(`checkBack2BackLesson: All back2backLesson are updated.`))
                                 .catch((err) => $log.error('checkBack2BackLesson: Failed to update back2backLesson. Error: ', err));
                         } else {
-                            $log.debug(`checkBack2BackLesson: back2BackLessons[0] al ready have backToBackId`);
+                            $log.debug(`checkBack2BackLesson: back2BackLessons[0] all ready have backToBackId`);
                         }
                     } else {
-                        $log.debug(`checkBack2BackLesson: back2BackLessons.length === 0`);
+                        scheduledLessonMap.scheduledLesson.lessonSummaryId = scheduledLessonMap.scheduledLesson.lessonSummaryId || newLessonSummaryId;
+                        $log.debug(`checkBack2BackLesson: no back2back lesson just single scheduledLesson`);
                     }
 
                     return scheduledLessonMap;
@@ -272,7 +282,8 @@
             controller: ["ENV", "$mdDialog", "LiveSessionSubjectSrv", "LiveSessionSrv", "ZnkLessonNotesSrv", function (ENV, $mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, ZnkLessonNotesSrv) {
                 'ngInject';
 
-                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
+                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getGlobalVariables()
+                     .then(globalVariables => globalVariables.liveSession);
 
                 this.$onInit = () =>  {
                     this.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
@@ -281,7 +292,7 @@
 
                 this.startSession = (sessionSubject) => {
                     liveSessionSettingsProm.then(liveSessionSettings => {
-                        let liveSessionLength = liveSessionSettings.length || ENV.liveSession.sessionLength;
+                        let liveSessionLength = liveSessionSettings.length || ENV.liveSession.length;
                         let expectedSessionEndTime = LiveSessionSrv._getRoundTime() + liveSessionLength;
                         let lessonData = { sessionSubject, expectedSessionEndTime };
                         LiveSessionSrv.startLiveSession(this.student, lessonData);
@@ -364,8 +375,8 @@
                   ZnkLessonNotesSrv, LessonStatusEnum, LessonNotesStatusEnum, $window, LiveSessionSubjectSrv) {
             'ngInject';
 
-            let SESSION_DURATION = {
-                length: ENV.liveSession.sessionLength,
+            let SESSION_SETTINGS = {
+                length: ENV.liveSession.length,
                 extendTime: ENV.liveSession.sessionExtendTime,
             };
 
@@ -401,8 +412,6 @@
                 return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then((liveSessionData) => {
                     liveSessionData.startTime = this._getRoundTime();
                     liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
-                    // update lesson in documentDB/cosmosDB
-                    this._updateLesson(liveSessionData);
                     return liveSessionData.$save();
                 });
             };
@@ -449,8 +458,8 @@
 
                     this._moveToArchive(data.liveSessionData);
 
-                    // update lesson in documentDB/cosmosDB
-                    this._updateLesson(data.liveSessionData);
+                    // create lesson summary in documentDB/cosmosDB
+                    this._saveLessonSummary(data.liveSessionData);
 
                     return data.storage.update(dataToSave);
 
@@ -585,11 +594,11 @@
                     }
                     LiveSessionDataGetterSrv.getLiveSessionDuration().then((liveSessionDuration) => {
                         if (liveSessionDuration) {
-                            SESSION_DURATION = liveSessionDuration;
+                            SESSION_SETTINGS = liveSessionDuration;
                         }
                         liveSessionInterval.interval = $interval(() => {
                             let liveSessionDuration = (this._getRoundTime() - activeLiveSessionDataFromAdapter.startTime);
-                            let EndAlertTime = SESSION_DURATION.length + activeLiveSessionDataFromAdapter.extendTime;
+                            let EndAlertTime = SESSION_SETTINGS.length + activeLiveSessionDataFromAdapter.extendTime;
 
                             if (liveSessionDuration >= EndAlertTime && !liveSessionInterval.isSessionAlertShown) {
                                 LiveSessionUiSrv.showSessionEndAlertPopup().then(() => {
@@ -604,51 +613,39 @@
                 }
             };
 
-            this._updateLesson = (liveSessionData) => {
+            this._updateLessonsStatus = (liveSessionData) => {
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
-                            let updatePromArr = [];
                             if (liveSessionData.backToBackId) {
-                                // update all backToBack lessons
-                                ZnkLessonNotesSrv.getLessonsByBackToBackId(liveSessionData.backToBackId)
-                                    .then(backToBackLessonsRes => {
-                                        let backToBackLessonsArr = backToBackLessonsRes.data;
-                                        backToBackLessonsArr.forEach(b2bLesson => {
-                                            updatePromArr.push(this.updateSingleLesson(b2bLesson, liveSessionData));
-                                        });
-                                    });
+                                return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.backToBackId, LessonStatusEnum.ATTENDED.enum, true);
                             } else {
-                                ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lessonData => {
-                                    let lesson = lessonData.data;
-                                    updatePromArr.push(this.updateSingleLesson(lesson, liveSessionData));
-                                });
+                                return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.lessonId, LessonStatusEnum.ATTENDED.enum, false);
                             }
-                            return Promise.all(updatePromArr)
-                                .then(updatedLessons => $log.debug('_updateLesson: update lessons for startTime & status. updatedLessons: ', updatedLessons))
-                                .catch (err => $log.error('_updateLesson: updateLesson failed. Error: ', err));
-
                         } else {
                             $log.debug('_updateLesson: darkFeatures in OFF');
                         }
-                    });
+                    }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
-            this.updateSingleLesson = (lesson, liveSessionData) => {
-                // update lesson startTime, endTime and status
-                lesson.lessonSummary = lesson.lessonSummary || {};
-                lesson.lessonSummary.startTime = lesson.lessonSummary.startTime ? lesson.lessonSummary.startTime :
-                    liveSessionData.startTime ? liveSessionData.startTime: null;
-                lesson.lessonSummary.endTime = lesson.lessonSummary.endTime ? lesson.lessonSummary.endTime :
-                    liveSessionData.endTime ? liveSessionData.endTime : null;
-                lesson.status = lesson.status === LessonStatusEnum.SCHEDULED.enum ?
-                    LessonStatusEnum.ATTENDED.enum : lesson.status;
-                lesson.lessonSummary.lessonNotes = lesson.lessonSummary.lessonNotes || {};
-                lesson.lessonSummary.lessonNotes.status = lesson.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
-                lesson.lessonSummary.liveSessions = lesson.lessonSummary.liveSessions || [];
-                lesson.lessonSummary.liveSessions.push(liveSessionData.guid);
-                lesson.lessonSummary.liveSessions = UtilitySrv.array.removeDuplicates(lesson.lessonSummary.liveSessions);
-                return ZnkLessonNotesSrv.updateLesson(lesson);
+            this._saveLessonSummary = (liveSessionData) => {
+                return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                    .then(isDarkFeaturesValid => {
+                        if (isDarkFeaturesValid) {
+                            let lessonSummary = {
+                                id: liveSessionData.lessonSummaryId,
+                                startTime: liveSessionData.startTime,
+                                endTime: liveSessionData.endTime,
+                                lessonNotes: {
+                                    status: LessonNotesStatusEnum.PENDING_NOTES.enum
+                                },
+                                liveSessions: [liveSessionData.guid]
+                            };
+                            return ZnkLessonNotesSrv.saveLessonSummary(lessonSummary);
+                        } else {
+                            $log.debug('_updateLesson: darkFeatures in OFF');
+                        }
+                    }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
             this._getRoundTime = () => {
@@ -746,10 +743,18 @@
                             startTime: null, // when student confirm the lesson request
                             endTime: null,
                             duration: null,
-                            sessionSubject: LiveSessionSubjectSrv.getSessionSubject(lessonData),
-                            lessonId: lessonData.scheduledLesson ? lessonData.scheduledLesson.id : null,
-                            backToBackId: lessonData.scheduledLesson ? lessonData.scheduledLesson.backToBackId : null
+                            sessionSubject: LiveSessionSubjectSrv.getSessionSubject(lessonData)
                         };
+
+                        if (lessonData.scheduledLesson) {
+                            // add lessonSummaryId prop to liveSessionObj to popup lessonNotes/rating in the end of the lesson
+                            newLiveSessionData.lessonSummaryId = lessonData.scheduledLesson.lessonSummaryId;
+                            if (lessonData.scheduledLesson.backToBackId) {
+                                newLiveSessionData.backToBackId = lessonData.scheduledLesson.backToBackId;
+                            } else {
+                                newLiveSessionData.lessonId = lessonData.scheduledLesson.id;
+                            }
+                        }
 
                         angular.extend(data.newLiveSessionData, newLiveSessionData);
 
@@ -794,10 +799,10 @@
             this.confirmExtendSession = () => {
                 LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid)
                     .then((liveSessionData) => {
-                    liveSessionData.extendTime += SESSION_DURATION.extendTime;
+                    liveSessionData.extendTime += SESSION_SETTINGS.extendTime;
                     return liveSessionData.$save();
                 }).then(() => {
-                    let extendTimeInMin = SESSION_DURATION.extendTime / 60000; // convert to minutes
+                    let extendTimeInMin = SESSION_SETTINGS.extendTime / 60000; // convert to minutes
                     $log.debug('confirmExtendSession: Live session is extend by ' + extendTimeInMin + ' minutes.');
                 }).catch(() => {
                     $log.debug('confirmExtendSession: Failed to save extend live session in guid: ' + activeLiveSessionDataFromAdapter.guid);
@@ -920,7 +925,7 @@
                                 LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
                             }
                         }
-                    });
+                    }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
             LiveSessionEventsSrv._handelLiveSessionConfirmed = (liveSessionData) => {
@@ -944,34 +949,43 @@
 
             LiveSessionEventsSrv._handelLiveSessionEnded = (liveSessionData) => {
                 LiveSessionUiSrv.closePopup();
+                // determine if student decline the live session request
+                const isStudentDeclineTheSession = !liveSessionData.startTime;
+
                 if (liveSessionData.studentId !== currUid) {
                     LiveSessionSrv.hangCall(liveSessionData.studentId);
                     LiveSessionSrv._destroyCheckDurationInterval();
                 }
 
-                LiveSessionUiSrv.showEndSessionPopup()
-                    .then(() => {
-                        LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
-                            .then(isDarkFeaturesValid => {
-                                if (isDarkFeaturesValid) {
-                                    $log.debug('darkFeatures in ON');
-                                    if (liveSessionData.lessonId) {
-                                        ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
-                                            if (liveSessionData.educatorId === currUid) {
-                                                ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson.data, UserTypeContextEnum.EDUCATOR.enum);
-                                            } else {
-                                                ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson.data, UserTypeContextEnum.STUDENT.enum);
-                                            }
-
-                                        });
+                if (isStudentDeclineTheSession) {
+                    if (liveSessionData.educatorId === currUid) {
+                        LiveSessionUiSrv.showStudentDeclineSessionPopup();
+                    }
+                } else {
+                    LiveSessionUiSrv.showEndSessionPopup()
+                        .then(() => {
+                            LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                                .then(isDarkFeaturesValid => {
+                                    if (isDarkFeaturesValid) {
+                                        $log.debug('darkFeatures in ON');
+                                        if (liveSessionData.lessonSummaryId) {
+                                            ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId).then(lessonSummary => {
+                                                if (liveSessionData.educatorId === currUid) {
+                                                    ZnkLessonNotesUiSrv.openLessonNotesPopup(lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
+                                                } else {
+                                                    ZnkLessonNotesUiSrv.openLessonRatingPopup(lessonSummary, UserTypeContextEnum.STUDENT.enum);
+                                                }
+                                            });
+                                        } else {
+                                            $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
+                                        }
                                     } else {
-                                        $log.debug('endLiveSession: There is NO lessonId on liveSessionData');
+                                        $log.debug('darkFeatures in OFF');
                                     }
-                                } else {
-                                    $log.debug('darkFeatures in OFF');
-                                }
-                            });
-                    });
+                                }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
+                        });
+                }
+
                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                 // Security check to insure there isn't active session
                 LiveSessionSrv._moveToArchive(liveSessionData);
@@ -1097,8 +1111,8 @@
             let childScope, liveSessionPhElement, readyProm;
             let darkFeaturesValid = null;
 
-            let SESSION_DURATION = {
-                length: ENV.liveSession.sessionLength,
+            let SESSION_SETTINGS = {
+                length: ENV.liveSession.length,
                 extendTime: ENV.liveSession.sessionExtendTime,
             };
 
@@ -1113,10 +1127,10 @@
                 LiveSessionDataGetterSrv.getLiveSessionDuration()
                     .then((liveSessionDuration) => {
                         if (liveSessionDuration) {
-                            SESSION_DURATION = liveSessionDuration;
+                            SESSION_SETTINGS = liveSessionDuration;
                         }
                     }).catch(err => {
-                    $log.error('LiveSessionUiSrv: getLiveSessionDuration failure' + err);
+                    $log.error('LiveSessionUiSrv: getLiveSessionDuration Error: ' + err);
                 });
             };
 
@@ -1173,15 +1187,14 @@
                         let popUpInstance = PopUpSrv.warning(
                             translations.title,
                             translations.content,
-                            translations.cancelBtnTitle,
-                            translations.acceptBtnTitle
+                            translations.acceptBtnTitle,
+                            translations.cancelBtnTitle
                         );
                         return popUpInstance.promise
-                        // todo: figure out why it's opposite
                             .then(res => $q.resolve(res))
                             .catch(err => $q.reject(err));
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showStudentConfirmationPopUp Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -1195,7 +1208,7 @@
                     .then(translations => {
                         PopUpSrv.wait(translations.title, translations.content, translations.cancelBtnTitle);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showEducatorPendingPopUp translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showEducatorPendingPopUp Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -1207,7 +1220,7 @@
                     .then(translations => {
                         PopUpSrv.wait(translations.title);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showWaitPopUp translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showWaitPopUp Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -1215,7 +1228,7 @@
             LiveSessionUiSrv.showSessionEndAlertPopup = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT');
-                translationsPromMap.content = $translate('LIVE_SESSION.EXTEND_SESSION', {extendTime: SESSION_DURATION.extendTime / 60000});
+                translationsPromMap.content = $translate('LIVE_SESSION.EXTEND_SESSION', {extendTime: SESSION_SETTINGS.extendTime / 60000});
                 translationsPromMap.extendBtnTitle = $translate('LIVE_SESSION.EXTEND');
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap)
@@ -1231,7 +1244,7 @@
                             .then(res => $q.reject(res))
                             .catch(err => $q.resolve(err));
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showSessionEndAlertPopup translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showSessionEndAlertPopup Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -1251,7 +1264,27 @@
                             .then(res => $q.resolve(res))
                             .catch(err => $q.reject(err));
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showEndSessionPopup translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showEndSessionPopup Error: ' + err);
+                        return $q.reject(err);
+                    });
+            };
+
+            LiveSessionUiSrv.showStudentDeclineSessionPopup = () => {
+                LiveSessionUiSrv.closePopup();
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
+                translationsPromMap.content = $translate('LIVE_SESSION.STUDENT_DECLINE_SESSION');
+                return $q.all(translationsPromMap)
+                    .then(translations => {
+                        let popUpInstance = PopUpSrv.info(
+                            translations.title,
+                            translations.content
+                        );
+                        return popUpInstance.promise
+                            .then(res => $q.resolve(res))
+                            .catch(err => $q.reject(err));
+                    }).catch(err => {
+                        $log.error('LiveSessionUiSrv: showStudentDeclineSessionPopup Error ' + err);
                         return $q.reject(err);
                     });
             };
@@ -1264,7 +1297,7 @@
                     .then(translations => {
                         PopUpSrv.info(translations.title, translations.content);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showIncompleteDiagnostic translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showIncompleteDiagnostic Error: ' + err);
                         return $q.reject(err);
                     });
             };
@@ -1277,7 +1310,7 @@
                     .then(translations => {
                         PopUpSrv.info(translations.title, translations.content);
                     }).catch(err => {
-                        $log.error('LiveSessionUiSrv: showNoLessonScheduledPopup translate failure' + err);
+                        $log.error('LiveSessionUiSrv: showNoLessonScheduledPopup Error: ' + err);
                         return $q.reject(err);
                     });
             };

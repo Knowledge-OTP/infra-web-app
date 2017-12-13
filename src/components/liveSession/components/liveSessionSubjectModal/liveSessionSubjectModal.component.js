@@ -12,7 +12,8 @@
             controller: function (ENV, $mdDialog, LiveSessionSubjectSrv, LiveSessionSrv, ZnkLessonNotesSrv) {
                 'ngInject';
 
-                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getLiveSessionSettings();
+                 let liveSessionSettingsProm = ZnkLessonNotesSrv.getGlobalVariables()
+                     .then(globalVariables => globalVariables.liveSession);
 
                 this.$onInit = () =>  {
                     this.sessionSubjects = LiveSessionSubjectSrv.getLiveSessionTopics();
@@ -21,7 +22,7 @@
 
                 this.startSession = (sessionSubject) => {
                     liveSessionSettingsProm.then(liveSessionSettings => {
-                        let liveSessionLength = liveSessionSettings.length || ENV.liveSession.sessionLength;
+                        let liveSessionLength = liveSessionSettings.length || ENV.liveSession.length;
                         let expectedSessionEndTime = LiveSessionSrv._getRoundTime() + liveSessionLength;
                         let lessonData = { sessionSubject, expectedSessionEndTime };
                         LiveSessionSrv.startLiveSession(this.student, lessonData);

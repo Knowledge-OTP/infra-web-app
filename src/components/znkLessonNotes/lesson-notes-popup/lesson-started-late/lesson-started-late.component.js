@@ -5,6 +5,7 @@
         .component('znkLessonStartedLate', {
             bindings: {
                 lesson: '=',
+                lessonSummary: '=',
                 userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-started-late/lesson-started-late.component.html',
@@ -23,17 +24,17 @@
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
                     this.isTeacher = this.userContext === UserTypeContextEnum.EDUCATOR.enum;
                     if (this.isTeacher) {
-                        this.lesson.lessonNotes.isStudentLate = !ZnkLessonNotesUiSrv.isNullOrUndefined(this.lesson.lessonNotes.isStudentLate) ?
-                            this.lesson.lessonNotes.isStudentLate : false;
+                        this.lessonSummary.lessonNotes.isStudentLate = !ZnkLessonNotesUiSrv.isNullOrUndefined(this.lessonSummary.lessonNotes.isStudentLate) ?
+                            this.lessonSummary.lessonNotes.isStudentLate : false;
                     } else {
-                        this.lesson.studentFeedback.isTeacherLate = !ZnkLessonNotesUiSrv.isNullOrUndefined(this.lesson.studentFeedback.isTeacherLate) ?
-                            this.lesson.studentFeedback.isTeacherLate : false;
+                        this.lessonSummary.studentFeedback.isTeacherLate = !ZnkLessonNotesUiSrv.isNullOrUndefined(this.lessonSummary.studentFeedback.isTeacherLate) ?
+                            this.lessonSummary.studentFeedback.isTeacherLate : false;
                     }
                 };
 
                 this.determineLessonStartedLate = () => {
-                    ZnkLessonNotesSrv.getLiveSessionSettings().then(liveSessionSettings => {
-                        this.lessonStartedLate = (this.lesson.date + liveSessionSettings.lessonStartedLateTimeout) < this.lesson.startTime;
+                    ZnkLessonNotesSrv.getGlobalVariables().then(globalVariables => {
+                        this.lessonStartedLate = (this.lesson.date + globalVariables.liveSession.lessonStartedLateTimeout) < this.lessonSummary.startTime;
                     });
                 };
             }

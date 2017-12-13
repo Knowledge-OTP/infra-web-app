@@ -5,6 +5,7 @@
         .component('znkSendEmailNotes', {
             bindings: {
                 lesson: '=',
+                lessonSummary: '=',
                 userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-teacher-notes/send-email-notes/send-email-notes.component.html',
@@ -30,8 +31,8 @@
                     ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
                         .then(studentsProfiles => {
                             $log.debug(' studentsProfiles loaded: ', studentsProfiles);
-                            this.studentsProfiles = studentsProfiles.data;
-                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles.data;
+                            this.studentsProfiles = studentsProfiles;
+                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles;
                             this.studentsProfiles.forEach(profile => {
                                 const studentMail = profile.email || profile.userEmail || profile.authEmail;
                                 this.studentsMails.push(studentMail);
@@ -46,11 +47,11 @@
                     if (mailGroup === UserTypeContextEnum.STUDENT.enum) {
                         this.mailsToSend = bool ? this.mailsToSend.concat(this.studentsMails) :
                             this.mailsToSend.filter( item => !this.studentsMails.includes( item ));
-                        this.lesson.lessonNotes.sentMailToStudents = bool;
+                        this.lessonSummary.lessonNotes.sentMailToStudents = bool;
                     } else {
                         this.mailsToSend = bool ? this.mailsToSend.concat(this.parentsMails) :
                             this.mailsToSend.filter( item => !this.parentsMails.includes( item ));
-                        this.lesson.lessonNotes.sentMailToParents = bool;
+                        this.lessonSummary.lessonNotes.sentMailToParents = bool;
                     }
                     ZnkLessonNotesSrv._mailsToSend = this.mailsToSend;
                 };

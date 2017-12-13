@@ -44,7 +44,7 @@
                                 LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
                             }
                         }
-                    });
+                    }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
             LiveSessionEventsSrv._handelLiveSessionConfirmed = (liveSessionData) => {
@@ -68,34 +68,43 @@
 
             LiveSessionEventsSrv._handelLiveSessionEnded = (liveSessionData) => {
                 LiveSessionUiSrv.closePopup();
+                // determine if student decline the live session request
+                const isStudentDeclineTheSession = !liveSessionData.startTime;
+
                 if (liveSessionData.studentId !== currUid) {
                     LiveSessionSrv.hangCall(liveSessionData.studentId);
                     LiveSessionSrv._destroyCheckDurationInterval();
                 }
 
-                LiveSessionUiSrv.showEndSessionPopup()
-                    .then(() => {
-                        LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
-                            .then(isDarkFeaturesValid => {
-                                if (isDarkFeaturesValid) {
-                                    $log.debug('darkFeatures in ON');
-                                    if (liveSessionData.lessonId) {
-                                        ZnkLessonNotesSrv.getLessonById(liveSessionData.lessonId).then(lesson => {
-                                            if (liveSessionData.educatorId === currUid) {
-                                                ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson.data, UserTypeContextEnum.EDUCATOR.enum);
-                                            } else {
-                                                ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson.data, UserTypeContextEnum.STUDENT.enum);
-                                            }
-
-                                        });
+                if (isStudentDeclineTheSession) {
+                    if (liveSessionData.educatorId === currUid) {
+                        LiveSessionUiSrv.showStudentDeclineSessionPopup();
+                    }
+                } else {
+                    LiveSessionUiSrv.showEndSessionPopup()
+                        .then(() => {
+                            LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                                .then(isDarkFeaturesValid => {
+                                    if (isDarkFeaturesValid) {
+                                        $log.debug('darkFeatures in ON');
+                                        if (liveSessionData.lessonSummaryId) {
+                                            ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId).then(lessonSummary => {
+                                                if (liveSessionData.educatorId === currUid) {
+                                                    ZnkLessonNotesUiSrv.openLessonNotesPopup(lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
+                                                } else {
+                                                    ZnkLessonNotesUiSrv.openLessonRatingPopup(lessonSummary, UserTypeContextEnum.STUDENT.enum);
+                                                }
+                                            });
+                                        } else {
+                                            $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
+                                        }
                                     } else {
-                                        $log.debug('endLiveSession: There is NO lessonId on liveSessionData');
+                                        $log.debug('darkFeatures in OFF');
                                     }
-                                } else {
-                                    $log.debug('darkFeatures in OFF');
-                                }
-                            });
-                    });
+                                }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
+                        });
+                }
+
                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                 // Security check to insure there isn't active session
                 LiveSessionSrv._moveToArchive(liveSessionData);

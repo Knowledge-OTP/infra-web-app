@@ -5,6 +5,7 @@
         .component('znkLessonDetails', {
             bindings: {
                 lesson: '=',
+                lessonSummary: '=',
                 userContext: '='
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html',
@@ -42,7 +43,7 @@
                     this.dataPromMap.serviceList = ZnkLessonNotesSrv.getServiceList();
                     $q.all(this.dataPromMap).then((dataMap) => {
                         this.translate = dataMap.translate;
-                        this.serviceListMap = dataMap.serviceList.data;
+                        this.serviceListMap = dataMap.serviceList;
                         this.buildViewModal();
                     });
                 };
@@ -73,15 +74,15 @@
                                 field.text = this.transformDate(this.lesson.date, 'DATE');
                                 break;
                             case `${this.nameSpace}.START_TIME`:
-                                field.text = this.lesson.startTime ? this.transformDate(this.lesson.startTime, 'START_TIME') : null;
+                                field.text = this.lessonSummary.startTime ? this.transformDate(this.lessonSummary.startTime, 'START_TIME') : null;
                                 break;
                             case `${this.nameSpace}.DURATION`:
-                                field.text = this.lesson.startTime && this.lesson.end ?
-                                    this.transformDate(this.lesson.endTime - this.lesson.startTime, 'DURATION') : null;
+                                field.text = this.lessonSummary.startTime && this.lessonSummary.endTime ?
+                                    this.transformDate(this.lessonSummary.endTime - this.lessonSummary.startTime, 'DURATION') : null;
                                 break;
                             case `${this.nameSpace}.STATUS`:
-                                this.lessunStatus = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
-                                field.text = this.lessunStatus.val;
+                                this.lessonStatus = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
+                                field.text = this.lessonStatus.val;
                                 break;
                         }
                         this.fields.push(field);

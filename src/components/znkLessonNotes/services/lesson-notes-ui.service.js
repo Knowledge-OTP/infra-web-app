@@ -2,30 +2,52 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesUiSrv',
-        function ($rootScope, $rootElement, $http, ENV, $mdDialog) {
+        function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, ZnkLessonNotesSrv, UtilitySrv) {
             'ngInject';
 
-            this.openLessonNotesPopup = (lesson, userContext) => {
-                $rootScope.lesson = lesson;
-                $rootScope.userContext = userContext;
-                $mdDialog.show({
-                    template: `<lesson-notes-popup lesson="lesson" user-context="userContext"
+            this.openLessonNotesPopup = (lessonSummary, userContext) => {
+                ZnkLessonNotesSrv.getLessonsByLessonSummaryIds([lessonSummary.id])
+                    .then(lessons => {
+                        if (lessons && lessons.length) {
+                            lessons.sort(UtilitySrv.array.sortByField('date'));
+                        } else {
+                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryIds: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            return;
+                        }
+                        $rootScope.lesson = lessons.pop();
+                        $rootScope.lessonSummary = lessonSummary;
+                        $rootScope.userContext = userContext;
+                        $mdDialog.show({
+                            template: `<lesson-notes-popup lesson-summary="lessonSummary" lesson="lesson" user-context="userContext"
                         aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
-                    scope: $rootScope,
-                    clickOutsideToClose: false,
-                    escapeToClose: true
-                });
+                            scope: $rootScope,
+                            clickOutsideToClose: false,
+                            escapeToClose: true
+                        })
+                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsByLessonSummaryIds: Error: ${err}`));
+                    });
             };
 
-            this.openLessonRatingPopup = (lesson) => {
-                $rootScope.lesson = lesson;
-                $mdDialog.show({
-                    template: `<lesson-rating-popup lesson="lesson"
-                        aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
-                    scope: $rootScope,
-                    clickOutsideToClose: false,
-                    escapeToClose: true
-                });
+            this.openLessonRatingPopup = (lessonSummary) => {
+                ZnkLessonNotesSrv.getLessonsByLessonSummaryIds([lessonSummary.id])
+                    .then(lessons => {
+                        if (lessons && lessons.length) {
+                            lessons.sort(UtilitySrv.array.sortByField('date'));
+                        } else {
+                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryIds: No lessons were found with lessonSummaryId ', lessonSummary.id);
+                            return;
+                        }
+                        $rootScope.lesson = lessons.pop();
+                        $rootScope.lessonSummary = lessonSummary;
+                        $mdDialog.show({
+                            template: `<lesson-rating-popup lesson-summary="lessonSummary" lesson="lesson"
+                            aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
+                            scope: $rootScope,
+                            clickOutsideToClose: false,
+                            escapeToClose: true
+                        });
+                    })
+                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsByLessonSummaryIds: Error: ${err}`));
             };
 
             this.getUserFullName = (profile) => {
