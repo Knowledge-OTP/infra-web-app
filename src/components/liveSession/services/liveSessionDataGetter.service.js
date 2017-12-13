@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').service('LiveSessionDataGetterSrv',
-        function (InfraConfigSrv, $q, ENV, UserProfileService) {
+        function (InfraConfigSrv, $q, ENV, UserProfileService, ZnkLessonNotesSrv) {
             'ngInject';
 
             let _this = this;
@@ -14,10 +14,6 @@
             this.getLiveSessionDataPath = (guid) => {
                 let LIVE_SESSION_ROOT_PATH = '/liveSession/';
                 return LIVE_SESSION_ROOT_PATH + guid;
-            };
-
-            this.getLiveSessionDurationPath = () => {
-                return '/settings/liveSessionDuration/';
             };
 
             this.getUserLiveSessionRequestsPath  = (userData) => {
@@ -34,10 +30,8 @@
             };
 
             this.getLiveSessionDuration = () => {
-                let liveSessionDurationPath = _this.getLiveSessionDurationPath();
-                return this._getStorage().then((storage) => {
-                    return storage.get(liveSessionDurationPath);
-                });
+                return ZnkLessonNotesSrv.getGlobalVariables()
+                    .then(globalVariables => globalVariables.liveSession);
             };
 
             this.getCurrUserLiveSessionRequests = () => {
