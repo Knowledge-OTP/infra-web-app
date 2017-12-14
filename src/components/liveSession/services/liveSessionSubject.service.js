@@ -4,7 +4,7 @@
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', function (LiveSessionSubjectConst) {
         'ngInject';
-        let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
+        let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH, LiveSessionSubjectConst.SCIENCE];
 
         this.setLiveSessionTopics = (_topics) => {
             if (angular.isArray(_topics) && _topics.length) {
