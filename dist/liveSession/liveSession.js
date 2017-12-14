@@ -331,7 +331,10 @@
 
             return new EnumSrv.BaseEnum([
                 ['TOPIC_1', 1, 'topic_1'],
-                ['TOPIC_2', 2, 'topic_2']
+                ['TOPIC_2', 2, 'topic_2'],
+                ['TOPIC_3', 3, 'topic_3'],
+                ['TOPIC_12', 2, 'topic_2'],
+                ['TOPIC_13', 2, 'topic_2']
             ]);
         }]
     );
@@ -1080,6 +1083,7 @@
                 if (lessonData.sessionSubject) {
                     return lessonData.sessionSubject.id;
                 } else {
+
                     let topicIdNum = MyZinkerzTopicMapEnum[lessonData.scheduledLesson.topicId.toUpperCase()].enum;
                     if (angular.isDefined(topicIdNum)) {
                         return topicIdNum;

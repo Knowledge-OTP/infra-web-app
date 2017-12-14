@@ -32,6 +32,7 @@
                 if (lessonData.sessionSubject) {
                     return lessonData.sessionSubject.id;
                 } else {
+
                     let topicIdNum = MyZinkerzTopicMapEnum[lessonData.scheduledLesson.topicId.toUpperCase()].enum;
                     if (angular.isDefined(topicIdNum)) {
                         return topicIdNum;
