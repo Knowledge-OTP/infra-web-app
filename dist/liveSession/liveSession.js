@@ -28,6 +28,7 @@
                 let svgMap = {
                     'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
                     'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
+                    'liveSession-science-icon': 'components/liveSession/svg/liveSession-science-icon.svg',
                     'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
@@ -330,7 +331,10 @@
 
             return new EnumSrv.BaseEnum([
                 ['TOPIC_1', 1, 'topic_1'],
-                ['TOPIC_2', 2, 'topic_2']
+                ['TOPIC_2', 2, 'topic_2'],
+                ['TOPIC_3', 3, 'topic_3'],
+                ['TOPIC_12', 2, 'topic_2'],
+                ['TOPIC_13', 2, 'topic_2']
             ]);
         }]
     );
@@ -1051,7 +1055,7 @@
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
         'ngInject';
-        let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
+        let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH, LiveSessionSubjectConst.SCIENCE];
 
         this.setLiveSessionTopics = (_topics) => {
             if (angular.isArray(_topics) && _topics.length) {
@@ -1079,6 +1083,7 @@
                 if (lessonData.sessionSubject) {
                     return lessonData.sessionSubject.id;
                 } else {
+
                     let topicIdNum = MyZinkerzTopicMapEnum[lessonData.scheduledLesson.topicId.toUpperCase()].enum;
                     if (angular.isDefined(topicIdNum)) {
                         return topicIdNum;
@@ -1486,6 +1491,35 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function 
     "		c2.5,0,5,0,7.5,0c1.3,0,2.3-0.5,2.4-1.9c0.1-1.3-0.8-2.1-2.4-2.1c-5,0-10.1,0-15.1,0c-1.6,0-2.6,0.9-2.5,2.1\n" +
     "		c0.2,1.4,1.1,1.9,2.5,1.9C-496.5,476-494,476-491.4,476z M-491.4,461.2c-2.5,0-5.1,0-7.6,0c-1.6,0-2.6,0.8-2.5,2\n" +
     "		c0.2,1.4,1.1,1.9,2.5,1.9c5,0,10.1,0,15.1,0c1.3,0,2.3-0.4,2.4-1.9c0.1-1.3-0.8-2-2.4-2C-486.4,461.2-488.9,461.2-491.4,461.2z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveSession/svg/liveSession-science-icon.svg",
+    "<svg version=\"1.1\" class=\"science-icon-svg\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-350 80.2 90 83.8\" style=\"enable-background:new -350 80.2 90 83.8;\" xml:space=\"preserve\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .science-icon-svg {\n" +
+    "            width: 100%;\n" +
+    "            height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
+    "<g>\n" +
+    "	<path d=\"M-306.8,158.6H-324c-1,0-2-0.5-2.5-1.4c-0.5-0.8-0.6-1.9-0.2-2.8l14.1-33.3c0-0.1,0-0.1,0-0.2v-7.3c0-1.7,1.3-3,3-3h3\n" +
+    "		c0.7,0,1.3,0.6,1.3,1.3s-0.6,1.3-1.3,1.3h-3c-0.1,0-0.4,0.1-0.4,0.4v7.3c0,0.2,0,0.6-0.2,1.1v0.1l-14.1,33.4\n" +
+    "		c-0.1,0.1-0.1,0.2,0,0.3c0,0.1,0.1,0.1,0.3,0.1h17.2c0.7,0,1.3,0.6,1.3,1.3S-306.1,158.6-306.8,158.6z\"/>\n" +
+    "	<path d=\"M-286,158.6h-20.7c-0.7,0-1.3-0.6-1.3-1.3s0.6-1.3,1.3-1.3h20.7c0.2,0,0.2-0.1,0.3-0.1c0.1-0.1,0.1-0.2,0-0.3l-14.1-33.4\n" +
+    "		v-0.1c-0.2-0.5-0.2-0.9-0.2-1.1v-7.3c0-0.3-0.2-0.4-0.4-0.4h-3c-0.7,0-1.3-0.6-1.3-1.3s0.6-1.3,1.3-1.3h3c1.7,0,3,1.3,3,3v7.3\n" +
+    "		c0,0.1,0,0.2,0,0.2l14.1,33.3c0.4,0.9,0.3,2-0.2,2.8C-284,158-285,158.6-286,158.6z\"/>\n" +
+    "	<path d=\"M-296,113.3h-17.8c-1.1,0-2-0.9-2-2s0.9-2,2-2h17.8c1.1,0,2,0.9,2,2S-294.9,113.3-296,113.3z\"/>\n" +
+    "	<path d=\"M-318.8,142.1c0,0,10.1,2.4,15,1.1c4.9-1.3,8.9-4.6,12.9-3.3l6.4,15.7l-0.5,1.1h-40.1v-4.5l5.1-10.4L-318.8,142.1z\"/>\n" +
+    "	<path d=\"M-298.4,98c-3.4,0-6.2-2.8-6.2-6.2s2.8-6.2,6.2-6.2s6.2,2.8,6.2,6.2S-295,98-298.4,98z M-298.4,87.8c-2.2,0-4,1.8-4,4\n" +
+    "		s1.8,4,4,4s4-1.8,4-4S-296.2,87.8-298.4,87.8z\"/>\n" +
+    "	<path d=\"M-308.2,104.7c-2.5,0-4.5-2-4.5-4.5s2-4.5,4.5-4.5s4.5,2,4.5,4.5S-305.7,104.7-308.2,104.7z M-308.2,97.9\n" +
+    "		c-1.3,0-2.3,1-2.3,2.3s1,2.3,2.3,2.3s2.3-1,2.3-2.3C-305.9,98.9-306.9,97.9-308.2,97.9z\"/>\n" +
+    "	<path d=\"M-311.6,92.7c-1.4,0-2.6-1.2-2.6-2.6s1.2-2.6,2.6-2.6s2.6,1.2,2.6,2.6S-310.2,92.7-311.6,92.7z M-311.6,88.7\n" +
+    "		c-0.8,0-1.4,0.6-1.4,1.4s0.6,1.4,1.4,1.4s1.4-0.6,1.4-1.4S-310.8,88.7-311.6,88.7z\"/>\n" +
     "</g>\n" +
     "</svg>\n" +
     "");
