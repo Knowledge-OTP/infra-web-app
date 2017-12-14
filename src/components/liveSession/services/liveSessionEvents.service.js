@@ -71,7 +71,7 @@
                 // determine if student decline the live session request
                 const isStudentDeclineTheSession = !liveSessionData.startTime;
 
-                if (liveSessionData.studentId !== currUid) {
+                if (liveSessionData.educatorId === currUid) {
                     LiveSessionSrv.hangCall(liveSessionData.studentId);
                     LiveSessionSrv._destroyCheckDurationInterval();
                 }

@@ -90,11 +90,9 @@
 
                     this._moveToArchive(data.liveSessionData);
 
-                    // create lesson summary in documentDB/cosmosDB
-                    this._saveLessonSummary(data.liveSessionData);
-
-                    return data.storage.update(dataToSave);
-
+                    // create lesson summary in documentDB/cosmosDB then save liveSessionData to firebase
+                    return this._saveLessonSummary(data.liveSessionData)
+                        .then(data.storage.update(dataToSave));
                 });
             };
 
