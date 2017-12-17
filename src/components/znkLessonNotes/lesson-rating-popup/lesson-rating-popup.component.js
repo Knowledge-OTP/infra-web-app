@@ -15,12 +15,13 @@
                 this.$onInit = () => {
                     $log.debug('lessonRatingPopup: Init with lesson: ', this.lesson );
                     $log.debug('lessonRatingPopup: Init with lessonSummary: ', this.lessonSummary);
+                    this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
                     this.closeModal = $mdDialog.cancel;
                     this.showSpinner = false;
                     this.userContext = UserTypeContextEnum.STUDENT.enum;
                 };
 
-                this.save = () => {
+                this.submit = () => {
                     this.showSpinner = true;
                     $log.debug('saving lessonSummary : ', this.lessonSummary);
                     ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)

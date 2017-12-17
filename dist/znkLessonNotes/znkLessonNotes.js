@@ -820,7 +820,8 @@
             };
 
             this.getUserProfiles = (uidArr) => {
-                return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr);
+                return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr)
+                    .then(userProfiles => userProfiles.data);
             };
 
             this.sendEmails = (lesson, lessonSummary) => {
