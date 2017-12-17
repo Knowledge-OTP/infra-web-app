@@ -19,13 +19,13 @@
             <znk-lesson-rating lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-rating>
 
             <div class="btn-group">
-                <button type="button" class="btn-type-link-gray znk-uppercase" ng-click="vm.closeModal()"
-                        translate="LESSON_NOTES.DO_IT_LATER">
+                <button type="button" class="btn-type-1 save-btn" ng-click="vm.submit()">
+                    <span class="btn-text" translate="LESSON_NOTES.SUBMIT"></span>
+                    <span class="spinner" ng-if="vm.showSpinner"></span>
                 </button>
 
-                <button type="button" class="btn-type-1 save-btn" ng-click="vm.save()">
-                    <span class="btn-text" translate="LESSON_NOTES.SAVE"></span>
-                    <span class="spinner" ng-if="vm.showSpinner"></span>
+                <button type="button" class="btn-type-link" ng-click="vm.closeModal()"
+                        translate="LESSON_NOTES.DO_IT_LATER">
                 </button>
             </div>
         </div>

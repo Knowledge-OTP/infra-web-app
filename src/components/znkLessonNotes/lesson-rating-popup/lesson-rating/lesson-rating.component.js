@@ -20,7 +20,6 @@
 
                 this.$onInit = () => {
                     $log.debug('znkLessonRating: Init');
-                    this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
                     this.lessonSummary.studentFeedback.studentFreeText = this.lessonSummary.studentFeedback.studentFreeText || '';
                     this.initStarsArr();
                     if (this.lessonSummary.studentFeedback.rating) {

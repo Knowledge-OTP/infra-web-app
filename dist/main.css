@@ -9441,7 +9441,11 @@ md-dialog.base {
     width: 700px; }
     .lesson-notes-popup .content-wrapper .znk-scrollbar {
       overflow: auto;
-      height: 98%; }
+      height: 98%;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column; }
     .lesson-notes-popup .content-wrapper .title {
       font-size: 25px;
       color: #4f4d4d;
@@ -9460,11 +9464,9 @@ md-dialog.base {
       width: 94%;
       margin: 0 auto; }
     .lesson-notes-popup .content-wrapper .btn-group {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-      margin: 20px 30px; }
+      margin: 20px 30px;
+      -ms-flex-item-align: end;
+          align-self: flex-end; }
       .lesson-notes-popup .content-wrapper .btn-group button {
         position: relative; }
         .lesson-notes-popup .content-wrapper .btn-group button .spinner {
@@ -9474,6 +9476,8 @@ md-dialog.base {
           top: 50%;
           right: 29px;
           transform: translateY(-50%); }
+      .lesson-notes-popup .content-wrapper .btn-group .btn-type-link, .lesson-notes-popup .content-wrapper .btn-group .btn-type-link-gray {
+        margin-top: 5px; }
 
 .lesson-details {
   height: 170px;
@@ -9644,7 +9648,11 @@ md-dialog.base {
     width: 700px; }
     .lesson-rating-popup .content-wrapper .znk-scrollbar {
       overflow: auto;
-      height: 98%; }
+      height: 98%;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column; }
     .lesson-rating-popup .content-wrapper .title {
       height: 30px;
       padding: 30px 0 10px 0;
@@ -9654,11 +9662,9 @@ md-dialog.base {
           justify-content: center;
       text-align: center; }
     .lesson-rating-popup .content-wrapper .btn-group {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-      margin: 20px 30px; }
+      margin: 10px 30px;
+      -ms-flex-item-align: end;
+          align-self: flex-end; }
       .lesson-rating-popup .content-wrapper .btn-group button {
         position: relative; }
         .lesson-rating-popup .content-wrapper .btn-group button .spinner {
@@ -9668,6 +9674,8 @@ md-dialog.base {
           top: 50%;
           right: 29px;
           transform: translateY(-50%); }
+      .lesson-rating-popup .content-wrapper .btn-group .btn-type-link, .lesson-rating-popup .content-wrapper .btn-group .btn-type-link-gray {
+        margin-top: 5px; }
 
 .lesson-rating {
   margin: 0 25px;

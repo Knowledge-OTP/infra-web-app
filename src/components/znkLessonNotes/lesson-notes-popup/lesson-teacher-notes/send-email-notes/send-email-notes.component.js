@@ -13,8 +13,6 @@
             controller: function ($log, $translate, UserTypeContextEnum, ZnkLessonNotesSrv) {
                 'ngInject';
 
-                this.isStudentsMailSelected = false;
-                this.isParentsMailSelected = false;
                 this.studentsMails = [];
                 this.parentsMails = [];
                 this.mailsToSend = [];
@@ -23,24 +21,21 @@
 
                 this.$onInit = function () {
                     $log.debug('SendEmailNotesComponent: Init');
-                    this.getStudentProfiles();
+                    this.lessonSummary.lessonNotes.sentMailToStudents = this.lessonSummary.lessonNotes.sentMailToStudents || true;
+                    this.lessonSummary.lessonNotes.sentMailToParents = this.lessonSummary.lessonNotes.sentMailToParents || true;
+                    this.getStudentProfiles().then(studentsProfiles => {
+                        $log.debug(' studentsProfiles loaded: ', studentsProfiles);
+                        this.studentsProfiles = studentsProfiles;
+                        ZnkLessonNotesSrv._studentsProfiles = studentsProfiles;
+                        this.loadStudentsAndParentEmail(studentsProfiles);
+                        this.emailSelected(UserTypeContextEnum.STUDENT.enum, this.lessonSummary.lessonNotes.sentMailToStudents);
+                        this.emailSelected(UserTypeContextEnum.PARENT.enum, this.lessonSummary.lessonNotes.sentMailToParents);
+                    });
                 };
 
                 this.getStudentProfiles = () => {
                     const studentsIdArr = Object.keys(this.lesson.students);
-                    ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
-                        .then(studentsProfiles => {
-                            $log.debug(' studentsProfiles loaded: ', studentsProfiles);
-                            this.studentsProfiles = studentsProfiles;
-                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles;
-                            this.studentsProfiles.forEach(profile => {
-                                const studentMail = profile.email || profile.userEmail || profile.authEmail;
-                                this.studentsMails.push(studentMail);
-                                if (profile.studentInfo.parentInfo && profile.studentInfo.parentInfo.email) {
-                                    this.parentsMails.push(profile.studentInfo.parentInfo.email);
-                                }
-                            });
-                        });
+                     return ZnkLessonNotesSrv.getUserProfiles(studentsIdArr);
                 };
 
                 this.emailSelected = (mailGroup, bool) => {
@@ -54,6 +49,16 @@
                         this.lessonSummary.lessonNotes.sentMailToParents = bool;
                     }
                     ZnkLessonNotesSrv._mailsToSend = this.mailsToSend;
+                };
+
+                this.loadStudentsAndParentEmail =(studentsProfiles) => {
+                    studentsProfiles.forEach(profile => {
+                        const studentMail = profile.email || profile.userEmail || profile.authEmail;
+                        this.studentsMails.push(studentMail);
+                        if (profile.studentInfo.parentInfo && profile.studentInfo.parentInfo.email) {
+                            this.parentsMails.push(profile.studentInfo.parentInfo.email);
+                        }
+                    });
                 };
 
             }
