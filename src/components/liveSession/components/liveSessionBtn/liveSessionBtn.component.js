@@ -138,6 +138,9 @@
                             scheduledLessonMap.scheduledLesson = lessons.pop();
                             scheduledLessonMap.scheduledLesson.lessonSummaryId = UtilitySrv.general.createGuid();
                             scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
+                            ZnkLessonNotesSrv.updateLesson(scheduledLessonMap.scheduledLesson)
+                                .then((scheduledLesson) => $log.debug(`getLessonInRange: scheduledLesson is updated. scheduledLessonId: ${scheduledLesson.id}`))
+                                .catch((err) => $log.error('getLessonInRange: Failed to update scheduledLesson. Error: ', err));
                         } else {
                             $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
                             scheduledLessonMap = this.checkBack2BackLesson(lessons);
@@ -202,6 +205,7 @@
                     return scheduledLessonMap;
 
                 };
+
             }
         });
 })(angular);
