@@ -40,8 +40,8 @@
             'ngInject';
             const vm = this;
             vm.lessonSummary = { id: '5ad53c05-8a64-4694-6dfe-82a528bec33d' };
-            // vm.userContext = UserTypeContextEnum.EDUCATOR.enum;
-            vm.userContext = UserTypeContextEnum.ADMIN.enum;
+            vm.userContext = UserTypeContextEnum.EDUCATOR.enum;
+            // vm.userContext = UserTypeContextEnum.ADMIN.enum;
             vm.openLessonNotesPopup = (lessonSummary, userContext) => {
                 ZnkLessonNotesUiSrv.openLessonNotesPopup(lessonSummary, userContext);
             };

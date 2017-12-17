@@ -52,7 +52,7 @@
                 };
 
                 this.loadStudentsAndParentEmail =(studentsProfiles) => {
-                    this.studentsProfiles.forEach(profile => {
+                    studentsProfiles.forEach(profile => {
                         const studentMail = profile.email || profile.userEmail || profile.authEmail;
                         this.studentsMails.push(studentMail);
                         if (profile.studentInfo.parentInfo && profile.studentInfo.parentInfo.email) {
