@@ -4,7 +4,7 @@
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', function (LiveSessionSubjectConst) {
         'ngInject';
-        let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
+        let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH, LiveSessionSubjectConst.SCIENCE];
 
         this.setLiveSessionTopics = (_topics) => {
             if (angular.isArray(_topics) && _topics.length) {
@@ -32,6 +32,7 @@
                 if (lessonData.sessionSubject) {
                     return lessonData.sessionSubject.id;
                 } else {
+
                     let topicIdNum = MyZinkerzTopicMapEnum[lessonData.scheduledLesson.topicId.toUpperCase()].enum;
                     if (angular.isDefined(topicIdNum)) {
                         return topicIdNum;

@@ -12,7 +12,7 @@
 
     <div class="bad-rating-wrapper" ng-if="vm.lessonSummary.studentFeedback.rating <= vm.MIN_STATR_FOR_RATING_FEEDBACK">
 
-        <znk-multiple-choice lesson="vm.lesson" ng-if="!vm.isAdmin"></znk-multiple-choice>
+        <znk-multiple-choice lesson="vm.lesson" lesson-summary="vm.lessonSummary" ng-if="!vm.isAdmin"></znk-multiple-choice>
 
         <textarea class="lato-14-n note-txt admin-view" ng-if="vm.isAdmin" readonly>{{vm.readOnlyStudentFeedback}}</textarea>
 

@@ -16,6 +16,8 @@
 
                 this.$onInit = () => {
                     $log.debug('LessonStartedLateComponent: Init');
+                    this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
+                    this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
                     this.initLessonStartedLate();
                     this.determineLessonStartedLate();
                 };

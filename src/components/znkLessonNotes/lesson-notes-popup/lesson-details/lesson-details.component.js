@@ -17,10 +17,10 @@
                 this.dataPromMap = {};
                 this.nameSpace = 'LESSON_NOTES.LESSON_NOTES_POPUP';
                 this.fields = [];
-                this.userTypeContextEnum = UserTypeContextEnum;
 
                 this.$onInit = function () {
                     $log.debug('znkLessonInfo: Init');
+                    this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
                     this.dataPromMap.translate = this.getTranslations();
                     this.lessonStatusArr = LessonStatusEnum.getEnumArr();
                     this.initLessonInfo();

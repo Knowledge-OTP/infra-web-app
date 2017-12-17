@@ -28,6 +28,7 @@
                 let svgMap = {
                     'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
                     'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
+                    'liveSession-science-icon': 'components/liveSession/svg/liveSession-science-icon.svg',
                     'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);

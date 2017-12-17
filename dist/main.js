@@ -9293,6 +9293,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                 let svgMap = {
                     'liveSession-english-icon': 'components/liveSession/svg/liveSession-verbal-icon.svg',
                     'liveSession-math-icon': 'components/liveSession/svg/liveSession-math-icon.svg',
+                    'liveSession-science-icon': 'components/liveSession/svg/liveSession-science-icon.svg',
                     'liveSession-start-lesson-popup-icon': 'components/liveSession/svg/liveSession-start-lesson-popup-icon.svg'
                 };
                 SvgIconSrvProvider.registerSvgSources(svgMap);
@@ -9595,7 +9596,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
 
             return new EnumSrv.BaseEnum([
                 ['TOPIC_1', 1, 'topic_1'],
-                ['TOPIC_2', 2, 'topic_2']
+                ['TOPIC_2', 2, 'topic_2'],
+                ['TOPIC_3', 3, 'topic_3'],
+                ['TOPIC_12', 2, 'topic_2'],
+                ['TOPIC_13', 2, 'topic_2']
             ]);
         }]
     );
@@ -10316,7 +10320,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
         'ngInject';
-        let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH];
+        let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH, LiveSessionSubjectConst.SCIENCE];
 
         this.setLiveSessionTopics = (_topics) => {
             if (angular.isArray(_topics) && _topics.length) {
@@ -10344,6 +10348,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                 if (lessonData.sessionSubject) {
                     return lessonData.sessionSubject.id;
                 } else {
+
                     let topicIdNum = MyZinkerzTopicMapEnum[lessonData.scheduledLesson.topicId.toUpperCase()].enum;
                     if (angular.isDefined(topicIdNum)) {
                         return topicIdNum;
@@ -10751,6 +10756,35 @@ angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function 
     "		c2.5,0,5,0,7.5,0c1.3,0,2.3-0.5,2.4-1.9c0.1-1.3-0.8-2.1-2.4-2.1c-5,0-10.1,0-15.1,0c-1.6,0-2.6,0.9-2.5,2.1\n" +
     "		c0.2,1.4,1.1,1.9,2.5,1.9C-496.5,476-494,476-491.4,476z M-491.4,461.2c-2.5,0-5.1,0-7.6,0c-1.6,0-2.6,0.8-2.5,2\n" +
     "		c0.2,1.4,1.1,1.9,2.5,1.9c5,0,10.1,0,15.1,0c1.3,0,2.3-0.4,2.4-1.9c0.1-1.3-0.8-2-2.4-2C-486.4,461.2-488.9,461.2-491.4,461.2z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
+  $templateCache.put("components/liveSession/svg/liveSession-science-icon.svg",
+    "<svg version=\"1.1\" class=\"science-icon-svg\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-350 80.2 90 83.8\" style=\"enable-background:new -350 80.2 90 83.8;\" xml:space=\"preserve\">\n" +
+    "\n" +
+    "    <style type=\"text/css\">\n" +
+    "        .science-icon-svg {\n" +
+    "            width: 100%;\n" +
+    "            height: auto;\n" +
+    "        }\n" +
+    "    </style>\n" +
+    "\n" +
+    "<g>\n" +
+    "	<path d=\"M-306.8,158.6H-324c-1,0-2-0.5-2.5-1.4c-0.5-0.8-0.6-1.9-0.2-2.8l14.1-33.3c0-0.1,0-0.1,0-0.2v-7.3c0-1.7,1.3-3,3-3h3\n" +
+    "		c0.7,0,1.3,0.6,1.3,1.3s-0.6,1.3-1.3,1.3h-3c-0.1,0-0.4,0.1-0.4,0.4v7.3c0,0.2,0,0.6-0.2,1.1v0.1l-14.1,33.4\n" +
+    "		c-0.1,0.1-0.1,0.2,0,0.3c0,0.1,0.1,0.1,0.3,0.1h17.2c0.7,0,1.3,0.6,1.3,1.3S-306.1,158.6-306.8,158.6z\"/>\n" +
+    "	<path d=\"M-286,158.6h-20.7c-0.7,0-1.3-0.6-1.3-1.3s0.6-1.3,1.3-1.3h20.7c0.2,0,0.2-0.1,0.3-0.1c0.1-0.1,0.1-0.2,0-0.3l-14.1-33.4\n" +
+    "		v-0.1c-0.2-0.5-0.2-0.9-0.2-1.1v-7.3c0-0.3-0.2-0.4-0.4-0.4h-3c-0.7,0-1.3-0.6-1.3-1.3s0.6-1.3,1.3-1.3h3c1.7,0,3,1.3,3,3v7.3\n" +
+    "		c0,0.1,0,0.2,0,0.2l14.1,33.3c0.4,0.9,0.3,2-0.2,2.8C-284,158-285,158.6-286,158.6z\"/>\n" +
+    "	<path d=\"M-296,113.3h-17.8c-1.1,0-2-0.9-2-2s0.9-2,2-2h17.8c1.1,0,2,0.9,2,2S-294.9,113.3-296,113.3z\"/>\n" +
+    "	<path d=\"M-318.8,142.1c0,0,10.1,2.4,15,1.1c4.9-1.3,8.9-4.6,12.9-3.3l6.4,15.7l-0.5,1.1h-40.1v-4.5l5.1-10.4L-318.8,142.1z\"/>\n" +
+    "	<path d=\"M-298.4,98c-3.4,0-6.2-2.8-6.2-6.2s2.8-6.2,6.2-6.2s6.2,2.8,6.2,6.2S-295,98-298.4,98z M-298.4,87.8c-2.2,0-4,1.8-4,4\n" +
+    "		s1.8,4,4,4s4-1.8,4-4S-296.2,87.8-298.4,87.8z\"/>\n" +
+    "	<path d=\"M-308.2,104.7c-2.5,0-4.5-2-4.5-4.5s2-4.5,4.5-4.5s4.5,2,4.5,4.5S-305.7,104.7-308.2,104.7z M-308.2,97.9\n" +
+    "		c-1.3,0-2.3,1-2.3,2.3s1,2.3,2.3,2.3s2.3-1,2.3-2.3C-305.9,98.9-306.9,97.9-308.2,97.9z\"/>\n" +
+    "	<path d=\"M-311.6,92.7c-1.4,0-2.6-1.2-2.6-2.6s1.2-2.6,2.6-2.6s2.6,1.2,2.6,2.6S-310.2,92.7-311.6,92.7z M-311.6,88.7\n" +
+    "		c-0.8,0-1.4,0.6-1.4,1.4s0.6,1.4,1.4,1.4s1.4-0.6,1.4-1.4S-310.8,88.7-311.6,88.7z\"/>\n" +
     "</g>\n" +
     "</svg>\n" +
     "");
@@ -19461,10 +19495,10 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 this.dataPromMap = {};
                 this.nameSpace = 'LESSON_NOTES.LESSON_NOTES_POPUP';
                 this.fields = [];
-                this.userTypeContextEnum = UserTypeContextEnum;
 
                 this.$onInit = function () {
                     $log.debug('znkLessonInfo: Init');
+                    this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
                     this.dataPromMap.translate = this.getTranslations();
                     this.lessonStatusArr = LessonStatusEnum.getEnumArr();
                     this.initLessonInfo();
@@ -19695,6 +19729,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 
                 this.$onInit = () => {
                     $log.debug('LessonStartedLateComponent: Init');
+                    this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
+                    this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
                     this.initLessonStartedLate();
                     this.determineLessonStartedLate();
                 };
@@ -19768,8 +19804,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
             controller: ["$log", "$translate", "UserTypeContextEnum", "ZnkLessonNotesSrv", function ($log, $translate, UserTypeContextEnum, ZnkLessonNotesSrv) {
                 'ngInject';
 
-                this.isStudentsMailSelected = false;
-                this.isParentsMailSelected = false;
                 this.studentsMails = [];
                 this.parentsMails = [];
                 this.mailsToSend = [];
@@ -19778,24 +19812,21 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 
                 this.$onInit = function () {
                     $log.debug('SendEmailNotesComponent: Init');
-                    this.getStudentProfiles();
+                    this.lessonSummary.lessonNotes.sentMailToStudents = this.lessonSummary.lessonNotes.sentMailToStudents || true;
+                    this.lessonSummary.lessonNotes.sentMailToParents = this.lessonSummary.lessonNotes.sentMailToParents || true;
+                    this.getStudentProfiles().then(studentsProfiles => {
+                        $log.debug(' studentsProfiles loaded: ', studentsProfiles);
+                        this.studentsProfiles = studentsProfiles;
+                        ZnkLessonNotesSrv._studentsProfiles = studentsProfiles;
+                        this.loadStudentsAndParentEmail(studentsProfiles);
+                        this.emailSelected(UserTypeContextEnum.STUDENT.enum, this.lessonSummary.lessonNotes.sentMailToStudents);
+                        this.emailSelected(UserTypeContextEnum.PARENT.enum, this.lessonSummary.lessonNotes.sentMailToParents);
+                    });
                 };
 
                 this.getStudentProfiles = () => {
                     const studentsIdArr = Object.keys(this.lesson.students);
-                    ZnkLessonNotesSrv.getUserProfiles(studentsIdArr)
-                        .then(studentsProfiles => {
-                            $log.debug(' studentsProfiles loaded: ', studentsProfiles);
-                            this.studentsProfiles = studentsProfiles;
-                            ZnkLessonNotesSrv._studentsProfiles = studentsProfiles;
-                            this.studentsProfiles.forEach(profile => {
-                                const studentMail = profile.email || profile.userEmail || profile.authEmail;
-                                this.studentsMails.push(studentMail);
-                                if (profile.studentInfo.parentInfo && profile.studentInfo.parentInfo.email) {
-                                    this.parentsMails.push(profile.studentInfo.parentInfo.email);
-                                }
-                            });
-                        });
+                     return ZnkLessonNotesSrv.getUserProfiles(studentsIdArr);
                 };
 
                 this.emailSelected = (mailGroup, bool) => {
@@ -19809,6 +19840,16 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                         this.lessonSummary.lessonNotes.sentMailToParents = bool;
                     }
                     ZnkLessonNotesSrv._mailsToSend = this.mailsToSend;
+                };
+
+                this.loadStudentsAndParentEmail =(studentsProfiles) => {
+                    studentsProfiles.forEach(profile => {
+                        const studentMail = profile.email || profile.userEmail || profile.authEmail;
+                        this.studentsMails.push(studentMail);
+                        if (profile.studentInfo.parentInfo && profile.studentInfo.parentInfo.email) {
+                            this.parentsMails.push(profile.studentInfo.parentInfo.email);
+                        }
+                    });
                 };
 
             }]
@@ -19833,12 +19874,13 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 this.$onInit = () => {
                     $log.debug('lessonRatingPopup: Init with lesson: ', this.lesson );
                     $log.debug('lessonRatingPopup: Init with lessonSummary: ', this.lessonSummary);
+                    this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
                     this.closeModal = $mdDialog.cancel;
                     this.showSpinner = false;
                     this.userContext = UserTypeContextEnum.STUDENT.enum;
                 };
 
-                this.save = () => {
+                this.submit = () => {
                     this.showSpinner = true;
                     $log.debug('saving lessonSummary : ', this.lessonSummary);
                     ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)
@@ -19880,7 +19922,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
 
                 this.$onInit = () => {
                     $log.debug('znkLessonRating: Init');
-                    this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
                     this.lessonSummary.studentFeedback.studentFreeText = this.lessonSummary.studentFeedback.studentFreeText || '';
                     this.initStarsArr();
                     if (this.lessonSummary.studentFeedback.rating) {
@@ -20180,7 +20221,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
             };
 
             this.getUserProfiles = (uidArr) => {
-                return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr);
+                return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr)
+                    .then(userProfiles => userProfiles.data);
             };
 
             this.sendEmails = (lesson, lessonSummary) => {
@@ -20237,8 +20279,8 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "<div class=\"lesson-details\" ng-if=\"vm.fields.length\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
     "    <div class=\"field\" ng-repeat=\"field in vm.fields\" ng-if=\"field.text\">\n" +
     "        <div class=\"label\">{{field.label}}</div>\n" +
-    "        <div class=\"text\" ng-if=\"field.label !== 'Status' || vm.userContext === vm.userTypeContextEnum.STUDENT.enum\">{{field.text}}</div>\n" +
-    "        <select class=\"lesson-status\" ng-if=\"field.label === 'Status' && vm.userContext !== vm.userTypeContextEnum.STUDENT.enum\"\n" +
+    "        <div class=\"text\" ng-if=\"field.label !== 'Status' || !vm.isAdmin\">{{field.text}}</div>\n" +
+    "        <select class=\"lesson-status\" ng-if=\"field.label === 'Status' && vm.isAdmin\"\n" +
     "                ng-options=\"status as status.val for status in vm.lessonStatusArr\"\n" +
     "                ng-model=\"vm.lessonStatus\"\n" +
     "                ng-change=\"vm.statusChanged(field, vm.lessonStatus)\">\n" +
@@ -20272,13 +20314,13 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            <znk-lesson-teacher-notes lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-teacher-notes>\n" +
     "\n" +
     "            <div class=\"btn-group\">\n" +
-    "                <button type=\"button\" class=\"btn-type-link-gray znk-uppercase\" ng-click=\"vm.doItLater()\"\n" +
-    "                        translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
-    "                </button>\n" +
-    "\n" +
     "                <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
     "                    <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
     "                    <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
+    "                </button>\n" +
+    "\n" +
+    "                <button type=\"button\" class=\"btn-type-link\" ng-click=\"vm.doItLater()\"\n" +
+    "                        translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
     "                </button>\n" +
     "            </div>\n" +
     "        </div>\n" +
@@ -20342,8 +20384,8 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "    </div>\n" +
     "    <div class=\"checkbox-group\" ng-if=\"vm.studentsProfiles.length\">\n" +
     "        <div class=\"input-wrap\">\n" +
-    "            <input id=\"studentsMail\" type=\"checkbox\" ng-model=\"vm.isStudentsMailSelected\"\n" +
-    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.STUDENT.enum, vm.isStudentsMailSelected)\">\n" +
+    "            <input id=\"studentsMail\" type=\"checkbox\" ng-model=\"vm.lessonSummary.lessonNotes.sentMailToStudents\"\n" +
+    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.STUDENT.enum, vm.lessonSummary.lessonNotes.sentMailToStudents)\">\n" +
     "            <ng-switch on=\"vm.studentsProfiles.length < 2\">\n" +
     "                <label for=\"studentsMail\" ng-switch-when=\"true\"\n" +
     "                       translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.STUDENT_MAIL\"></label>\n" +
@@ -20352,8 +20394,8 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            </ng-switch>\n" +
     "        </div>\n" +
     "        <div class=\"input-wrap\">\n" +
-    "            <input id=\"parentsMail\" type=\"checkbox\" ng-model=\"vm.isParentsMailSelected\"\n" +
-    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.PARENT.enum, vm.isParentsMailSelected)\">\n" +
+    "            <input id=\"parentsMail\" type=\"checkbox\" ng-model=\"vm.lessonSummary.lessonNotes.sentMailToParents\"\n" +
+    "                   ng-change=\"vm.emailSelected(vm.userTypeContextEnum.PARENT.enum, vm.lessonSummary.lessonNotes.sentMailToParents)\">\n" +
     "            <ng-switch on=\"vm.studentsProfiles.length < 2\">\n" +
     "                <label for=\"parentsMail\" ng-switch=\"\" ng-switch-when=\"true\"\n" +
     "                       translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.PARENT_MAIL\"></label>\n" +
@@ -20390,13 +20432,13 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            <znk-lesson-rating lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-rating>\n" +
     "\n" +
     "            <div class=\"btn-group\">\n" +
-    "                <button type=\"button\" class=\"btn-type-link-gray znk-uppercase\" ng-click=\"vm.closeModal()\"\n" +
-    "                        translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
+    "                <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
+    "                    <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
+    "                    <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
     "                </button>\n" +
     "\n" +
-    "                <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.save()\">\n" +
-    "                    <span class=\"btn-text\" translate=\"LESSON_NOTES.SAVE\"></span>\n" +
-    "                    <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
+    "                <button type=\"button\" class=\"btn-type-link\" ng-click=\"vm.closeModal()\"\n" +
+    "                        translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
     "                </button>\n" +
     "            </div>\n" +
     "        </div>\n" +
@@ -20418,7 +20460,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "\n" +
     "    <div class=\"bad-rating-wrapper\" ng-if=\"vm.lessonSummary.studentFeedback.rating <= vm.MIN_STATR_FOR_RATING_FEEDBACK\">\n" +
     "\n" +
-    "        <znk-multiple-choice lesson=\"vm.lesson\" ng-if=\"!vm.isAdmin\"></znk-multiple-choice>\n" +
+    "        <znk-multiple-choice lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" ng-if=\"!vm.isAdmin\"></znk-multiple-choice>\n" +
     "\n" +
     "        <textarea class=\"lato-14-n note-txt admin-view\" ng-if=\"vm.isAdmin\" readonly>{{vm.readOnlyStudentFeedback}}</textarea>\n" +
     "\n" +
