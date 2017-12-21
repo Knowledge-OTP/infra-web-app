@@ -136,8 +136,6 @@
                         // No multiple lesson return single lesson
                         if (lessons.length === 1) {
                             scheduledLessonMap.scheduledLesson = lessons.pop();
-                            scheduledLessonMap.scheduledLesson.lessonSummaryId =
-                                scheduledLessonMap.scheduledLesson.lessonSummaryId || UtilitySrv.general.createGuid();
                             scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
                         } else {
                             $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
@@ -203,6 +201,7 @@
                     return scheduledLessonMap;
 
                 };
+
             }
         });
 })(angular);

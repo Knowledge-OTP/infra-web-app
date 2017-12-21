@@ -41,11 +41,13 @@
                     return $q.reject(errMsg);
                 }
 
-                return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then((liveSessionData) => {
-                    liveSessionData.startTime = this._getRoundTime();
-                    liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
-                    return liveSessionData.$save();
-                });
+                return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid)
+                    .then((liveSessionData) => {
+                        liveSessionData.startTime = this._getRoundTime();
+                        liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
+                        this._updateLessonsStatusToAttended(liveSessionData);
+                        return liveSessionData.$save();
+                    });
             };
 
             this.makeAutoCall = (receiverId, liveSessionDataGuid) => {
@@ -90,11 +92,9 @@
 
                     this._moveToArchive(data.liveSessionData);
 
-                    // create lesson summary in documentDB/cosmosDB
-                    this._saveLessonSummary(data.liveSessionData);
-
-                    return data.storage.update(dataToSave);
-
+                    // create lesson summary in documentDB/cosmosDB then save liveSessionData to firebase
+                    return this._saveLessonSummary(data.liveSessionData)
+                        .then(data.storage.update(dataToSave));
                 });
             };
 
@@ -245,14 +245,19 @@
                 }
             };
 
-            this._updateLessonsStatus = (liveSessionData) => {
+            this._updateLessonsStatusToAttended = (liveSessionData) => {
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
-                            if (liveSessionData.backToBackId) {
-                                return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.backToBackId, LessonStatusEnum.ATTENDED.enum, true);
-                            } else {
-                                return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.lessonId, LessonStatusEnum.ATTENDED.enum, false);
+                            try {
+                                if (liveSessionData.backToBackId) {
+                                    return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.backToBackId, LessonStatusEnum.ATTENDED.enum, true);
+                                } else {
+                                    return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.lessonId, LessonStatusEnum.ATTENDED.enum, false);
+                                }
+                            }
+                            catch (err) {
+                                $log.error('_updateLessonsStatusToAttended Error: ', err);
                             }
                         } else {
                             $log.debug('_updateLesson: darkFeatures in OFF');
@@ -371,7 +376,7 @@
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
                             expectedSessionEndTime: lessonData.expectedSessionEndTime,
-                            educatorStartTime:  this._getRoundTime(),
+                            educatorStartTime: this._getRoundTime(),
                             startTime: null, // when student confirm the lesson request
                             endTime: null,
                             duration: null,
@@ -431,9 +436,9 @@
             this.confirmExtendSession = () => {
                 LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid)
                     .then((liveSessionData) => {
-                    liveSessionData.extendTime += SESSION_SETTINGS.extendTime;
-                    return liveSessionData.$save();
-                }).then(() => {
+                        liveSessionData.extendTime += SESSION_SETTINGS.extendTime;
+                        return liveSessionData.$save();
+                    }).then(() => {
                     let extendTimeInMin = SESSION_SETTINGS.extendTime / 60000; // convert to minutes
                     $log.debug('confirmExtendSession: Live session is extend by ' + extendTimeInMin + ' minutes.');
                 }).catch(() => {

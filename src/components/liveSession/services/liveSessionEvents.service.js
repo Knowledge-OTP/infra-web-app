@@ -71,7 +71,7 @@
                 // determine if student decline the live session request
                 const isStudentDeclineTheSession = !liveSessionData.startTime;
 
-                if (liveSessionData.studentId !== currUid) {
+                if (liveSessionData.educatorId === currUid) {
                     LiveSessionSrv.hangCall(liveSessionData.studentId);
                     LiveSessionSrv._destroyCheckDurationInterval();
                 }
@@ -109,6 +109,10 @@
                 } else {
                     $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
                 }
+
+                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                // Security check to insure there isn't active session
+                LiveSessionSrv._moveToArchive(liveSessionData);
             };
 
             LiveSessionEventsSrv._cb = (liveSessionData) => {

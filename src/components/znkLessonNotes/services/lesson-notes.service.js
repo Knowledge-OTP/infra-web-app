@@ -27,7 +27,9 @@
                 return $http.get(getLessonSummaryApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                }).then(lessonSummary => lessonSummary.data);
+                })
+                    .then(lessonSummary => lessonSummary.data)
+                    .catch(() => null);
             };
 
             this.getLessonsByLessonSummaryIds = (lessonSummaryIds) => {
@@ -143,6 +145,7 @@
                     return Promise.reject('At list one email is required');
                 }
             };
+
         }
     );
 })(angular);

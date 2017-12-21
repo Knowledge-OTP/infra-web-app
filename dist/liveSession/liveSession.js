@@ -174,8 +174,6 @@
                         // No multiple lesson return single lesson
                         if (lessons.length === 1) {
                             scheduledLessonMap.scheduledLesson = lessons.pop();
-                            scheduledLessonMap.scheduledLesson.lessonSummaryId =
-                                scheduledLessonMap.scheduledLesson.lessonSummaryId || UtilitySrv.general.createGuid();
                             scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
                         } else {
                             $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
@@ -241,6 +239,7 @@
                     return scheduledLessonMap;
 
                 };
+
             }]
         });
 })(angular);
@@ -415,11 +414,13 @@
                     return $q.reject(errMsg);
                 }
 
-                return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid).then((liveSessionData) => {
-                    liveSessionData.startTime = this._getRoundTime();
-                    liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
-                    return liveSessionData.$save();
-                });
+                return LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid)
+                    .then((liveSessionData) => {
+                        liveSessionData.startTime = this._getRoundTime();
+                        liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
+                        this._updateLessonsStatusToAttended(liveSessionData);
+                        return liveSessionData.$save();
+                    });
             };
 
             this.makeAutoCall = (receiverId, liveSessionDataGuid) => {
@@ -464,11 +465,9 @@
 
                     this._moveToArchive(data.liveSessionData);
 
-                    // create lesson summary in documentDB/cosmosDB
-                    this._saveLessonSummary(data.liveSessionData);
-
-                    return data.storage.update(dataToSave);
-
+                    // create lesson summary in documentDB/cosmosDB then save liveSessionData to firebase
+                    return this._saveLessonSummary(data.liveSessionData)
+                        .then(data.storage.update(dataToSave));
                 });
             };
 
@@ -619,14 +618,19 @@
                 }
             };
 
-            this._updateLessonsStatus = (liveSessionData) => {
+            this._updateLessonsStatusToAttended = (liveSessionData) => {
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
-                            if (liveSessionData.backToBackId) {
-                                return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.backToBackId, LessonStatusEnum.ATTENDED.enum, true);
-                            } else {
-                                return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.lessonId, LessonStatusEnum.ATTENDED.enum, false);
+                            try {
+                                if (liveSessionData.backToBackId) {
+                                    return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.backToBackId, LessonStatusEnum.ATTENDED.enum, true);
+                                } else {
+                                    return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.lessonId, LessonStatusEnum.ATTENDED.enum, false);
+                                }
+                            }
+                            catch (err) {
+                                $log.error('_updateLessonsStatusToAttended Error: ', err);
                             }
                         } else {
                             $log.debug('_updateLesson: darkFeatures in OFF');
@@ -745,7 +749,7 @@
                             educatorPath: educatorPath,
                             appName: ENV.firebaseAppScopeName.split('_')[0],
                             expectedSessionEndTime: lessonData.expectedSessionEndTime,
-                            educatorStartTime:  this._getRoundTime(),
+                            educatorStartTime: this._getRoundTime(),
                             startTime: null, // when student confirm the lesson request
                             endTime: null,
                             duration: null,
@@ -805,9 +809,9 @@
             this.confirmExtendSession = () => {
                 LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid)
                     .then((liveSessionData) => {
-                    liveSessionData.extendTime += SESSION_SETTINGS.extendTime;
-                    return liveSessionData.$save();
-                }).then(() => {
+                        liveSessionData.extendTime += SESSION_SETTINGS.extendTime;
+                        return liveSessionData.$save();
+                    }).then(() => {
                     let extendTimeInMin = SESSION_SETTINGS.extendTime / 60000; // convert to minutes
                     $log.debug('confirmExtendSession: Live session is extend by ' + extendTimeInMin + ' minutes.');
                 }).catch(() => {
@@ -952,7 +956,7 @@
                 // determine if student decline the live session request
                 const isStudentDeclineTheSession = !liveSessionData.startTime;
 
-                if (liveSessionData.studentId !== currUid) {
+                if (liveSessionData.educatorId === currUid) {
                     LiveSessionSrv.hangCall(liveSessionData.studentId);
                     LiveSessionSrv._destroyCheckDurationInterval();
                 }
@@ -962,15 +966,16 @@
                         LiveSessionUiSrv.showStudentDeclineSessionPopup();
                     }
                 } else {
-                    LiveSessionUiSrv.showEndSessionPopup().then(() => {
-                        LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
-                            .then(isDarkFeaturesValid => isDarkFeaturesValid ?
-                                LiveSessionEventsSrv._handelLiveSession(liveSessionData) : $log.debug('darkFeatures in OFF'))
-                            .catch(err => $log.error('isDarkFeaturesValid Error: ', err));
+                    LiveSessionUiSrv.showEndSessionPopup()
+                        .then(() => {
+                            LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                                .then(isDarkFeaturesValid => isDarkFeaturesValid?
+                                       LiveSessionEventsSrv._handelLiveSession(liveSessionData) : $log.debug('darkFeatures in OFF'))
+                                        .catch(err => $log.error('isDarkFeaturesValid Error: ', err));
                     });
                 }
 
-                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
+                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum,liveSessionData);
                 // Security check to insure there isn't active session
                 LiveSessionSrv._moveToArchive(liveSessionData);
             };
@@ -978,17 +983,16 @@
             LiveSessionEventsSrv._handelLiveSession = (liveSessionData) => {
                 if (LiveSessionSrv.scheduledLessonFromAdapter &&
                     LiveSessionSrv.scheduledLessonFromAdapter.lessonSummaryId) {
-                    ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId)
-                        .then(lessonSummary => {
-                            lessonSummary = lessonSummary || ZnkLessonNotesUiSrv.newLessonSummary(liveSessionData);
-                            if (liveSessionData.educatorId === currUid) {
-                                ZnkLessonNotesUiSrv.openLessonNotesPopup(LiveSessionSrv.scheduledLessonFromAdapter, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
-                            } else {
-                                ZnkLessonNotesUiSrv.openLessonRatingPopup(LiveSessionSrv.scheduledLessonFromAdapter, lessonSummary);
-                            }
-                        });
-                } else {
-                    $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
+                                            ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId).then(lessonSummary => {lessonSummary = lessonSummary || { id: liveSessionData.lessonSummaryId };
+                            lessonSummary = lessonSummary || ZnkLessonNotesUiSrv.newLessonSummary(liveSessionData);                    if (liveSessionData.educatorId === currUid) {
+                                                    ZnkLessonNotesUiSrv.openLessonNotesPopup(LiveSessionSrv.scheduledLessonFromAdapter,lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
+                                                } else {
+                                                    ZnkLessonNotesUiSrv.openLessonRatingPopup(LiveSessionSrv.scheduledLessonFromAdapter,lessonSummary);
+                                                }
+                                            });
+                                        } else {
+                                            $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
+
                 }
             };
 
