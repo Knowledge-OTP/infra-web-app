@@ -677,10 +677,14 @@ md-dialog.base {
         fill: #ffffff; }
   .lesson-notes-popup .content-wrapper {
     height: 95%;
-    width: 700px; }
+    width: 700px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column; }
     .lesson-notes-popup .content-wrapper .znk-scrollbar {
       overflow: auto;
-      height: 98%;
+      height: 90%;
       display: -ms-flexbox;
       display: flex;
       -ms-flex-direction: column;
@@ -703,9 +707,15 @@ md-dialog.base {
       width: 94%;
       margin: 0 auto; }
     .lesson-notes-popup .content-wrapper .btn-group {
-      margin: 20px 30px;
+      margin: 0 30px;
       -ms-flex-item-align: end;
-          align-self: flex-end; }
+          align-self: flex-end;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-align: center;
+          align-items: center; }
       .lesson-notes-popup .content-wrapper .btn-group button {
         position: relative; }
         .lesson-notes-popup .content-wrapper .btn-group button .spinner {
@@ -884,10 +894,14 @@ md-dialog.base {
         fill: #ffffff; }
   .lesson-rating-popup .content-wrapper {
     height: 95%;
-    width: 700px; }
+    width: 700px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column; }
     .lesson-rating-popup .content-wrapper .znk-scrollbar {
       overflow: auto;
-      height: 98%;
+      height: 90%;
       display: -ms-flexbox;
       display: flex;
       -ms-flex-direction: column;
@@ -901,9 +915,15 @@ md-dialog.base {
           justify-content: center;
       text-align: center; }
     .lesson-rating-popup .content-wrapper .btn-group {
-      margin: 10px 30px;
+      margin: 0 30px;
       -ms-flex-item-align: end;
-          align-self: flex-end; }
+          align-self: flex-end;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-align: center;
+          align-items: center; }
       .lesson-rating-popup .content-wrapper .btn-group button {
         position: relative; }
         .lesson-rating-popup .content-wrapper .btn-group button .spinner {

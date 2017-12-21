@@ -21,17 +21,15 @@
             <div class="divider" ng-if="vm.isAdmin"></div>
 
             <znk-lesson-teacher-notes lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-teacher-notes>
-
-            <div class="btn-group">
-                <button type="button" class="btn-type-1 save-btn" ng-click="vm.submit()">
-                    <span class="btn-text" translate="LESSON_NOTES.SUBMIT"></span>
-                    <span class="spinner" ng-if="vm.showSpinner"></span>
-                </button>
-
-                <button type="button" class="btn-type-link" ng-click="vm.doItLater()"
-                        translate="LESSON_NOTES.DO_IT_LATER">
-                </button>
-            </div>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn-type-1 save-btn" ng-click="vm.submit()">
+                <span class="btn-text" translate="LESSON_NOTES.SUBMIT"></span>
+                <span class="spinner" ng-if="vm.showSpinner"></span>
+            </button>
+            <button type="button" class="btn-type-link" ng-click="vm.doItLater()"
+                    translate="LESSON_NOTES.DO_IT_LATER">
+            </button>
         </div>
     </div>
 </div>

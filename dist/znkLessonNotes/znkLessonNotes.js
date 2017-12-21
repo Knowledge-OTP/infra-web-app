@@ -654,7 +654,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesUiSrv',
-        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog) {
+        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "LessonNotesStatusEnum", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, LessonNotesStatusEnum) {
             'ngInject';
 
             this.openLessonNotesPopup = (lesson, lessonSummary, userContext) => {
@@ -689,7 +689,9 @@
                     endTime: liveSessionData.endTime,
                     liveSessions: [liveSessionData.guid],
                     studentFeedback: null,
-                    lessonNotes: null,
+                    lessonNotes: {
+                        status: LessonNotesStatusEnum.PENDING_NOTES.enum
+                    },
                     dbType: 'lessonSummary'
                 };
             };
@@ -915,17 +917,15 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            <div class=\"divider\" ng-if=\"vm.isAdmin\"></div>\n" +
     "\n" +
     "            <znk-lesson-teacher-notes lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-teacher-notes>\n" +
-    "\n" +
-    "            <div class=\"btn-group\">\n" +
-    "                <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
-    "                    <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
-    "                    <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
-    "                </button>\n" +
-    "\n" +
-    "                <button type=\"button\" class=\"btn-type-link\" ng-click=\"vm.doItLater()\"\n" +
-    "                        translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
-    "                </button>\n" +
-    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"btn-group\">\n" +
+    "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
+    "                <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
+    "                <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" class=\"btn-type-link\" ng-click=\"vm.doItLater()\"\n" +
+    "                    translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
+    "            </button>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -1033,17 +1033,16 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            <div class=\"divider\"></div>\n" +
     "\n" +
     "            <znk-lesson-rating lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-rating>\n" +
+    "        </div>\n" +
+    "        <div class=\"btn-group\">\n" +
+    "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
+    "                <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
+    "                <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
+    "            </button>\n" +
     "\n" +
-    "            <div class=\"btn-group\">\n" +
-    "                <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
-    "                    <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
-    "                    <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
-    "                </button>\n" +
-    "\n" +
-    "                <button type=\"button\" class=\"btn-type-link\" ng-click=\"vm.closeModal()\"\n" +
-    "                        translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
-    "                </button>\n" +
-    "            </div>\n" +
+    "            <button type=\"button\" class=\"btn-type-link\" ng-click=\"vm.closeModal()\"\n" +
+    "                    translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
+    "            </button>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +

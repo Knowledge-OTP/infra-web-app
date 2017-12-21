@@ -83,8 +83,15 @@
                 } else {
                     LiveSessionUiSrv.showEndSessionPopup().then(() => {
                         LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
-                            .then(isDarkFeaturesValid => isDarkFeaturesValid ?
-                                LiveSessionEventsSrv._handelLiveSession(liveSessionData) : $log.debug('darkFeatures in OFF'))
+                            .then(isDarkFeaturesValid => {
+                                if (isDarkFeaturesValid) {
+                                    LiveSessionEventsSrv._handelLessonSummary(liveSessionData)
+                                        .then(() => LiveSessionSrv.clearScheduledLessonData());
+                                } else {
+                                    $log.debug('darkFeatures in OFF');
+                                    LiveSessionSrv.clearScheduledLessonData();
+                                }
+                            })
                             .catch(err => $log.error('isDarkFeaturesValid Error: ', err));
                     });
                 }
@@ -94,25 +101,35 @@
                 LiveSessionSrv._moveToArchive(liveSessionData);
             };
 
-            LiveSessionEventsSrv._handelLiveSession = (liveSessionData) => {
-                if (LiveSessionSrv.scheduledLessonFromAdapter &&
-                    LiveSessionSrv.scheduledLessonFromAdapter.lessonSummaryId) {
-                    ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId)
-                        .then(lessonSummary => {
-                            lessonSummary = lessonSummary || ZnkLessonNotesUiSrv.newLessonSummary(liveSessionData);
-                            if (liveSessionData.educatorId === currUid) {
-                                ZnkLessonNotesUiSrv.openLessonNotesPopup(LiveSessionSrv.scheduledLessonFromAdapter, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
+            LiveSessionEventsSrv._handelLessonSummary = (liveSessionData) => {
+                let getLessonSummaryProm = null;
+                return LiveSessionSrv.getScheduledLessonData(liveSessionData.lessonId).then(scheduledLesson => {
+                    if (scheduledLesson) {
+                        if (scheduledLesson.lessonSummaryId) {
+                            $log.debug('_handelLessonSummary: getLessonSummaryById: ', scheduledLesson.lessonSummaryId);
+                            getLessonSummaryProm = ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId);
+                        } else {
+                            $log.debug('_handelLessonSummary: New Lesson Summary');
+                            getLessonSummaryProm = Promise.resolve(ZnkLessonNotesUiSrv.newLessonSummary(liveSessionData));
+                        }
+
+                        return getLessonSummaryProm.then(lessonSummary => {
+                            if (lessonSummary) {
+                                scheduledLesson.lessonSummaryId =
+                                    scheduledLesson.lessonSummaryId || lessonSummary.id;
+                                if (liveSessionData.educatorId === currUid) {
+                                    return ZnkLessonNotesUiSrv.openLessonNotesPopup(scheduledLesson, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
+                                } else {
+                                    return ZnkLessonNotesUiSrv.openLessonRatingPopup(scheduledLesson, lessonSummary);
+                                }
                             } else {
-                                ZnkLessonNotesUiSrv.openLessonRatingPopup(LiveSessionSrv.scheduledLessonFromAdapter, lessonSummary);
+                                $log.error('_handelLessonSummary: Error: lessonSummary is required');
                             }
                         });
-                } else {
-                    $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
-                }
-
-                LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
-                // Security check to insure there isn't active session
-                LiveSessionSrv._moveToArchive(liveSessionData);
+                    } else {
+                        $log.error('_handelLessonSummary: scheduledLesson is required');
+                    }
+                });
             };
 
             LiveSessionEventsSrv._cb = (liveSessionData) => {
