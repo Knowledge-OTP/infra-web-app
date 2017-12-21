@@ -447,7 +447,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.purchase').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/purchase/components/purchaseBtn/purchaseBtn.template.html",
     "<ng-switch on=\"vm.purchaseState\">\n" +
     "\n" +

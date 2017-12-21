@@ -237,7 +237,7 @@
     });
 })(angular);
 
-angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html",
     "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
     "    <div class=\"time-line-wrapper\">\n" +

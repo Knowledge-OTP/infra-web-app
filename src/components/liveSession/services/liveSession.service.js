@@ -13,12 +13,12 @@
             };
 
             let activeLiveSessionDataFromAdapter = null;
-            let scheduledLessonFromAdapter = null;
             let currUserLiveSessionState = UserLiveSessionStateEnum.NONE.enum;
             let registeredCbToActiveLiveSessionDataChanges = [];
             let registeredCbToCurrUserLiveSessionStateChange = [];
             let liveSessionInterval = {};
             let isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
+            this.scheduledLessonFromAdapter = null;
 
             this.startLiveSession = (studentData, lessonData) => {
                 return UserProfileService.getCurrUserId().then((currUserId) => {
@@ -28,7 +28,7 @@
 
                     };
 
-                    scheduledLessonFromAdapter = lessonData.scheduledLesson || null;
+                    this.scheduledLessonFromAdapter = lessonData.scheduledLesson || null;
 
                     return this._initiateLiveSession(educatorData, studentData, lessonData, UserLiveSessionStateEnum.EDUCATOR.enum);
                 });

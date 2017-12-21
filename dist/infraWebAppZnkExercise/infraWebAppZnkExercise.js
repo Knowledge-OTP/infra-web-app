@@ -303,7 +303,7 @@
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
     "    <div class=\"answer-explanation-content-wrapper\"\n" +

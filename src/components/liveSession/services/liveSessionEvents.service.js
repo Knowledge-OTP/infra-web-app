@@ -10,9 +10,9 @@
         };
 
         this.$get = function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
-                     UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
-                     LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum,
-                     ZnkLessonNotesUiSrv) {
+                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
+                              LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum,
+                              ZnkLessonNotesUiSrv) {
 
             let currUid = null;
             let LiveSessionEventsSrv = {};
@@ -81,33 +81,34 @@
                         LiveSessionUiSrv.showStudentDeclineSessionPopup();
                     }
                 } else {
-                    LiveSessionUiSrv.showEndSessionPopup()
-                        .then(() => {
-                            LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
-                                .then(isDarkFeaturesValid => {
-                                    if (isDarkFeaturesValid) {
-                                        $log.debug('darkFeatures in ON');
-                                        if (liveSessionData.lessonSummaryId) {
-                                            ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId).then(lessonSummary => {
-                                                if (liveSessionData.educatorId === currUid) {
-                                                    ZnkLessonNotesUiSrv.openLessonNotesPopup(lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
-                                                } else {
-                                                    ZnkLessonNotesUiSrv.openLessonRatingPopup(lessonSummary, UserTypeContextEnum.STUDENT.enum);
-                                                }
-                                            });
-                                        } else {
-                                            $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
-                                        }
-                                    } else {
-                                        $log.debug('darkFeatures in OFF');
-                                    }
-                                }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
-                        });
+                    LiveSessionUiSrv.showEndSessionPopup().then(() => {
+                        LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                            .then(isDarkFeaturesValid => isDarkFeaturesValid ?
+                                LiveSessionEventsSrv._handelLiveSession(liveSessionData) : $log.debug('darkFeatures in OFF'))
+                            .catch(err => $log.error('isDarkFeaturesValid Error: ', err));
+                    });
                 }
 
                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                 // Security check to insure there isn't active session
                 LiveSessionSrv._moveToArchive(liveSessionData);
+            };
+
+            LiveSessionEventsSrv._handelLiveSession = (liveSessionData) => {
+                if (LiveSessionSrv.scheduledLessonFromAdapter &&
+                    LiveSessionSrv.scheduledLessonFromAdapter.lessonSummaryId) {
+                    ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId)
+                        .then(lessonSummary => {
+                            lessonSummary = lessonSummary || ZnkLessonNotesUiSrv.newLessonSummary(liveSessionData);
+                            if (liveSessionData.educatorId === currUid) {
+                                ZnkLessonNotesUiSrv.openLessonNotesPopup(LiveSessionSrv.scheduledLessonFromAdapter, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
+                            } else {
+                                ZnkLessonNotesUiSrv.openLessonRatingPopup(LiveSessionSrv.scheduledLessonFromAdapter, lessonSummary);
+                            }
+                        });
+                } else {
+                    $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
+                }
             };
 
             LiveSessionEventsSrv._cb = (liveSessionData) => {

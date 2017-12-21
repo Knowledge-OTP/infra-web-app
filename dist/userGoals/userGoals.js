@@ -102,6 +102,6 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
     }];
 }]);
 
-angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
 
 }]);
