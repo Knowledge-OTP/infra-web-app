@@ -243,6 +243,7 @@
                     $log.debug('lessonNotesPopup: Init with lessonSummary: ', this.lessonSummary);
                     this.showSpinner = false;
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                    this.lessonSummary =  this.lessonSummary || {};
                     this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
                     this.lessonSummary.lessonNotes.status = this.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
                 };
@@ -480,6 +481,7 @@
                 this.$onInit = () => {
                     $log.debug('lessonRatingPopup: Init with lesson: ', this.lesson );
                     $log.debug('lessonRatingPopup: Init with lessonSummary: ', this.lessonSummary);
+                    this.lessonSummary =  this.lessonSummary || {};
                     this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
                     this.closeModal = $mdDialog.cancel;
                     this.showSpinner = false;
@@ -652,52 +654,46 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesUiSrv',
-        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "ZnkLessonNotesSrv", "UtilitySrv", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, ZnkLessonNotesSrv, UtilitySrv) {
+        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "LessonNotesStatusEnum", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, LessonNotesStatusEnum) {
             'ngInject';
 
-            this.openLessonNotesPopup = (lessonSummary, userContext) => {
-                ZnkLessonNotesSrv.getLessonsByLessonSummaryIds([lessonSummary.id])
-                    .then(lessons => {
-                        if (lessons && lessons.length) {
-                            lessons.sort(UtilitySrv.array.sortByField('date'));
-                        } else {
-                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryIds: No lessons were found with lessonSummaryId ', lessonSummary.id);
-                            return;
-                        }
-                        $rootScope.lesson = lessons.pop();
-                        $rootScope.lessonSummary = lessonSummary;
-                        $rootScope.userContext = userContext;
-                        $mdDialog.show({
-                            template: `<lesson-notes-popup lesson-summary="lessonSummary" lesson="lesson" user-context="userContext"
+            this.openLessonNotesPopup = (lesson, lessonSummary, userContext) => {
+                $rootScope.lesson = lesson;
+                $rootScope.lessonSummary = lessonSummary;
+                $rootScope.userContext = userContext;
+                $mdDialog.show({
+                    template: `<lesson-notes-popup lesson-summary="lessonSummary" lesson="lesson" user-context="userContext"
                         aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
-                            scope: $rootScope,
-                            clickOutsideToClose: false,
-                            escapeToClose: true
-                        })
-                            .catch(err => $log.error(`openLessonNotesPopup: getLessonsByLessonSummaryIds: Error: ${err}`));
-                    });
+                    scope: $rootScope,
+                    clickOutsideToClose: false,
+                    escapeToClose: true
+                });
             };
 
-            this.openLessonRatingPopup = (lessonSummary) => {
-                ZnkLessonNotesSrv.getLessonsByLessonSummaryIds([lessonSummary.id])
-                    .then(lessons => {
-                        if (lessons && lessons.length) {
-                            lessons.sort(UtilitySrv.array.sortByField('date'));
-                        } else {
-                            $log.error('openLessonNotesPopup: getLessonsByLessonSummaryIds: No lessons were found with lessonSummaryId ', lessonSummary.id);
-                            return;
-                        }
-                        $rootScope.lesson = lessons.pop();
-                        $rootScope.lessonSummary = lessonSummary;
-                        $mdDialog.show({
-                            template: `<lesson-rating-popup lesson-summary="lessonSummary" lesson="lesson"
+            this.openLessonRatingPopup = (lesson, lessonSummary) => {
+                $rootScope.lesson = lesson;
+                $rootScope.lessonSummary = lessonSummary;
+                $mdDialog.show({
+                    template: `<lesson-rating-popup lesson-summary="lessonSummary" lesson="lesson"
                             aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
-                            scope: $rootScope,
-                            clickOutsideToClose: false,
-                            escapeToClose: true
-                        });
-                    })
-                    .catch(err => $log.error(`openLessonRatingPopup: getLessonsByLessonSummaryIds: Error: ${err}`));
+                    scope: $rootScope,
+                    clickOutsideToClose: false,
+                    escapeToClose: true
+                });
+            };
+
+            this.newLessonSummary = (liveSessionData) => {
+                return {
+                    id: liveSessionData.lessonSummaryId,
+                    startTime: liveSessionData.startTime ,
+                    endTime: liveSessionData.endTime,
+                    liveSessions: [liveSessionData.guid],
+                    studentFeedback: null,
+                    lessonNotes: {
+                        status: LessonNotesStatusEnum.PENDING_NOTES.enum
+                    },
+                    dbType: 'lessonSummary'
+                };
             };
 
             this.getUserFullName = (profile) => {
@@ -760,7 +756,9 @@
                 return $http.get(getLessonSummaryApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
-                }).then(lessonSummary => lessonSummary.data);
+                })
+                    .then(lessonSummary => lessonSummary.data)
+                    .catch(() => null);
             };
 
             this.getLessonsByLessonSummaryIds = (lessonSummaryIds) => {
@@ -876,11 +874,12 @@
                     return Promise.reject('At list one email is required');
                 }
             };
+
         }]
     );
 })(angular);
 
-angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html",
     "<div class=\"lesson-details\" ng-if=\"vm.fields.length\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
     "    <div class=\"field\" ng-repeat=\"field in vm.fields\" ng-if=\"field.text\">\n" +
@@ -918,17 +917,15 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            <div class=\"divider\" ng-if=\"vm.isAdmin\"></div>\n" +
     "\n" +
     "            <znk-lesson-teacher-notes lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-teacher-notes>\n" +
-    "\n" +
-    "            <div class=\"btn-group\">\n" +
-    "                <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
-    "                    <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
-    "                    <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
-    "                </button>\n" +
-    "\n" +
-    "                <button type=\"button\" class=\"btn-type-link\" ng-click=\"vm.doItLater()\"\n" +
-    "                        translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
-    "                </button>\n" +
-    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"btn-group\">\n" +
+    "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
+    "                <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
+    "                <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" class=\"btn-type-link\" ng-click=\"vm.doItLater()\"\n" +
+    "                    translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
+    "            </button>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +
@@ -1036,17 +1033,16 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            <div class=\"divider\"></div>\n" +
     "\n" +
     "            <znk-lesson-rating lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-rating>\n" +
+    "        </div>\n" +
+    "        <div class=\"btn-group\">\n" +
+    "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
+    "                <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
+    "                <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
+    "            </button>\n" +
     "\n" +
-    "            <div class=\"btn-group\">\n" +
-    "                <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
-    "                    <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
-    "                    <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
-    "                </button>\n" +
-    "\n" +
-    "                <button type=\"button\" class=\"btn-type-link\" ng-click=\"vm.closeModal()\"\n" +
-    "                        translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
-    "                </button>\n" +
-    "            </div>\n" +
+    "            <button type=\"button\" class=\"btn-type-link\" ng-click=\"vm.closeModal()\"\n" +
+    "                    translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
+    "            </button>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "</div>\n" +

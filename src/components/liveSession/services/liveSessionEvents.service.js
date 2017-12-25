@@ -10,9 +10,9 @@
         };
 
         this.$get = function (UserProfileService, InfraConfigSrv, $q, StorageSrv, ENV, LiveSessionStatusEnum,
-                     UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
-                     LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum,
-                     ZnkLessonNotesUiSrv) {
+                              UserLiveSessionStateEnum, $log, LiveSessionUiSrv, LiveSessionSrv,
+                              LiveSessionDataGetterSrv, ZnkLessonNotesSrv, UserTypeContextEnum,
+                              ZnkLessonNotesUiSrv) {
 
             let currUid = null;
             let LiveSessionEventsSrv = {};
@@ -71,7 +71,7 @@
                 // determine if student decline the live session request
                 const isStudentDeclineTheSession = !liveSessionData.startTime;
 
-                if (liveSessionData.studentId !== currUid) {
+                if (liveSessionData.educatorId === currUid) {
                     LiveSessionSrv.hangCall(liveSessionData.studentId);
                     LiveSessionSrv._destroyCheckDurationInterval();
                 }
@@ -81,33 +81,55 @@
                         LiveSessionUiSrv.showStudentDeclineSessionPopup();
                     }
                 } else {
-                    LiveSessionUiSrv.showEndSessionPopup()
-                        .then(() => {
-                            LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
-                                .then(isDarkFeaturesValid => {
-                                    if (isDarkFeaturesValid) {
-                                        $log.debug('darkFeatures in ON');
-                                        if (liveSessionData.lessonSummaryId) {
-                                            ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId).then(lessonSummary => {
-                                                if (liveSessionData.educatorId === currUid) {
-                                                    ZnkLessonNotesUiSrv.openLessonNotesPopup(lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
-                                                } else {
-                                                    ZnkLessonNotesUiSrv.openLessonRatingPopup(lessonSummary, UserTypeContextEnum.STUDENT.enum);
-                                                }
-                                            });
-                                        } else {
-                                            $log.debug('endLiveSession: There is NO lessonSummaryId on liveSessionData');
-                                        }
-                                    } else {
-                                        $log.debug('darkFeatures in OFF');
-                                    }
-                                }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
-                        });
+                    LiveSessionUiSrv.showEndSessionPopup().then(() => {
+                        LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
+                            .then(isDarkFeaturesValid => {
+                                if (isDarkFeaturesValid) {
+                                    LiveSessionEventsSrv._handelLessonSummary(liveSessionData)
+                                        .then(() => LiveSessionSrv.clearScheduledLessonData());
+                                } else {
+                                    $log.debug('darkFeatures in OFF');
+                                    LiveSessionSrv.clearScheduledLessonData();
+                                }
+                            })
+                            .catch(err => $log.error('isDarkFeaturesValid Error: ', err));
+                    });
                 }
 
                 LiveSessionSrv._userLiveSessionStateChanged(UserLiveSessionStateEnum.NONE.enum, liveSessionData);
                 // Security check to insure there isn't active session
                 LiveSessionSrv._moveToArchive(liveSessionData);
+            };
+
+            LiveSessionEventsSrv._handelLessonSummary = (liveSessionData) => {
+                let getLessonSummaryProm = null;
+                return LiveSessionSrv.getScheduledLessonData(liveSessionData.lessonId).then(scheduledLesson => {
+                    if (scheduledLesson) {
+                        if (scheduledLesson.lessonSummaryId) {
+                            $log.debug('_handelLessonSummary: getLessonSummaryById: ', scheduledLesson.lessonSummaryId);
+                            getLessonSummaryProm = ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId);
+                        } else {
+                            $log.debug('_handelLessonSummary: New Lesson Summary');
+                            getLessonSummaryProm = Promise.resolve(ZnkLessonNotesUiSrv.newLessonSummary(liveSessionData));
+                        }
+
+                        return getLessonSummaryProm.then(lessonSummary => {
+                            if (lessonSummary) {
+                                scheduledLesson.lessonSummaryId =
+                                    scheduledLesson.lessonSummaryId || lessonSummary.id;
+                                if (liveSessionData.educatorId === currUid) {
+                                    return ZnkLessonNotesUiSrv.openLessonNotesPopup(scheduledLesson, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
+                                } else {
+                                    return ZnkLessonNotesUiSrv.openLessonRatingPopup(scheduledLesson, lessonSummary);
+                                }
+                            } else {
+                                $log.error('_handelLessonSummary: Error: lessonSummary is required');
+                            }
+                        });
+                    } else {
+                        $log.error('_handelLessonSummary: scheduledLesson is required');
+                    }
+                });
             };
 
             LiveSessionEventsSrv._cb = (liveSessionData) => {

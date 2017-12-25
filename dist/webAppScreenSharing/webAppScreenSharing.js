@@ -66,7 +66,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewer.template.html",
     "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
     "    <div class=\"header\">\n" +

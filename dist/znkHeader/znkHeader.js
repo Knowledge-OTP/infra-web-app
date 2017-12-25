@@ -172,7 +172,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +

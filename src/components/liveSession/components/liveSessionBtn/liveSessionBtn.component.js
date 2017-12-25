@@ -72,7 +72,7 @@
                             .then(isDarkFeaturesValid => {
                                 if (isDarkFeaturesValid) {
                                     $log.debug('darkFeatures in ON');
-                                    this.getScheduledLessonData().then(scheduledLessonData => {
+                                    this.getScheduledLessons().then(scheduledLessonData => {
                                         LiveSessionUiSrv.closePopup();
                                         if (scheduledLessonData) {
                                             LiveSessionSrv.startLiveSession(this.student, scheduledLessonData);
@@ -99,7 +99,7 @@
                     });
                 };
 
-                this.getScheduledLessonData = () => {
+                this.getScheduledLessons = () => {
                     let dataPromMap = {
                         liveSessionSettings: this.liveSessionSettings ? $q.when(this.liveSessionSettings) : liveSessionSettingsProm,
                         educatorProfile: this.educatorProfile ? $q.when(this.educatorProfile) : educatorProfileProm
@@ -201,6 +201,7 @@
                     return scheduledLessonMap;
 
                 };
+
             }
         });
 })(angular);

@@ -135,13 +135,12 @@
                         let popUpInstance = PopUpSrv.warning(
                             translations.title,
                             translations.content,
-                            translations.cancelBtnTitle,
-                            translations.extendBtnTitle
+                            translations.extendBtnTitle,
+                            translations.cancelBtnTitle
                         );
                         return popUpInstance.promise
-                        // todo: figure out why it's opposite
-                            .then(res => $q.reject(res))
-                            .catch(err => $q.resolve(err));
+                            .then(res => $q.resolve(res))
+                            .catch(err => $q.reject(err));
                     }).catch(err => {
                         $log.error('LiveSessionUiSrv: showSessionEndAlertPopup Error: ' + err);
                         return $q.reject(err);

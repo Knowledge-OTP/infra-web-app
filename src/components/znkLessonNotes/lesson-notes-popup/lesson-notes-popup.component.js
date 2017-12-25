@@ -19,6 +19,7 @@
                     $log.debug('lessonNotesPopup: Init with lessonSummary: ', this.lessonSummary);
                     this.showSpinner = false;
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                    this.lessonSummary =  this.lessonSummary || {};
                     this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
                     this.lessonSummary.lessonNotes.status = this.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
                 };

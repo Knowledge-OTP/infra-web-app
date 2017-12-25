@@ -126,7 +126,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.feedback').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/feedback/svg/completed-v-feedback.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +

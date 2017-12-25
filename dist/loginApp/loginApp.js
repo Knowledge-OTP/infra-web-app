@@ -867,7 +867,7 @@
     });
 })(angular);
 
-angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($templateCache) {
+angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/loginApp/directives/loginApp/loginApp.template.html",
     "<div class=\"login-app\" ng-class=\"{\n" +
     "        student: d.userContext === d.userContextObj.STUDENT,\n" +
