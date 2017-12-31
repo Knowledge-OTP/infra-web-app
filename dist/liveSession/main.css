@@ -271,18 +271,24 @@ live-session-subject-modal .live-session-subject-modal {
       color: #757a83;
       font-family: Lato;
       font-weight: 400;
-      text-align: center; }
+      text-align: center;
+      margin-bottom: 20px; }
     live-session-subject-modal .live-session-subject-modal .popup-content .subjects-btns {
       display: -ms-flexbox;
       display: flex;
       -ms-flex-pack: center;
-          justify-content: center; }
+          justify-content: center;
+      -ms-flex-item-align: center;
+          align-self: center;
+      width: 90%;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap; }
       live-session-subject-modal .live-session-subject-modal .popup-content .subjects-btns .subject-icon-wrap {
         width: 155px;
         height: 35px;
         border-radius: 30px;
         color: #ffffff;
-        margin: auto 5px;
+        margin: 5px;
         display: -ms-flexbox;
         display: flex;
         -ms-flex-align: center;
@@ -293,9 +299,11 @@ live-session-subject-modal .live-session-subject-modal {
         live-session-subject-modal .live-session-subject-modal .popup-content .subjects-btns .subject-icon-wrap svg-icon path {
           fill: #ffffff; }
         live-session-subject-modal .live-session-subject-modal .popup-content .subjects-btns .subject-icon-wrap.math {
-          background-color: #AF89D2; }
+          background-color: #7a7fa9; }
         live-session-subject-modal .live-session-subject-modal .popup-content .subjects-btns .subject-icon-wrap.english {
           background-color: #F3CF19; }
+        live-session-subject-modal .live-session-subject-modal .popup-content .subjects-btns .subject-icon-wrap.science {
+          background-color: #51CDBA; }
         live-session-subject-modal .live-session-subject-modal .popup-content .subjects-btns .subject-icon-wrap svg-icon {
           width: 25px;
           height: 25px;
