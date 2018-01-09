@@ -19180,7 +19180,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "            </md-list>\n" +
     "        </div>\n" +
     "        <div class=\"app-user-area\" layout=\"row\" layout-align=\"center center\">\n" +
-    "            <invitation-manager></invitation-manager>\n" +
     "            <div class=\"profile-status\" ng-click=\"vm.showPurchaseDialog()\">\n" +
     "                <div class=\"pending-purchase-icon-wrapper\" ng-if=\"vm.purchaseState === 'pending'\">\n" +
     "                    <svg-icon name=\"pending-purchase-clock-icon\"></svg-icon>\n" +
