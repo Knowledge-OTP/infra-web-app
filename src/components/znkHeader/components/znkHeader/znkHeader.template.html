@@ -19,9 +19,6 @@
         </div>
         <div class="app-user-area" layout="row" layout-align="center center">
             <invitation-manager></invitation-manager>
-            <a ng-click="vm.goToMyZinkerz('scheduling/teacher')">
-                <svg-icon class="calendar-icon" name="calendar-icon"></svg-icon>
-            </a>
             <div class="profile-status" ng-click="vm.showPurchaseDialog()">
                 <div class="pending-purchase-icon-wrapper" ng-if="vm.purchaseState === 'pending'">
                     <svg-icon name="pending-purchase-clock-icon"></svg-icon>
@@ -51,9 +48,6 @@
                                 </div>
                             </ng-switch>
                         </md-list-item>
-                        <md-list-item md-ink-ripple ng-class="{'no-live-lessons': vm.noLiveLessons}" class="header-modal-item header-modal-item-uppercase links">
-                            <span ng-click="vm.showMyLiveLessonsSchedule()" translate=".MY_LIVE_LESSONS"></span>
-                        </md-list-item>
                         <md-list-item md-ink-ripple aria-label="{{'ZNK_HEADER.PROFILE_GOALS' | translate}}" ng-disabled="!vm.isOnBoardingCompleted"
                             disable-click-drv ng-click="vm.showGoalsEdit()">
                             <div class="header-modal-item header-modal-item-uppercase links" translate=".PROFILE_GOALS"></div>
@@ -61,6 +55,9 @@
                         <md-list-item md-ink-ripple aria-label="{{'ZNK_HEADER.MY_PROFILE' | translate}}" ng-click="vm.goToMyZinkerz('usercard/studentcard')">
                             <div class="header-modal-item header-modal-item-uppercase links" translate=".MY_PROFILE"></div>
                         </md-list-item>
+                        <md-list-item md-ink-ripple ng-class="{'no-live-lessons': vm.noLiveLessons}" class="header-modal-item header-modal-item-uppercase links">
+                          <span ng-click="vm.showMyLiveLessonsSchedule()" translate=".MY_LIVE_LESSONS"></span>
+                      </md-list-item>
                         <md-list-item md-ink-ripple>
                             <a ui-sref="app.faq" class="header-modal-item header-modal-item-uppercase links" translate=".WHAT_IS_THE_THIS_TEST">
                             </a>
