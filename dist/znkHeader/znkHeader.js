@@ -194,10 +194,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "            </md-list>\n" +
     "        </div>\n" +
     "        <div class=\"app-user-area\" layout=\"row\" layout-align=\"center center\">\n" +
-    "            <invitation-manager></invitation-manager>\n" +
-    "            <a ng-click=\"vm.goToMyZinkerz('scheduling/teacher')\">\n" +
-    "                <svg-icon class=\"calendar-icon\" name=\"calendar-icon\"></svg-icon>\n" +
-    "            </a>\n" +
     "            <div class=\"profile-status\" ng-click=\"vm.showPurchaseDialog()\">\n" +
     "                <div class=\"pending-purchase-icon-wrapper\" ng-if=\"vm.purchaseState === 'pending'\">\n" +
     "                    <svg-icon name=\"pending-purchase-clock-icon\"></svg-icon>\n" +
@@ -227,9 +223,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                                </div>\n" +
     "                            </ng-switch>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item md-ink-ripple ng-class=\"{'no-live-lessons': vm.noLiveLessons}\" class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                            <span ng-click=\"vm.showMyLiveLessonsSchedule()\" translate=\".MY_LIVE_LESSONS\"></span>\n" +
-    "                        </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple aria-label=\"{{'ZNK_HEADER.PROFILE_GOALS' | translate}}\" ng-disabled=\"!vm.isOnBoardingCompleted\"\n" +
     "                            disable-click-drv ng-click=\"vm.showGoalsEdit()\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase links\" translate=\".PROFILE_GOALS\"></div>\n" +
@@ -237,6 +230,9 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                        <md-list-item md-ink-ripple aria-label=\"{{'ZNK_HEADER.MY_PROFILE' | translate}}\" ng-click=\"vm.goToMyZinkerz('usercard/studentcard')\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase links\" translate=\".MY_PROFILE\"></div>\n" +
     "                        </md-list-item>\n" +
+    "                        <md-list-item md-ink-ripple ng-class=\"{'no-live-lessons': vm.noLiveLessons}\" class=\"header-modal-item header-modal-item-uppercase links\">\n" +
+    "                          <span ng-click=\"vm.showMyLiveLessonsSchedule()\" translate=\".MY_LIVE_LESSONS\"></span>\n" +
+    "                      </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple>\n" +
     "                            <a ui-sref=\"app.faq\" class=\"header-modal-item header-modal-item-uppercase links\" translate=\".WHAT_IS_THE_THIS_TEST\">\n" +
     "                            </a>\n" +
