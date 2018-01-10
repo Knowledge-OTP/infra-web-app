@@ -230,8 +230,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "                        <md-list-item md-ink-ripple aria-label=\"{{'ZNK_HEADER.MY_PROFILE' | translate}}\" ng-click=\"vm.goToMyZinkerz('usercard/studentcard')\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase links\" translate=\".MY_PROFILE\"></div>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item md-ink-ripple ng-class=\"{'no-live-lessons': vm.noLiveLessons}\" class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                          <span ng-click=\"vm.showMyLiveLessonsSchedule()\" translate=\".MY_LIVE_LESSONS\"></span>\n" +
+    "                        <md-list-item md-ink-ripple class=\"header-modal-item header-modal-item-uppercase links\">\n" +
+    "                          <span ng-click=\"vm.goToMyZinkerz('scheduling/main')\" translate=\".MY_LIVE_LESSONS\"></span>\n" +
     "                      </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple>\n" +
     "                            <a ui-sref=\"app.faq\" class=\"header-modal-item header-modal-item-uppercase links\" translate=\".WHAT_IS_THE_THIS_TEST\">\n" +
