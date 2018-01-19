@@ -24,11 +24,13 @@
                 let educatorProfileProm = UserProfileService.getProfile();
 
                 this.$onInit = () => {
+                    // Live session btn, click on it will start all the flow
                     this.isLiveSessionActive = false;
                     this.isOffline = true;
                     this.isDiagnosticCompleted = false;
                     this.initializeLiveSessionStatus();
 
+                    // Watch on student presences to enable/disable the live session btn on the educator client
                     $scope.$watch('vm.student', newStudent => {
                         if (newStudent && angular.isDefined(newStudent.presence)) {
                             this.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
@@ -38,11 +40,13 @@
                             });
                         }
                     }, true);
-
+                    // Watch live session state changes to change the live session btn activity (Start Session/End Session)
                     LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(this.liveSessionStateChanged);
                 };
 
+                // handel the live session btn state in case on browser refresh/reload
                 this.initializeLiveSessionStatus = () => {
+                    //
                     LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         if (liveSessionData) {
                             this.liveSessionStateChanged(liveSessionData.status);
@@ -50,6 +54,7 @@
                     });
                 };
 
+                // Show the topic modal to select topic in case we don't have dark lunch
                 this.showSessionModal = () => {
                     $mdDialog.show({
                         template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
@@ -59,15 +64,18 @@
                     });
                 };
 
+                // click on start session execute this fn
                 this.showStartSessionPopup = () => {
                     if (!this.isDiagnosticCompleted) {
                         $log.debug('showStartSessionPopup: Student didn\'t complete Diagnostic test');
                         return LiveSessionUiSrv.showIncompleteDiagnostic(this.student.name);
                     }
 
+                    // show wait popup to the educator while dark lunch check and getting the schedule lessons
                     LiveSessionUiSrv.showWaitPopUp();
 
                     UserProfileService.getCurrUserId().then(educatorId => {
+                        // check if there is dark lunch in both educator and student
                         LiveSessionUiSrv.isDarkFeaturesValid(educatorId, this.student.uid)
                             .then(isDarkFeaturesValid => {
                                 if (isDarkFeaturesValid) {
@@ -75,6 +83,7 @@
                                     this.getScheduledLessons().then(scheduledLessonData => {
                                         LiveSessionUiSrv.closePopup();
                                         if (scheduledLessonData) {
+                                            // continue with saving the liveSession in db
                                             LiveSessionSrv.startLiveSession(this.student, scheduledLessonData);
                                         } else {
                                             LiveSessionUiSrv.showNoLessonScheduledPopup(this.student.name)
@@ -82,23 +91,30 @@
                                         }
                                     });
                                 } else {
+                                    // close the wait popup and open the topic select modal
                                     LiveSessionUiSrv.closePopup();
                                     this.showSessionModal();
                                 }
-                            }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
+                            }).catch(err => {
+                            $log.error('isDarkFeaturesValid Error: ', err);
+                            LiveSessionUiSrv.errorPopup();
+                        });
                     });
                 };
 
+                // change the live session btn activity (Start Session/End Session)
                 this.liveSessionStateChanged = (newLiveSessionState) => {
                     this.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
                 };
 
+                // click on start session execute this fn
                 this.endSession = () => {
                     LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                     });
                 };
 
+                // get the schedule lessons between range of (now - 75 min) and (now + 4 hours)
                 this.getScheduledLessons = () => {
                     let dataPromMap = {
                         liveSessionSettings: this.liveSessionSettings ? $q.when(this.liveSessionSettings) : liveSessionSettingsProm,
@@ -118,25 +134,37 @@
 
                         return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid)
                             .then(lessons => {
+                                let lessonToReturn = null;
                                 if (lessons && lessons.length) {
                                     lessons.sort(UtilitySrv.array.sortByField('date'));
-                                    return this.getLessonInRange(lessons);
-                                } else {
-                                    return null;
+                                    lessonToReturn = this.getLessonInRange(lessons);
                                 }
-                            }, err => $log.error('getScheduledLesson: getLessonsByStudentIds Error: ', err));
+                                return lessonToReturn;
+                            }, err => {
+                                $log.error('getScheduledLesson: getLessonsByStudentIds Error: ', err);
+                                LiveSessionUiSrv.errorPopup();
+                            });
                     });
 
 
                 };
 
+                // check if the lessons schedule for now (now > lesson.date - 5 min) and (now < lesson.date + 60 min + 15 min)
                 this.getLessonInRange = (lessons) => {
                     let scheduledLessonMap = {};
+                    let now = Date.now();
                     if (lessons && lessons.length > 0) {
                         // No multiple lesson return single lesson
                         if (lessons.length === 1) {
-                            scheduledLessonMap.scheduledLesson = lessons.pop();
-                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
+                            let lesson = lessons.pop();
+                            let startTimeRange = lesson.date - SESSION_SETTINGS.marginBeforeSessionStart;
+                            let endTimeRange = lesson.date + SESSION_SETTINGS.length + SESSION_SETTINGS.marginAfterSessionStart;
+                            if (now > startTimeRange && now < endTimeRange) {
+                                scheduledLessonMap.scheduledLesson = lesson;
+                                scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
+                            } else {
+                                scheduledLessonMap = null;
+                            }
                         } else {
                             $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
                             scheduledLessonMap = this.checkBack2BackLesson(lessons);
@@ -146,6 +174,7 @@
                     return scheduledLessonMap;
                 };
 
+                // multiple lessons -  check if there back to back lesson (double lesson)
                 this.checkBack2BackLesson = (lessons) => {
                     $log.debug(`checkBack2BackLesson`);
                     let scheduledLessonMap = {};
@@ -154,13 +183,13 @@
                     lessons.forEach(lesson => {
                         let startTimeRange = lesson.date - SESSION_SETTINGS.marginBeforeSessionStart;
                         let endTimeRange = lesson.date + SESSION_SETTINGS.length + SESSION_SETTINGS.marginAfterSessionStart;
-                        if ((startTimeRange < now < endTimeRange) && !scheduledLessonMap.scheduledLesson) {
+                        if ((now > startTimeRange && now < endTimeRange) && !scheduledLessonMap.scheduledLesson) {
                             scheduledLessonMap.scheduledLesson = lesson;
                             back2BackLessons.push(lesson);
                             scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
                         } else if (scheduledLessonMap.scheduledLesson) {
                             // must be second iteration or above
-                            if ((back2BackLessons[back2BackLessons.length-1].date + SESSION_SETTINGS.length) === lesson.date) {
+                            if ((back2BackLessons[back2BackLessons.length - 1].date + SESSION_SETTINGS.length) === lesson.date) {
                                 $log.debug(`checkBack2BackLesson: b2b lesson found. lessonId: ${lesson.id}`);
                                 // scenario when the second lesson in the array is the actual scheduledLesson and not the first one
                                 if (lesson.date < now) {

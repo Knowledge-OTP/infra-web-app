@@ -20,6 +20,7 @@
                     this.closeModal = $mdDialog.cancel;
                 };
 
+                // Show the topic modal to select topic in case we don't have dark lunch
                 this.startSession = (sessionSubject) => {
                     liveSessionSettingsProm.then(liveSessionSettings => {
                         let liveSessionLength = liveSessionSettings.length || ENV.liveSession.length;

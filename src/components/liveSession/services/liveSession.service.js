@@ -20,6 +20,7 @@
             let isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
             let scheduledLessonFromAdapter = null;
 
+            // return the live session obj data from adapter
             this.getScheduledLessonData = (lessonId) => {
                 if (scheduledLessonFromAdapter) {
                     return Promise.resolve(scheduledLessonFromAdapter);
@@ -29,10 +30,12 @@
                 }
             };
 
+            // clear the live session obj data from adapter
             this.clearScheduledLessonData = () => {
                 scheduledLessonFromAdapter = null;
             };
 
+            // get the educator date and start the session
             this.startLiveSession = (studentData, lessonData) => {
                 return UserProfileService.getCurrUserId().then((currUserId) => {
                     let educatorData = {
@@ -47,6 +50,7 @@
                 });
             };
 
+            // student live session confirmation
             this.confirmLiveSession = (liveSessionGuid) => {
                 if (currUserLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
                     let errMsg = 'LiveSessionSrv: live session is already active!!!';
@@ -65,6 +69,7 @@
                     });
             };
 
+            // make auto call after session starts
             this.makeAutoCall = (receiverId, liveSessionDataGuid) => {
                 let isAutoCallAlreadyMade = $window.localStorage.getItem('isAutoCallAlreadyMade');
                 isAutoCallAlreadyMade = JSON.parse(isAutoCallAlreadyMade);
@@ -80,6 +85,7 @@
                 });
             };
 
+            // hang call when sesison ends
             this.hangCall = (receiverId) => {
                 CallsSrv.isUserInActiveCall().then((isInActiveCall) => {
                     if (isInActiveCall) {
@@ -93,6 +99,7 @@
                 });
             };
 
+            // handel ending live session
             this.endLiveSession = (liveSessionGuid) => {
                 let getDataPromMap = {};
                 getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
@@ -111,6 +118,7 @@
                 });
             };
 
+            // handel updating live session
             this.updateLiveSession = (liveSessionToUpdate) => {
                 return this._getStorage().then((data) => {
                     let dataToSave = {
@@ -121,6 +129,8 @@
                 });
             };
 
+            // when ending session this fn clears both student and educator active session path
+            // and moving the session guid to archive path
             this._moveToArchive = (liveSessionData) => {
                 let getDataPromMap = {};
                 getDataPromMap.currUid = UserProfileService.getCurrUserId();
@@ -156,6 +166,7 @@
                 });
             };
 
+            // insert callback fn to cb array that execute when live session DATA changed
             this.registerToActiveLiveSessionDataChanges = (cb) => {
                 registeredCbToActiveLiveSessionDataChanges.push(cb);
                 if (activeLiveSessionDataFromAdapter) {
@@ -163,19 +174,23 @@
                 }
             };
 
+            // remove callback fn from cb array
             this.unregisterFromActiveLiveSessionDataChanges = (cb) => {
                 registeredCbToActiveLiveSessionDataChanges = this._removeCbFromCbArr(registeredCbToActiveLiveSessionDataChanges, cb);
             };
 
+            // insert callback fn to cb array that execute when live session STATUS changed
             this.registerToCurrUserLiveSessionStateChanges = (cb) => {
                 registeredCbToCurrUserLiveSessionStateChange.push(cb);
             };
 
+            // remove callback fn from cb array
             this.unregisterFromCurrUserLiveSessionStateChanges = (cb) => {
                 this._cleanRegisteredCbToActiveLiveSessionData();
                 registeredCbToCurrUserLiveSessionStateChange = this._removeCbFromCbArr(registeredCbToCurrUserLiveSessionStateChange, cb);
             };
 
+            // get live session data from DB
             this.getActiveLiveSessionData = () => {
                 if (!activeLiveSessionDataFromAdapter) {
                     return $q.when(null);
@@ -196,6 +211,7 @@
                 });
             };
 
+            // handel live session STATE changes
             this._userLiveSessionStateChanged = (newUserLiveSessionState, liveSessionData) => {
                 if (!newUserLiveSessionState || (currUserLiveSessionState === newUserLiveSessionState)) {
                     return;
@@ -217,6 +233,7 @@
                 this._invokeCurrUserLiveSessionStateChangedCb(currUserLiveSessionState);
             };
 
+            // handel live session DATA changes, execute callbacks array
             this._liveSessionDataChanged = (newLiveSessionData) => {
                 if (!activeLiveSessionDataFromAdapter || activeLiveSessionDataFromAdapter.guid !== newLiveSessionData.guid) {
                     return;
@@ -227,11 +244,13 @@
                 this._invokeCbs(registeredCbToActiveLiveSessionDataChanges, [activeLiveSessionDataFromAdapter]);
             };
 
+            // when session ends, destroy the check times up session interval
             this._destroyCheckDurationInterval = () => {
                 $interval.cancel(liveSessionInterval.interval);
                 liveSessionInterval = {};
             };
 
+            // check if lesson times up
             this._checkSessionDuration = () => {
                 if (isTeacherApp && activeLiveSessionDataFromAdapter.status === LiveSessionStatusEnum.CONFIRMED.enum) {
                     if (liveSessionInterval.interval) {
@@ -258,6 +277,8 @@
                 }
             };
 
+            // then student confirm the session and the session started
+            // update the schedule lesson status to attended (only if dark lunch)
             this._updateLessonsStatusToAttended = (liveSessionData) => {
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
@@ -279,10 +300,12 @@
                     }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
+            // return now time with round milliseconds
             this._getRoundTime = () => {
                 return Math.floor(Date.now() / 1000) * 1000;
             };
 
+            // return the APP global storage
             this._getStorage = () => {
                 return InfraConfigSrv.getGlobalStorage();
             };
@@ -295,6 +318,7 @@
                 return initiatorToInitStatusMap[initiator] || null;
             };
 
+            // check if there is no active session
             this._isLiveSessionAlreadyInitiated = (educatorId, studentId) => {
                 return LiveSessionDataGetterSrv.getCurrUserLiveSessionData().then((liveSessionDataMap) => {
                     let isInitiated = false;
@@ -318,6 +342,10 @@
                 });
             };
 
+            // check if there is no active session and start new session
+            // build the live session obj and save it to the db
+            // also save the live session guid in both student and educator active session path
+            // (those with the event listener on)
             this._initiateLiveSession = (educatorData, studentData, lessonData, initiator) => {
                 let errMsg;
 
@@ -405,27 +433,32 @@
                 });
             };
 
+            // clear the live session data adapter
             this._cleanRegisteredCbToActiveLiveSessionData = () => {
                 activeLiveSessionDataFromAdapter = null;
                 registeredCbToActiveLiveSessionDataChanges = [];
             };
 
+            // execute when live session STATUS changed
             this._invokeCurrUserLiveSessionStateChangedCb = () => {
                 this._invokeCbs(registeredCbToCurrUserLiveSessionStateChange, [currUserLiveSessionState]);
             };
 
+            // remove fn from array
             this._removeCbFromCbArr = (cbArr, cb) => {
                 return cbArr.filter((iterationCb) => {
                     return iterationCb !== cb;
                 });
             };
 
+            // execute callbacks array
             this._invokeCbs = (cbArr, args) => {
                 cbArr.forEach((cb) => {
                     cb.apply(null, args);
                 });
             };
 
+            // educator can extend the session with another 15 min when the times up alert poped
             this.confirmExtendSession = () => {
                 LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid)
                     .then((liveSessionData) => {

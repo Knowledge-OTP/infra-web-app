@@ -15,6 +15,7 @@
                 extendTime: ENV.liveSession.sessionExtendTime,
             };
 
+            // create the live session dom element and insert it to body
             LiveSessionUiSrv._init = () => {
                 let bodyElement = angular.element(document.body);
 
@@ -22,7 +23,7 @@
 
                 bodyElement.append(liveSessionPhElement);
 
-                //load liveSessionDuration from firebase
+                // load liveSessionDuration from firebase
                 LiveSessionDataGetterSrv.getLiveSessionDuration()
                     .then((liveSessionDuration) => {
                         if (liveSessionDuration) {
@@ -33,6 +34,7 @@
                 });
             };
 
+            // destroy the live session element
             LiveSessionUiSrv.endLiveSession = () => {
                 if (childScope) {
                     childScope.$destroy();
@@ -46,6 +48,7 @@
                 }
             };
 
+            // when session starts this element get the class the display the orange square
             LiveSessionUiSrv.activateLiveSession = (userLiveSessionState) => {
                 LiveSessionUiSrv.endLiveSession();
 
@@ -75,6 +78,7 @@
                 return defer.promise;
             };
 
+            // student confirmation popup
             LiveSessionUiSrv.showStudentConfirmationPopUp = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
@@ -98,6 +102,7 @@
                     });
             };
 
+            // educator waiting popup until student confirm the session
             LiveSessionUiSrv.showEducatorPendingPopUp = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
@@ -112,6 +117,7 @@
                     });
             };
 
+            // show wait popup to the educator while dark lunch check and getting the schedule lessons
             LiveSessionUiSrv.showWaitPopUp = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.STARTING_SESSION');
@@ -124,6 +130,7 @@
                     });
             };
 
+            // alert popup for educator when the lesson comes to an end
             LiveSessionUiSrv.showSessionEndAlertPopup = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT');
@@ -147,6 +154,7 @@
                     });
             };
 
+            // end session notification popup
             LiveSessionUiSrv.showEndSessionPopup = () => {
                 LiveSessionUiSrv.closePopup();
                 let translationsPromMap = {};
@@ -167,6 +175,7 @@
                     });
             };
 
+            // popup to the educator when student decline the session (in dark lunch)
             LiveSessionUiSrv.showStudentDeclineSessionPopup = () => {
                 LiveSessionUiSrv.closePopup();
                 let translationsPromMap = {};
@@ -200,6 +209,7 @@
                     });
             };
 
+            // popup to the educator when there in no scheduled lesson in calender (in dark lunch)
             LiveSessionUiSrv.showNoLessonScheduledPopup = (studentName) => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.CANT_START_SESSION');
@@ -213,6 +223,7 @@
                     });
             };
 
+            // toaster notification for the student that the session started
             LiveSessionUiSrv.showLiveSessionToast = () => {
                 let options = {
                     hideDelay: 5000,
@@ -231,6 +242,24 @@
                 }
             };
 
+            LiveSessionUiSrv.errorPopup = () => {
+                LiveSessionUiSrv.closePopup();
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_LESSON.TITLE');
+                translationsPromMap.content = $translate('LIVE_LESSON.GENERAL_ERROR');
+                return $q.all(translationsPromMap)
+                    .then(translations => {
+                        return PopUpSrv.error(
+                            translations.title,
+                            translations.content
+                        );
+                    }).catch(err => {
+                        $log.error('LiveSessionUiSrv: errorPopup Error: ' + err);
+                        return $q.reject(err);
+                    });
+            };
+
+            // check if there is dark lunch in both educator and student
             LiveSessionUiSrv.isDarkFeaturesValid = (educatorId, studentId) => {
                 if (darkFeaturesValid !== null) {
                     return Promise.resolve(darkFeaturesValid);

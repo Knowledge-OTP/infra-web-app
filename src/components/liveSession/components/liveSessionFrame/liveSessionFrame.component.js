@@ -11,6 +11,7 @@
             controller: function (UserLiveSessionStateEnum, $log) {
                 'ngInject';
 
+                // adding the classes that display the orange square
                 this.$onInit = () => {
                     if (this.userLiveSessionState) {
                         this.liveSessionCls = 'active-state';
