@@ -62,11 +62,13 @@
                 let educatorProfileProm = UserProfileService.getProfile();
 
                 this.$onInit = () => {
+                    // Live session btn, click on it will start all the flow
                     this.isLiveSessionActive = false;
                     this.isOffline = true;
                     this.isDiagnosticCompleted = false;
                     this.initializeLiveSessionStatus();
 
+                    // Watch on student presences to enable/disable the live session btn on the educator client
                     $scope.$watch('vm.student', newStudent => {
                         if (newStudent && angular.isDefined(newStudent.presence)) {
                             this.isOffline = newStudent.presence === PresenceService.userStatus.OFFLINE;
@@ -76,11 +78,13 @@
                             });
                         }
                     }, true);
-
+                    // Watch live session state changes to change the live session btn activity (Start Session/End Session)
                     LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(this.liveSessionStateChanged);
                 };
 
+                // handel the live session btn state in case on browser refresh/reload
                 this.initializeLiveSessionStatus = () => {
+                    //
                     LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         if (liveSessionData) {
                             this.liveSessionStateChanged(liveSessionData.status);
@@ -88,6 +92,7 @@
                     });
                 };
 
+                // Show the topic modal to select topic in case we don't have dark lunch
                 this.showSessionModal = () => {
                     $mdDialog.show({
                         template: '<live-session-subject-modal student="vm.student"></live-session-subject-modal>',
@@ -97,15 +102,18 @@
                     });
                 };
 
+                // click on start session execute this fn
                 this.showStartSessionPopup = () => {
                     if (!this.isDiagnosticCompleted) {
                         $log.debug('showStartSessionPopup: Student didn\'t complete Diagnostic test');
                         return LiveSessionUiSrv.showIncompleteDiagnostic(this.student.name);
                     }
 
+                    // show wait popup to the educator while dark lunch check and getting the schedule lessons
                     LiveSessionUiSrv.showWaitPopUp();
 
                     UserProfileService.getCurrUserId().then(educatorId => {
+                        // check if there is dark lunch in both educator and student
                         LiveSessionUiSrv.isDarkFeaturesValid(educatorId, this.student.uid)
                             .then(isDarkFeaturesValid => {
                                 if (isDarkFeaturesValid) {
@@ -113,6 +121,7 @@
                                     this.getScheduledLessons().then(scheduledLessonData => {
                                         LiveSessionUiSrv.closePopup();
                                         if (scheduledLessonData) {
+                                            // continue with saving the liveSession in db
                                             LiveSessionSrv.startLiveSession(this.student, scheduledLessonData);
                                         } else {
                                             LiveSessionUiSrv.showNoLessonScheduledPopup(this.student.name)
@@ -120,23 +129,30 @@
                                         }
                                     });
                                 } else {
+                                    // close the wait popup and open the topic select modal
                                     LiveSessionUiSrv.closePopup();
                                     this.showSessionModal();
                                 }
-                            }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
+                            }).catch(err => {
+                            $log.error('isDarkFeaturesValid Error: ', err);
+                            LiveSessionUiSrv.errorPopup();
+                        });
                     });
                 };
 
+                // change the live session btn activity (Start Session/End Session)
                 this.liveSessionStateChanged = (newLiveSessionState) => {
                     this.isLiveSessionActive = newLiveSessionState === LiveSessionStatusEnum.CONFIRMED.enum;
                 };
 
+                // click on start session execute this fn
                 this.endSession = () => {
                     LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                     });
                 };
 
+                // get the schedule lessons between range of (now - 75 min) and (now + 4 hours)
                 this.getScheduledLessons = () => {
                     let dataPromMap = {
                         liveSessionSettings: this.liveSessionSettings ? $q.when(this.liveSessionSettings) : liveSessionSettingsProm,
@@ -156,25 +172,37 @@
 
                         return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid)
                             .then(lessons => {
+                                let lessonToReturn = null;
                                 if (lessons && lessons.length) {
                                     lessons.sort(UtilitySrv.array.sortByField('date'));
-                                    return this.getLessonInRange(lessons);
-                                } else {
-                                    return null;
+                                    lessonToReturn = this.getLessonInRange(lessons);
                                 }
-                            }, err => $log.error('getScheduledLesson: getLessonsByStudentIds Error: ', err));
+                                return lessonToReturn;
+                            }, err => {
+                                $log.error('getScheduledLesson: getLessonsByStudentIds Error: ', err);
+                                LiveSessionUiSrv.errorPopup();
+                            });
                     });
 
 
                 };
 
+                // check if the lessons schedule for now (now > lesson.date - 5 min) and (now < lesson.date + 60 min + 15 min)
                 this.getLessonInRange = (lessons) => {
                     let scheduledLessonMap = {};
+                    let now = Date.now();
                     if (lessons && lessons.length > 0) {
                         // No multiple lesson return single lesson
                         if (lessons.length === 1) {
-                            scheduledLessonMap.scheduledLesson = lessons.pop();
-                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
+                            let lesson = lessons.pop();
+                            let startTimeRange = lesson.date - SESSION_SETTINGS.marginBeforeSessionStart;
+                            let endTimeRange = lesson.date + SESSION_SETTINGS.length + SESSION_SETTINGS.marginAfterSessionStart;
+                            if (now > startTimeRange && now < endTimeRange) {
+                                scheduledLessonMap.scheduledLesson = lesson;
+                                scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
+                            } else {
+                                scheduledLessonMap = null;
+                            }
                         } else {
                             $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
                             scheduledLessonMap = this.checkBack2BackLesson(lessons);
@@ -184,6 +212,7 @@
                     return scheduledLessonMap;
                 };
 
+                // multiple lessons -  check if there back to back lesson (double lesson)
                 this.checkBack2BackLesson = (lessons) => {
                     $log.debug(`checkBack2BackLesson`);
                     let scheduledLessonMap = {};
@@ -192,13 +221,13 @@
                     lessons.forEach(lesson => {
                         let startTimeRange = lesson.date - SESSION_SETTINGS.marginBeforeSessionStart;
                         let endTimeRange = lesson.date + SESSION_SETTINGS.length + SESSION_SETTINGS.marginAfterSessionStart;
-                        if ((startTimeRange < now < endTimeRange) && !scheduledLessonMap.scheduledLesson) {
+                        if ((now > startTimeRange && now < endTimeRange) && !scheduledLessonMap.scheduledLesson) {
                             scheduledLessonMap.scheduledLesson = lesson;
                             back2BackLessons.push(lesson);
                             scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
                         } else if (scheduledLessonMap.scheduledLesson) {
                             // must be second iteration or above
-                            if ((back2BackLessons[back2BackLessons.length-1].date + SESSION_SETTINGS.length) === lesson.date) {
+                            if ((back2BackLessons[back2BackLessons.length - 1].date + SESSION_SETTINGS.length) === lesson.date) {
                                 $log.debug(`checkBack2BackLesson: b2b lesson found. lessonId: ${lesson.id}`);
                                 // scenario when the second lesson in the array is the actual scheduledLesson and not the first one
                                 if (lesson.date < now) {
@@ -257,6 +286,7 @@
             controller: ["UserLiveSessionStateEnum", "$log", function (UserLiveSessionStateEnum, $log) {
                 'ngInject';
 
+                // adding the classes that display the orange square
                 this.$onInit = () => {
                     if (this.userLiveSessionState) {
                         this.liveSessionCls = 'active-state';
@@ -292,6 +322,7 @@
                     this.closeModal = $mdDialog.cancel;
                 };
 
+                // Show the topic modal to select topic in case we don't have dark lunch
                 this.startSession = (sessionSubject) => {
                     liveSessionSettingsProm.then(liveSessionSettings => {
                         let liveSessionLength = liveSessionSettings.length || ENV.liveSession.length;
@@ -363,6 +394,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveSession').run(
+        // execute in APP load, to add event listener to both student and educator active session paths
         ["ActivePanelSrv", "LiveSessionEventsSrv", function(ActivePanelSrv, LiveSessionEventsSrv){
             'ngInject';
             ActivePanelSrv.loadActivePanel();
@@ -393,6 +425,7 @@
             let isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
             let scheduledLessonFromAdapter = null;
 
+            // return the live session obj data from adapter
             this.getScheduledLessonData = (lessonId) => {
                 if (scheduledLessonFromAdapter) {
                     return Promise.resolve(scheduledLessonFromAdapter);
@@ -402,10 +435,12 @@
                 }
             };
 
+            // clear the live session obj data from adapter
             this.clearScheduledLessonData = () => {
                 scheduledLessonFromAdapter = null;
             };
 
+            // get the educator date and start the session
             this.startLiveSession = (studentData, lessonData) => {
                 return UserProfileService.getCurrUserId().then((currUserId) => {
                     let educatorData = {
@@ -420,6 +455,7 @@
                 });
             };
 
+            // student live session confirmation
             this.confirmLiveSession = (liveSessionGuid) => {
                 if (currUserLiveSessionState !== UserLiveSessionStateEnum.NONE.enum) {
                     let errMsg = 'LiveSessionSrv: live session is already active!!!';
@@ -438,6 +474,7 @@
                     });
             };
 
+            // make auto call after session starts
             this.makeAutoCall = (receiverId, liveSessionDataGuid) => {
                 let isAutoCallAlreadyMade = $window.localStorage.getItem('isAutoCallAlreadyMade');
                 isAutoCallAlreadyMade = JSON.parse(isAutoCallAlreadyMade);
@@ -453,6 +490,7 @@
                 });
             };
 
+            // hang call when sesison ends
             this.hangCall = (receiverId) => {
                 CallsSrv.isUserInActiveCall().then((isInActiveCall) => {
                     if (isInActiveCall) {
@@ -466,6 +504,7 @@
                 });
             };
 
+            // handel ending live session
             this.endLiveSession = (liveSessionGuid) => {
                 let getDataPromMap = {};
                 getDataPromMap.liveSessionData = LiveSessionDataGetterSrv.getLiveSessionData(liveSessionGuid);
@@ -484,6 +523,7 @@
                 });
             };
 
+            // handel updating live session
             this.updateLiveSession = (liveSessionToUpdate) => {
                 return this._getStorage().then((data) => {
                     let dataToSave = {
@@ -494,6 +534,8 @@
                 });
             };
 
+            // when ending session this fn clears both student and educator active session path
+            // and moving the session guid to archive path
             this._moveToArchive = (liveSessionData) => {
                 let getDataPromMap = {};
                 getDataPromMap.currUid = UserProfileService.getCurrUserId();
@@ -529,6 +571,7 @@
                 });
             };
 
+            // insert callback fn to cb array that execute when live session DATA changed
             this.registerToActiveLiveSessionDataChanges = (cb) => {
                 registeredCbToActiveLiveSessionDataChanges.push(cb);
                 if (activeLiveSessionDataFromAdapter) {
@@ -536,19 +579,23 @@
                 }
             };
 
+            // remove callback fn from cb array
             this.unregisterFromActiveLiveSessionDataChanges = (cb) => {
                 registeredCbToActiveLiveSessionDataChanges = this._removeCbFromCbArr(registeredCbToActiveLiveSessionDataChanges, cb);
             };
 
+            // insert callback fn to cb array that execute when live session STATUS changed
             this.registerToCurrUserLiveSessionStateChanges = (cb) => {
                 registeredCbToCurrUserLiveSessionStateChange.push(cb);
             };
 
+            // remove callback fn from cb array
             this.unregisterFromCurrUserLiveSessionStateChanges = (cb) => {
                 this._cleanRegisteredCbToActiveLiveSessionData();
                 registeredCbToCurrUserLiveSessionStateChange = this._removeCbFromCbArr(registeredCbToCurrUserLiveSessionStateChange, cb);
             };
 
+            // get live session data from DB
             this.getActiveLiveSessionData = () => {
                 if (!activeLiveSessionDataFromAdapter) {
                     return $q.when(null);
@@ -569,6 +616,7 @@
                 });
             };
 
+            // handel live session STATE changes
             this._userLiveSessionStateChanged = (newUserLiveSessionState, liveSessionData) => {
                 if (!newUserLiveSessionState || (currUserLiveSessionState === newUserLiveSessionState)) {
                     return;
@@ -590,6 +638,7 @@
                 this._invokeCurrUserLiveSessionStateChangedCb(currUserLiveSessionState);
             };
 
+            // handel live session DATA changes, execute callbacks array
             this._liveSessionDataChanged = (newLiveSessionData) => {
                 if (!activeLiveSessionDataFromAdapter || activeLiveSessionDataFromAdapter.guid !== newLiveSessionData.guid) {
                     return;
@@ -600,11 +649,13 @@
                 this._invokeCbs(registeredCbToActiveLiveSessionDataChanges, [activeLiveSessionDataFromAdapter]);
             };
 
+            // when session ends, destroy the check times up session interval
             this._destroyCheckDurationInterval = () => {
                 $interval.cancel(liveSessionInterval.interval);
                 liveSessionInterval = {};
             };
 
+            // check if lesson times up
             this._checkSessionDuration = () => {
                 if (isTeacherApp && activeLiveSessionDataFromAdapter.status === LiveSessionStatusEnum.CONFIRMED.enum) {
                     if (liveSessionInterval.interval) {
@@ -631,6 +682,8 @@
                 }
             };
 
+            // then student confirm the session and the session started
+            // update the schedule lesson status to attended (only if dark lunch)
             this._updateLessonsStatusToAttended = (liveSessionData) => {
                 return LiveSessionUiSrv.isDarkFeaturesValid(liveSessionData.educatorId, liveSessionData.studentId)
                     .then(isDarkFeaturesValid => {
@@ -652,10 +705,12 @@
                     }).catch(err => $log.error('isDarkFeaturesValid Error: ', err));
             };
 
+            // return now time with round milliseconds
             this._getRoundTime = () => {
                 return Math.floor(Date.now() / 1000) * 1000;
             };
 
+            // return the APP global storage
             this._getStorage = () => {
                 return InfraConfigSrv.getGlobalStorage();
             };
@@ -668,6 +723,7 @@
                 return initiatorToInitStatusMap[initiator] || null;
             };
 
+            // check if there is no active session
             this._isLiveSessionAlreadyInitiated = (educatorId, studentId) => {
                 return LiveSessionDataGetterSrv.getCurrUserLiveSessionData().then((liveSessionDataMap) => {
                     let isInitiated = false;
@@ -691,6 +747,10 @@
                 });
             };
 
+            // check if there is no active session and start new session
+            // build the live session obj and save it to the db
+            // also save the live session guid in both student and educator active session path
+            // (those with the event listener on)
             this._initiateLiveSession = (educatorData, studentData, lessonData, initiator) => {
                 let errMsg;
 
@@ -778,27 +838,32 @@
                 });
             };
 
+            // clear the live session data adapter
             this._cleanRegisteredCbToActiveLiveSessionData = () => {
                 activeLiveSessionDataFromAdapter = null;
                 registeredCbToActiveLiveSessionDataChanges = [];
             };
 
+            // execute when live session STATUS changed
             this._invokeCurrUserLiveSessionStateChangedCb = () => {
                 this._invokeCbs(registeredCbToCurrUserLiveSessionStateChange, [currUserLiveSessionState]);
             };
 
+            // remove fn from array
             this._removeCbFromCbArr = (cbArr, cb) => {
                 return cbArr.filter((iterationCb) => {
                     return iterationCb !== cb;
                 });
             };
 
+            // execute callbacks array
             this._invokeCbs = (cbArr, args) => {
                 cbArr.forEach((cb) => {
                     cb.apply(null, args);
                 });
             };
 
+            // educator can extend the session with another 15 min when the times up alert poped
             this.confirmExtendSession = () => {
                 LiveSessionDataGetterSrv.getLiveSessionData(activeLiveSessionDataFromAdapter.guid)
                     .then((liveSessionData) => {
@@ -824,21 +889,25 @@
 
             let _this = this;
 
+            // return the APP global storage
             this._getStorage = () => {
                 return InfraConfigSrv.getGlobalStorage();
             };
 
+            // return live session path from APP root
             this.getLiveSessionDataPath = (guid) => {
                 let LIVE_SESSION_ROOT_PATH = '/liveSession/';
                 return LIVE_SESSION_ROOT_PATH + guid;
             };
 
+            // return student/educator path from APP by context. ex: act_dashboard/users/$$uid$$/liveSession
             this.getUserLiveSessionRequestsPath  = (userData) => {
                 let appName = userData.isTeacher ? ENV.dashboardAppName : ENV.studentAppName;
                 let USER_DATA_PATH = appName  + '/users/' + userData.uid;
                 return USER_DATA_PATH + '/liveSession';
             };
 
+            // get live session data from DB
             this.getLiveSessionData = (liveSessionGuid) => {
                 let liveSessionDataPath = _this.getLiveSessionDataPath(liveSessionGuid);
                 return this._getStorage().then((storage) => {
@@ -846,11 +915,13 @@
                 });
             };
 
+            // get live session duration from cosmos db (previous document db)
             this.getLiveSessionDuration = () => {
                 return ZnkLessonNotesSrv.getGlobalVariables()
                     .then(globalVariables => globalVariables.liveSession);
             };
 
+            // get live session active guid from DB. ex: act_dashboard/users/$$uid$$/liveSession/active
             this.getCurrUserLiveSessionRequests = () => {
                 return UserProfileService.getCurrUserId().then(currUid => {
                     return this._getStorage().then(storage => {
@@ -860,6 +931,7 @@
                 });
             };
 
+            // return live session data if there is active session
             this.getCurrUserLiveSessionData = () => {
                 return _this.getCurrUserLiveSessionRequests().then((currUserLiveSessionRequests) =>{
                     let liveSessionDataPromMap = {};
@@ -918,7 +990,7 @@
                                 LiveSessionUiSrv.showEducatorPendingPopUp();
                             }
                         } else {
-                            if (liveSessionData.studentId === currUid) {
+                            if (liveSessionData.educatorId === currUid) {
                                 LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
                             }
                         }
@@ -1076,6 +1148,7 @@
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
         'ngInject';
+        // defult topics. every APP infra suppose to setLiveSessionTopics of there own
         let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH, LiveSessionSubjectConst.SCIENCE];
 
         this.setLiveSessionTopics = (_topics) => {
@@ -1088,6 +1161,7 @@
 
             let LiveSessionSubjectSrv = {};
 
+            // return topic obj from LiveSessionSubjectConst (infra)
             LiveSessionSubjectSrv.getLiveSessionTopics = () => {
                 return topics.map(function (topicId) {
                     let topicName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectConst, topicId).toLowerCase();
@@ -1099,6 +1173,7 @@
                 });
             };
 
+            // handel the diff between the old subject enum and the new topic enum from my zinkerz app
             LiveSessionSubjectSrv.getSessionSubject = (lessonData) => {
                 console.log('_getSessionSubject lessonData : ', lessonData);
                 if (lessonData.sessionSubject) {
@@ -1136,6 +1211,7 @@
                 extendTime: ENV.liveSession.sessionExtendTime,
             };
 
+            // create the live session dom element and insert it to body
             LiveSessionUiSrv._init = () => {
                 let bodyElement = angular.element(document.body);
 
@@ -1143,7 +1219,7 @@
 
                 bodyElement.append(liveSessionPhElement);
 
-                //load liveSessionDuration from firebase
+                // load liveSessionDuration from firebase
                 LiveSessionDataGetterSrv.getLiveSessionDuration()
                     .then((liveSessionDuration) => {
                         if (liveSessionDuration) {
@@ -1154,6 +1230,7 @@
                 });
             };
 
+            // destroy the live session element
             LiveSessionUiSrv.endLiveSession = () => {
                 if (childScope) {
                     childScope.$destroy();
@@ -1167,6 +1244,7 @@
                 }
             };
 
+            // when session starts this element get the class the display the orange square
             LiveSessionUiSrv.activateLiveSession = (userLiveSessionState) => {
                 LiveSessionUiSrv.endLiveSession();
 
@@ -1196,6 +1274,7 @@
                 return defer.promise;
             };
 
+            // student confirmation popup
             LiveSessionUiSrv.showStudentConfirmationPopUp = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
@@ -1219,6 +1298,7 @@
                     });
             };
 
+            // educator waiting popup until student confirm the session
             LiveSessionUiSrv.showEducatorPendingPopUp = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.LIVE_SESSION_REQUEST');
@@ -1233,6 +1313,7 @@
                     });
             };
 
+            // show wait popup to the educator while dark lunch check and getting the schedule lessons
             LiveSessionUiSrv.showWaitPopUp = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.STARTING_SESSION');
@@ -1245,6 +1326,7 @@
                     });
             };
 
+            // alert popup for educator when the lesson comes to an end
             LiveSessionUiSrv.showSessionEndAlertPopup = () => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.END_ALERT');
@@ -1268,6 +1350,7 @@
                     });
             };
 
+            // end session notification popup
             LiveSessionUiSrv.showEndSessionPopup = () => {
                 LiveSessionUiSrv.closePopup();
                 let translationsPromMap = {};
@@ -1288,6 +1371,7 @@
                     });
             };
 
+            // popup to the educator when student decline the session (in dark lunch)
             LiveSessionUiSrv.showStudentDeclineSessionPopup = () => {
                 LiveSessionUiSrv.closePopup();
                 let translationsPromMap = {};
@@ -1321,6 +1405,7 @@
                     });
             };
 
+            // popup to the educator when there in no scheduled lesson in calender (in dark lunch)
             LiveSessionUiSrv.showNoLessonScheduledPopup = (studentName) => {
                 let translationsPromMap = {};
                 translationsPromMap.title = $translate('LIVE_SESSION.CANT_START_SESSION');
@@ -1334,6 +1419,7 @@
                     });
             };
 
+            // toaster notification for the student that the session started
             LiveSessionUiSrv.showLiveSessionToast = () => {
                 let options = {
                     hideDelay: 5000,
@@ -1352,6 +1438,24 @@
                 }
             };
 
+            LiveSessionUiSrv.errorPopup = () => {
+                LiveSessionUiSrv.closePopup();
+                let translationsPromMap = {};
+                translationsPromMap.title = $translate('LIVE_LESSON.TITLE');
+                translationsPromMap.content = $translate('LIVE_LESSON.GENERAL_ERROR');
+                return $q.all(translationsPromMap)
+                    .then(translations => {
+                        return PopUpSrv.error(
+                            translations.title,
+                            translations.content
+                        );
+                    }).catch(err => {
+                        $log.error('LiveSessionUiSrv: errorPopup Error: ' + err);
+                        return $q.reject(err);
+                    });
+            };
+
+            // check if there is dark lunch in both educator and student
             LiveSessionUiSrv.isDarkFeaturesValid = (educatorId, studentId) => {
                 if (darkFeaturesValid !== null) {
                     return Promise.resolve(darkFeaturesValid);

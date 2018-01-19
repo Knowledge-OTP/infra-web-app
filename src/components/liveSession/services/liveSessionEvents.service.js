@@ -40,7 +40,7 @@
                                 LiveSessionUiSrv.showEducatorPendingPopUp();
                             }
                         } else {
-                            if (liveSessionData.studentId === currUid) {
+                            if (liveSessionData.educatorId === currUid) {
                                 LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
                             }
                         }

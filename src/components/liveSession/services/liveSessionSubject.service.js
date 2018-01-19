@@ -4,6 +4,7 @@
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', function (LiveSessionSubjectConst) {
         'ngInject';
+        // defult topics. every APP infra suppose to setLiveSessionTopics of there own
         let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH, LiveSessionSubjectConst.SCIENCE];
 
         this.setLiveSessionTopics = (_topics) => {
@@ -16,6 +17,7 @@
 
             let LiveSessionSubjectSrv = {};
 
+            // return topic obj from LiveSessionSubjectConst (infra)
             LiveSessionSubjectSrv.getLiveSessionTopics = () => {
                 return topics.map(function (topicId) {
                     let topicName = UtilitySrv.object.getKeyByValue(LiveSessionSubjectConst, topicId).toLowerCase();
@@ -27,6 +29,7 @@
                 });
             };
 
+            // handel the diff between the old subject enum and the new topic enum from my zinkerz app
             LiveSessionSubjectSrv.getSessionSubject = (lessonData) => {
                 console.log('_getSessionSubject lessonData : ', lessonData);
                 if (lessonData.sessionSubject) {

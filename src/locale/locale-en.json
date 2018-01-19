@@ -533,6 +533,8 @@
         "END_SESSION": "End Lesson"
     },
     "LIVE_SESSION": {
+        "TITLE": "Live Lesson",
+        "GENERAL_ERROR": "An error has occurred, Please try again later",
         "START_SESSION": "Start Lesson",
         "STARTING_SESSION": "Starting Lesson...",
         "END_SESSION": "End Lesson",
