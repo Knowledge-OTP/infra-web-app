@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('AdminSearchService',
-            function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv, StorageSrv, InfraConfigSrv) {
+            function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv, StorageSrv, InfraConfigSrv, AccountStatusEnum) {
                 'ngInject';
 
                 var sizeLimit = 10000;
@@ -50,8 +50,9 @@
                         if (!source) {
                             return mappedData;
                         }
+                        var zinkerzTeacher = source && source.teacherInfo && source.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
                         source.uid = item._id;
-                        source.zinkerzTeacher = !!source.zinkerzTeacher;
+                        source.zinkerzTeacher = zinkerzTeacher;
                         return source;
                     });
                     return mappedData;

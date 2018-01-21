@@ -35,7 +35,9 @@
     'use strict';
 
     angular.module('znk.infra-web-app.adminDashboard')
-        .controller('EducatorProfileController', ["$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", "ZnkToastSrv", "EMetadataService", "$filter", function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, EMetadataService, $filter) {
+        .controller('EducatorProfileController',
+            ["$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", "ZnkToastSrv", "EMetadataService", "$filter", "AccountStatusEnum", function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, EMetadataService,
+                      $filter, AccountStatusEnum) {
             'ngInject';
             var self = this;
             var translateFilter = $filter('translate');
@@ -46,6 +48,7 @@
             self.profileData.timezone = localTimezone;
             self.profileData.educatorAvailabilityHours = self.profileData.educatorAvailabilityHours || translateFilter("ADMIN.EMETADATA.FROM_TO");
             self.isTimezoneManual = false;
+            self.isZinkerzTeacher = self.profileData && self.profileData.teacherInfo && self.profileData.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
 
             self.closeDialog = function () {
                 $mdDialog.cancel();
@@ -56,6 +59,7 @@
                     self.profileData.timezone = localTimezone;
                 }
             };
+
             self.updateProfile = function (profileForm) {
                 if (profileForm.$valid && profileForm.$dirty) {
                     EMetadataService.updateProfile(self.profileData).then(_profileSuccess, _profileError);
@@ -64,9 +68,18 @@
 
             self.setZinkerzTeacher = function (profileZinkerzTeacherForm) {
                 if (profileZinkerzTeacherForm.$valid && profileZinkerzTeacherForm.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.profileData.zinkerzTeacher).then(_profileSuccess, _profileError);
+                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.isZinkerzTeacher)
+                        .then(_profileSuccess, _profileError);
                 }
             };
+
+            self.toggleZinkerzTeacher = function (isZinkerzTeacher) {
+                if (!self.profileData.teacherInfo) {
+                    self.profileData.teacherInfo = {};
+                }
+                self.profileData.teacherInfo.accountStatus = isZinkerzTeacher ? AccountStatusEnum.ACTIVE.enum : AccountStatusEnum.INACTIVE.enum;
+            };
+
             function _profileSuccess() {
                 var type, msg;
                 type = 'success';
@@ -707,7 +720,7 @@
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('AdminSearchService',
-            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticSearchSrv", "StorageSrv", "InfraConfigSrv", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv, StorageSrv, InfraConfigSrv) {
+            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticSearchSrv", "StorageSrv", "InfraConfigSrv", "AccountStatusEnum", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv, StorageSrv, InfraConfigSrv, AccountStatusEnum) {
                 'ngInject';
 
                 var sizeLimit = 10000;
@@ -754,8 +767,9 @@
                         if (!source) {
                             return mappedData;
                         }
+                        var zinkerzTeacher = source && source.teacherInfo && source.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
                         source.uid = item._id;
-                        source.zinkerzTeacher = !!source.zinkerzTeacher;
+                        source.zinkerzTeacher = zinkerzTeacher;
                         return source;
                     });
                     return mappedData;
@@ -985,7 +999,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    <div class=\"znk-input\">\n" +
     "                        <input type=\"checkbox\"\n" +
     "                               id=\"zinkerzTeacher\" name=\"zinkerzTeacher\"\n" +
-    "                               ng-model=\"vm.profileData.zinkerzTeacher\">\n" +
+    "                               ng-change=\"toggleZinkerzTeacher($event.checked)\">\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"znk-input-group\"\n" +

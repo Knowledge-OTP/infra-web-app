@@ -710,7 +710,9 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
     'use strict';
 
     angular.module('znk.infra-web-app.adminDashboard')
-        .controller('EducatorProfileController', ["$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", "ZnkToastSrv", "EMetadataService", "$filter", function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, EMetadataService, $filter) {
+        .controller('EducatorProfileController',
+            ["$mdDialog", "$timeout", "userProfile", "timezonesList", "localTimezone", "ZnkToastSrv", "EMetadataService", "$filter", "AccountStatusEnum", function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, EMetadataService,
+                      $filter, AccountStatusEnum) {
             'ngInject';
             var self = this;
             var translateFilter = $filter('translate');
@@ -721,6 +723,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
             self.profileData.timezone = localTimezone;
             self.profileData.educatorAvailabilityHours = self.profileData.educatorAvailabilityHours || translateFilter("ADMIN.EMETADATA.FROM_TO");
             self.isTimezoneManual = false;
+            self.isZinkerzTeacher = self.profileData && self.profileData.teacherInfo && self.profileData.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
 
             self.closeDialog = function () {
                 $mdDialog.cancel();
@@ -731,6 +734,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                     self.profileData.timezone = localTimezone;
                 }
             };
+
             self.updateProfile = function (profileForm) {
                 if (profileForm.$valid && profileForm.$dirty) {
                     EMetadataService.updateProfile(self.profileData).then(_profileSuccess, _profileError);
@@ -739,9 +743,18 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
 
             self.setZinkerzTeacher = function (profileZinkerzTeacherForm) {
                 if (profileZinkerzTeacherForm.$valid && profileZinkerzTeacherForm.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.profileData.zinkerzTeacher).then(_profileSuccess, _profileError);
+                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.isZinkerzTeacher)
+                        .then(_profileSuccess, _profileError);
                 }
             };
+
+            self.toggleZinkerzTeacher = function (isZinkerzTeacher) {
+                if (!self.profileData.teacherInfo) {
+                    self.profileData.teacherInfo = {};
+                }
+                self.profileData.teacherInfo.accountStatus = isZinkerzTeacher ? AccountStatusEnum.ACTIVE.enum : AccountStatusEnum.INACTIVE.enum;
+            };
+
             function _profileSuccess() {
                 var type, msg;
                 type = 'success';
@@ -1382,7 +1395,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
 
     angular.module('znk.infra-web-app.adminDashboard')
         .service('AdminSearchService',
-            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticSearchSrv", "StorageSrv", "InfraConfigSrv", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv, StorageSrv, InfraConfigSrv) {
+            ["$mdDialog", "$http", "ENV", "UserProfileService", "$q", "$log", "ElasticSearchSrv", "StorageSrv", "InfraConfigSrv", "AccountStatusEnum", function ($mdDialog, $http, ENV, UserProfileService, $q, $log, ElasticSearchSrv, StorageSrv, InfraConfigSrv, AccountStatusEnum) {
                 'ngInject';
 
                 var sizeLimit = 10000;
@@ -1429,8 +1442,9 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                         if (!source) {
                             return mappedData;
                         }
+                        var zinkerzTeacher = source && source.teacherInfo && source.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
                         source.uid = item._id;
-                        source.zinkerzTeacher = !!source.zinkerzTeacher;
+                        source.zinkerzTeacher = zinkerzTeacher;
                         return source;
                     });
                     return mappedData;
@@ -1660,7 +1674,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "                    <div class=\"znk-input\">\n" +
     "                        <input type=\"checkbox\"\n" +
     "                               id=\"zinkerzTeacher\" name=\"zinkerzTeacher\"\n" +
-    "                               ng-model=\"vm.profileData.zinkerzTeacher\">\n" +
+    "                               ng-change=\"toggleZinkerzTeacher($event.checked)\">\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"znk-input-group\"\n" +
@@ -7697,7 +7711,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationService',
 
-        ["$log", "$mdDialog", "ENV", "AuthService", "$q", "$http", "$timeout", "PopUpSrv", "$filter", "UserProfileService", "InfraConfigSrv", "StudentContextSrv", function ($log, $mdDialog, ENV, AuthService, $q, $http, $timeout, PopUpSrv, $filter, UserProfileService, InfraConfigSrv, StudentContextSrv) {
+        ["$log", "$mdDialog", "ENV", "AuthService", "$q", "$http", "$timeout", "PopUpSrv", "$filter", "UserProfileService", "InfraConfigSrv", "StudentContextSrv", "AccountStatusEnum", function ($log, $mdDialog, ENV, AuthService, $q, $http, $timeout, PopUpSrv, $filter, UserProfileService,
+                  InfraConfigSrv, StudentContextSrv, AccountStatusEnum) {
             'ngInject';
             var self = this;
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
@@ -8017,7 +8032,8 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                 if (angular.isDefined(teacher)) {
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
                         if (profile){
-                            teacher.zinkerzTeacher = profile.zinkerzTeacher;
+                            var zinkerzTeacher = profile && profile.teacherInfo && profile.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
+                            teacher.zinkerzTeacher = zinkerzTeacher;
                             teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
                             teacher.educatorTeachworksName = profile.educatorTeachworksName;
                             teacher.educatorAvailabilityHours = profile.educatorAvailabilityHours;
