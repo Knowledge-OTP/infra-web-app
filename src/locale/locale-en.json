@@ -607,7 +607,7 @@
         "DO_IT_LATER": "Do It Later",
         "LESSON_RATING_POPUP": {
             "TITLE": "How was this session?",
-            "SUB_TITLE": "Student Lesson Rating",
+            "SUB_TITLE": "Lesson Rating",
             "STAR1": "Sucks big time - 1 star",
             "STAR2": "Kinda bad - 2 stars",
             "STAR3": "Meh - 3 stars",
@@ -647,10 +647,8 @@
             "HOURS": "hours",
             "MINUTES": "minutes",
             "UPDATE_LESSON_FAILED": "Update lesson failed",
-            "SEND_MAIL_FAILED": "Failed to send lesson notes email. Please try again later",
             "NO_MAIL": "At list one email is required",
             "LESSON_NOTES_SAVED": "Lesson Notes Saved",
-            "LESSON_NOTES_EMAIL_SENT": "Lesson Notes Email Sent",
             "TEACHER_NOTES": {
                 "ADMIN_TITLE": "Lesson Note",
                 "TEACHER_TITLE1": "These notes will be sent to the student and parent.",

@@ -10,14 +10,14 @@
     </div>
 
     <div class="content-wrapper">
+        <div class="quicksand-25-b title" translate="LESSON_NOTES.LESSON_RATING_POPUP.TITLE"></div>
         <div class="znk-scrollbar">
-            <div class="quicksand-25-b title" translate="LESSON_NOTES.LESSON_RATING_POPUP.TITLE"></div>
-
             <znk-lesson-details lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-details>
             <div class="divider"></div>
 
             <znk-lesson-rating lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-rating>
         </div>
+        <div class="divider"></div>
         <div class="btn-group">
             <button type="button" class="btn-type-1 save-btn" ng-click="vm.submit()">
                 <span class="btn-text" translate="LESSON_NOTES.SUBMIT"></span>

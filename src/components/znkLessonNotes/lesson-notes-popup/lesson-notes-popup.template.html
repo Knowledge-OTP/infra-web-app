@@ -10,18 +10,18 @@
     </div>
 
     <div class="content-wrapper">
+        <div class="title" translate="LESSON_NOTES.LESSON_NOTES_POPUP.TITLE"></div>
         <div class="znk-scrollbar">
-            <div class="title" translate="LESSON_NOTES.LESSON_NOTES_POPUP.TITLE"></div>
-
             <znk-lesson-details lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-details>
             <znk-lesson-started-late lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-started-late>
             <div class="divider" ng-if="vm.isAdmin"></div>
 
-            <znk-lesson-rating lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-rating>
+            <znk-lesson-rating ng-if="vm.isAdmin || vm.isStudent" lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-rating>
             <div class="divider" ng-if="vm.isAdmin"></div>
 
             <znk-lesson-teacher-notes lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-teacher-notes>
         </div>
+        <div class="divider"></div>
         <div class="btn-group">
             <button type="button" class="btn-type-1 save-btn" ng-click="vm.submit()">
                 <span class="btn-text" translate="LESSON_NOTES.SUBMIT"></span>
@@ -32,4 +32,5 @@
             </button>
         </div>
     </div>
+
 </div>

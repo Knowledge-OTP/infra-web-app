@@ -4,6 +4,8 @@
     overflow: visible;
     width: 700px;
     border-radius: 15px;
+    display: flex;
+    flex-direction: column;
 
     .znk-popup-header{
         position: relative;
@@ -42,14 +44,14 @@
     }
 
     .content-wrapper {
-        height: 95%;
+        height: calc(100% - 33px);
         width: 700px;
         display: flex;
         flex-direction: column;
 
         .znk-scrollbar{
             overflow: auto;
-            height: 90%;
+            height: calc(100% - 110px);
             display: flex;
             flex-direction: column;
         }
@@ -65,7 +67,6 @@
             justify-content: center;
             text-align: center;
         }
-
         .divider {
             background-color: $mercury;
             height: 1px;
@@ -74,7 +75,7 @@
         }
 
         .btn-group {
-            margin: 0 30px;
+            margin: 10px 30px;
             align-self: flex-end;
             display: flex;
             flex-direction: column;
@@ -97,5 +98,6 @@
             }
         }
     }
+
 }
 

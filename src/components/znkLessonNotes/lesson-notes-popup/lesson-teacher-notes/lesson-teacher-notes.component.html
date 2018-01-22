@@ -8,7 +8,7 @@
         <div>{{'LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.TEACHER_TITLE2' | translate}}</div>
     </div>
 
-    <textarea class="lato-14-n note-txt" ng-model="vm.lesson.lessonNotes.educatorNotes"></textarea>
+    <textarea class="lato-14-n note-txt" ng-model="vm.lessonSummary.lessonNotes.educatorNotes"></textarea>
 
     <znk-send-email-notes lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-send-email-notes>
 

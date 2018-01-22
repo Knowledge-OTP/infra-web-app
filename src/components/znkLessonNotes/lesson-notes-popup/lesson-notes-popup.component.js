@@ -11,7 +11,7 @@
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html',
             controllerAs: 'vm',
             controller: function ($log, $mdDialog, $translate, ZnkLessonNotesSrv, UserTypeContextEnum, LessonStatusEnum,
-                                  LessonNotesStatusEnum, ZnkToastSrv) {
+                                  LessonNotesStatusEnum, ZnkToastSrv, UtilitySrv) {
                 'ngInject';
 
                 this.$onInit = () => {
@@ -19,49 +19,39 @@
                     $log.debug('lessonNotesPopup: Init with lessonSummary: ', this.lessonSummary);
                     this.showSpinner = false;
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                    this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.lessonSummary =  this.lessonSummary || {};
+                    this.lessonSummary.id = this.lessonSummary.id || UtilitySrv.general.createGuid();
+                    this.lessonSummary.studentIds = this.lessonSummary.studentIds || Object.keys(this.lesson.students);
+                    this.lessonSummary.educatorId = this.lessonSummary.educatorId || this.lesson.educatorId;
                     this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
-                    this.lessonSummary.lessonNotes.status = this.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_NOTES.enum;
+                    this.lessonSummary.lessonNotes.status = this.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_COMPLETION.enum;
                 };
 
                 this.submit = () => {
                     this.showSpinner = true;
-                    if (ZnkLessonNotesSrv._mailsToSend.length > 0) {
-                        ZnkLessonNotesSrv.sendEmails(this.lesson, this.lessonSummary)
-                            .then(() => {
-                                let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_EMAIL_SENT');
-                                translationsProm.then(message => {
-                                    ZnkToastSrv.showToast('success', message);
-                                });
-
-                                this.saveLessonSummary(this.lessonSummary, true);
-                            })
-                            .catch(err => {
-                                $log.error('lessonNotesPopup: sendEmail failed. Error: ', err);
-                                let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.SEND_MAIL_FAILED');
-                                translationsProm.then(message => {
-                                    ZnkToastSrv.showToast('error', message);
-                                });
-                                this.doItLater();
-                            });
+                    if (ZnkLessonNotesSrv.sendEmailIndicators.sendMailToStudents ||
+                        ZnkLessonNotesSrv.sendEmailIndicators.sendMailToParents) {
+                        this.lessonSummary.lessonNotes.status =
+                            this.lessonSummary.lessonNotes.status === LessonNotesStatusEnum.PENDING_COMPLETION.enum ?
+                                LessonNotesStatusEnum.complete : this.lessonSummary.lessonNotes.status;
+                        this.saveLessonSummary(ZnkLessonNotesSrv.sendEmailIndicators);
                     } else {
-                        $log.error('lessonNotesPopup: At list one email is required');
+                        $log.debug(`lessonNotesPopup: You didn't choose any email to send to`);
                         let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.NO_MAIL');
                         translationsProm.then(message => {
                             ZnkToastSrv.showToast('error', message);
                         });
-                        this.doItLater();
                     }
                 };
 
                 this.doItLater = () => {
-                    this.saveLessonSummary(this.lessonSummary, false);
+                    $mdDialog.cancel();
                 };
 
-                this.saveLessonSummary = (lessonSummary, hasMailSent) => {
-                    $log.debug('saving lessonSummary : ', lessonSummary);
-                    lessonSummary = hasMailSent ? this.updateLessonNotes(lessonSummary) : lessonSummary;
-                    ZnkLessonNotesSrv.saveLessonSummary(lessonSummary)
+                this.saveLessonSummary = (sendEmailIndicators) => {
+                    $log.debug('saving lessonSummary : ', this.lessonSummary);
+                    ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary, sendEmailIndicators)
                         .then(updatedLessonSummary => {
                             $log.debug('lessonNotesPopup saveLessonSummary:  updatedLessonSummary: ', updatedLessonSummary);
                             this.showSpinner = false;
@@ -79,15 +69,6 @@
                                 ZnkToastSrv.showToast('error', message);
                             });
                         });
-                };
-
-                this.updateLessonNotes = (lessonSummary) => {
-                    // update sendMailTime and status in lessonNotes only if email sent
-                    lessonSummary.lessonNotes.sendMailTime = new Date().getTime();
-                    lessonSummary.lessonNotes.status = lessonSummary.lessonNotes.status === LessonNotesStatusEnum.PENDING_NOTES.enum ?
-                        LessonNotesStatusEnum.COMPLETE.enum : lessonSummary.lessonNotes.status;
-
-                    return lessonSummary;
                 };
 
             }

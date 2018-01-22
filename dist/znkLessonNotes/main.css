@@ -240,10 +240,10 @@
 /* Input Colors */
 .znk-scrollbar ::-webkit-scrollbar, .znk-scrollbar::-webkit-scrollbar {
   width: 10px;
-  background-color: #fbfafb; }
+  background-color: #e1e1e1; }
 
 .znk-scrollbar ::-webkit-scrollbar-thumb, .znk-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #ebebeb; }
+  background-color: #c2c2c2; }
 
 /*colors*/
 /*Buttons States Colors*/
@@ -637,7 +637,11 @@ md-dialog.base {
   background-color: #ffffff;
   overflow: visible;
   width: 700px;
-  border-radius: 15px; }
+  border-radius: 15px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column; }
   .lesson-notes-popup .znk-popup-header {
     position: relative;
     height: 33px;
@@ -676,7 +680,7 @@ md-dialog.base {
         width: 14px;
         fill: #ffffff; }
   .lesson-notes-popup .content-wrapper {
-    height: 95%;
+    height: calc(100% - 33px);
     width: 700px;
     display: -ms-flexbox;
     display: flex;
@@ -684,7 +688,7 @@ md-dialog.base {
         flex-direction: column; }
     .lesson-notes-popup .content-wrapper .znk-scrollbar {
       overflow: auto;
-      height: 90%;
+      height: calc(100% - 110px);
       display: -ms-flexbox;
       display: flex;
       -ms-flex-direction: column;
@@ -707,7 +711,7 @@ md-dialog.base {
       width: 94%;
       margin: 0 auto; }
     .lesson-notes-popup .content-wrapper .btn-group {
-      margin: 0 30px;
+      margin: 10px 30px;
       -ms-flex-item-align: end;
           align-self: flex-end;
       display: -ms-flexbox;
@@ -730,7 +734,7 @@ md-dialog.base {
 
 .lesson-details {
   height: 170px;
-  margin: 25px;
+  margin: 15px 25px;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
@@ -893,7 +897,7 @@ md-dialog.base {
         width: 14px;
         fill: #ffffff; }
   .lesson-rating-popup .content-wrapper {
-    height: 95%;
+    height: calc(100% - 33px);
     width: 700px;
     display: -ms-flexbox;
     display: flex;
@@ -901,7 +905,7 @@ md-dialog.base {
         flex-direction: column; }
     .lesson-rating-popup .content-wrapper .znk-scrollbar {
       overflow: auto;
-      height: 90%;
+      height: calc(100% - 110px);
       display: -ms-flexbox;
       display: flex;
       -ms-flex-direction: column;
@@ -914,8 +918,13 @@ md-dialog.base {
       -ms-flex-pack: center;
           justify-content: center;
       text-align: center; }
+    .lesson-rating-popup .content-wrapper .divider {
+      background-color: #e1e1e1;
+      height: 1px;
+      width: 94%;
+      margin: 0 auto; }
     .lesson-rating-popup .content-wrapper .btn-group {
-      margin: 0 30px;
+      margin: 10px 30px;
       -ms-flex-item-align: end;
           align-self: flex-end;
       display: -ms-flexbox;
