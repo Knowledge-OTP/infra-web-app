@@ -1,13 +1,12 @@
 <div class="send-email-notes">
     <div class="lato-16-n">
         <span translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.SEND_NOTES"></span>
-        <span> ({{vm.mailsToSend.length}})</span>
     </div>
-    <div class="checkbox-group" ng-if="vm.studentsProfiles.length">
+    <div class="checkbox-group">
         <div class="input-wrap">
-            <input id="studentsMail" type="checkbox" ng-model="vm.lessonSummary.lessonNotes.sentMailToStudents"
-                   ng-change="vm.emailSelected(vm.userTypeContextEnum.STUDENT.enum, vm.lessonSummary.lessonNotes.sentMailToStudents)">
-            <ng-switch on="vm.studentsProfiles.length < 2">
+            <input id="studentsMail" type="checkbox" ng-model="vm.sendMailToStudents"
+                   ng-change="vm.emailSelectionChanged()">
+            <ng-switch on="vm.lessonSummary.studentIds.length < 2">
                 <label for="studentsMail" ng-switch-when="true"
                        translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.STUDENT_MAIL"></label>
                 <label for="studentsMail" ng-switch-when="false"
@@ -15,9 +14,9 @@
             </ng-switch>
         </div>
         <div class="input-wrap">
-            <input id="parentsMail" type="checkbox" ng-model="vm.lessonSummary.lessonNotes.sentMailToParents"
-                   ng-change="vm.emailSelected(vm.userTypeContextEnum.PARENT.enum, vm.lessonSummary.lessonNotes.sentMailToParents)">
-            <ng-switch on="vm.studentsProfiles.length < 2">
+            <input id="parentsMail" type="checkbox" ng-model="vm.sendMailToParents"
+                   ng-change="vm.emailSelected()">
+            <ng-switch on="vm.lessonSummary.studentIds.length < 2">
                 <label for="parentsMail" ng-switch="" ng-switch-when="true"
                        translate="LESSON_NOTES.LESSON_NOTES_POPUP.TEACHER_NOTES.EMAIL_NOTES.PARENT_MAIL"></label>
                 <label for="parentsMail" ng-switch-when="false"

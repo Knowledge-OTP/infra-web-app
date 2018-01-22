@@ -44,11 +44,11 @@
 <body ng-app="demo" layout="column"  ng-controller="Main as vm">
     <h2>znk Lesson Notes</h2>
 
-    <button class="btn-demo" ng-click="vm.openLessonNotesPopup(vm.lessonSummary, vm.userContext)">
+    <button class="btn-demo" ng-click="vm.openLessonNotesPopup(vm.lesson, vm.lessonSummary, vm.userContext)">
         Open Lesson Notes Popup
     </button>
 
-    <button class="btn-demo" ng-click="vm.openLessonRatingPopup(vm.lessonSummary)">
+    <button class="btn-demo" ng-click="vm.openLessonRatingPopup(vm.lesson, vm.lessonSummary)">
         Open Lesson Rating Popup
     </button>
 

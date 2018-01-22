@@ -38,7 +38,7 @@
                     liveSessions: [liveSessionData.guid],
                     studentFeedback: null,
                     lessonNotes: {
-                        status: LessonNotesStatusEnum.PENDING_NOTES.enum
+                        status: LessonNotesStatusEnum.PENDING_COMPLETION.enum
                     },
                     dbType: 'lessonSummary'
                 };

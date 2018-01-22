@@ -11,8 +11,7 @@
             let globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
             let userProfileEndPoint = `${ENV.znkBackendBaseUrl}/userprofile`;
 
-            this._mailsToSend = [];
-            this._studentsProfiles = [];
+            this.sendEmailIndicators = {};
 
             this.getLessonById = (lessonId) => {
                 let getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
@@ -25,6 +24,16 @@
             this.getLessonSummaryById = (lessonSummaryId) => {
                 let getLessonSummaryApi = `${lessonApi}/getLessonSummaryById?lessonSummaryId=${lessonSummaryId}`;
                 return $http.get(getLessonSummaryApi, {
+                    timeout: ENV.promiseTimeOut,
+                    cache: true
+                })
+                    .then(lessonSummary => lessonSummary.data)
+                    .catch(() => null);
+            };
+
+            this.getEducatorStudentIds = (educatorId) => {
+                let getEducatorStudentIdsApi = `${schedulingApi}/getStudentsIdsByEducatorId/${educatorId}`;
+                return $http.get(getEducatorStudentIdsApi, {
                     timeout: ENV.promiseTimeOut,
                     cache: true
                 })
@@ -98,52 +107,6 @@
             this.getUserProfiles = (uidArr) => {
                 return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr)
                     .then(userProfiles => userProfiles.data);
-            };
-
-            this.sendEmails = (lesson, lessonSummary) => {
-                if (this._mailsToSend.length) {
-                    const mailPromArr = [];
-                    return this.getServiceList().then(serviceList => {
-                        $log.debug('mailsToSend: ', this._mailsToSend);
-                        const lessonService = serviceList[lesson.serviceId];
-                        const topicName = lessonService.topics[lesson.topicId].name;
-                        const mailTemplateParams = {
-                            date: lesson.date,
-                            startTime: lessonSummary.startTime,
-                            service: lessonService.name,
-                            topic: topicName,
-                            status: lesson.status,
-                            educatorFirstName: lesson.educatorFirstName,
-                            educatorLastName: lesson.educatorLastName,
-                            educatorNotes: lessonSummary.lessonNotes.educatorNotes
-                        };
-
-                        this._studentsProfiles.forEach(profile => {
-                            mailTemplateParams.studentFirstName = profile.firstName || '';
-                            const emails = [];
-                            const studentMail = profile.email || profile.userEmail || profile.authEmail;
-                            if (studentMail) {
-                                emails.push(studentMail);
-                            }
-                            if (lessonSummary.lessonNotes.sentMailToParents) {
-                                const parentMail = profile.studentInfo && profile.studentInfo.parentInfo ? profile.studentInfo.parentInfo.email: null;
-                                if (parentMail) {
-                                    emails.push(parentMail);
-                                }
-                            }
-                            // TODO: implement sendEmail service
-                            // Mailer.prototype.sendEmail = function(emails,params,templateName, imageAttachment, replyToEmail, dontSendEmail, options)
-                            mailPromArr.push($http.post('MAILER_API', { emails: emails, params: mailTemplateParams }));
-                        });
-
-                        // return Promise.all(mailPromArr);  uncomment when mailer api is available
-                        return Promise.resolve('mail sent');
-
-                    });
-                } else {
-                    $log.error('sendEmails: At list one email is required');
-                    return Promise.reject('At list one email is required');
-                }
             };
 
         }

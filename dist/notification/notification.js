@@ -129,7 +129,7 @@
                             for (var i = 0; i < notificationList.length; i++) {
                                 var notificationData = notificationList[i];
                                 if (!notificationData.id) {
-                                    this.logger.log("notification id for obj:" + JSON.stringify(notificationData) + "is null or empty");
+                                    $log.debug("notification id for obj:" + JSON.stringify(notificationData) + "is null or empty");
                                     continue;
                                 }
                                 this.populateObjectForMoveAndDelete(notificationData, dataToMoveAndDelete);

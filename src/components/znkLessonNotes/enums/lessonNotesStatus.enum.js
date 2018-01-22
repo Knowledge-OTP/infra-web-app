@@ -6,7 +6,7 @@
             'ngInject';
 
             return new EnumSrv.BaseEnum([
-                ['PENDING_NOTES', 1, 'pendingNotes'],
+                ['PENDING_COMPLETION', 1, 'pendingCompletion'],
                 ['COMPLETE', 2, 'complete'],
                 ['INCOMPLETE', 3, 'incomplete']
             ]);
