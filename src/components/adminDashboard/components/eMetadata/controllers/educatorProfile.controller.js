@@ -2,7 +2,9 @@
     'use strict';
 
     angular.module('znk.infra-web-app.adminDashboard')
-        .controller('EducatorProfileController', function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, EMetadataService, $filter) {
+        .controller('EducatorProfileController',
+            function ($mdDialog, $timeout, userProfile, timezonesList, localTimezone, ZnkToastSrv, EMetadataService,
+                      $filter, AccountStatusEnum) {
             'ngInject';
             var self = this;
             var translateFilter = $filter('translate');
@@ -13,6 +15,7 @@
             self.profileData.timezone = localTimezone;
             self.profileData.educatorAvailabilityHours = self.profileData.educatorAvailabilityHours || translateFilter("ADMIN.EMETADATA.FROM_TO");
             self.isTimezoneManual = false;
+            self.isZinkerzTeacher = self.profileData && self.profileData.teacherInfo && self.profileData.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
 
             self.closeDialog = function () {
                 $mdDialog.cancel();
@@ -23,6 +26,7 @@
                     self.profileData.timezone = localTimezone;
                 }
             };
+
             self.updateProfile = function (profileForm) {
                 if (profileForm.$valid && profileForm.$dirty) {
                     EMetadataService.updateProfile(self.profileData).then(_profileSuccess, _profileError);
@@ -31,9 +35,18 @@
 
             self.setZinkerzTeacher = function (profileZinkerzTeacherForm) {
                 if (profileZinkerzTeacherForm.$valid && profileZinkerzTeacherForm.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.profileData.zinkerzTeacher).then(_profileSuccess, _profileError);
+                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.isZinkerzTeacher)
+                        .then(_profileSuccess, _profileError);
                 }
             };
+
+            self.toggleZinkerzTeacher = function (isZinkerzTeacher) {
+                if (!self.profileData.teacherInfo) {
+                    self.profileData.teacherInfo = {};
+                }
+                self.profileData.teacherInfo.accountStatus = isZinkerzTeacher ? AccountStatusEnum.ACTIVE.enum : AccountStatusEnum.INACTIVE.enum;
+            };
+
             function _profileSuccess() {
                 var type, msg;
                 type = 'success';

@@ -2,7 +2,8 @@
     'use strict';
     angular.module('znk.infra-web-app.invitation').service('InvitationService',
 
-        function ($log, $mdDialog, ENV, AuthService, $q, $http, $timeout, PopUpSrv, $filter, UserProfileService, InfraConfigSrv, StudentContextSrv) {
+        function ($log, $mdDialog, ENV, AuthService, $q, $http, $timeout, PopUpSrv, $filter, UserProfileService,
+                  InfraConfigSrv, StudentContextSrv, AccountStatusEnum) {
             'ngInject';
             var self = this;
             var invitationEndpoint = ENV.backendEndpoint + 'invitation';
@@ -322,7 +323,8 @@
                 if (angular.isDefined(teacher)) {
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
                         if (profile){
-                            teacher.zinkerzTeacher = profile.zinkerzTeacher;
+                            var zinkerzTeacher = profile && profile.teacherInfo && profile.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
+                            teacher.zinkerzTeacher = zinkerzTeacher;
                             teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
                             teacher.educatorTeachworksName = profile.educatorTeachworksName;
                             teacher.educatorAvailabilityHours = profile.educatorAvailabilityHours;
