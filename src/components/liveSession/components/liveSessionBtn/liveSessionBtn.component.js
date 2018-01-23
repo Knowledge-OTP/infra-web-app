@@ -10,7 +10,7 @@
             controllerAs: 'vm',
             controller: function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
                                   PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum,
-                                  UserProfileService, LiveSessionUiSrv, StudentService, UtilitySrv) {
+                                  UserProfileService, LiveSessionUiSrv, StudentService, UtilitySrv, LessonNotesStatusEnum) {
                 'ngInject';
 
                 let SESSION_SETTINGS = {
@@ -131,8 +131,13 @@
                             startDate: calcStartTime,
                             endDate: calcEndTime
                         };
+                        let lessonStatusList = [
+                            LessonStatusEnum.SCHEDULED.enum,
+                            LessonStatusEnum.ATTENDED.enum,
+                            LessonStatusEnum.MISSED.enum
+                        ];
 
-                        return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid)
+                        return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid, lessonStatusList)
                             .then(lessons => {
                                 let lessonToReturn = null;
                                 if (lessons && lessons.length) {
@@ -185,8 +190,8 @@
                         let endTimeRange = lesson.date + SESSION_SETTINGS.length + SESSION_SETTINGS.marginAfterSessionStart;
                         if ((now > startTimeRange && now < endTimeRange) && !scheduledLessonMap.scheduledLesson) {
                             scheduledLessonMap.scheduledLesson = lesson;
-                            back2BackLessons.push(lesson);
                             scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
+                            back2BackLessons.push(lesson);
                         } else if (scheduledLessonMap.scheduledLesson) {
                             // must be second iteration or above
                             if ((back2BackLessons[back2BackLessons.length - 1].date + SESSION_SETTINGS.length) === lesson.date) {
@@ -212,6 +217,19 @@
                             let newB2BLessonId = UtilitySrv.general.createGuid();
                             let updateB2BLessonProms = [];
                             back2BackLessons.forEach(b2bLesson => {
+                                if (!b2bLesson.lessonSummaryId) {
+                                    const newLessonSummary = {
+                                        id: newLessonSummaryId,
+                                        lessonNotes: {
+                                            status: LessonNotesStatusEnum.PENDING_COMPLETION.enum
+                                        },
+                                        dbType: 'lessonSummary'
+                                    };
+                                    b2bLesson.lessonSummaryId = newLessonSummary.id;
+                                    ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
+                                        .then('checkBack2BackLesson: saveLessonSummary: new lesson summary saved. id: ', newLessonSummary.id)
+                                        .catch('checkBack2BackLesson: saveLessonSummary: Failed to save LessonSummary. id: ', newLessonSummary.id);
+                                }
                                 b2bLesson.lessonSummaryId = b2bLesson.lessonSummaryId || newLessonSummaryId;
                                 b2bLesson.backToBackId = newB2BLessonId;
                                 updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));

@@ -656,7 +656,7 @@
                 name += profile.firstName ? profile.firstName + ' ' : '';
                 name += profile.lastName ? profile.lastName : '';
 
-                return name ? name : profile.nickname ? profile.nickname : profile.email.split('@')[0];
+                return name ? name : profile.nickname ? profile.nickname : '';
             };
 
             this.convertMS = (ms) => {
@@ -736,8 +736,8 @@
                 }).then(lessons => lessons.data);
             };
 
-            this.getLessonsByStudentIds = (studentIds, dateRange, educatorId) => {
-                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId})
+            this.getLessonsByStudentIds = (studentIds, dateRange, educatorId, lessonStatusList) => {
+                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId, lessonStatusList})
                     .then(lessons => lessons.data);
             };
 
