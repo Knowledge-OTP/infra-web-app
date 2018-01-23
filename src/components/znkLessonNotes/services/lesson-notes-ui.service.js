@@ -52,7 +52,7 @@
                 name += profile.firstName ? profile.firstName + ' ' : '';
                 name += profile.lastName ? profile.lastName : '';
 
-                return name ? name : profile.nickname ? profile.nickname : profile.email.split('@')[0];
+                return name ? name : profile.nickname ? profile.nickname : '';
             };
 
             this.convertMS = (ms) => {
