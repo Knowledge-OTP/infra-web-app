@@ -64,7 +64,7 @@
                             "should": [
                                 {
                                     "query_string": {
-                                        "fields": ["user.zinkerzTeacher", "user.nickname", "user.email", "user.promoCodes", "user.purchase"],
+                                        "fields": ["user.teacherInfo.accountStatus", "user.nickname", "user.email", "user.promoCodes", "user.purchase"],
                                         "query": _makeTerm(term)
                                     }
                                 },
@@ -77,7 +77,7 @@
                     if (hasTeacher) {
                         body.query.bool.must.push({
                             "term": {
-                                "user.zinkerzTeacher": "true"
+                                "user.teacherInfo.accountStatus": AccountStatusEnum.ACTIVE.enum
                             }
                         });
                     }
