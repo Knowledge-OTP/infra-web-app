@@ -3,6 +3,7 @@
     angular.module('demo', [
         'demoEnv',
         'znk.infra.auth',
+        'znk.infra.popUp',
         'pascalprecht.translate',
         'znk.infra-web-app.znkLessonNotes',
         'znk.infra-web-app.diagnostic'
@@ -36,7 +37,7 @@
             };
             return $delegate;
         })
-        .controller('Main', function (ZnkLessonNotesUiSrv, UserTypeContextEnum) {
+        .controller('Main', function (ZnkLessonNotesUiSrv, UserTypeContextEnum, PopUpSrv) {
             'ngInject';
             const vm = this;
             vm.lesson = {
@@ -76,12 +77,18 @@
             };
             // vm.userContext = UserTypeContextEnum.EDUCATOR.enum;
             vm.userContext = UserTypeContextEnum.ADMIN.enum;
+
             vm.openLessonNotesPopup = (lesson, lessonSummary, userContext) => {
                 ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson, lessonSummary, userContext);
             };
-            vm.openLessonRatingPopup = (lesson, lessonSummary) => {
+
+            vm.openLessonRatingPopup = (lesson, lessonSummary) => {;
                 ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson, lessonSummary);
             };
+
+            vm.openPopup = () => {
+                PopUpSrv.success('TEST POPUP');
+            }
 
         });
 })(angular);
