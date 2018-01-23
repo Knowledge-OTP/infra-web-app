@@ -736,8 +736,8 @@
                 }).then(lessons => lessons.data);
             };
 
-            this.getLessonsByStudentIds = (studentIds, dateRange, educatorId) => {
-                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId})
+            this.getLessonsByStudentIds = (studentIds, dateRange, educatorId, lessonStatusList) => {
+                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId, lessonStatusList})
                     .then(lessons => lessons.data);
             };
 
