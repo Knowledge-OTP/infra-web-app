@@ -1,15 +1,15 @@
 <div class="lesson-notes-popup" ng-if="vm.lesson && vm.lessonSummary">
 
-    <div class="znk-popup-header">
+    <header class="znk-popup-header">
         <div class="icon-wrapper">
             <svg-icon name="znkLessonNotes-zoe-new-record"></svg-icon>
         </div>
         <div class="close-popup-wrap" ng-click="vm.doItLater()">
             <svg-icon name="znkLessonNotes-close-popup"></svg-icon>
         </div>
-    </div>
+    </header>
 
-    <div class="content-wrapper">
+    <main class="content-wrapper">
         <div class="title" translate="LESSON_NOTES.LESSON_NOTES_POPUP.TITLE"></div>
         <div class="znk-scrollbar">
             <znk-lesson-details lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-details>
@@ -21,6 +21,9 @@
 
             <znk-lesson-teacher-notes lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-teacher-notes>
         </div>
+    </main>
+
+    <footer>
         <div class="divider"></div>
         <div class="btn-group">
             <button type="button" class="btn-type-1 save-btn" ng-click="vm.submit()">
@@ -31,6 +34,6 @@
                     translate="LESSON_NOTES.DO_IT_LATER">
             </button>
         </div>
-    </div>
+    </footer>
 
 </div>

@@ -1,17 +1,27 @@
 .lesson-rating-popup {
-    height: 100%;
+    max-height: -webkit-fill-available;
     background-color: $bgColor3;
-    overflow: visible;
     width: 700px;
     border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-    .znk-popup-header{
+    .divider {
+        background-color: $mercury;
+        height: 1px;
+        width: 94%;
+        margin: 0 auto;
+    }
+
+
+    header.znk-popup-header {
         position: relative;
         height: 33px;
         border-radius: 15px 15px 0 0;
         background-color: $bgColor5;
 
-        .icon-wrapper{
+        .icon-wrapper {
             @include dimension(76px, 76px);
             border-radius: 50%;
             @include absolute-position(-12px, 50%);
@@ -22,7 +32,7 @@
             svg-icon {
                 svg {
                     width: 38px;
-                    height:38px;
+                    height: 38px;
                     fill: $bgColor3;
                 }
             }
@@ -41,15 +51,15 @@
         }
     }
 
-    .content-wrapper {
-        height: calc(100% - 33px);
+    main.content-wrapper {
+        max-height: inherit;
         width: 700px;
         display: flex;
         flex-direction: column;
 
-        .znk-scrollbar{
-            overflow: auto;
-            height: calc(100% - 110px);
+        .znk-scrollbar {
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
         }
@@ -61,13 +71,12 @@
             justify-content: center;
             text-align: center;
         }
+    }
 
-        .divider {
-            background-color: $mercury;
-            height: 1px;
-            width: 94%;
-            margin: 0 auto;
-        }
+    footer {
+        height: 84px;
+        display: flex;
+        flex-direction: column;
 
         .btn-group {
             margin: 10px 30px;
