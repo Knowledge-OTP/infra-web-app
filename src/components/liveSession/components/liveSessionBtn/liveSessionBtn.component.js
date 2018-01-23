@@ -131,7 +131,11 @@
                             startDate: calcStartTime,
                             endDate: calcEndTime
                         };
-                        let lessonStatusList = [LessonStatusEnum.SCHEDULED.enum];
+                        let lessonStatusList = [
+                            LessonStatusEnum.SCHEDULED.enum,
+                            LessonStatusEnum.ATTENDED.enum,
+                            LessonStatusEnum.MISSED.enum
+                        ];
 
                         return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid, lessonStatusList)
                             .then(lessons => {
