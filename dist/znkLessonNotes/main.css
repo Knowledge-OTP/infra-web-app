@@ -633,7 +633,7 @@ md-dialog.base {
       height: 19px; }
 
 .lesson-notes-popup {
-  height: 100%;
+  max-height: -webkit-fill-available;
   background-color: #ffffff;
   overflow: visible;
   width: 700px;
@@ -641,13 +641,20 @@ md-dialog.base {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
-      flex-direction: column; }
-  .lesson-notes-popup .znk-popup-header {
+      flex-direction: column;
+  -ms-flex-pack: justify;
+      justify-content: space-between; }
+  .lesson-notes-popup .divider {
+    background-color: #e1e1e1;
+    height: 1px;
+    width: 94%;
+    margin: 0 auto; }
+  .lesson-notes-popup header.znk-popup-header {
     position: relative;
     height: 33px;
     border-radius: 15px 15px 0 0;
     background-color: #0a9bad; }
-    .lesson-notes-popup .znk-popup-header .icon-wrapper {
+    .lesson-notes-popup header.znk-popup-header .icon-wrapper {
       width: 76px;
       height: 76px;
       border-radius: 50%;
@@ -664,36 +671,36 @@ md-dialog.base {
           align-items: center;
       -webkit-align-items: center;
       background-color: #0a9bad; }
-      .lesson-notes-popup .znk-popup-header .icon-wrapper svg-icon svg {
+      .lesson-notes-popup header.znk-popup-header .icon-wrapper svg-icon svg {
         width: 38px;
         height: 38px;
         fill: #ffffff; }
-    .lesson-notes-popup .znk-popup-header .close-popup-wrap {
+    .lesson-notes-popup header.znk-popup-header .close-popup-wrap {
       position: absolute;
       top: 10px;
       right: 10px;
       height: 14px;
       width: 14px;
       cursor: pointer; }
-      .lesson-notes-popup .znk-popup-header .close-popup-wrap svg-icon svg {
+      .lesson-notes-popup header.znk-popup-header .close-popup-wrap svg-icon svg {
         height: 14px;
         width: 14px;
         fill: #ffffff; }
-  .lesson-notes-popup .content-wrapper {
-    height: calc(100% - 33px);
+  .lesson-notes-popup main.content-wrapper {
+    max-height: inherit;
     width: 700px;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-direction: column;
         flex-direction: column; }
-    .lesson-notes-popup .content-wrapper .znk-scrollbar {
-      overflow: auto;
-      height: calc(100% - 110px);
+    .lesson-notes-popup main.content-wrapper .znk-scrollbar {
+      overflow-x: hidden;
+      overflow-y: auto;
       display: -ms-flexbox;
       display: flex;
       -ms-flex-direction: column;
           flex-direction: column; }
-    .lesson-notes-popup .content-wrapper .title {
+    .lesson-notes-popup main.content-wrapper .title {
       font-size: 25px;
       color: #4f4d4d;
       font-family: Quicksand;
@@ -705,12 +712,13 @@ md-dialog.base {
       -ms-flex-pack: center;
           justify-content: center;
       text-align: center; }
-    .lesson-notes-popup .content-wrapper .divider {
-      background-color: #e1e1e1;
-      height: 1px;
-      width: 94%;
-      margin: 0 auto; }
-    .lesson-notes-popup .content-wrapper .btn-group {
+  .lesson-notes-popup footer {
+    height: 84px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column; }
+    .lesson-notes-popup footer .btn-group {
       margin: 10px 30px;
       -ms-flex-item-align: end;
           align-self: flex-end;
@@ -720,16 +728,16 @@ md-dialog.base {
           flex-direction: column;
       -ms-flex-align: center;
           align-items: center; }
-      .lesson-notes-popup .content-wrapper .btn-group button {
+      .lesson-notes-popup footer .btn-group button {
         position: relative; }
-        .lesson-notes-popup .content-wrapper .btn-group button .spinner {
+        .lesson-notes-popup footer .btn-group button .spinner {
           position: absolute;
           margin: 0;
           font-size: 5px;
           top: 50%;
           right: 29px;
           transform: translateY(-50%); }
-      .lesson-notes-popup .content-wrapper .btn-group .btn-type-link, .lesson-notes-popup .content-wrapper .btn-group .btn-type-link-gray {
+      .lesson-notes-popup footer .btn-group .btn-type-link, .lesson-notes-popup footer .btn-group .btn-type-link-gray {
         margin-top: 5px; }
 
 .lesson-details {
@@ -854,17 +862,27 @@ md-dialog.base {
         margin: 0 5px; }
 
 .lesson-rating-popup {
-  height: 100%;
+  max-height: -webkit-fill-available;
   background-color: #ffffff;
-  overflow: visible;
   width: 700px;
-  border-radius: 15px; }
-  .lesson-rating-popup .znk-popup-header {
+  border-radius: 15px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  -ms-flex-pack: justify;
+      justify-content: space-between; }
+  .lesson-rating-popup .divider {
+    background-color: #e1e1e1;
+    height: 1px;
+    width: 94%;
+    margin: 0 auto; }
+  .lesson-rating-popup header.znk-popup-header {
     position: relative;
     height: 33px;
     border-radius: 15px 15px 0 0;
     background-color: #0a9bad; }
-    .lesson-rating-popup .znk-popup-header .icon-wrapper {
+    .lesson-rating-popup header.znk-popup-header .icon-wrapper {
       width: 76px;
       height: 76px;
       border-radius: 50%;
@@ -881,36 +899,36 @@ md-dialog.base {
           align-items: center;
       -webkit-align-items: center;
       background-color: #0a9bad; }
-      .lesson-rating-popup .znk-popup-header .icon-wrapper svg-icon svg {
+      .lesson-rating-popup header.znk-popup-header .icon-wrapper svg-icon svg {
         width: 38px;
         height: 38px;
         fill: #ffffff; }
-    .lesson-rating-popup .znk-popup-header .close-popup-wrap {
+    .lesson-rating-popup header.znk-popup-header .close-popup-wrap {
       position: absolute;
       top: 10px;
       right: 10px;
       height: 14px;
       width: 14px;
       cursor: pointer; }
-      .lesson-rating-popup .znk-popup-header .close-popup-wrap svg-icon svg {
+      .lesson-rating-popup header.znk-popup-header .close-popup-wrap svg-icon svg {
         height: 14px;
         width: 14px;
         fill: #ffffff; }
-  .lesson-rating-popup .content-wrapper {
-    height: calc(100% - 33px);
+  .lesson-rating-popup main.content-wrapper {
+    max-height: inherit;
     width: 700px;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-direction: column;
         flex-direction: column; }
-    .lesson-rating-popup .content-wrapper .znk-scrollbar {
-      overflow: auto;
-      height: calc(100% - 110px);
+    .lesson-rating-popup main.content-wrapper .znk-scrollbar {
+      overflow-x: hidden;
+      overflow-y: auto;
       display: -ms-flexbox;
       display: flex;
       -ms-flex-direction: column;
           flex-direction: column; }
-    .lesson-rating-popup .content-wrapper .title {
+    .lesson-rating-popup main.content-wrapper .title {
       height: 30px;
       padding: 30px 0 10px 0;
       display: -ms-flexbox;
@@ -918,12 +936,13 @@ md-dialog.base {
       -ms-flex-pack: center;
           justify-content: center;
       text-align: center; }
-    .lesson-rating-popup .content-wrapper .divider {
-      background-color: #e1e1e1;
-      height: 1px;
-      width: 94%;
-      margin: 0 auto; }
-    .lesson-rating-popup .content-wrapper .btn-group {
+  .lesson-rating-popup footer {
+    height: 84px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column; }
+    .lesson-rating-popup footer .btn-group {
       margin: 10px 30px;
       -ms-flex-item-align: end;
           align-self: flex-end;
@@ -933,16 +952,16 @@ md-dialog.base {
           flex-direction: column;
       -ms-flex-align: center;
           align-items: center; }
-      .lesson-rating-popup .content-wrapper .btn-group button {
+      .lesson-rating-popup footer .btn-group button {
         position: relative; }
-        .lesson-rating-popup .content-wrapper .btn-group button .spinner {
+        .lesson-rating-popup footer .btn-group button .spinner {
           position: absolute;
           margin: 0;
           font-size: 5px;
           top: 50%;
           right: 29px;
           transform: translateY(-50%); }
-      .lesson-rating-popup .content-wrapper .btn-group .btn-type-link, .lesson-rating-popup .content-wrapper .btn-group .btn-type-link-gray {
+      .lesson-rating-popup footer .btn-group .btn-type-link, .lesson-rating-popup footer .btn-group .btn-type-link-gray {
         margin-top: 5px; }
 
 .lesson-rating {
@@ -1044,7 +1063,7 @@ md-dialog {
     opacity: .76; }
 
 lesson-notes-popup, lesson-rating-popup {
-  height: 700px; }
+  overflow: hidden; }
 
 .divider {
   background-color: #e1e1e1;

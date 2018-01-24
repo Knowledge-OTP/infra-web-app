@@ -20313,9 +20313,9 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 
             };
 
-            this.saveLessonSummary = (lessonSummary) => {
+            this.saveLessonSummary = (lessonSummary, sendEmailIndicators) => {
                 let saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
-                return $http.post(saveLessonSummaryApi, lessonSummary)
+                return $http.post(saveLessonSummaryApi, { lessonSummary, sendEmailIndicators })
                     .then(lessonSummary => lessonSummary.data);
             };
 
@@ -20359,16 +20359,16 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html",
     "<div class=\"lesson-notes-popup\" ng-if=\"vm.lesson && vm.lessonSummary\">\n" +
     "\n" +
-    "    <div class=\"znk-popup-header\">\n" +
+    "    <header class=\"znk-popup-header\">\n" +
     "        <div class=\"icon-wrapper\">\n" +
     "            <svg-icon name=\"znkLessonNotes-zoe-new-record\"></svg-icon>\n" +
     "        </div>\n" +
     "        <div class=\"close-popup-wrap\" ng-click=\"vm.doItLater()\">\n" +
     "            <svg-icon name=\"znkLessonNotes-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
-    "    </div>\n" +
+    "    </header>\n" +
     "\n" +
-    "    <div class=\"content-wrapper\">\n" +
+    "    <main class=\"content-wrapper\">\n" +
     "        <div class=\"title\" translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\"></div>\n" +
     "        <div class=\"znk-scrollbar\">\n" +
     "            <znk-lesson-details lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-details>\n" +
@@ -20380,6 +20380,9 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "\n" +
     "            <znk-lesson-teacher-notes lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-teacher-notes>\n" +
     "        </div>\n" +
+    "    </main>\n" +
+    "\n" +
+    "    <footer>\n" +
     "        <div class=\"divider\"></div>\n" +
     "        <div class=\"btn-group\">\n" +
     "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
@@ -20390,7 +20393,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "                    translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
     "            </button>\n" +
     "        </div>\n" +
-    "    </div>\n" +
+    "    </footer>\n" +
     "\n" +
     "</div>\n" +
     "");
@@ -20479,16 +20482,16 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
   $templateCache.put("components/znkLessonNotes/lesson-rating-popup/lesson-rating-popup.template.html",
     "<div class=\"lesson-rating-popup\" ng-if=\"vm.lesson && vm.lessonSummary\">\n" +
     "\n" +
-    "    <div class=\"znk-popup-header\">\n" +
+    "    <header class=\"znk-popup-header\">\n" +
     "        <div class=\"icon-wrapper\">\n" +
     "            <svg-icon name=\"znkLessonNotes-star\"></svg-icon>\n" +
     "        </div>\n" +
     "        <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
     "            <svg-icon name=\"znkLessonNotes-close-popup\"></svg-icon>\n" +
     "        </div>\n" +
-    "    </div>\n" +
+    "    </header>\n" +
     "\n" +
-    "    <div class=\"content-wrapper\">\n" +
+    "    <main class=\"content-wrapper\">\n" +
     "        <div class=\"quicksand-25-b title\" translate=\"LESSON_NOTES.LESSON_RATING_POPUP.TITLE\"></div>\n" +
     "        <div class=\"znk-scrollbar\">\n" +
     "            <znk-lesson-details lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-details>\n" +
@@ -20496,6 +20499,10 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "\n" +
     "            <znk-lesson-rating lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-rating>\n" +
     "        </div>\n" +
+    "\n" +
+    "    </main>\n" +
+    "\n" +
+    "    <footer>\n" +
     "        <div class=\"divider\"></div>\n" +
     "        <div class=\"btn-group\">\n" +
     "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
@@ -20507,7 +20514,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "                    translate=\"LESSON_NOTES.DO_IT_LATER\">\n" +
     "            </button>\n" +
     "        </div>\n" +
-    "    </div>\n" +
+    "    </footer>\n" +
     "</div>\n" +
     "");
   $templateCache.put("components/znkLessonNotes/lesson-rating-popup/lesson-rating/lesson-rating.component.html",
