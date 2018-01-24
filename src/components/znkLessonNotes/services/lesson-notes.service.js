@@ -84,9 +84,9 @@
 
             };
 
-            this.saveLessonSummary = (lessonSummary) => {
+            this.saveLessonSummary = (lessonSummary, sendEmailIndicators) => {
                 let saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
-                return $http.post(saveLessonSummaryApi, lessonSummary)
+                return $http.post(saveLessonSummaryApi, { lessonSummary, sendEmailIndicators })
                     .then(lessonSummary => lessonSummary.data);
             };
 
