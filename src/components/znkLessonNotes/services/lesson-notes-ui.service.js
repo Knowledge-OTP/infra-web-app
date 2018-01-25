@@ -44,6 +44,13 @@
                 };
             };
 
+            this.updateLessonSummaryFromLiveSessionData  = (lessonSummary, liveSessionData) => {
+                lessonSummary.startTime = lessonSummary.startTime || liveSessionData.startTime;
+                lessonSummary.endTime = liveSessionData.endTime;
+                lessonSummary.liveSessions.push(liveSessionData.guid);
+                return lessonSummary;
+            };
+
             this.getUserFullName = (profile) => {
                 if (!profile) {
                     return;

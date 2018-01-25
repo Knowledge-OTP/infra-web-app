@@ -9552,7 +9552,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     }
 
                     return scheduledLessonMap;
-
                 };
 
                 // add backToBackId for backToBack lessons if they don't have
@@ -10371,6 +10370,9 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId)
                                 .then(lessonSummary => {
                                     if (lessonSummary) {
+                                        if (liveSessionData.educatorId === currUid) {
+                                            lessonSummary = ZnkLessonNotesUiSrv.updateLessonSummaryFromLiveSessionData(lessonSummary, liveSessionData);
+                                        }
                                         scheduledLesson.lessonSummaryId = scheduledLesson.lessonSummaryId || lessonSummary.id;
                                         let promToReturn;
                                         if (liveSessionData.educatorId === currUid) {
@@ -20205,6 +20207,13 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                     },
                     dbType: 'lessonSummary'
                 };
+            };
+
+            this.updateLessonSummaryFromLiveSessionData  = (lessonSummary, liveSessionData) => {
+                lessonSummary.startTime = lessonSummary.startTime || liveSessionData.startTime;
+                lessonSummary.endTime = liveSessionData.endTime;
+                lessonSummary.liveSessions.push(liveSessionData.guid);
+                return lessonSummary;
             };
 
             this.getUserFullName = (profile) => {

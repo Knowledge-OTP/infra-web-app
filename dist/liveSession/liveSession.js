@@ -271,7 +271,6 @@
                     }
 
                     return scheduledLessonMap;
-
                 };
 
                 // add backToBackId for backToBack lessons if they don't have
@@ -1090,6 +1089,9 @@
                             ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId)
                                 .then(lessonSummary => {
                                     if (lessonSummary) {
+                                        if (liveSessionData.educatorId === currUid) {
+                                            lessonSummary = ZnkLessonNotesUiSrv.updateLessonSummaryFromLiveSessionData(lessonSummary, liveSessionData);
+                                        }
                                         scheduledLesson.lessonSummaryId = scheduledLesson.lessonSummaryId || lessonSummary.id;
                                         let promToReturn;
                                         if (liveSessionData.educatorId === currUid) {
