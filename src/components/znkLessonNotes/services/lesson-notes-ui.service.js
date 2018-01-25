@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesUiSrv',
-        function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, LessonNotesStatusEnum) {
+        function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, LessonNotesStatusEnum, UtilitySrv) {
             'ngInject';
 
             this.openLessonNotesPopup = (lesson, lessonSummary, userContext) => {
@@ -30,12 +30,12 @@
                 });
             };
 
-            this.newLessonSummary = (liveSessionData) => {
+            this.newLessonSummary = () => {
                 return {
-                    id: liveSessionData.lessonSummaryId,
-                    startTime: liveSessionData.startTime ,
-                    endTime: liveSessionData.endTime,
-                    liveSessions: [liveSessionData.guid],
+                    id: UtilitySrv.general.createGuid(),
+                    startTime: null,
+                    endTime: null,
+                    liveSessions: [],
                     studentFeedback: null,
                     lessonNotes: {
                         status: LessonNotesStatusEnum.PENDING_COMPLETION.enum

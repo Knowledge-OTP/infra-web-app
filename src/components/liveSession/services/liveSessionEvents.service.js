@@ -102,30 +102,28 @@
             };
 
             LiveSessionEventsSrv._handelLessonSummary = (liveSessionData) => {
-                let getLessonSummaryProm = null;
                 return LiveSessionSrv.getScheduledLessonData(liveSessionData.lessonId).then(scheduledLesson => {
                     if (scheduledLesson) {
                         if (scheduledLesson.lessonSummaryId) {
                             $log.debug('_handelLessonSummary: getLessonSummaryById: ', scheduledLesson.lessonSummaryId);
-                            getLessonSummaryProm = ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId);
+                            ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId)
+                                .then(lessonSummary => {
+                                    if (lessonSummary) {
+                                        scheduledLesson.lessonSummaryId = scheduledLesson.lessonSummaryId || lessonSummary.id;
+                                        let promToReturn;
+                                        if (liveSessionData.educatorId === currUid) {
+                                            promToReturn = ZnkLessonNotesUiSrv.openLessonNotesPopup(scheduledLesson, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
+                                        } else {
+                                            promToReturn = ZnkLessonNotesUiSrv.openLessonRatingPopup(scheduledLesson, lessonSummary);
+                                        }
+                                        return promToReturn;
+                                    } else {
+                                        $log.error('_handelLessonSummary: Error: lessonSummary is required');
+                                    }
+                                });
                         } else {
-                            $log.debug('_handelLessonSummary: New Lesson Summary');
-                            getLessonSummaryProm = Promise.resolve(ZnkLessonNotesUiSrv.newLessonSummary(liveSessionData));
+                            $log.error('_handelLessonSummary: Lesson summary id is required');
                         }
-
-                        return getLessonSummaryProm.then(lessonSummary => {
-                            if (lessonSummary) {
-                                scheduledLesson.lessonSummaryId =
-                                    scheduledLesson.lessonSummaryId || lessonSummary.id;
-                                if (liveSessionData.educatorId === currUid) {
-                                    return ZnkLessonNotesUiSrv.openLessonNotesPopup(scheduledLesson, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
-                                } else {
-                                    return ZnkLessonNotesUiSrv.openLessonRatingPopup(scheduledLesson, lessonSummary);
-                                }
-                            } else {
-                                $log.error('_handelLessonSummary: Error: lessonSummary is required');
-                            }
-                        });
                     } else {
                         $log.error('_handelLessonSummary: scheduledLesson is required');
                     }
