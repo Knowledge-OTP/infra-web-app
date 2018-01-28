@@ -9327,9 +9327,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             },
             templateUrl: 'components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html',
             controllerAs: 'vm',
-            controller: ["$q", "$log", "$scope", "$mdDialog", "LiveSessionSrv", "StudentContextSrv", "TeacherContextSrv", "PresenceService", "ENV", "LiveSessionStatusEnum", "ZnkLessonNotesSrv", "LessonStatusEnum", "UserProfileService", "LiveSessionUiSrv", "StudentService", "UtilitySrv", "LessonNotesStatusEnum", function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
+            controller: ["$q", "$log", "$scope", "$mdDialog", "LiveSessionSrv", "StudentContextSrv", "TeacherContextSrv", "PresenceService", "ENV", "LiveSessionStatusEnum", "ZnkLessonNotesSrv", "LessonStatusEnum", "UserProfileService", "LiveSessionUiSrv", "StudentService", "UtilitySrv", "LessonNotesStatusEnum", "ZnkLessonNotesUiSrv", function ($q, $log, $scope, $mdDialog, LiveSessionSrv, StudentContextSrv, TeacherContextSrv,
                                   PresenceService, ENV, LiveSessionStatusEnum, ZnkLessonNotesSrv, LessonStatusEnum,
-                                  UserProfileService, LiveSessionUiSrv, StudentService, UtilitySrv, LessonNotesStatusEnum) {
+                                  UserProfileService, LiveSessionUiSrv, StudentService, UtilitySrv, LessonNotesStatusEnum,
+                                  ZnkLessonNotesUiSrv) {
                 'ngInject';
 
                 let SESSION_SETTINGS = {
@@ -9473,22 +9474,22 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                 };
 
+                // check if the lessons schedule for now (now > lesson.date - 5 min) and (now < lesson.date + 60 min + 15 min) return boolean
+                this.isLessonInRange = (lesson) => {
+                    const now = Date.now();
+                    const startTimeRange = lesson.date - SESSION_SETTINGS.marginBeforeSessionStart;
+                    const endTimeRange = lesson.date + SESSION_SETTINGS.length + SESSION_SETTINGS.marginAfterSessionStart;
+                    return (now > startTimeRange && now < endTimeRange);
+                };
+
                 // check if the lessons schedule for now (now > lesson.date - 5 min) and (now < lesson.date + 60 min + 15 min)
                 this.getLessonInRange = (lessons) => {
-                    let scheduledLessonMap = {};
-                    let now = Date.now();
+                    let scheduledLessonMap = null;
                     if (lessons && lessons.length > 0) {
                         // No multiple lesson return single lesson
                         if (lessons.length === 1) {
                             let lesson = lessons.pop();
-                            let startTimeRange = lesson.date - SESSION_SETTINGS.marginBeforeSessionStart;
-                            let endTimeRange = lesson.date + SESSION_SETTINGS.length + SESSION_SETTINGS.marginAfterSessionStart;
-                            if (now > startTimeRange && now < endTimeRange) {
-                                scheduledLessonMap.scheduledLesson = lesson;
-                                scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
-                            } else {
-                                scheduledLessonMap = null;
-                            }
+                            scheduledLessonMap = this.isLessonInRange(lesson) ? this.getScheduledLessonMapFromSingleLesson(lesson) : null;
                         } else {
                             $log.debug(`getLessonInRange: multiple lesson - check if it's back to back`);
                             scheduledLessonMap = this.checkBack2BackLesson(lessons);
@@ -9498,18 +9499,35 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     return scheduledLessonMap;
                 };
 
+                this.getScheduledLessonMapFromSingleLesson = (lesson) => {
+                    let scheduledLessonMap = {};
+                    if (!lesson.lessonSummaryId) {
+                        // add lessonSummaryId to scheduledLesson if there isn't
+                        const newLessonSummary = ZnkLessonNotesUiSrv.newLessonSummary();
+                        lesson.lessonSummaryId = newLessonSummary.id;
+                        ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
+                            .then('getLessonInRange: saveLessonSummary: new lesson summary saved. id: ', newLessonSummary.id)
+                            .catch('getLessonInRange: saveLessonSummary: Failed to save LessonSummary. id: ', newLessonSummary.id);
+                        ZnkLessonNotesSrv.updateLesson(lesson)
+                            .then('getLessonInRange: updateLesson: update Lesson successfully. id: ', lesson.id)
+                            .catch('getLessonInRange: updateLesson: Failed to update Lesson. id: ', lesson.id);
+                    }
+
+                    scheduledLessonMap.scheduledLesson = lesson;
+                    scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
+                    return scheduledLessonMap;
+                };
+
                 // multiple lessons -  check if there back to back lesson (double lesson)
                 this.checkBack2BackLesson = (lessons) => {
                     $log.debug(`checkBack2BackLesson`);
                     let scheduledLessonMap = {};
                     let back2BackLessons = [];
                     let now = Date.now();
+                    // get the first scheduledLesson that is in range from all the query lessons
                     lessons.forEach(lesson => {
-                        let startTimeRange = lesson.date - SESSION_SETTINGS.marginBeforeSessionStart;
-                        let endTimeRange = lesson.date + SESSION_SETTINGS.length + SESSION_SETTINGS.marginAfterSessionStart;
-                        if ((now > startTimeRange && now < endTimeRange) && !scheduledLessonMap.scheduledLesson) {
-                            scheduledLessonMap.scheduledLesson = lesson;
-                            scheduledLessonMap.expectedSessionEndTime = scheduledLessonMap.scheduledLesson.date + SESSION_SETTINGS.length;
+                        if (this.isLessonInRange(lesson) && !scheduledLessonMap.scheduledLesson) {
+                            scheduledLessonMap = this.getScheduledLessonMapFromSingleLesson(lesson);
                             back2BackLessons.push(lesson);
                         } else if (scheduledLessonMap.scheduledLesson) {
                             // must be second iteration or above
@@ -9518,54 +9536,48 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                                 // scenario when the second lesson in the array is the actual scheduledLesson and not the first one
                                 if (lesson.date < now) {
                                     back2BackLessons.pop();
-                                    scheduledLessonMap.scheduledLesson = lesson;
+                                    scheduledLessonMap = this.getScheduledLessonMapFromSingleLesson(lesson);
                                 }
                                 back2BackLessons.push(lesson);
-                                scheduledLessonMap.expectedSessionEndTime = lesson.date + SESSION_SETTINGS.length;
                             } else {
                                 $log.debug(`checkBack2BackLesson: this lesson isn't b2b lesson.`);
                             }
                         }
                     });
 
-                    // add lessonSummaryId to scheduledLesson or all back2BackLessons if there isn't
-                    let newLessonSummaryId = UtilitySrv.general.createGuid();
-
                     if (back2BackLessons.length > 1) {
-                        if (!back2BackLessons[0].backToBackId) {
-                            let newB2BLessonId = UtilitySrv.general.createGuid();
-                            let updateB2BLessonProms = [];
-                            back2BackLessons.forEach(b2bLesson => {
-                                if (!b2bLesson.lessonSummaryId) {
-                                    const newLessonSummary = {
-                                        id: newLessonSummaryId,
-                                        lessonNotes: {
-                                            status: LessonNotesStatusEnum.PENDING_COMPLETION.enum
-                                        },
-                                        dbType: 'lessonSummary'
-                                    };
-                                    b2bLesson.lessonSummaryId = newLessonSummary.id;
-                                    ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
-                                        .then('checkBack2BackLesson: saveLessonSummary: new lesson summary saved. id: ', newLessonSummary.id)
-                                        .catch('checkBack2BackLesson: saveLessonSummary: Failed to save LessonSummary. id: ', newLessonSummary.id);
-                                }
-                                b2bLesson.lessonSummaryId = b2bLesson.lessonSummaryId || newLessonSummaryId;
-                                b2bLesson.backToBackId = newB2BLessonId;
-                                updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
-                            });
-                            Promise.all(updateB2BLessonProms)
-                                .then(() => $log.debug(`checkBack2BackLesson: All back2backLesson are updated.`))
-                                .catch((err) => $log.error('checkBack2BackLesson: Failed to update back2backLesson. Error: ', err));
-                        } else {
-                            $log.debug(`checkBack2BackLesson: back2BackLessons[0] all ready have backToBackId`);
-                        }
+                        this.checkLessonForBackToBackId(back2BackLessons);
                     } else {
-                        scheduledLessonMap.scheduledLesson.lessonSummaryId = scheduledLessonMap.scheduledLesson.lessonSummaryId || newLessonSummaryId;
-                        $log.debug(`checkBack2BackLesson: no back2back lesson just single scheduledLesson`);
+                        $log.debug(`checkBack2BackLesson: no back2back lesson, just single scheduledLesson`);
                     }
 
                     return scheduledLessonMap;
+                };
 
+                // add backToBackId for backToBack lessons if they don't have
+                this.checkLessonForBackToBackId = (back2BackLessons) => {
+                    // I am assuming that if the first lesson have backToBackId, so they all have
+                    if (!back2BackLessons[0].backToBackId) {
+                        let newB2BLessonId = UtilitySrv.general.createGuid();
+                        let updateB2BLessonProms = [];
+                        back2BackLessons.forEach(b2bLesson => {
+                            if (!b2bLesson.lessonSummaryId) {
+                                // add lessonSummaryId to scheduledLesson or all back2BackLessons if there isn't
+                                const newLessonSummary = ZnkLessonNotesUiSrv.newLessonSummary();
+                                b2bLesson.lessonSummaryId = newLessonSummary.id;
+                                ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
+                                    .then('checkBack2BackLesson: saveLessonSummary: new lesson summary saved. id: ', newLessonSummary.id)
+                                    .catch('checkBack2BackLesson: saveLessonSummary: Failed to save LessonSummary. id: ', newLessonSummary.id);
+                            }
+                            b2bLesson.backToBackId = newB2BLessonId;
+                            updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
+                        });
+                        Promise.all(updateB2BLessonProms)
+                            .then(() => $log.debug(`checkBack2BackLesson: All back2backLesson are updated.`))
+                            .catch((err) => $log.error('checkBack2BackLesson: Failed to update back2backLesson. Error: ', err));
+                    } else {
+                        $log.debug(`checkBack2BackLesson: back2BackLessons[0] all ready have backToBackId`);
+                    }
                 };
 
             }]
@@ -10351,30 +10363,31 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             };
 
             LiveSessionEventsSrv._handelLessonSummary = (liveSessionData) => {
-                let getLessonSummaryProm = null;
                 return LiveSessionSrv.getScheduledLessonData(liveSessionData.lessonId).then(scheduledLesson => {
                     if (scheduledLesson) {
                         if (scheduledLesson.lessonSummaryId) {
                             $log.debug('_handelLessonSummary: getLessonSummaryById: ', scheduledLesson.lessonSummaryId);
-                            getLessonSummaryProm = ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId);
+                            ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId)
+                                .then(lessonSummary => {
+                                    if (lessonSummary) {
+                                        if (liveSessionData.educatorId === currUid) {
+                                            lessonSummary = ZnkLessonNotesUiSrv.updateLessonSummaryFromLiveSessionData(lessonSummary, liveSessionData);
+                                        }
+                                        scheduledLesson.lessonSummaryId = scheduledLesson.lessonSummaryId || lessonSummary.id;
+                                        let promToReturn;
+                                        if (liveSessionData.educatorId === currUid) {
+                                            promToReturn = ZnkLessonNotesUiSrv.openLessonNotesPopup(scheduledLesson, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
+                                        } else {
+                                            promToReturn = ZnkLessonNotesUiSrv.openLessonRatingPopup(scheduledLesson, lessonSummary);
+                                        }
+                                        return promToReturn;
+                                    } else {
+                                        $log.error('_handelLessonSummary: Error: lessonSummary is required');
+                                    }
+                                });
                         } else {
-                            $log.debug('_handelLessonSummary: New Lesson Summary');
-                            getLessonSummaryProm = Promise.resolve(ZnkLessonNotesUiSrv.newLessonSummary(liveSessionData));
+                            $log.error('_handelLessonSummary: Lesson summary id is required');
                         }
-
-                        return getLessonSummaryProm.then(lessonSummary => {
-                            if (lessonSummary) {
-                                scheduledLesson.lessonSummaryId =
-                                    scheduledLesson.lessonSummaryId || lessonSummary.id;
-                                if (liveSessionData.educatorId === currUid) {
-                                    return ZnkLessonNotesUiSrv.openLessonNotesPopup(scheduledLesson, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
-                                } else {
-                                    return ZnkLessonNotesUiSrv.openLessonRatingPopup(scheduledLesson, lessonSummary);
-                                }
-                            } else {
-                                $log.error('_handelLessonSummary: Error: lessonSummary is required');
-                            }
-                        });
                     } else {
                         $log.error('_handelLessonSummary: scheduledLesson is required');
                     }
@@ -10447,7 +10460,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', ["LiveSessionSubjectConst", function (LiveSessionSubjectConst) {
         'ngInject';
-        // defult topics. every APP infra suppose to setLiveSessionTopics of there own
+        // default topics. every APP infra suppose to setLiveSessionTopics of there own
         let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH, LiveSessionSubjectConst.SCIENCE];
 
         this.setLiveSessionTopics = (_topics) => {
@@ -20154,7 +20167,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesUiSrv',
-        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "LessonNotesStatusEnum", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, LessonNotesStatusEnum) {
+        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "LessonNotesStatusEnum", "UtilitySrv", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, LessonNotesStatusEnum, UtilitySrv) {
             'ngInject';
 
             this.openLessonNotesPopup = (lesson, lessonSummary, userContext) => {
@@ -20182,18 +20195,25 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 });
             };
 
-            this.newLessonSummary = (liveSessionData) => {
+            this.newLessonSummary = () => {
                 return {
-                    id: liveSessionData.lessonSummaryId,
-                    startTime: liveSessionData.startTime ,
-                    endTime: liveSessionData.endTime,
-                    liveSessions: [liveSessionData.guid],
+                    id: UtilitySrv.general.createGuid(),
+                    startTime: null,
+                    endTime: null,
+                    liveSessions: [],
                     studentFeedback: null,
                     lessonNotes: {
                         status: LessonNotesStatusEnum.PENDING_COMPLETION.enum
                     },
                     dbType: 'lessonSummary'
                 };
+            };
+
+            this.updateLessonSummaryFromLiveSessionData  = (lessonSummary, liveSessionData) => {
+                lessonSummary.startTime = lessonSummary.startTime || liveSessionData.startTime;
+                lessonSummary.endTime = liveSessionData.endTime;
+                lessonSummary.liveSessions.push(liveSessionData.guid);
+                return lessonSummary;
             };
 
             this.getUserFullName = (profile) => {
@@ -20243,60 +20263,63 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
             this.sendEmailIndicators = {};
 
             this.getLessonById = (lessonId) => {
-                let getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
-                return $http.get(getLessonsApi, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                }).then(lesson => lesson.data);
+                const getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
+                return $http.get(getLessonsApi, {timeout: ENV.promiseTimeOut, cache: true})
+                    .then(lesson => lesson.data)
+                    .catch((err) => $log.error('getLessonById: Failed to get lesson summary by  id: ',
+                        lessonId, ' Error: ', err));
             };
 
             this.getLessonSummaryById = (lessonSummaryId) => {
-                let getLessonSummaryApi = `${lessonApi}/getLessonSummaryById?lessonSummaryId=${lessonSummaryId}`;
-                return $http.get(getLessonSummaryApi, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                })
+                const getLessonSummaryApi = `${lessonApi}/getLessonSummaryById?lessonSummaryId=${lessonSummaryId}`;
+                return $http.get(getLessonSummaryApi, {timeout: ENV.promiseTimeOut, cache: true})
                     .then(lessonSummary => lessonSummary.data)
-                    .catch(() => null);
+                    .catch((err) => $log.error('getLessonSummaryById: Failed to get lesson summary by id: ',
+                        lessonSummaryId, ' Error: ', err));
             };
 
             this.getEducatorStudentIds = (educatorId) => {
-                let getEducatorStudentIdsApi = `${schedulingApi}/getStudentsIdsByEducatorId/${educatorId}`;
-                return $http.get(getEducatorStudentIdsApi, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                })
+                const getEducatorStudentIdsApi = `${schedulingApi}/getStudentsIdsByEducatorId/${educatorId}`;
+                return $http.get(getEducatorStudentIdsApi, {timeout: ENV.promiseTimeOut, cache: true})
                     .then(lessonSummary => lessonSummary.data)
-                    .catch(() => null);
+                    .catch((err) => $log.error('getEducatorStudentIds: Failed to get students by educatorId: ',
+                        educatorId, ' Error: ', err));
             };
 
             this.getLessonsByLessonSummaryIds = (lessonSummaryIds) => {
-                let getLessonsByLessonSummaryIdsApi = `${lessonApi}/getLessonsByLessonSummaryIds`;
+                const getLessonsByLessonSummaryIdsApi = `${lessonApi}/getLessonsByLessonSummaryIds`;
                 return $http.post(getLessonsByLessonSummaryIdsApi, lessonSummaryIds)
-                    .then(lessons => lessons.data);
+                    .then(lessons => lessons.data)
+                    .catch((err) => $log.error('getLessonsByLessonSummaryIds: Failed to get lesson by ' +
+                        'lesson summary by  ids: ', lessonSummaryIds, ' Error: ', err));
             };
 
             this.getLessonsByBackToBackId = (backToBackId) => {
-                let getBackToBackApi = `${lessonApi}/getLessonsByBackToBackId?backToBackId=${backToBackId}`;
-                return $http.get(getBackToBackApi, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                }).then(lessons => lessons.data);
+                const getBackToBackApi = `${lessonApi}/getLessonsByBackToBackId?backToBackId=${backToBackId}`;
+                return $http.get(getBackToBackApi, {timeout: ENV.promiseTimeOut, cache: true})
+                    .then(lessons => lessons.data)
+                    .catch((err) => $log.error('getLessonsByBackToBackId: Failed to get lessons by backToBackId: ',
+                        backToBackId, ' Error: ', err));
             };
 
             this.getLessonsByStudentIds = (studentIds, dateRange, educatorId, lessonStatusList) => {
-                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId, lessonStatusList})
-                    .then(lessons => lessons.data);
+                const getLessonsByStudentIds = `${schedulingApi}/getLessonsByStudentIds`;
+                return $http.post(getLessonsByStudentIds, {studentIds, dateRange, educatorId, lessonStatusList})
+                    .then(lessons => lessons.data)
+                    .catch((err) => $log.error('getLessonsByStudentIds: Failed to get lessons by studentIds: ',
+                        studentIds, ' Error: ', err));
             };
 
             this.updateLesson = (lessonToUpdate) => {
-                let updateLessonApi = `${schedulingApi}/updateLesson`;
+                const updateLessonApi = `${schedulingApi}/updateLesson`;
                 return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
-                    .then(lessons => lessons.data[0]);
+                    .then(lessons => lessons.data[0])
+                    .catch((err) => $log.error('updateLesson: Failed to update lesson: ',
+                        lessonToUpdate, ' Error: ', err));
             };
 
             this.updateLessonsStatus = (id, newStatus, isBackToBackId) => {
-                let lessonsProm = isBackToBackId ? this.getLessonsByBackToBackId(id) : this.getLessonById(id);
+                const lessonsProm = isBackToBackId ? this.getLessonsByBackToBackId(id) : this.getLessonById(id);
                 return lessonsProm.then(lessons => {
                     let updateLessonPromArr = [];
                     if (lessons && lessons.length) {
@@ -20314,28 +20337,30 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
             };
 
             this.saveLessonSummary = (lessonSummary, sendEmailIndicators) => {
-                let saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
-                return $http.post(saveLessonSummaryApi, { lessonSummary, sendEmailIndicators })
-                    .then(lessonSummary => lessonSummary.data);
+                const saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
+                return $http.post(saveLessonSummaryApi, {lessonSummary, sendEmailIndicators})
+                    .then(lessonSummary => lessonSummary.data)
+                    .catch((err) => $log.error('saveLessonSummary: Failed to save lesson summary: ',
+                        lessonSummary, ' Error: ', err));
             };
 
             this.getServiceList = () => {
-                return $http.get(`${serviceBackendUrl}/`, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                }).then(services => services.data);
+                return $http.get(`${serviceBackendUrl}/`, {timeout: ENV.promiseTimeOut, cache: true})
+                    .then(services => services.data)
+                    .catch((err) => $log.error('getServiceList: Failed to get service list. Error: ', err));
             };
 
             this.getGlobalVariables = () => {
-                return $http.get(`${globalBackendUrl}`, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                }).then(globalVariables => globalVariables.data);
+                return $http.get(`${globalBackendUrl}`, {timeout: ENV.promiseTimeOut, cache: true})
+                    .then(globalVariables => globalVariables.data)
+                    .catch((err) => $log.error('getGlobalVariables: Failed to get global variables. Error: ', err));
             };
 
             this.getUserProfiles = (uidArr) => {
                 return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr)
-                    .then(userProfiles => userProfiles.data);
+                    .then(userProfiles => userProfiles.data)
+                    .catch((err) => $log.error('getUserProfiles: Failed to get user profiles: ',
+                        uidArr, ' Error: ', err));
             };
 
         }]

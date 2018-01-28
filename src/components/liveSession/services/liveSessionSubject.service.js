@@ -4,7 +4,7 @@
 
     angular.module('znk.infra-web-app.liveSession').provider('LiveSessionSubjectSrv', function (LiveSessionSubjectConst) {
         'ngInject';
-        // defult topics. every APP infra suppose to setLiveSessionTopics of there own
+        // default topics. every APP infra suppose to setLiveSessionTopics of there own
         let topics = [LiveSessionSubjectConst.MATH, LiveSessionSubjectConst.ENGLISH, LiveSessionSubjectConst.SCIENCE];
 
         this.setLiveSessionTopics = (_topics) => {

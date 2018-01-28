@@ -14,60 +14,63 @@
             this.sendEmailIndicators = {};
 
             this.getLessonById = (lessonId) => {
-                let getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
-                return $http.get(getLessonsApi, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                }).then(lesson => lesson.data);
+                const getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
+                return $http.get(getLessonsApi, {timeout: ENV.promiseTimeOut, cache: true})
+                    .then(lesson => lesson.data)
+                    .catch((err) => $log.error('getLessonById: Failed to get lesson summary by  id: ',
+                        lessonId, ' Error: ', err));
             };
 
             this.getLessonSummaryById = (lessonSummaryId) => {
-                let getLessonSummaryApi = `${lessonApi}/getLessonSummaryById?lessonSummaryId=${lessonSummaryId}`;
-                return $http.get(getLessonSummaryApi, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                })
+                const getLessonSummaryApi = `${lessonApi}/getLessonSummaryById?lessonSummaryId=${lessonSummaryId}`;
+                return $http.get(getLessonSummaryApi, {timeout: ENV.promiseTimeOut, cache: true})
                     .then(lessonSummary => lessonSummary.data)
-                    .catch(() => null);
+                    .catch((err) => $log.error('getLessonSummaryById: Failed to get lesson summary by id: ',
+                        lessonSummaryId, ' Error: ', err));
             };
 
             this.getEducatorStudentIds = (educatorId) => {
-                let getEducatorStudentIdsApi = `${schedulingApi}/getStudentsIdsByEducatorId/${educatorId}`;
-                return $http.get(getEducatorStudentIdsApi, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                })
+                const getEducatorStudentIdsApi = `${schedulingApi}/getStudentsIdsByEducatorId/${educatorId}`;
+                return $http.get(getEducatorStudentIdsApi, {timeout: ENV.promiseTimeOut, cache: true})
                     .then(lessonSummary => lessonSummary.data)
-                    .catch(() => null);
+                    .catch((err) => $log.error('getEducatorStudentIds: Failed to get students by educatorId: ',
+                        educatorId, ' Error: ', err));
             };
 
             this.getLessonsByLessonSummaryIds = (lessonSummaryIds) => {
-                let getLessonsByLessonSummaryIdsApi = `${lessonApi}/getLessonsByLessonSummaryIds`;
+                const getLessonsByLessonSummaryIdsApi = `${lessonApi}/getLessonsByLessonSummaryIds`;
                 return $http.post(getLessonsByLessonSummaryIdsApi, lessonSummaryIds)
-                    .then(lessons => lessons.data);
+                    .then(lessons => lessons.data)
+                    .catch((err) => $log.error('getLessonsByLessonSummaryIds: Failed to get lesson by ' +
+                        'lesson summary by  ids: ', lessonSummaryIds, ' Error: ', err));
             };
 
             this.getLessonsByBackToBackId = (backToBackId) => {
-                let getBackToBackApi = `${lessonApi}/getLessonsByBackToBackId?backToBackId=${backToBackId}`;
-                return $http.get(getBackToBackApi, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                }).then(lessons => lessons.data);
+                const getBackToBackApi = `${lessonApi}/getLessonsByBackToBackId?backToBackId=${backToBackId}`;
+                return $http.get(getBackToBackApi, {timeout: ENV.promiseTimeOut, cache: true})
+                    .then(lessons => lessons.data)
+                    .catch((err) => $log.error('getLessonsByBackToBackId: Failed to get lessons by backToBackId: ',
+                        backToBackId, ' Error: ', err));
             };
 
             this.getLessonsByStudentIds = (studentIds, dateRange, educatorId, lessonStatusList) => {
-                return $http.post(`${schedulingApi}/getLessonsByStudentIds`, {studentIds, dateRange, educatorId, lessonStatusList})
-                    .then(lessons => lessons.data);
+                const getLessonsByStudentIds = `${schedulingApi}/getLessonsByStudentIds`;
+                return $http.post(getLessonsByStudentIds, {studentIds, dateRange, educatorId, lessonStatusList})
+                    .then(lessons => lessons.data)
+                    .catch((err) => $log.error('getLessonsByStudentIds: Failed to get lessons by studentIds: ',
+                        studentIds, ' Error: ', err));
             };
 
             this.updateLesson = (lessonToUpdate) => {
-                let updateLessonApi = `${schedulingApi}/updateLesson`;
+                const updateLessonApi = `${schedulingApi}/updateLesson`;
                 return $http.post(updateLessonApi, {lesson: lessonToUpdate, isRecurring: false})
-                    .then(lessons => lessons.data[0]);
+                    .then(lessons => lessons.data[0])
+                    .catch((err) => $log.error('updateLesson: Failed to update lesson: ',
+                        lessonToUpdate, ' Error: ', err));
             };
 
             this.updateLessonsStatus = (id, newStatus, isBackToBackId) => {
-                let lessonsProm = isBackToBackId ? this.getLessonsByBackToBackId(id) : this.getLessonById(id);
+                const lessonsProm = isBackToBackId ? this.getLessonsByBackToBackId(id) : this.getLessonById(id);
                 return lessonsProm.then(lessons => {
                     let updateLessonPromArr = [];
                     if (lessons && lessons.length) {
@@ -85,28 +88,30 @@
             };
 
             this.saveLessonSummary = (lessonSummary, sendEmailIndicators) => {
-                let saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
-                return $http.post(saveLessonSummaryApi, { lessonSummary, sendEmailIndicators })
-                    .then(lessonSummary => lessonSummary.data);
+                const saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
+                return $http.post(saveLessonSummaryApi, {lessonSummary, sendEmailIndicators})
+                    .then(lessonSummary => lessonSummary.data)
+                    .catch((err) => $log.error('saveLessonSummary: Failed to save lesson summary: ',
+                        lessonSummary, ' Error: ', err));
             };
 
             this.getServiceList = () => {
-                return $http.get(`${serviceBackendUrl}/`, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                }).then(services => services.data);
+                return $http.get(`${serviceBackendUrl}/`, {timeout: ENV.promiseTimeOut, cache: true})
+                    .then(services => services.data)
+                    .catch((err) => $log.error('getServiceList: Failed to get service list. Error: ', err));
             };
 
             this.getGlobalVariables = () => {
-                return $http.get(`${globalBackendUrl}`, {
-                    timeout: ENV.promiseTimeOut,
-                    cache: true
-                }).then(globalVariables => globalVariables.data);
+                return $http.get(`${globalBackendUrl}`, {timeout: ENV.promiseTimeOut, cache: true})
+                    .then(globalVariables => globalVariables.data)
+                    .catch((err) => $log.error('getGlobalVariables: Failed to get global variables. Error: ', err));
             };
 
             this.getUserProfiles = (uidArr) => {
                 return $http.post(`${userProfileEndPoint}/getuserprofiles`, uidArr)
-                    .then(userProfiles => userProfiles.data);
+                    .then(userProfiles => userProfiles.data)
+                    .catch((err) => $log.error('getUserProfiles: Failed to get user profiles: ',
+                        uidArr, ' Error: ', err));
             };
 
         }
