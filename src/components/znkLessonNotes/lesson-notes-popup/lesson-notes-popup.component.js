@@ -18,6 +18,7 @@
                     $log.debug('lessonNotesPopup: Init with lesson: ', this.lesson);
                     $log.debug('lessonNotesPopup: Init with lessonSummary: ', this.lessonSummary);
                     this.showSpinner = false;
+                    this.showStatusError = false;
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
                     this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.lessonSummary =  this.lessonSummary || {};
@@ -28,7 +29,15 @@
                     this.lessonSummary.lessonNotes.status = this.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_COMPLETION.enum;
                 };
 
+                this.isLessonValid = (lesson) => {
+                    return lesson.status === LessonStatusEnum.ATTENDED.enum || lesson.status === LessonStatusEnum.MISSED.enum;
+                };
+
                 this.submit = () => {
+                    if (!this.isLessonValid(this.lesson)) {
+                        this.showStatusError = true;
+                        return;
+                    }
                     this.showSpinner = true;
                     if (ZnkLessonNotesSrv.sendEmailIndicators.sendMailToStudents ||
                         ZnkLessonNotesSrv.sendEmailIndicators.sendMailToParents) {
