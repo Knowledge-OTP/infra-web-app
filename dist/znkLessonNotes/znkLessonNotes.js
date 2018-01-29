@@ -759,7 +759,9 @@
 
             this.updateLessonsStatus = (id, newStatus, isBackToBackId) => {
                 const lessonsProm = isBackToBackId ? this.getLessonsByBackToBackId(id) : this.getLessonById(id);
+                // lessonsProm: Could return lessons array or single lesson
                 return lessonsProm.then(lessons => {
+                    lessons = isBackToBackId ? lessons : lessons ? [lessons] : null;
                     let updateLessonPromArr = [];
                     if (lessons && lessons.length) {
                         updateLessonPromArr = lessons.map(lesson => {

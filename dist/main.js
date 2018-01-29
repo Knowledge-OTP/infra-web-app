@@ -9778,9 +9778,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     .then((liveSessionData) => {
                         liveSessionData.startTime = this._getRoundTime();
                         liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
-                        this._updateLessonsStatusToAttended(liveSessionData).then((updatedLessons) => {
-                            $log.debug('_updateLessonsStatusToAttended: Lessons status successfully updated.', JSON.stringify(updatedLessons));
-                        });
                         return liveSessionData.$save();
                     });
             };
@@ -10319,6 +10316,10 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
                 if (liveSessionData.educatorId === currUid) {
                     userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
+                    LiveSessionSrv._updateLessonsStatusToAttended(liveSessionData)
+                        .then((updatedLessons) => {
+                            $log.debug('_updateLessonsStatusToAttended: Lessons status successfully updated.', JSON.stringify(updatedLessons));
+                        });
                     LiveSessionSrv.makeAutoCall(liveSessionData.studentId, liveSessionData.guid);
                 }
 
@@ -20320,7 +20321,9 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 
             this.updateLessonsStatus = (id, newStatus, isBackToBackId) => {
                 const lessonsProm = isBackToBackId ? this.getLessonsByBackToBackId(id) : this.getLessonById(id);
+                // lessonsProm: Could return lessons array or single lesson
                 return lessonsProm.then(lessons => {
+                    lessons = isBackToBackId ? lessons : lessons ? [lessons] : null;
                     let updateLessonPromArr = [];
                     if (lessons && lessons.length) {
                         updateLessonPromArr = lessons.map(lesson => {
