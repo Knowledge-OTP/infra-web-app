@@ -62,9 +62,6 @@
                     .then((liveSessionData) => {
                         liveSessionData.startTime = this._getRoundTime();
                         liveSessionData.status = LiveSessionStatusEnum.CONFIRMED.enum;
-                        this._updateLessonsStatusToAttended(liveSessionData).then((updatedLessons) => {
-                            $log.debug('_updateLessonsStatusToAttended: Lessons status successfully updated.', JSON.stringify(updatedLessons));
-                        });
                         return liveSessionData.$save();
                     });
             };

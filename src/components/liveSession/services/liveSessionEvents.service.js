@@ -58,6 +58,10 @@
 
                 if (liveSessionData.educatorId === currUid) {
                     userLiveSessionState = UserLiveSessionStateEnum.EDUCATOR.enum;
+                    LiveSessionSrv._updateLessonsStatusToAttended(liveSessionData)
+                        .then((updatedLessons) => {
+                            $log.debug('_updateLessonsStatusToAttended: Lessons status successfully updated.', JSON.stringify(updatedLessons));
+                        });
                     LiveSessionSrv.makeAutoCall(liveSessionData.studentId, liveSessionData.guid);
                 }
 
