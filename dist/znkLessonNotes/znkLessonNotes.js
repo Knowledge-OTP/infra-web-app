@@ -105,8 +105,11 @@
                 this.$onInit = function () {
                     $log.debug('znkLessonInfo: Init');
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                    this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.dataPromMap.translate = this.getTranslations();
-                    this.lessonStatusArr = LessonStatusEnum.getEnumArr();
+                    const lessonStatusArr = LessonStatusEnum.getEnumArr();
+                    this.lessonStatusArr = lessonStatusArr.filter(status =>
+                        status.enum === LessonStatusEnum.ATTENDED.enum || status.enum === LessonStatusEnum.MISSED.enum);
                     this.initLessonInfo();
                 };
 
@@ -165,12 +168,24 @@
                                     this.transformDate(this.lessonSummary.endTime - this.lessonSummary.startTime, 'DURATION') : null;
                                 break;
                             case `${this.nameSpace}.STATUS`:
-                                this.lessonStatus = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
-                                field.text = this.lessonStatus.val;
+                                this.lessonStatus = this.getLessonStatus();
+                                this.statusChanged(field, this.lessonStatus);
                                 break;
                         }
                         this.fields.push(field);
                     });
+                };
+
+                this.getLessonStatus = () => {
+                    let statusToReturn;
+                    if (this.lesson.status === LessonStatusEnum.ATTENDED.enum ||
+                        this.lesson.status === LessonStatusEnum.MISSED.enum) {
+                        statusToReturn = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
+                    } else {
+                        statusToReturn = this.lessonStatusArr.filter(status => status.enum === LessonStatusEnum.ATTENDED.enum)[0];
+                    }
+
+                    return statusToReturn;
                 };
 
                 this.getStudentsNames = () => {
@@ -242,6 +257,7 @@
                     $log.debug('lessonNotesPopup: Init with lesson: ', this.lesson);
                     $log.debug('lessonNotesPopup: Init with lessonSummary: ', this.lessonSummary);
                     this.showSpinner = false;
+                    this.showStatusError = false;
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
                     this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.lessonSummary =  this.lessonSummary || {};
@@ -252,7 +268,15 @@
                     this.lessonSummary.lessonNotes.status = this.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_COMPLETION.enum;
                 };
 
+                this.isLessonValid = (lesson) => {
+                    return lesson.status === LessonStatusEnum.ATTENDED.enum || lesson.status === LessonStatusEnum.MISSED.enum;
+                };
+
                 this.submit = () => {
+                    if (!this.isLessonValid(this.lesson)) {
+                        this.showStatusError = true;
+                        return;
+                    }
                     this.showSpinner = true;
                     if (ZnkLessonNotesSrv.sendEmailIndicators.sendMailToStudents ||
                         ZnkLessonNotesSrv.sendEmailIndicators.sendMailToParents) {
@@ -813,9 +837,10 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "<div class=\"lesson-details\" ng-if=\"vm.fields.length\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
     "    <div class=\"field\" ng-repeat=\"field in vm.fields\" ng-if=\"field.text\">\n" +
     "        <div class=\"label\">{{field.label}}</div>\n" +
-    "        <div class=\"text\" ng-if=\"field.label !== 'Status' || !vm.isAdmin\">{{field.text}}</div>\n" +
-    "        <select class=\"lesson-status\" ng-if=\"field.label === 'Status' && vm.isAdmin\"\n" +
+    "        <div class=\"text\" ng-if=\"field.label !== 'Status' || vm.isStudent\">{{field.text}}</div>\n" +
+    "        <select class=\"lesson-status\" ng-if=\"field.label === 'Status' && !vm.isStudent\"\n" +
     "                ng-options=\"status as status.val for status in vm.lessonStatusArr\"\n" +
+    "                placeholder=\"{{'LESSON_NOTES.LESSON_NOTES_POPUP.SELECT' | translate}}\"\n" +
     "                ng-model=\"vm.lessonStatus\"\n" +
     "                ng-change=\"vm.statusChanged(field, vm.lessonStatus)\">\n" +
     "        </select>\n" +
@@ -838,6 +863,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "        <div class=\"title\" translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\"></div>\n" +
     "        <div class=\"znk-scrollbar\">\n" +
     "            <znk-lesson-details lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-details>\n" +
+    "            <div class=\"error\" ng-if=\"vm.showStatusError\" translate=\"LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_STATUS_REQUIRED\"></div>\n" +
     "            <znk-lesson-started-late lesson=\"vm.lesson\" lesson-summary=\"vm.lessonSummary\" user-context=\"vm.userContext\"></znk-lesson-started-late>\n" +
     "            <div class=\"divider\" ng-if=\"vm.isAdmin\"></div>\n" +
     "\n" +

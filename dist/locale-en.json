@@ -643,6 +643,8 @@
             "START_TIME": "Start Time",
             "DURATION": " Duration",
             "STATUS": "Status",
+            "LESSON_STATUS_REQUIRED": "Please select lesson status",
+            "SELECT": "Select",
             "HOUR": "hour",
             "HOURS": "hours",
             "MINUTES": "minutes",

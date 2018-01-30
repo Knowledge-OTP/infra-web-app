@@ -21,8 +21,11 @@
                 this.$onInit = function () {
                     $log.debug('znkLessonInfo: Init');
                     this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                    this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.dataPromMap.translate = this.getTranslations();
-                    this.lessonStatusArr = LessonStatusEnum.getEnumArr();
+                    const lessonStatusArr = LessonStatusEnum.getEnumArr();
+                    this.lessonStatusArr = lessonStatusArr.filter(status =>
+                        status.enum === LessonStatusEnum.ATTENDED.enum || status.enum === LessonStatusEnum.MISSED.enum);
                     this.initLessonInfo();
                 };
 
@@ -81,12 +84,24 @@
                                     this.transformDate(this.lessonSummary.endTime - this.lessonSummary.startTime, 'DURATION') : null;
                                 break;
                             case `${this.nameSpace}.STATUS`:
-                                this.lessonStatus = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
-                                field.text = this.lessonStatus.val;
+                                this.lessonStatus = this.getLessonStatus();
+                                this.statusChanged(field, this.lessonStatus);
                                 break;
                         }
                         this.fields.push(field);
                     });
+                };
+
+                this.getLessonStatus = () => {
+                    let statusToReturn;
+                    if (this.lesson.status === LessonStatusEnum.ATTENDED.enum ||
+                        this.lesson.status === LessonStatusEnum.MISSED.enum) {
+                        statusToReturn = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
+                    } else {
+                        statusToReturn = this.lessonStatusArr.filter(status => status.enum === LessonStatusEnum.ATTENDED.enum)[0];
+                    }
+
+                    return statusToReturn;
                 };
 
                 this.getStudentsNames = () => {

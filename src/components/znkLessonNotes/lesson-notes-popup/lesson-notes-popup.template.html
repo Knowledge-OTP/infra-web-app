@@ -13,6 +13,7 @@
         <div class="title" translate="LESSON_NOTES.LESSON_NOTES_POPUP.TITLE"></div>
         <div class="znk-scrollbar">
             <znk-lesson-details lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-details>
+            <div class="error" ng-if="vm.showStatusError" translate="LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_STATUS_REQUIRED"></div>
             <znk-lesson-started-late lesson="vm.lesson" lesson-summary="vm.lessonSummary" user-context="vm.userContext"></znk-lesson-started-late>
             <div class="divider" ng-if="vm.isAdmin"></div>
 

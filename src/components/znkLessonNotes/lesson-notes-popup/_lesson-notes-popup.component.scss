@@ -8,6 +8,16 @@
     flex-direction: column;
     justify-content: space-between;
 
+    .error {
+        align-self: flex-end;
+        margin-right: 80px;
+        margin-bottom: 10px;
+        font-size: 12px;
+        color: $bittersweet;
+        font-family: Lato;
+        font-weight: $lightFontWeight;
+    }
+
     .divider {
         background-color: $mercury;
         height: 1px;
