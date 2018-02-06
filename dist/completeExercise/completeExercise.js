@@ -1042,9 +1042,18 @@
                 }
 
                 function _getSubjectId(exerciseData) {
-                    return exerciseData.level1CategoryId !== 'undefined' && exerciseData.level1CategoryId !== null ? exerciseData.level1CategoryId :
-                        exerciseData.exerciseResult.subjectId !== 'undefined' && exerciseData.exerciseResult.subjectId !== null ?
+                    var subjectIdToReturn;
+                    if (isVarDefined(exerciseData.level1CategoryId)) {
+                        subjectIdToReturn = exerciseData.level1CategoryId;
+                    } else {
+                        subjectIdToReturn = isVarDefined(exerciseData.exerciseResult.subjectId) ?
                             exerciseData.exerciseResult.subjectId : exerciseData.exerciseContent.subjectId;
+                    }
+                    return subjectIdToReturn;
+                }
+
+                function isVarDefined(variable) {
+                    return !(typeof variable === 'undefined' || variable === null);
                 }
 
                 this.$onInit = function(){
