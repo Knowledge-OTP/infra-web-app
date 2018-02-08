@@ -207,7 +207,9 @@
 
                                 var exerciseCategoryForSubject = [data.exerciseContent.categoryId, data.exerciseContent.categoryId2];
                                 if (isSection || !data.level1CategoryId){
-                                    $ctrl.exerciseData.exerciseResult.subjectId = CategoryService.getCategoryLevel1ParentSync(exerciseCategoryForSubject);
+                                    $ctrl.exerciseData.exerciseResult.subjectId =
+                                        (typeof data.exerciseContent.subjectId === 'undefined' || data.exerciseContent.subjectId === null) ?
+                                            CategoryService.getCategoryLevel1ParentSync(exerciseCategoryForSubject) : data.exerciseContent.subjectId;
                                 } else  {
                                     $ctrl.exerciseData.exerciseResult.subjectId = data.level1CategoryId;
                                 }
@@ -744,7 +746,8 @@
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
                             questionFormatId: question.questionFormatId,
-                            subjectId: $ctrl.exeriseSubjectId ? $ctrl.exeriseSubjectId : CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject)
+                            subjectId: $ctrl.exeriseSubjectId ? $ctrl.exeriseSubjectId : (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                                CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject) : question.subjectId
                         };
                     });
                 }
@@ -1111,7 +1114,8 @@
                     var exerciseParentContent = this.completeExerciseIntroCtrl.getExerciseParentContent();
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
 
-                    this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentSync([exerciseContent.categoryId, exerciseContent.categoryId2]);
+                    this.exerciseSubjectId = (typeof exerciseContent.subjectId === 'undefined' || exerciseContent.subjectId === null) ?
+                        CategoryService.getCategoryLevel1ParentSync([exerciseContent.categoryId, exerciseContent.categoryId2]) : exerciseContent.subjectId;
 
                     this.exerciseContent = exerciseContent;
                     this.exerciseParentContent = exerciseParentContent;

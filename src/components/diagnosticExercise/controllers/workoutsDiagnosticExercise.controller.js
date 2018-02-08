@@ -5,12 +5,14 @@
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
         function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
-            $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-            $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-            $translate, ExerciseReviewStatusEnum, CategoryService) {
+                  $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
+                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+                  $translate, ExerciseReviewStatusEnum, CategoryService) {
             'ngInject';
             var self = this;
-            this.subjectId = CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2]);
+            this.subjectId = (typeof exerciseData.questionsData.subjectId === 'undefined' || exerciseData.questionsData.subjectId === null) ?
+                CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2])
+                : exerciseData.questionsData.subjectId;
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
@@ -265,7 +267,7 @@
                     if (!_isLastQuestion()) {
                         numQuestionCounter = numQuestionCounter + 1;
                         _setNumSlideForNgModel(numQuestionCounter);
-                        znkAnalyticsSrv.pageTrack({ props: { url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '') } });
+                        znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
                     } else {
                         self.actions.forceDoneBtnDisplay(true);
                     }

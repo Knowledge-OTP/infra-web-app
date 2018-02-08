@@ -15,7 +15,8 @@
                     var exerciseParentContent = this.completeExerciseIntroCtrl.getExerciseParentContent();
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
 
-                    this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentSync([exerciseContent.categoryId, exerciseContent.categoryId2]);
+                    this.exerciseSubjectId = (typeof exerciseContent.subjectId === 'undefined' || exerciseContent.subjectId === null) ?
+                        CategoryService.getCategoryLevel1ParentSync([exerciseContent.categoryId, exerciseContent.categoryId2]) : exerciseContent.subjectId;
 
                     this.exerciseContent = exerciseContent;
                     this.exerciseParentContent = exerciseParentContent;

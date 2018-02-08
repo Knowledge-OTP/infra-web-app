@@ -2297,7 +2297,9 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
 
                                 var exerciseCategoryForSubject = [data.exerciseContent.categoryId, data.exerciseContent.categoryId2];
                                 if (isSection || !data.level1CategoryId){
-                                    $ctrl.exerciseData.exerciseResult.subjectId = CategoryService.getCategoryLevel1ParentSync(exerciseCategoryForSubject);
+                                    $ctrl.exerciseData.exerciseResult.subjectId =
+                                        (typeof data.exerciseContent.subjectId === 'undefined' || data.exerciseContent.subjectId === null) ?
+                                            CategoryService.getCategoryLevel1ParentSync(exerciseCategoryForSubject) : data.exerciseContent.subjectId;
                                 } else  {
                                     $ctrl.exerciseData.exerciseResult.subjectId = data.level1CategoryId;
                                 }
@@ -2834,7 +2836,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
                             questionFormatId: question.questionFormatId,
-                            subjectId: $ctrl.exeriseSubjectId ? $ctrl.exeriseSubjectId : CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject)
+                            subjectId: $ctrl.exeriseSubjectId ? $ctrl.exeriseSubjectId : (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                                CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject) : question.subjectId
                         };
                     });
                 }
@@ -3201,7 +3204,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
                     var exerciseParentContent = this.completeExerciseIntroCtrl.getExerciseParentContent();
                     var exerciseContent = this.completeExerciseIntroCtrl.getExerciseContent();
 
-                    this.exerciseSubjectId = CategoryService.getCategoryLevel1ParentSync([exerciseContent.categoryId, exerciseContent.categoryId2]);
+                    this.exerciseSubjectId = (typeof exerciseContent.subjectId === 'undefined' || exerciseContent.subjectId === null) ?
+                        CategoryService.getCategoryLevel1ParentSync([exerciseContent.categoryId, exerciseContent.categoryId2]) : exerciseContent.subjectId;
 
                     this.exerciseContent = exerciseContent;
                     this.exerciseParentContent = exerciseParentContent;
@@ -4014,12 +4018,14 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
         ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
-            $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-            $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-            $translate, ExerciseReviewStatusEnum, CategoryService) {
+                  $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
+                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+                  $translate, ExerciseReviewStatusEnum, CategoryService) {
             'ngInject';
             var self = this;
-            this.subjectId = CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2]);
+            this.subjectId = (typeof exerciseData.questionsData.subjectId === 'undefined' || exerciseData.questionsData.subjectId === null) ?
+                CategoryService.getCategoryLevel1ParentSync([exerciseData.questionsData.categoryId, exerciseData.questionsData.categoryId2])
+                : exerciseData.questionsData.subjectId;
             // current section data
             var questions = exerciseData.questionsData.questions;
             var resultsData = exerciseData.resultsData;
@@ -4274,7 +4280,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                     if (!_isLastQuestion()) {
                         numQuestionCounter = numQuestionCounter + 1;
                         _setNumSlideForNgModel(numQuestionCounter);
-                        znkAnalyticsSrv.pageTrack({ props: { url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '') } });
+                        znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
                     } else {
                         self.actions.forceDoneBtnDisplay(true);
                     }
@@ -4714,7 +4720,8 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                             var stateResults = _getStateDataByExamAndExerciseResult(exam, exerciseResult);
                             var currentQuestionResults = stateResults.currentQuestionResults;
                             var currentSection = stateResults.currentSection;
-                            currentState.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId);
+                            currentState.subjectId = (typeof currentSection.subjectId === 'undefined' || currentSection.subjectId === null) ?
+                                CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId) : currentSection.subjectId;
 
                             if (angular.isUndefined(currentQuestionResults) && !skipIntroBool) {
                                 currentState.state = '.intro';
@@ -7087,7 +7094,8 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                     var ngModelCtrl = ctrls[1];
                     var viewMode = questionBuilderCtrl.getViewMode();
                     var question = questionBuilderCtrl.question;
-                    var questionSubjectId = CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]);
+                    var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                        CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]) : question.subjectId;
 
                     scope.d = {};
 
@@ -7206,7 +7214,8 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
                 link: function (scope, element, attrs, questionBuilderCtrl) {
                     var question = questionBuilderCtrl.question;
                     var questionCategoryForSubjectId = question.categoryId || question.categoryId2;
-                    var questionSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId);
+                    var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                        CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId) : question.subjectId;
                     var isPlayFlag = false;
                     var analyticsProps = {
                         subjectType: questionSubjectId,
