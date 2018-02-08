@@ -160,7 +160,8 @@
                             var stateResults = _getStateDataByExamAndExerciseResult(exam, exerciseResult);
                             var currentQuestionResults = stateResults.currentQuestionResults;
                             var currentSection = stateResults.currentSection;
-                            currentState.subjectId = CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId);
+                            currentState.subjectId = (typeof currentSection.subjectId === 'undefined' || currentSection.subjectId === null) ?
+                                CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId) : currentSection.subjectId;
 
                             if (angular.isUndefined(currentQuestionResults) && !skipIntroBool) {
                                 currentState.state = '.intro';

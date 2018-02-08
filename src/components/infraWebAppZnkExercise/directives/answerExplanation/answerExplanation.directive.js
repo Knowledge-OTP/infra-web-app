@@ -25,7 +25,8 @@
                     var ngModelCtrl = ctrls[1];
                     var viewMode = questionBuilderCtrl.getViewMode();
                     var question = questionBuilderCtrl.question;
-                    var questionSubjectId = CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]);
+                    var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                        CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]) : question.subjectId;
 
                     scope.d = {};
 

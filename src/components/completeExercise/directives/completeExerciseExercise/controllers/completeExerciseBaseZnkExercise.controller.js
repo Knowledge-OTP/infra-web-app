@@ -53,7 +53,8 @@
                             difficulty: question.difficulty,
                             correctAnswerId: question.correctAnswerId,
                             questionFormatId: question.questionFormatId,
-                            subjectId: $ctrl.exeriseSubjectId ? $ctrl.exeriseSubjectId : CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject)
+                            subjectId: $ctrl.exeriseSubjectId ? $ctrl.exeriseSubjectId : (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                                CategoryService.getCategoryLevel1ParentSync(questionCategoriesForSubject) : question.subjectId
                         };
                     });
                 }

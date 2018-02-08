@@ -174,7 +174,9 @@
 
                                 var exerciseCategoryForSubject = [data.exerciseContent.categoryId, data.exerciseContent.categoryId2];
                                 if (isSection || !data.level1CategoryId){
-                                    $ctrl.exerciseData.exerciseResult.subjectId = CategoryService.getCategoryLevel1ParentSync(exerciseCategoryForSubject);
+                                    $ctrl.exerciseData.exerciseResult.subjectId =
+                                        (typeof data.exerciseContent.subjectId === 'undefined' || data.exerciseContent.subjectId === null) ?
+                                            CategoryService.getCategoryLevel1ParentSync(exerciseCategoryForSubject) : data.exerciseContent.subjectId;
                                 } else  {
                                     $ctrl.exerciseData.exerciseResult.subjectId = data.level1CategoryId;
                                 }

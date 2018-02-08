@@ -84,7 +84,8 @@
                     var ngModelCtrl = ctrls[1];
                     var viewMode = questionBuilderCtrl.getViewMode();
                     var question = questionBuilderCtrl.question;
-                    var questionSubjectId = CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]);
+                    var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                        CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]) : question.subjectId;
 
                     scope.d = {};
 
@@ -203,7 +204,8 @@
                 link: function (scope, element, attrs, questionBuilderCtrl) {
                     var question = questionBuilderCtrl.question;
                     var questionCategoryForSubjectId = question.categoryId || question.categoryId2;
-                    var questionSubjectId = CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId);
+                    var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                        CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId) : question.subjectId;
                     var isPlayFlag = false;
                     var analyticsProps = {
                         subjectType: questionSubjectId,
