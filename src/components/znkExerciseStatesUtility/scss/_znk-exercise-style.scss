@@ -50,6 +50,12 @@
                 bottom-right-radius: 15px;
             }
         }
+
+        .answer-container, .question-container {
+            .redactor-roman-list {
+                list-style-type: upper-roman;
+            }
+        }
     }
 
     //table style from admin

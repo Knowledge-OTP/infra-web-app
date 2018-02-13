@@ -45,6 +45,8 @@
     .exercise-container znk-exercise .question-bottom-shadow {
       border-bottom-left-radius: 15px;
       border-bottom-right-radius: 15px; }
+    .exercise-container znk-exercise .answer-container .redactor-roman-list, .exercise-container znk-exercise .question-container .redactor-roman-list {
+      list-style-type: upper-roman; }
   .exercise-container znk-exercise .question-wrapper table, .exercise-container .tutorial-intro table {
     border-collapse: collapse;
     font-size: 1em;
