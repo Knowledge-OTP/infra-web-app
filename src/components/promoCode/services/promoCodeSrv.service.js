@@ -59,6 +59,11 @@
                     promoCodeToUpdate = promoCode;
                 };
 
+                promoCodeSrv.cleanPromoCode = function () {
+                    promoCodeToUpdate = null;
+                    promoCodeStatus = null;
+                };
+
                 promoCodeSrv.getPromoCodeToUpdate = function () {
                     return promoCodeToUpdate;
                 };

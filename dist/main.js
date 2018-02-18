@@ -14244,8 +14244,9 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
                 restrict: 'E',
                 scope: {
                     userContext: '<',
-                    userContextConst: "<",
+                    userContextConst: '<',
                     appContext: '<',
+                    promoStatus: '='
                 },
                 link: function (scope) {
                     var ENTER_KEY_CODE = 13;
@@ -14258,6 +14259,10 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
                             scope.d.showSpinner = true;
                             PromoCodeSrv.checkPromoCode(promoCode, scope.appContext.id).then(function (promoCodeResult) {
                                 scope.d.promoCodeStatus = promoCodeResult.status;
+                                scope.promoStatus = {
+                                    isApproved: !promoCodeResult.status,
+                                    promoKey: promoCode
+                                };
                                 scope.d.promoCodeStatusText = promoCodeResult.text;
                                 scope.d.showSpinner = false;
                                 if (scope.d.promoCodeStatus === scope.d.promoCodeStatusConst.accepted) {
@@ -14272,6 +14277,11 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
                         _cleanPromoCodeStatus();
                         scope.d.promoCode = '';
                     };
+
+                    scope.$on('$destroy', function() {
+                        PromoCodeSrv.cleanPromoCode();
+                        scope.d.clearInput();
+                    });
 
                     scope.d.keyDownHandler = function ($event, promoCode) {
                         if ($event.keyCode !== ENTER_KEY_CODE) {
@@ -14409,6 +14419,11 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
 
                 promoCodeSrv.promoCodeToUpdate = function (promoCode) {
                     promoCodeToUpdate = promoCode;
+                };
+
+                promoCodeSrv.cleanPromoCode = function () {
+                    promoCodeToUpdate = null;
+                    promoCodeStatus = null;
                 };
 
                 promoCodeSrv.getPromoCodeToUpdate = function () {
@@ -14779,7 +14794,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 
     angular.module('znk.infra-web-app.purchase')
         .controller('PurchaseDialogController',
-            ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout) {
+            ["$mdDialog", "purchaseService", "PurchaseStateEnum", "ENV", "$scope", "$timeout", "PromoCodeSrv", "AuthService", "$filter", "PopUpSrv", function($mdDialog, purchaseService, PurchaseStateEnum, ENV, $scope, $timeout, PromoCodeSrv, AuthService, $filter, PopUpSrv) {
                 'ngInject';
 
                 var vm = this;
@@ -14788,6 +14803,40 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                 vm.purchaseStateEnum = PurchaseStateEnum;
                 vm.appName = ENV.firebaseAppScopeName.split('_')[0].toUpperCase();
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
+                vm.appId = {
+                    id: ENV.firebaseAppScopeName
+                };
+                vm.studentContextConst = {
+                    TEACHER: 1,
+                    STUDENT: 2
+                };
+                vm.promoStatus = {
+                    isApproved: false
+                };
+
+                vm.enablePromoCode = function (promoCodeId) {
+                    var translate = $filter('translate');
+                    AuthService.getAuth().then(authData => {
+                        if (authData && authData.uid) {
+                            if (angular.isDefined(promoCodeId)) {
+                                var appContext = ENV.firebaseAppScopeName;
+                                PromoCodeSrv.updatePromoCode(authData.uid, promoCodeId, appContext).then(function () {
+                                    var successTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
+                                    var SuccessMsg = translate('PROMO_CODE.PROMO_CODE_SUCCESS_MESSAGE');
+                                    PopUpSrv.success(successTitle, SuccessMsg).promise.then(function () {
+                                        vm.close();
+                                    });
+                                }).catch(function () {
+                                    var errorTitle = translate('PROMO_CODE.PROMO_CODE_TITLE');
+                                    var errorMsg = translate('PROMO_CODE.PROMO_CODE_ERROR_MESSAGE');
+                                    PopUpSrv.error(errorTitle, errorMsg).promise.then(function () {
+                                        vm.close();
+                                    });
+                                });
+                            }
+                        }
+                    });
+                };
 
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
@@ -14806,6 +14855,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                     vm.productPrice = +productPrice.price;
                     vm.productPreviousPrice = +productPrice.previousPrice;
                     vm.productDiscountPercentage = Math.floor(100 - ((vm.productPrice / vm.productPreviousPrice) * 100)) + '%';
+                    // vm.promoCodeDiscountPercentage = '100%';
                 });
 
 
@@ -15451,13 +15501,25 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                        </li>\n" +
     "                    </ul>\n" +
     "                </div>\n" +
-    "                <div class=\"price\" ng-show=\"vm.purchaseState === vm.purchaseStateEnum.NONE.enum\">\n" +
+    "                <div>\n" +
+    "                    <promo-code user-context-const=\"vm.studentContextConst\" promo-status=\"vm.promoStatus\" user-context=\"vm.studentContextConst.STUDENT\"\n" +
+    "                        app-context=\"vm.appId\"></promo-code>\n" +
+    "                </div>\n" +
+    "                <div class=\"price\" ng-show=\"!vm.promoStatus.isApproved && vm.purchaseState === vm.purchaseStateEnum.NONE.enum\">\n" +
     "                    <del>{{'$' + vm.productPreviousPrice}}</del>\n" +
     "                    <b>{{'$' + vm.productPrice}}</b>\n" +
     "                    <span translate=\".SAVE\" translate-values='{ percent: vm.productDiscountPercentage}'></span>\n" +
     "                </div>\n" +
+    "                <div class=\\ \"price\\\" ng-show=\\ \"vm.promoStatus.isApproved\\\">\n" +
+    "                    <del>{{'$' + vm.productPreviousPrice}}</del>\n" +
+    "                    <b>$0</b>\n" +
+    "                    <span translate=\".SAVE\" translate-values='{ percent: vm.promoCodeDiscountPercentage}'></span>\n" +
+    "                </div>\n" +
     "                <div class=\"action\">\n" +
-    "                    <purchase-btn purchase-state=\"vm.purchaseState\"></purchase-btn>\n" +
+    "                    <purchase-btn purchase-state=\"vm.purchaseState\" ng-if=\"!vm.promoStatus.isApproved\"></purchase-btn>\n" +
+    "                    <button class=\"action md-button inline-block\" ng-if=\"vm.promoStatus.isApproved\" ng-click=\"vm.enablePromoCode(vm.promoStatus.promoKey)\"\n" +
+    "                        translate=\".UPGRADE_NOW\" name=\"submit\">\n" +
+    "                    </button>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </md-dialog-content>\n" +

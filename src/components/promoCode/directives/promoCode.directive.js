@@ -10,8 +10,9 @@
                 restrict: 'E',
                 scope: {
                     userContext: '<',
-                    userContextConst: "<",
+                    userContextConst: '<',
                     appContext: '<',
+                    promoStatus: '='
                 },
                 link: function (scope) {
                     var ENTER_KEY_CODE = 13;
@@ -24,6 +25,10 @@
                             scope.d.showSpinner = true;
                             PromoCodeSrv.checkPromoCode(promoCode, scope.appContext.id).then(function (promoCodeResult) {
                                 scope.d.promoCodeStatus = promoCodeResult.status;
+                                scope.promoStatus = {
+                                    isApproved: !promoCodeResult.status,
+                                    promoKey: promoCode
+                                };
                                 scope.d.promoCodeStatusText = promoCodeResult.text;
                                 scope.d.showSpinner = false;
                                 if (scope.d.promoCodeStatus === scope.d.promoCodeStatusConst.accepted) {
@@ -38,6 +43,11 @@
                         _cleanPromoCodeStatus();
                         scope.d.promoCode = '';
                     };
+
+                    scope.$on('$destroy', function() {
+                        PromoCodeSrv.cleanPromoCode();
+                        scope.d.clearInput();
+                    });
 
                     scope.d.keyDownHandler = function ($event, promoCode) {
                         if ($event.keyCode !== ENTER_KEY_CODE) {
