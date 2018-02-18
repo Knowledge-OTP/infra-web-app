@@ -49,13 +49,25 @@
                         </li>
                     </ul>
                 </div>
-                <div class="price" ng-show="vm.purchaseState === vm.purchaseStateEnum.NONE.enum">
+                <div>
+                    <promo-code ng-show="vm.purchaseState === vm.purchaseStateEnum.NONE.enum" user-context-const="vm.studentContextConst" promo-status="vm.promoStatus" user-context="vm.studentContextConst.STUDENT"
+                        app-context="vm.appId"></promo-code>
+                </div>
+                <div class="price" ng-show="!vm.promoStatus.isApproved && vm.purchaseState === vm.purchaseStateEnum.NONE.enum">
                     <del>{{'$' + vm.productPreviousPrice}}</del>
                     <b>{{'$' + vm.productPrice}}</b>
                     <span translate=".SAVE" translate-values='{ percent: vm.productDiscountPercentage}'></span>
                 </div>
+                <div class="price" ng-show="vm.promoStatus.isApproved">
+                    <del>{{'$' + vm.productPreviousPrice}}</del>
+                    <b>$0</b>
+                    <span translate=".SAVE" translate-values='{ percent: vm.promoCodeDiscountPercentage}'></span>
+                </div>
                 <div class="action">
-                    <purchase-btn purchase-state="vm.purchaseState"></purchase-btn>
+                    <purchase-btn purchase-state="vm.purchaseState" ng-if="!vm.promoStatus.isApproved"></purchase-btn>
+                    <button class="action md-button inline-block" ng-if="vm.promoStatus.isApproved" ng-click="vm.enablePromoCode(vm.promoStatus.promoKey)"
+                        translate=".UPGRADE_NOW" name="submit">
+                    </button>
                 </div>
             </div>
         </md-dialog-content>
