@@ -878,7 +878,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                    <b>{{'$' + vm.productPrice}}</b>\n" +
     "                    <span translate=\".SAVE\" translate-values='{ percent: vm.productDiscountPercentage}'></span>\n" +
     "                </div>\n" +
-    "                <div class=\\ \"price\\\" ng-show=\\ \"vm.promoStatus.isApproved\\\">\n" +
+    "                <div class=\"price\" ng-show=\"vm.promoStatus.isApproved\">\n" +
     "                    <del>{{'$' + vm.productPreviousPrice}}</del>\n" +
     "                    <b>$0</b>\n" +
     "                    <span translate=\".SAVE\" translate-values='{ percent: vm.promoCodeDiscountPercentage}'></span>\n" +
