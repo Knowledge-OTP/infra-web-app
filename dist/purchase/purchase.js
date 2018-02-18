@@ -534,7 +534,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                </form>\n" +
     "            </div>\n" +
     "            <div class=\"upgrade-btn-wrapper\" ng-switch-default>\n" +
-    "                <button class=\"md-button success drop-shadow\"\n" +
+    "                <button class=\"upgrade-btn-wrapper md-button success drop-shadow\"\n" +
     "                        ng-click=\"vm.showPurchaseError()\"\n" +
     "                        translate=\".UPGRADE_NOW\"\n" +
     "                        name=\"submit\">\n" +
@@ -870,7 +870,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                    </ul>\n" +
     "                </div>\n" +
     "                <div>\n" +
-    "                    <promo-code user-context-const=\"vm.studentContextConst\" promo-status=\"vm.promoStatus\" user-context=\"vm.studentContextConst.STUDENT\"\n" +
+    "                    <promo-code ng-show=\"vm.purchaseState === vm.purchaseStateEnum.NONE.enum\" user-context-const=\"vm.studentContextConst\" promo-status=\"vm.promoStatus\" user-context=\"vm.studentContextConst.STUDENT\"\n" +
     "                        app-context=\"vm.appId\"></promo-code>\n" +
     "                </div>\n" +
     "                <div class=\"price\" ng-show=\"!vm.promoStatus.isApproved && vm.purchaseState === vm.purchaseStateEnum.NONE.enum\">\n" +
