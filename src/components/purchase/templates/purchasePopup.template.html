@@ -50,7 +50,7 @@
                     </ul>
                 </div>
                 <div>
-                    <promo-code user-context-const="vm.studentContextConst" promo-status="vm.promoStatus" user-context="vm.studentContextConst.STUDENT"
+                    <promo-code ng-show="vm.purchaseState === vm.purchaseStateEnum.NONE.enum" user-context-const="vm.studentContextConst" promo-status="vm.promoStatus" user-context="vm.studentContextConst.STUDENT"
                         app-context="vm.appId"></promo-code>
                 </div>
                 <div class="price" ng-show="!vm.promoStatus.isApproved && vm.purchaseState === vm.purchaseStateEnum.NONE.enum">
