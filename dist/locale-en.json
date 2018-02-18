@@ -655,7 +655,7 @@
                 "ADMIN_TITLE": "Lesson Note",
                 "TEACHER_TITLE1": "These notes will be sent to the student and parent.",
                 "TEACHER_TITLE2": "Feel free to edit the format of the notes for your convenience.",
-                "NOTES_TEMPLATE": "Was the homework completed by the student before the lesson today?\n\r\rWhat did the student learn today?\n\r\rStudent performance on exercises?\n\r\rStudent effort/participation?\n\r\rFlow can the student improve before next lesson (including homework)?\n\r\rOther Notes\n\r",
+                "NOTES_TEMPLATE": "Was the homework completed by the student before the lesson today?\n\r\rWhat did the student learn today?\n\r\rStudent performance on exercises?\n\r\rStudent effort/participation?\n\r\rHow can the student improve before next lesson (including homework)?\n\r\rOther Notes\n\r",
                 "EMAIL_NOTES": {
                     "SEND_NOTES": "Send Lesson Notes",
                     "STUDENT_MAIL": "student email",
