@@ -65,7 +65,7 @@
                 </div>
                 <div class="action">
                     <purchase-btn purchase-state="vm.purchaseState" ng-if="!vm.promoStatus.isApproved"></purchase-btn>
-                    <button class="action md-button inline-block" ng-if="vm.promoStatus.isApproved" ng-click="vm.enablePromoCode(vm.promoStatus.promoKey)"
+                    <button class="upgrade-btn-wrapper md-button success action inline-block" ng-if="vm.promoStatus.isApproved" ng-click="vm.enablePromoCode(vm.promoStatus.promoKey)"
                         translate=".UPGRADE_NOW" name="submit">
                     </button>
                 </div>
