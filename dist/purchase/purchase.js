@@ -885,7 +885,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                </div>\n" +
     "                <div class=\"action\">\n" +
     "                    <purchase-btn purchase-state=\"vm.purchaseState\" ng-if=\"!vm.promoStatus.isApproved\"></purchase-btn>\n" +
-    "                    <button class=\"upgrade-btn-wrapper md-button success action inline-block\" ng-if=\"vm.promoStatus.isApproved\" ng-click=\"vm.enablePromoCode(vm.promoStatus.promoKey)\"\n" +
+    "                    <button class=\"upgrade-btn-wrapper md-button success action\" ng-if=\"vm.promoStatus.isApproved\" ng-click=\"vm.enablePromoCode(vm.promoStatus.promoKey)\"\n" +
     "                        translate=\".UPGRADE_NOW\" name=\"submit\">\n" +
     "                    </button>\n" +
     "                </div>\n" +
