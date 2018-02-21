@@ -168,7 +168,7 @@
                                     this.transformDate(this.lessonSummary.endTime - this.lessonSummary.startTime, 'DURATION') : null;
                                 break;
                             case `${this.nameSpace}.STATUS`:
-                                this.lessonStatus = this.getLessonStatus();
+                                this.lessonStatus = this.getLessonStatus(this.lesson);
                                 this.statusChanged(field, this.lessonStatus);
                                 break;
                         }
@@ -176,13 +176,16 @@
                     });
                 };
 
-                this.getLessonStatus = () => {
+                this.getLessonStatus = (lesson) => {
+                    const HOUR_IN_MILISEC = 3600000;
                     let statusToReturn;
-                    if (this.lesson.status === LessonStatusEnum.ATTENDED.enum ||
-                        this.lesson.status === LessonStatusEnum.MISSED.enum) {
-                        statusToReturn = this.lessonStatusArr.filter(status => status.enum === this.lesson.status)[0];
+                    if (lesson.status === LessonStatusEnum.ATTENDED.enum ||
+                        lesson.status === LessonStatusEnum.MISSED.enum) {
+                        statusToReturn = lesson.status;
                     } else {
-                        statusToReturn = this.lessonStatusArr.filter(status => status.enum === LessonStatusEnum.ATTENDED.enum)[0];
+                        // Status Methodology suggestion - if (lesson.date + 2 hours) > now then lesson missed
+                        statusToReturn = (lesson.date + (HOUR_IN_MILISEC * 2)) > Date.now() ?
+                            LessonStatusEnum.MISSED.enum : LessonStatusEnum.ATTENDED.enum;
                     }
 
                     return statusToReturn;
