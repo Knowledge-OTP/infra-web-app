@@ -4221,6 +4221,8 @@ promo-code {
       height: 43px;
       margin: 0 auto;
       position: relative; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .input-promo {
+        padding-right: 40px; }
       promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
         width: 35px;
         height: 34px;
@@ -5601,6 +5603,8 @@ promo-code {
       height: 43px;
       margin: 0 auto;
       position: relative; }
+      promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .input-promo {
+        padding-right: 40px; }
       promo-code .promo-code-wrapper .promo-code-overlay .promo-code-input-wrapper .input-wrapper .icon-wrapper {
         width: 35px;
         height: 34px;

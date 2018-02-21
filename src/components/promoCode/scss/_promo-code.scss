@@ -64,6 +64,10 @@ promo-code {
                     margin: 0 auto;
                     position: relative;
 
+                    .input-promo {
+                        padding-right: 40px;
+                    }
+
                     .icon-wrapper {
                         @include dimension(35px, 34px);
                         display: flex;
