@@ -14518,6 +14518,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
     "                </md-progress-circular>\n" +
     "                <input\n" +
     "                    type=\"text\"\n" +
+    "                    class=\"input-promo\"\n" +
     "                    ng-model=\"d.promoCode\"\n" +
     "                    ng-keydown=\"d.keyDownHandler($event, d.promoCode)\"\n" +
     "                    ng-autofocus =\"true\"\n" +
