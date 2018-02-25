@@ -85,6 +85,9 @@ md-dialog.purchase-popup {
     padding: 0;
     margin: 10px;
     cursor: pointer; }
+  md-dialog.purchase-popup .purchase-popup-container {
+    overflow: auto;
+    height: 600px; }
   md-dialog.purchase-popup .popup-header {
     position: relative;
     height: 40px;
