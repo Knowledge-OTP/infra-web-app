@@ -835,6 +835,26 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                    <span class=\"pill pro\" translate=\".PRO\"></span>\n" +
     "                </h2>\n" +
     "                <p translate=\".DESCRIPTION\"></p>\n" +
+    "                <div>\n" +
+    "                    <promo-code ng-show=\"vm.purchaseState === vm.purchaseStateEnum.NONE.enum\" user-context-const=\"vm.studentContextConst\" promo-status=\"vm.promoStatus\"\n" +
+    "                        user-context=\"vm.studentContextConst.STUDENT\" app-context=\"vm.appId\"></promo-code>\n" +
+    "                </div>\n" +
+    "                <div class=\"price\" ng-show=\"!vm.promoStatus.isApproved && vm.purchaseState === vm.purchaseStateEnum.NONE.enum\">\n" +
+    "                    <del>{{'$' + vm.productPreviousPrice}}</del>\n" +
+    "                    <b>{{'$' + vm.productPrice}}</b>\n" +
+    "                    <span translate=\".SAVE\" translate-values='{ percent: vm.productDiscountPercentage}'></span>\n" +
+    "                </div>\n" +
+    "                <div class=\"price\" ng-show=\"vm.promoStatus.isApproved\">\n" +
+    "                    <del>{{'$' + vm.productPreviousPrice}}</del>\n" +
+    "                    <b>$0</b>\n" +
+    "                    <span translate=\".SAVE\" translate-values='{ percent: vm.promoCodeDiscountPercentage}'></span>\n" +
+    "                </div>\n" +
+    "                <div class=\"action\">\n" +
+    "                    <purchase-btn purchase-state=\"vm.purchaseState\" ng-if=\"!vm.promoStatus.isApproved\"></purchase-btn>\n" +
+    "                    <button class=\"upgrade-btn-wrapper md-button success action\" ng-if=\"vm.promoStatus.isApproved\" ng-click=\"vm.enablePromoCode(vm.promoStatus.promoKey)\"\n" +
+    "                        translate=\".UPGRADE_NOW\" name=\"submit\">\n" +
+    "                    </button>\n" +
+    "                </div>\n" +
     "                <div class=\"features-box base-border-radius\">\n" +
     "                    <ul>\n" +
     "                        <li>\n" +
@@ -868,26 +888,6 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                            <span translate=\".BULLET5\"></span>\n" +
     "                        </li>\n" +
     "                    </ul>\n" +
-    "                </div>\n" +
-    "                <div>\n" +
-    "                    <promo-code ng-show=\"vm.purchaseState === vm.purchaseStateEnum.NONE.enum\" user-context-const=\"vm.studentContextConst\" promo-status=\"vm.promoStatus\" user-context=\"vm.studentContextConst.STUDENT\"\n" +
-    "                        app-context=\"vm.appId\"></promo-code>\n" +
-    "                </div>\n" +
-    "                <div class=\"price\" ng-show=\"!vm.promoStatus.isApproved && vm.purchaseState === vm.purchaseStateEnum.NONE.enum\">\n" +
-    "                    <del>{{'$' + vm.productPreviousPrice}}</del>\n" +
-    "                    <b>{{'$' + vm.productPrice}}</b>\n" +
-    "                    <span translate=\".SAVE\" translate-values='{ percent: vm.productDiscountPercentage}'></span>\n" +
-    "                </div>\n" +
-    "                <div class=\"price\" ng-show=\"vm.promoStatus.isApproved\">\n" +
-    "                    <del>{{'$' + vm.productPreviousPrice}}</del>\n" +
-    "                    <b>$0</b>\n" +
-    "                    <span translate=\".SAVE\" translate-values='{ percent: vm.promoCodeDiscountPercentage}'></span>\n" +
-    "                </div>\n" +
-    "                <div class=\"action\">\n" +
-    "                    <purchase-btn purchase-state=\"vm.purchaseState\" ng-if=\"!vm.promoStatus.isApproved\"></purchase-btn>\n" +
-    "                    <button class=\"upgrade-btn-wrapper md-button success action\" ng-if=\"vm.promoStatus.isApproved\" ng-click=\"vm.enablePromoCode(vm.promoStatus.promoKey)\"\n" +
-    "                        translate=\".UPGRADE_NOW\" name=\"submit\">\n" +
-    "                    </button>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </md-dialog-content>\n" +
