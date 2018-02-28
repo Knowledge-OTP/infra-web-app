@@ -262,7 +262,7 @@
             // check if there is dark lunch in both educator and student
             LiveSessionUiSrv.isDarkFeaturesValid = (educatorId, studentId) => {
                 if (darkFeaturesValid !== null) {
-                    return Promise.resolve(darkFeaturesValid);
+                    return $q.resolve(darkFeaturesValid);
                 } else {
                     return UserProfileService.darkFeaturesValid([educatorId, studentId])
                         .then(isValid => {

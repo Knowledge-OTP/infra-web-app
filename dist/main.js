@@ -9760,7 +9760,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             // return the live session obj data from adapter
             this.getScheduledLessonData = (lessonId) => {
                 if (scheduledLessonFromAdapter) {
-                    return Promise.resolve(scheduledLessonFromAdapter);
+                    return $q.resolve(scheduledLessonFromAdapter);
                 } else {
                     $log.debug('getScheduledLessonData: getLessonById: ', lessonId);
                     return ZnkLessonNotesSrv.getLessonById(lessonId);
@@ -10791,7 +10791,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
             // check if there is dark lunch in both educator and student
             LiveSessionUiSrv.isDarkFeaturesValid = (educatorId, studentId) => {
                 if (darkFeaturesValid !== null) {
-                    return Promise.resolve(darkFeaturesValid);
+                    return $q.resolve(darkFeaturesValid);
                 } else {
                     return UserProfileService.darkFeaturesValid([educatorId, studentId])
                         .then(isValid => {
@@ -20375,7 +20375,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        ["$log", "$rootScope", "$rootElement", "$http", "ENV", function ($log, $rootScope, $rootElement, $http, ENV) {
+        ["$q", "$log", "$rootScope", "$rootElement", "$http", "ENV", function ($q, $log, $rootScope, $rootElement, $http, ENV) {
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
@@ -20454,7 +20454,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                             lesson.status = newStatus;
                             return this.updateLesson(lesson);
                         });
-                        return Promise.all(updateLessonPromArr);
+                        return $q.all(updateLessonPromArr);
                     } else {
                         $log.error(`updateLessonsStatus: NO lessons are found with this id: ${id}, isBackToBackId: ${isBackToBackId}`);
                     }

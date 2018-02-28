@@ -461,7 +461,7 @@
             // return the live session obj data from adapter
             this.getScheduledLessonData = (lessonId) => {
                 if (scheduledLessonFromAdapter) {
-                    return Promise.resolve(scheduledLessonFromAdapter);
+                    return $q.resolve(scheduledLessonFromAdapter);
                 } else {
                     $log.debug('getScheduledLessonData: getLessonById: ', lessonId);
                     return ZnkLessonNotesSrv.getLessonById(lessonId);
@@ -1492,7 +1492,7 @@
             // check if there is dark lunch in both educator and student
             LiveSessionUiSrv.isDarkFeaturesValid = (educatorId, studentId) => {
                 if (darkFeaturesValid !== null) {
-                    return Promise.resolve(darkFeaturesValid);
+                    return $q.resolve(darkFeaturesValid);
                 } else {
                     return UserProfileService.darkFeaturesValid([educatorId, studentId])
                         .then(isValid => {

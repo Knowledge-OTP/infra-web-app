@@ -23,7 +23,7 @@
             // return the live session obj data from adapter
             this.getScheduledLessonData = (lessonId) => {
                 if (scheduledLessonFromAdapter) {
-                    return Promise.resolve(scheduledLessonFromAdapter);
+                    return $q.resolve(scheduledLessonFromAdapter);
                 } else {
                     $log.debug('getScheduledLessonData: getLessonById: ', lessonId);
                     return ZnkLessonNotesSrv.getLessonById(lessonId);

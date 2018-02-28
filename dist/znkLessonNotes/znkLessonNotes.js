@@ -730,7 +730,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesSrv',
-        ["$log", "$rootScope", "$rootElement", "$http", "ENV", function ($log, $rootScope, $rootElement, $http, ENV) {
+        ["$q", "$log", "$rootScope", "$rootElement", "$http", "ENV", function ($q, $log, $rootScope, $rootElement, $http, ENV) {
             'ngInject';
 
             let schedulingApi = `${ENV.znkBackendBaseUrl}/scheduling`;
@@ -809,7 +809,7 @@
                             lesson.status = newStatus;
                             return this.updateLesson(lesson);
                         });
-                        return Promise.all(updateLessonPromArr);
+                        return $q.all(updateLessonPromArr);
                     } else {
                         $log.error(`updateLessonsStatus: NO lessons are found with this id: ${id}, isBackToBackId: ${isBackToBackId}`);
                     }
