@@ -10,22 +10,23 @@
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html',
             controllerAs: 'vm',
-            controller: function ($http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv,
+            controller: function ($scope, $http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv,
                                   ZnkLessonNotesUiSrv, UserTypeContextEnum) {
                 'ngInject';
 
+                this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                 this.dataPromMap = {};
                 this.nameSpace = 'LESSON_NOTES.LESSON_NOTES_POPUP';
                 this.fields = [];
+                const lessonStatusArr = LessonStatusEnum.getEnumArr();
+                this.lessonStatusArr = lessonStatusArr.filter(status =>
+                    status.enum === LessonStatusEnum.ATTENDED.enum || status.enum === LessonStatusEnum.MISSED.enum);
+                this.LessonStatusEnum = LessonStatusEnum;
 
                 this.$onInit = function () {
                     $log.debug('znkLessonInfo: Init');
-                    this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
-                    this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.dataPromMap.translate = this.getTranslations();
-                    const lessonStatusArr = LessonStatusEnum.getEnumArr();
-                    this.lessonStatusArr = lessonStatusArr.filter(status =>
-                        status.enum === LessonStatusEnum.ATTENDED.enum || status.enum === LessonStatusEnum.MISSED.enum);
                     this.initLessonInfo();
                 };
 
@@ -84,27 +85,28 @@
                                     this.transformDate(this.lessonSummary.endTime - this.lessonSummary.startTime, 'DURATION') : null;
                                 break;
                             case `${this.nameSpace}.STATUS`:
-                                this.lessonStatus = this.getLessonStatus(this.lesson);
-                                this.statusChanged(field, this.lessonStatus);
+                                this.lessonStatus = this.getLessonStatusObj(this.lesson);
+                                field.text = this.lessonStatus.val;
                                 break;
                         }
                         this.fields.push(field);
                     });
                 };
 
-                this.getLessonStatus = (lesson) => {
+                this.getLessonStatusObj = (lesson) => {
                     const HOUR_IN_MILISEC = 3600000;
-                    let statusToReturn;
+                    let statusObjToReturn;
                     if (lesson.status === LessonStatusEnum.ATTENDED.enum ||
                         lesson.status === LessonStatusEnum.MISSED.enum) {
-                        statusToReturn = lesson.status;
+                        statusObjToReturn = this.lessonStatusArr.find(status => status.enum === lesson.status);
                     } else {
                         // Status Methodology suggestion - if (lesson.date + 2 hours) > now then lesson missed
-                        statusToReturn = (lesson.date + (HOUR_IN_MILISEC * 2)) > Date.now() ?
+                        const seggestStatus = (lesson.date + (HOUR_IN_MILISEC * 2)) > Date.now() ?
                             LessonStatusEnum.MISSED.enum : LessonStatusEnum.ATTENDED.enum;
+                        statusObjToReturn = this.lessonStatusArr.find(status => status.enum === seggestStatus);
                     }
 
-                    return statusToReturn;
+                    return statusObjToReturn;
                 };
 
                 this.getStudentsNames = () => {
@@ -150,6 +152,7 @@
                 this.statusChanged = (field, statusEnumObj) => {
                     field.text = statusEnumObj.val;
                     this.lesson.status = statusEnumObj.enum;
+                    $scope.$emit('LESSON__STATUS_CHANGED', statusEnumObj.enum);
                 };
 
             }

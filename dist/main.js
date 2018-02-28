@@ -10509,7 +10509,6 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
 
             // handel the diff between the old subject enum and the new topic enum from my zinkerz app
             LiveSessionSubjectSrv.getSessionSubject = (lessonData) => {
-                console.log('_getSessionSubject lessonData : ', lessonData);
                 if (lessonData.sessionSubject) {
                     return lessonData.sessionSubject.id;
                 } else {
@@ -19740,22 +19739,23 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
             },
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html',
             controllerAs: 'vm',
-            controller: ["$http", "$q", "$log", "$filter", "ENV", "$translate", "LessonStatusEnum", "ZnkLessonNotesSrv", "ZnkLessonNotesUiSrv", "UserTypeContextEnum", function ($http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv,
+            controller: ["$scope", "$http", "$q", "$log", "$filter", "ENV", "$translate", "LessonStatusEnum", "ZnkLessonNotesSrv", "ZnkLessonNotesUiSrv", "UserTypeContextEnum", function ($scope, $http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv,
                                   ZnkLessonNotesUiSrv, UserTypeContextEnum) {
                 'ngInject';
 
+                this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                 this.dataPromMap = {};
                 this.nameSpace = 'LESSON_NOTES.LESSON_NOTES_POPUP';
                 this.fields = [];
+                const lessonStatusArr = LessonStatusEnum.getEnumArr();
+                this.lessonStatusArr = lessonStatusArr.filter(status =>
+                    status.enum === LessonStatusEnum.ATTENDED.enum || status.enum === LessonStatusEnum.MISSED.enum);
+                this.LessonStatusEnum = LessonStatusEnum;
 
                 this.$onInit = function () {
                     $log.debug('znkLessonInfo: Init');
-                    this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
-                    this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                     this.dataPromMap.translate = this.getTranslations();
-                    const lessonStatusArr = LessonStatusEnum.getEnumArr();
-                    this.lessonStatusArr = lessonStatusArr.filter(status =>
-                        status.enum === LessonStatusEnum.ATTENDED.enum || status.enum === LessonStatusEnum.MISSED.enum);
                     this.initLessonInfo();
                 };
 
@@ -19814,27 +19814,28 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                                     this.transformDate(this.lessonSummary.endTime - this.lessonSummary.startTime, 'DURATION') : null;
                                 break;
                             case `${this.nameSpace}.STATUS`:
-                                this.lessonStatus = this.getLessonStatus(this.lesson);
-                                this.statusChanged(field, this.lessonStatus);
+                                this.lessonStatus = this.getLessonStatusObj(this.lesson);
+                                field.text = this.lessonStatus.val;
                                 break;
                         }
                         this.fields.push(field);
                     });
                 };
 
-                this.getLessonStatus = (lesson) => {
+                this.getLessonStatusObj = (lesson) => {
                     const HOUR_IN_MILISEC = 3600000;
-                    let statusToReturn;
+                    let statusObjToReturn;
                     if (lesson.status === LessonStatusEnum.ATTENDED.enum ||
                         lesson.status === LessonStatusEnum.MISSED.enum) {
-                        statusToReturn = lesson.status;
+                        statusObjToReturn = this.lessonStatusArr.find(status => status.enum === lesson.status);
                     } else {
                         // Status Methodology suggestion - if (lesson.date + 2 hours) > now then lesson missed
-                        statusToReturn = (lesson.date + (HOUR_IN_MILISEC * 2)) > Date.now() ?
+                        const seggestStatus = (lesson.date + (HOUR_IN_MILISEC * 2)) > Date.now() ?
                             LessonStatusEnum.MISSED.enum : LessonStatusEnum.ATTENDED.enum;
+                        statusObjToReturn = this.lessonStatusArr.find(status => status.enum === seggestStatus);
                     }
 
-                    return statusToReturn;
+                    return statusObjToReturn;
                 };
 
                 this.getStudentsNames = () => {
@@ -19880,6 +19881,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 this.statusChanged = (field, statusEnumObj) => {
                     field.text = statusEnumObj.val;
                     this.lesson.status = statusEnumObj.enum;
+                    $scope.$emit('LESSON__STATUS_CHANGED', statusEnumObj.enum);
                 };
 
             }]
@@ -19888,33 +19890,39 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-
     angular.module('znk.infra-web-app.znkLessonNotes')
-        .component('lessonNotesPopup', {
-            bindings: {
-                lesson: '=',
-                lessonSummary: '=',
-                userContext: '='
-            },
-            templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html',
-            controllerAs: 'vm',
-            controller: ["$log", "$mdDialog", "$translate", "ZnkLessonNotesSrv", "UserTypeContextEnum", "LessonStatusEnum", "LessonNotesStatusEnum", "ZnkToastSrv", "UtilitySrv", function ($log, $mdDialog, $translate, ZnkLessonNotesSrv, UserTypeContextEnum, LessonStatusEnum,
-                                  LessonNotesStatusEnum, ZnkToastSrv, UtilitySrv) {
+        .controller('lessonNotesPopupCtrl',
+
+            ["locals", "$q", "$scope", "$log", "$mdDialog", "$translate", "ZnkLessonNotesSrv", "UserTypeContextEnum", "LessonStatusEnum", "LessonNotesStatusEnum", "ZnkToastSrv", "UtilitySrv", function (locals, $q, $scope, $log, $mdDialog, $translate, ZnkLessonNotesSrv, UserTypeContextEnum, LessonStatusEnum,
+                      LessonNotesStatusEnum, ZnkToastSrv, UtilitySrv) {
                 'ngInject';
+
+                this.lesson = locals.lesson;
+                this.lessonSummary = locals.lessonSummary;
+                this.userContext = locals.userContext;
+                this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
+                this.lessonSummary = this.lessonSummary || {};
+                this.lessonSummary.id = this.lessonSummary.id || UtilitySrv.general.createGuid();
+                this.lessonSummary.studentIds = this.lessonSummary.studentIds || Object.keys(this.lesson.students);
+                this.lessonSummary.educatorId = this.lessonSummary.educatorId || this.lesson.educatorId;
+                this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
+                this.lessonSummary.lessonNotes.status = this.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_COMPLETION.enum;
+
+                const lessonStatusListener = $scope.$on('LESSON__STATUS_CHANGED', (event, status) => {
+                    this.lesson.status = status;
+                    $log.debug('lessonStatusChanged : ', LessonStatusEnum.getValByEnum(status));
+                    this.isLessonUpdateNeeded = true;
+                    this.showStatusError = false;
+
+                });
 
                 this.$onInit = () => {
                     $log.debug('lessonNotesPopup: Init with lesson: ', this.lesson);
                     $log.debug('lessonNotesPopup: Init with lessonSummary: ', this.lessonSummary);
                     this.showSpinner = false;
                     this.showStatusError = false;
-                    this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
-                    this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
-                    this.lessonSummary =  this.lessonSummary || {};
-                    this.lessonSummary.id = this.lessonSummary.id || UtilitySrv.general.createGuid();
-                    this.lessonSummary.studentIds = this.lessonSummary.studentIds || Object.keys(this.lesson.students);
-                    this.lessonSummary.educatorId = this.lessonSummary.educatorId || this.lesson.educatorId;
-                    this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
-                    this.lessonSummary.lessonNotes.status = this.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_COMPLETION.enum;
+                    this.isLessonUpdateNeeded = false;
                 };
 
                 this.isLessonValid = (lesson) => {
@@ -19947,17 +19955,23 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 };
 
                 this.saveLessonSummary = (sendEmailIndicators) => {
+                    const savePromArr = [];
+                    if (this.isLessonUpdateNeeded || this.isAdmin) {
+                        this.logger.log('Saving lesson: ', this.lesson);
+                        savePromArr.push(this.lessonService.updateLesson(this.lesson));
+                    }
                     $log.debug('saving lessonSummary : ', this.lessonSummary);
-                    ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary, sendEmailIndicators)
-                        .then(updatedLessonSummary => {
-                            $log.debug('lessonNotesPopup saveLessonSummary:  updatedLessonSummary: ', updatedLessonSummary);
-                            this.showSpinner = false;
-                            let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
-                            translationsProm.then(message => {
-                                ZnkToastSrv.showToast('success', message);
-                            });
-                            $mdDialog.cancel();
-                        })
+                    savePromArr.push(ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary, sendEmailIndicators));
+
+                    $q.all(savePromArr).then(updatedLessonSummary => {
+                        $log.debug('lessonNotesPopup saveLessonSummary:  updatedLessonSummary: ', updatedLessonSummary);
+                        this.showSpinner = false;
+                        let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
+                        translationsProm.then(message => {
+                            ZnkToastSrv.showToast('success', message);
+                        });
+                        $mdDialog.cancel();
+                    })
                         .catch(err => {
                             this.showSpinner = false;
                             $log.error('lessonNotesPopup: saveLessonSummary failed. Error: ', err);
@@ -19968,8 +19982,12 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                         });
                 };
 
+                this.$onDestroy = () => {
+                    lessonStatusListener();
+                };
+
             }]
-        });
+        );
 })(angular);
 
 (function (angular) {
@@ -20091,32 +20109,28 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 
 (function (angular) {
     'use strict';
-
     angular.module('znk.infra-web-app.znkLessonNotes')
-        .component('lessonRatingPopup', {
-            bindings: {
-                lesson: '=',
-                lessonSummary: '='
-            },
-            templateUrl: 'components/znkLessonNotes/lesson-rating-popup/lesson-rating-popup.template.html',
-            controllerAs: 'vm',
-            controller: ["$log", "$mdDialog", "ZnkLessonNotesSrv", "UserTypeContextEnum", function ($log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum) {
+        .controller('lessonRatingPopupCtrl',
+
+            ["locals", "$log", "$mdDialog", "ZnkLessonNotesSrv", "UserTypeContextEnum", function (locals, $log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum) {
                 'ngInject';
 
-                this.$onInit = () => {
+                this.lesson = locals.lesson;
+                this.lessonSummary = locals.lessonSummary;
+                this.userContext = UserTypeContextEnum.STUDENT.enum;
+                this.lessonSummary =  this.lessonSummary || {};
+                this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
+
+                this.$onInit = function() {
                     $log.debug('lessonRatingPopup: Init with lesson: ', this.lesson );
                     $log.debug('lessonRatingPopup: Init with lessonSummary: ', this.lessonSummary);
-                    this.lessonSummary =  this.lessonSummary || {};
-                    this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
-                    this.closeModal = $mdDialog.cancel;
                     this.showSpinner = false;
-                    this.userContext = UserTypeContextEnum.STUDENT.enum;
                 };
 
-                this.submit = () => {
+                this.submit = function() {
                     this.showSpinner = true;
                     $log.debug('saving lessonSummary : ', this.lessonSummary);
-                    ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)
+                    return ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)
                         .then(updatedLessonSummary => {
                             this.lessonSummary = updatedLessonSummary;
                             this.showSpinner = false;
@@ -20126,11 +20140,11 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 
                 };
 
-                this.closeModal = () => {
+                this.closeModal = function () {
                     $mdDialog.cancel();
                 };
             }]
-        });
+        );
 })(angular);
 
 (function (angular) {
@@ -20155,6 +20169,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 
                 this.$onInit = () => {
                     $log.debug('znkLessonRating: Init');
+                    this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
                     this.lessonSummary.studentFeedback.studentFreeText = this.lessonSummary.studentFeedback.studentFreeText || '';
                     this.initStarsArr();
                     if (this.lessonSummary.studentFeedback.rating) {
@@ -20283,25 +20298,22 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
             'ngInject';
 
             this.openLessonNotesPopup = (lesson, lessonSummary, userContext) => {
-                $rootScope.lesson = lesson;
-                $rootScope.lessonSummary = lessonSummary;
-                $rootScope.userContext = userContext;
-                $mdDialog.show({
-                    template: `<lesson-notes-popup lesson-summary="lessonSummary" lesson="lesson" user-context="userContext"
-                        aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
-                    scope: $rootScope,
+                return $mdDialog.show({
+                    locals: { lesson, lessonSummary, userContext },
+                    controller: 'lessonNotesPopupCtrl',
+                    controllerAs: 'vm',
+                    templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html',
                     clickOutsideToClose: false,
                     escapeToClose: true
                 });
             };
 
             this.openLessonRatingPopup = (lesson, lessonSummary) => {
-                $rootScope.lesson = lesson;
-                $rootScope.lessonSummary = lessonSummary;
-                $mdDialog.show({
-                    template: `<lesson-rating-popup lesson-summary="lessonSummary" lesson="lesson"
-                            aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
-                    scope: $rootScope,
+                return $mdDialog.show({
+                    locals: { lesson, lessonSummary },
+                    controller: 'lessonRatingPopupCtrl',
+                    controllerAs: 'vm',
+                    templateUrl: 'components/znkLessonNotes/lesson-rating-popup/lesson-rating-popup.template.html',
                     clickOutsideToClose: false,
                     escapeToClose: true
                 });
@@ -20486,11 +20498,15 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "<div class=\"lesson-details\" ng-if=\"vm.fields.length\" translate-namespace=\"LESSON_NOTES.LESSON_NOTES_POPUP\">\n" +
     "    <div class=\"field\" ng-repeat=\"field in vm.fields\" ng-if=\"field.text\">\n" +
     "        <div class=\"label\">{{field.label}}</div>\n" +
-    "        <div class=\"text\" ng-if=\"field.label !== 'Status' || vm.isStudent\">{{field.text}}</div>\n" +
+    "        <div class=\"text\" ng-if=\"field.label !== 'Status' || field.label === 'Status' && vm.isStudent\"\n" +
+    "             ng-class=\"{\n" +
+    "             'attended': field.label === 'Status' && field.text == vm.LessonStatusEnum.ATTENDED.val,\n" +
+    "             'missed': field.label === 'Status' && field.text == vm.LessonStatusEnum.MISSED.val}\">\n" +
+    "            {{field.text}}</div>\n" +
     "        <select class=\"lesson-status\" ng-if=\"field.label === 'Status' && !vm.isStudent\"\n" +
     "                ng-options=\"status as status.val for status in vm.lessonStatusArr\"\n" +
     "                placeholder=\"{{'LESSON_NOTES.LESSON_NOTES_POPUP.SELECT' | translate}}\"\n" +
-    "                ng-model=\"vm.lessonStatus\"\n" +
+    "                ng-model=\"vm.lessonStatus\" ng-class=\"vm.lessonStatus.val\"\n" +
     "                ng-change=\"vm.statusChanged(field, vm.lessonStatus)\">\n" +
     "        </select>\n" +
     "    </div>\n" +

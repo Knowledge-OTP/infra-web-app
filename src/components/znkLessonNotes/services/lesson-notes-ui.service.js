@@ -6,25 +6,22 @@
             'ngInject';
 
             this.openLessonNotesPopup = (lesson, lessonSummary, userContext) => {
-                $rootScope.lesson = lesson;
-                $rootScope.lessonSummary = lessonSummary;
-                $rootScope.userContext = userContext;
-                $mdDialog.show({
-                    template: `<lesson-notes-popup lesson-summary="lessonSummary" lesson="lesson" user-context="userContext"
-                        aria-label="{{\'LESSON_NOTES.LESSON_NOTES_POPUP.TITLE\' | translate}}"></lesson-notes-popup>`,
-                    scope: $rootScope,
+                return $mdDialog.show({
+                    locals: { lesson, lessonSummary, userContext },
+                    controller: 'lessonNotesPopupCtrl',
+                    controllerAs: 'vm',
+                    templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-notes-popup.template.html',
                     clickOutsideToClose: false,
                     escapeToClose: true
                 });
             };
 
             this.openLessonRatingPopup = (lesson, lessonSummary) => {
-                $rootScope.lesson = lesson;
-                $rootScope.lessonSummary = lessonSummary;
-                $mdDialog.show({
-                    template: `<lesson-rating-popup lesson-summary="lessonSummary" lesson="lesson"
-                            aria-label="{{\'LESSON_NOTES.LESSON_RATING_POPUP.TITLE\' | translate}}"></lesson-rating-popup>`,
-                    scope: $rootScope,
+                return $mdDialog.show({
+                    locals: { lesson, lessonSummary },
+                    controller: 'lessonRatingPopupCtrl',
+                    controllerAs: 'vm',
+                    templateUrl: 'components/znkLessonNotes/lesson-rating-popup/lesson-rating-popup.template.html',
                     clickOutsideToClose: false,
                     escapeToClose: true
                 });

@@ -9557,6 +9557,10 @@ md-dialog.base {
       text-transform: uppercase; }
     .lesson-details .field .text {
       text-transform: capitalize; }
+      .lesson-details .field .text.attended {
+        color: #87ca4d; }
+      .lesson-details .field .text.missed {
+        color: #ff6766; }
     .lesson-details .field select {
       width: 130px;
       font-size: 16px;
@@ -9574,8 +9578,10 @@ md-dialog.base {
       text-transform: capitalize; }
       .lesson-details .field select.attended {
         color: #87ca4d; }
-      .lesson-details .field select.canceled, .lesson-details .field select.missed {
+      .lesson-details .field select.missed {
         color: #ff6766; }
+      .lesson-details .field select option {
+        color: #000000; }
 
 .lesson-teacher-notes {
   margin: 0 20px;

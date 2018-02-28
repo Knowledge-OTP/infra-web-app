@@ -1,11 +1,15 @@
 <div class="lesson-details" ng-if="vm.fields.length" translate-namespace="LESSON_NOTES.LESSON_NOTES_POPUP">
     <div class="field" ng-repeat="field in vm.fields" ng-if="field.text">
         <div class="label">{{field.label}}</div>
-        <div class="text" ng-if="field.label !== 'Status' || vm.isStudent">{{field.text}}</div>
+        <div class="text" ng-if="field.label !== 'Status' || field.label === 'Status' && vm.isStudent"
+             ng-class="{
+             'attended': field.label === 'Status' && field.text == vm.LessonStatusEnum.ATTENDED.val,
+             'missed': field.label === 'Status' && field.text == vm.LessonStatusEnum.MISSED.val}">
+            {{field.text}}</div>
         <select class="lesson-status" ng-if="field.label === 'Status' && !vm.isStudent"
                 ng-options="status as status.val for status in vm.lessonStatusArr"
                 placeholder="{{'LESSON_NOTES.LESSON_NOTES_POPUP.SELECT' | translate}}"
-                ng-model="vm.lessonStatus"
+                ng-model="vm.lessonStatus" ng-class="vm.lessonStatus.val"
                 ng-change="vm.statusChanged(field, vm.lessonStatus)">
         </select>
     </div>

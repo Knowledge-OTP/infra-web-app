@@ -1,31 +1,27 @@
 (function (angular) {
     'use strict';
-
     angular.module('znk.infra-web-app.znkLessonNotes')
-        .component('lessonRatingPopup', {
-            bindings: {
-                lesson: '=',
-                lessonSummary: '='
-            },
-            templateUrl: 'components/znkLessonNotes/lesson-rating-popup/lesson-rating-popup.template.html',
-            controllerAs: 'vm',
-            controller: function ($log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum) {
+        .controller('lessonRatingPopupCtrl',
+
+            function (locals, $log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum) {
                 'ngInject';
 
-                this.$onInit = () => {
+                this.lesson = locals.lesson;
+                this.lessonSummary = locals.lessonSummary;
+                this.userContext = UserTypeContextEnum.STUDENT.enum;
+                this.lessonSummary =  this.lessonSummary || {};
+                this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
+
+                this.$onInit = function() {
                     $log.debug('lessonRatingPopup: Init with lesson: ', this.lesson );
                     $log.debug('lessonRatingPopup: Init with lessonSummary: ', this.lessonSummary);
-                    this.lessonSummary =  this.lessonSummary || {};
-                    this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
-                    this.closeModal = $mdDialog.cancel;
                     this.showSpinner = false;
-                    this.userContext = UserTypeContextEnum.STUDENT.enum;
                 };
 
-                this.submit = () => {
+                this.submit = function() {
                     this.showSpinner = true;
                     $log.debug('saving lessonSummary : ', this.lessonSummary);
-                    ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)
+                    return ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)
                         .then(updatedLessonSummary => {
                             this.lessonSummary = updatedLessonSummary;
                             this.showSpinner = false;
@@ -35,9 +31,9 @@
 
                 };
 
-                this.closeModal = () => {
+                this.closeModal = function () {
                     $mdDialog.cancel();
                 };
             }
-        });
+        );
 })(angular);

@@ -1210,7 +1210,6 @@
 
             // handel the diff between the old subject enum and the new topic enum from my zinkerz app
             LiveSessionSubjectSrv.getSessionSubject = (lessonData) => {
-                console.log('_getSessionSubject lessonData : ', lessonData);
                 if (lessonData.sessionSubject) {
                     return lessonData.sessionSubject.id;
                 } else {

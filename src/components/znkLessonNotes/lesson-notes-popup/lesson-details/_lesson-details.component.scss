@@ -24,6 +24,12 @@
         }
         .text {
             text-transform: capitalize;
+            &.attended {
+                color: $mantis;
+            }
+            &.missed {
+                color: $bittersweet;
+            }
         }
         select {
             width: 130px;
@@ -44,8 +50,11 @@
             &.attended {
                 color: $mantis;
             }
-            &.canceled, &.missed {
+            &.missed {
                 color: $bittersweet;
+            }
+            option {
+                color: $black;
             }
         }
     }
