@@ -294,7 +294,7 @@
                         ZnkLessonNotesSrv.sendEmailIndicators.sendMailToParents) {
                         this.lessonSummary.lessonNotes.status =
                             this.lessonSummary.lessonNotes.status === LessonNotesStatusEnum.PENDING_COMPLETION.enum ?
-                                LessonNotesStatusEnum.complete : this.lessonSummary.lessonNotes.status;
+                                LessonNotesStatusEnum.COMPLETE.enum : this.lessonSummary.lessonNotes.status;
                         this.saveLessonSummary(ZnkLessonNotesSrv.sendEmailIndicators);
                     } else {
                         $log.debug(`lessonNotesPopup: You didn't choose any email to send to`);
