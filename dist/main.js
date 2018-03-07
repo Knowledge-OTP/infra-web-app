@@ -20127,16 +20127,18 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                     this.showSpinner = false;
                 };
 
-                this.submit = function() {
+                this.saveStudentFeedback = function() {
                     this.showSpinner = true;
-                    $log.debug('saving lessonSummary : ', this.lessonSummary);
-                    return ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)
-                        .then(updatedLessonSummary => {
-                            this.lessonSummary = updatedLessonSummary;
+                    $log.debug('saving studentFeedback : ', this.lessonSummary.studentFeedback);
+                    return ZnkLessonNotesSrv.saveStudentFeedback(this.lessonSummary.studentFeedback)
+                        .then(() => {
                             this.showSpinner = false;
                             this.closeModal();
                         })
-                        .catch(err => $log.error('lessonNotesPopup: saveLessonSummary failed. Error: ', err));
+                        .catch(err => {
+                            $log.error('lessonNotesPopup: saveLessonSummary failed. Error: ', err);
+                            this.showSpinner = false;
+                        });
 
                 };
 
@@ -20459,8 +20461,15 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                         $log.error(`updateLessonsStatus: NO lessons are found with this id: ${id}, isBackToBackId: ${isBackToBackId}`);
                     }
                 });
-
             };
+
+            this.saveStudentFeedback = (lessonSummaryId, studentFeedback) => {
+                const saveStudentFeedbackApi = `${lessonApi}/saveStudentFeedback`;
+            return this.$http.post(saveStudentFeedbackApi, { lessonSummaryId, studentFeedback })
+                .then(studentFeedback => studentFeedback.data)
+                .catch((err) => $log.error('saveStudentFeedback: Failed to save studentFeedback: ',
+                    studentFeedback, ' Error: ', err));
+        };
 
             this.saveLessonSummary = (lessonSummary, sendEmailIndicators) => {
                 const saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
@@ -20662,7 +20671,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "    <footer>\n" +
     "        <div class=\"divider\"></div>\n" +
     "        <div class=\"btn-group\">\n" +
-    "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.submit()\">\n" +
+    "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.saveStudentFeedback()\">\n" +
     "                <span class=\"btn-text\" translate=\"LESSON_NOTES.SUBMIT\"></span>\n" +
     "                <span class=\"spinner\" ng-if=\"vm.showSpinner\"></span>\n" +
     "            </button>\n" +

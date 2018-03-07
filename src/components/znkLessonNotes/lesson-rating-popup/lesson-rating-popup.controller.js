@@ -18,16 +18,18 @@
                     this.showSpinner = false;
                 };
 
-                this.submit = function() {
+                this.saveStudentFeedback = function() {
                     this.showSpinner = true;
-                    $log.debug('saving lessonSummary : ', this.lessonSummary);
-                    return ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)
-                        .then(updatedLessonSummary => {
-                            this.lessonSummary = updatedLessonSummary;
+                    $log.debug('saving studentFeedback : ', this.lessonSummary.studentFeedback);
+                    return ZnkLessonNotesSrv.saveStudentFeedback(this.lessonSummary.studentFeedback)
+                        .then(() => {
                             this.showSpinner = false;
                             this.closeModal();
                         })
-                        .catch(err => $log.error('lessonNotesPopup: saveLessonSummary failed. Error: ', err));
+                        .catch(err => {
+                            $log.error('lessonNotesPopup: saveLessonSummary failed. Error: ', err);
+                            this.showSpinner = false;
+                        });
 
                 };
 
