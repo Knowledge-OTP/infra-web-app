@@ -822,7 +822,7 @@
 
             this.saveStudentFeedback = (lessonSummaryId, studentFeedback) => {
                 const saveStudentFeedbackApi = `${lessonApi}/saveStudentFeedback`;
-            return this.$http.post(saveStudentFeedbackApi, { lessonSummaryId, studentFeedback })
+            return $http.post(saveStudentFeedbackApi, { lessonSummaryId, studentFeedback })
                 .then(studentFeedback => studentFeedback.data)
                 .catch((err) => $log.error('saveStudentFeedback: Failed to save studentFeedback: ',
                     studentFeedback, ' Error: ', err));
