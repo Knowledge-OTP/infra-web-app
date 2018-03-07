@@ -19657,7 +19657,8 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
             'znk.infra.general',
             'znk.infra.svgIcon',
             'znk.infra-web-app.znkToast',
-            'znk.infra.config'
+            'znk.infra.config',
+            'znk.infra.utility'
         ])
         .config([
             'SvgIconSrvProvider',
@@ -20112,13 +20113,14 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     angular.module('znk.infra-web-app.znkLessonNotes')
         .controller('lessonRatingPopupCtrl',
 
-            ["locals", "$log", "$mdDialog", "ZnkLessonNotesSrv", "UserTypeContextEnum", function (locals, $log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum) {
+            ["locals", "$log", "$mdDialog", "ZnkLessonNotesSrv", "UserTypeContextEnum", "UtilitySrv", function (locals, $log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum, UtilitySrv) {
                 'ngInject';
 
                 this.lesson = locals.lesson;
                 this.lessonSummary = locals.lessonSummary;
                 this.userContext = UserTypeContextEnum.STUDENT.enum;
-                this.lessonSummary =  this.lessonSummary || {};
+                this.lessonSummary = this.lessonSummary || {};
+                this.lessonSummary.id = this.lessonSummary || UtilitySrv.general.createGuid();
                 this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
 
                 this.$onInit = function() {
@@ -20130,7 +20132,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 this.saveStudentFeedback = function() {
                     this.showSpinner = true;
                     $log.debug('saving studentFeedback : ', this.lessonSummary.studentFeedback);
-                    return ZnkLessonNotesSrv.saveStudentFeedback(this.lessonSummary.studentFeedback)
+                    return ZnkLessonNotesSrv.saveStudentFeedback(this.lessonSummary.id, this.lessonSummary.studentFeedback)
                         .then(() => {
                             this.showSpinner = false;
                             this.closeModal();

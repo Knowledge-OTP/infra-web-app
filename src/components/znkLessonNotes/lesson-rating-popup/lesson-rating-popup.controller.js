@@ -3,13 +3,14 @@
     angular.module('znk.infra-web-app.znkLessonNotes')
         .controller('lessonRatingPopupCtrl',
 
-            function (locals, $log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum) {
+            function (locals, $log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum, UtilitySrv) {
                 'ngInject';
 
                 this.lesson = locals.lesson;
                 this.lessonSummary = locals.lessonSummary;
                 this.userContext = UserTypeContextEnum.STUDENT.enum;
-                this.lessonSummary =  this.lessonSummary || {};
+                this.lessonSummary = this.lessonSummary || {};
+                this.lessonSummary.id = this.lessonSummary || UtilitySrv.general.createGuid();
                 this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
 
                 this.$onInit = function() {
@@ -21,7 +22,7 @@
                 this.saveStudentFeedback = function() {
                     this.showSpinner = true;
                     $log.debug('saving studentFeedback : ', this.lessonSummary.studentFeedback);
-                    return ZnkLessonNotesSrv.saveStudentFeedback(this.lessonSummary.studentFeedback)
+                    return ZnkLessonNotesSrv.saveStudentFeedback(this.lessonSummary.id, this.lessonSummary.studentFeedback)
                         .then(() => {
                             this.showSpinner = false;
                             this.closeModal();
