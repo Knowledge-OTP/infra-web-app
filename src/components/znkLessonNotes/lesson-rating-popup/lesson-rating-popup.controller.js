@@ -10,7 +10,7 @@
                 this.lessonSummary = locals.lessonSummary;
                 this.userContext = UserTypeContextEnum.STUDENT.enum;
                 this.lessonSummary = this.lessonSummary || {};
-                this.lessonSummary.id = this.lessonSummary || UtilitySrv.general.createGuid();
+                this.lessonSummary.id = this.lessonSummary.id || UtilitySrv.general.createGuid();
                 this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
 
                 this.$onInit = function() {

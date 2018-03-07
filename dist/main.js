@@ -20120,7 +20120,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 this.lessonSummary = locals.lessonSummary;
                 this.userContext = UserTypeContextEnum.STUDENT.enum;
                 this.lessonSummary = this.lessonSummary || {};
-                this.lessonSummary.id = this.lessonSummary || UtilitySrv.general.createGuid();
+                this.lessonSummary.id = this.lessonSummary.id || UtilitySrv.general.createGuid();
                 this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
 
                 this.$onInit = function() {
@@ -20476,7 +20476,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
             this.saveLessonSummary = (lessonSummary, sendEmailIndicators) => {
                 const saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
                 return $http.post(saveLessonSummaryApi, {lessonSummary, sendEmailIndicators})
-                    .then(lessonSummary => lessonSummary.data)
+                    .then(lessonSummary => lessonSummary)
                     .catch((err) => $log.error('saveLessonSummary: Failed to save lesson summary: ',
                         lessonSummary, ' Error: ', err));
             };
