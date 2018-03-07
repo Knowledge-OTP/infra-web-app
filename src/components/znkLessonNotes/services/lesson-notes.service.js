@@ -86,13 +86,20 @@
                         $log.error(`updateLessonsStatus: NO lessons are found with this id: ${id}, isBackToBackId: ${isBackToBackId}`);
                     }
                 });
-
             };
+
+            this.saveStudentFeedback = (lessonSummaryId, studentFeedback) => {
+                const saveStudentFeedbackApi = `${lessonApi}/saveStudentFeedback`;
+            return $http.post(saveStudentFeedbackApi, { lessonSummaryId, studentFeedback })
+                .then(studentFeedback => studentFeedback.data)
+                .catch((err) => $log.error('saveStudentFeedback: Failed to save studentFeedback: ',
+                    studentFeedback, ' Error: ', err));
+        };
 
             this.saveLessonSummary = (lessonSummary, sendEmailIndicators) => {
                 const saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
                 return $http.post(saveLessonSummaryApi, {lessonSummary, sendEmailIndicators})
-                    .then(lessonSummary => lessonSummary.data)
+                    .then(lessonSummary => lessonSummary)
                     .catch((err) => $log.error('saveLessonSummary: Failed to save lesson summary: ',
                         lessonSummary, ' Error: ', err));
             };

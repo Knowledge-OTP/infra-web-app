@@ -3,13 +3,14 @@
     angular.module('znk.infra-web-app.znkLessonNotes')
         .controller('lessonRatingPopupCtrl',
 
-            function (locals, $log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum) {
+            function (locals, $log, $mdDialog, ZnkLessonNotesSrv, UserTypeContextEnum, UtilitySrv) {
                 'ngInject';
 
                 this.lesson = locals.lesson;
                 this.lessonSummary = locals.lessonSummary;
                 this.userContext = UserTypeContextEnum.STUDENT.enum;
-                this.lessonSummary =  this.lessonSummary || {};
+                this.lessonSummary = this.lessonSummary || {};
+                this.lessonSummary.id = this.lessonSummary.id || UtilitySrv.general.createGuid();
                 this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
 
                 this.$onInit = function() {
@@ -18,16 +19,18 @@
                     this.showSpinner = false;
                 };
 
-                this.submit = function() {
+                this.saveStudentFeedback = function() {
                     this.showSpinner = true;
-                    $log.debug('saving lessonSummary : ', this.lessonSummary);
-                    return ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary)
-                        .then(updatedLessonSummary => {
-                            this.lessonSummary = updatedLessonSummary;
+                    $log.debug('saving studentFeedback : ', this.lessonSummary.studentFeedback);
+                    return ZnkLessonNotesSrv.saveStudentFeedback(this.lessonSummary.id, this.lessonSummary.studentFeedback)
+                        .then(() => {
                             this.showSpinner = false;
                             this.closeModal();
                         })
-                        .catch(err => $log.error('lessonNotesPopup: saveLessonSummary failed. Error: ', err));
+                        .catch(err => {
+                            $log.error('lessonNotesPopup: saveLessonSummary failed. Error: ', err);
+                            this.showSpinner = false;
+                        });
 
                 };
 

@@ -12,7 +12,8 @@
             'znk.infra.general',
             'znk.infra.svgIcon',
             'znk.infra-web-app.znkToast',
-            'znk.infra.config'
+            'znk.infra.config',
+            'znk.infra.utility'
         ])
         .config([
             'SvgIconSrvProvider',
