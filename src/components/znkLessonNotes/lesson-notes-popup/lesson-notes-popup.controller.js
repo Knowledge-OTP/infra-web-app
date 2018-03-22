@@ -19,9 +19,8 @@
                 this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
                 this.lessonSummary.lessonNotes.status = this.lessonSummary.lessonNotes.status || LessonNotesStatusEnum.PENDING_COMPLETION.enum;
 
-                const lessonStatusListener = $scope.$on('LESSON__STATUS_CHANGED', (event, status) => {
-                    this.lesson.status = status;
-                    $log.debug('lessonStatusChanged : ', LessonStatusEnum.getValByEnum(status));
+                const lessonStatusListener = $scope.$on('LESSON_CHANGED', () => {
+                    $log.debug('lessonChanged Event');
                     this.isLessonUpdateNeeded = true;
                     this.showStatusError = false;
 
@@ -66,15 +65,20 @@
 
                 this.saveLessonSummary = (sendEmailIndicators) => {
                     const savePromArr = [];
-                    if (this.isLessonUpdateNeeded || this.isAdmin) {
-                        this.logger.log('Saving lesson: ', this.lesson);
-                        savePromArr.push(this.lessonService.updateLesson(this.lesson));
+                    if (this.isLessonUpdateNeeded) {
+                        $log.debug('Saving lesson: ', this.lesson);
+                        savePromArr.push(ZnkLessonNotesSrv.updateLesson(this.lesson));
+                    } else {
+                        savePromArr.push($q.resolve(this.lesson));
                     }
                     $log.debug('saving lessonSummary : ', this.lessonSummary);
                     savePromArr.push(ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary, sendEmailIndicators));
 
-                    $q.all(savePromArr).then(updatedLessonSummary => {
-                        $log.debug('lessonNotesPopup saveLessonSummary:  updatedLessonSummary: ', updatedLessonSummary);
+                    $q.all(savePromArr).then(([lesson, lessonSummary]) => {
+                        this.lesson = lesson;
+                        this.isLessonUpdateNeeded = false;
+                        this.lessonSummary = lessonSummary;
+                        $log.debug('lessonNotesPopup saveLessonSummary:  updatedLessonSummary: ', lessonSummary);
                         this.showSpinner = false;
                         let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
                         translationsProm.then(message => {

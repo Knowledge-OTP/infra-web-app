@@ -1,60 +1,113 @@
 
 .lesson-details {
     height: 170px;
-    margin: 15px 25px;
+    margin: 10px 25px;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-between;
 
-    .field {
-        width: 50%;
-        height: 40px;
+    .fields-wrapper {
         display: flex;
-        align-items: center;
-        .label {
-            width: 95px;
-            text-align: right;
-            margin-right: 33px;
-            font-size: 14px;
-            color: #4f4d4d;
-            font-family: Lato;
-            font-weight: 100;
-            text-transform: uppercase;
-        }
-        .text {
-            text-transform: capitalize;
-            &.attended {
-                color: $mantis;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .field {
+            width: 48%;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            .label {
+                width: 80px;
+                text-align: left;
+                margin-right: 33px;
+                font-size: 14px;
+                color: #4f4d4d;
+                font-family: Lato;
+                font-weight: 100;
+                text-transform: uppercase;
             }
-            &.missed {
-                color: $bittersweet;
+            .text {
+                text-transform: capitalize;
+                &.attended {
+                    color: $mantis;
+                }
+                &.missed {
+                    color: $bittersweet;
+                }
             }
-        }
-        select {
-            width: 130px;
-            font-size: 16px;
-            color: #4f4d4d;
-            font-family: Lato;
-            font-weight: 100;
-            border: 1px solid #9A9797;
-            height: 37px;
-            padding-left: 10px;
-            box-sizing: content-box;
-            -webkit-appearance: none;
-            border-radius: 0;
-            background-color: #ffffff;
-            outline: 0;
-            text-transform: capitalize;
+            select {
+                width: 130px;
+                font-size: 16px;
+                color: #4f4d4d;
+                font-family: Lato;
+                font-weight: 100;
+                border: 1px solid #9A9797;
+                height: 37px;
+                padding-left: 10px;
+                box-sizing: content-box;
+                -webkit-appearance: none;
+                border-radius: 0;
+                background-color: #ffffff;
+                outline: 0;
+                text-transform: capitalize;
 
-            &.attended {
-                color: $mantis;
+                &.attended {
+                    color: $mantis;
+                }
+                &.missed {
+                    color: $bittersweet;
+                }
+                option {
+                    color: $black;
+                }
             }
-            &.missed {
-                color: $bittersweet;
-            }
-            option {
-                color: $black;
+            &.student-list-field {
+                height: auto;
+                .student-list {
+                    width: 100%;
+                    max-height: 85px;
+                    overflow: auto;
+                    text-transform: capitalize;
+                    .student-wrapper {
+                        display: flex;
+                        margin: 3px 0;
+                        .student-name {
+                            margin-right: 10px;
+                        }
+                        .svg-v-icon, .svg-x-icon {
+                            outline: none;
+                            cursor: pointer;
+                            margin-left: 10px;
+                            *{
+                                width: 13px;
+                                height: 13px;
+                                fill: $nobel;
+                            }
+                        }
+                        .svg-v-icon *{
+                            width: 14px;
+                        }
+                        &.attended {
+                            color: $mantis;
+                            .svg-v-icon *{
+                                fill: $mantis;
+                            }
+                            .svg-x-icon *{
+                                fill: $nobel;
+                            }
+                        }
+                        &.missed {
+                            color: $bittersweet;
+                            .svg-v-icon *{
+                                fill: $nobel;
+                            }
+                            .svg-x-icon *{
+                                fill: $bittersweet;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

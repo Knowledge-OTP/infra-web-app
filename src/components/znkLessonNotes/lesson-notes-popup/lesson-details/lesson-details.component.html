@@ -1,16 +1,79 @@
-<div class="lesson-details" ng-if="vm.fields.length" translate-namespace="LESSON_NOTES.LESSON_NOTES_POPUP">
-    <div class="field" ng-repeat="field in vm.fields" ng-if="field.text">
-        <div class="label">{{field.label}}</div>
-        <div class="text" ng-if="field.label !== 'Status' || field.label === 'Status' && vm.isStudent"
-             ng-class="{
-             'attended': field.label === 'Status' && field.text == vm.LessonStatusEnum.ATTENDED.val,
-             'missed': field.label === 'Status' && field.text == vm.LessonStatusEnum.MISSED.val}">
-            {{field.text}}</div>
-        <select class="lesson-status" ng-if="field.label === 'Status' && !vm.isStudent"
-                ng-options="status as status.val for status in vm.lessonStatusArr"
-                placeholder="{{'LESSON_NOTES.LESSON_NOTES_POPUP.SELECT' | translate}}"
-                ng-model="vm.lessonStatus" ng-class="vm.lessonStatus.val"
-                ng-change="vm.statusChanged(field, vm.lessonStatus)">
-        </select>
+<div class="lesson-details" ng-if="vm.viewModal">
+    <div class="fields-wrapper">
+
+        <div class="field" ng-if="vm.viewModal.serviceName.val">
+            <div class="label">{{vm.viewModal.serviceName.label}}</div>
+            <div class="text">{{vm.viewModal.serviceName.val}}</div>
+        </div>
+
+        <div class="field" ng-if="vm.viewModal.topicName.val">
+            <div class="label">{{vm.viewModal.topicName.label}}</div>
+            <div class="text">{{vm.viewModal.topicName.val}}</div>
+        </div>
+
+        <div class="field student-list-field" ng-if="vm.viewModal.studentList.val.length && !vm.isStudent">
+            <div class="label">{{vm.viewModal.studentList.label}}</div>
+            <div class="student-list">
+                <div class="student-wrapper" ng-repeat="student in vm.viewModal.studentList.val track by $index"
+                     ng-class="{'attended': student.attendanceStatus===vm.LessonStatusEnum.ATTENDED.enum,
+                         'missed': student.attendanceStatus===vm.LessonStatusEnum.MISSED.enum}">
+                    <div class="student-name">{{student.firstName || ''}} {{student.lastName || ''}}</div>
+                    <svg-icon class="svg-v-icon" name="znkLessonNotes-v-icon" ng-mouseover="vm.showTooltipV=true"
+                              ng-mouseleave="vm.showTooltipV=false"
+                              ng-click="vm.updateAttendanceStatus(student, vm.LessonStatusEnum.ATTENDED.enum)"></svg-icon>
+                    <md-tooltip md-visible="vm.showTooltipV" md-direction="bottom" class="md-fab">
+                        <div translate="LESSON_NOTES.LESSON_NOTES_POPUP.ATTENDED"></div>
+                    </md-tooltip>
+
+                    <svg-icon class="svg-x-icon" name="znkLessonNotes-x-icon" ng-mouseover="vm.showTooltipX=true"
+                              ng-mouseleave="vm.showTooltipX=false"
+                              ng-click="vm.updateAttendanceStatus(student, vm.LessonStatusEnum.MISSED.enum)"></svg-icon>
+                    <md-tooltip md-visible="vm.showTooltipX" md-direction="bottom" class="md-fab">
+                        <div translate="LESSON_NOTES.LESSON_NOTES_POPUP.MISSED"></div>
+                    </md-tooltip>
+                </div>
+            </div>
+        </div>
+
+        <div class="field" ng-if="vm.viewModal.educatorName.val && (vm.isAdmin || vm.isStudent)">
+            <div class="label">{{vm.viewModal.educatorName.label}}</div>
+            <div class="text">{{vm.viewModal.educatorName.val}}</div>
+        </div>
+
+        <div class="field" ng-if="vm.viewModal.lessonDate.val">
+            <div class="label">{{vm.viewModal.lessonDate.label}}</div>
+            <div class="text">{{vm.viewModal.lessonDate.val}}</div>
+        </div>
+
+        <div class="field" ng-if="vm.viewModal.startTime.val">
+            <div class="label">{{vm.viewModal.startTime.label}}</div>
+            <div class="text">{{vm.viewModal.startTime.val}}</div>
+        </div>
+
+        <div class="field" ng-if="vm.viewModal.duration.val">
+            <div class="label">{{vm.viewModal.duration.label}}</div>
+            <div class="text">{{vm.viewModal.duration.val}}</div>
+        </div>
+
+        <div class="field" ng-if="vm.isStudent && vm.viewModal.lessonStatus.val">
+            <div class="label">{{vm.viewModal.lessonStatus.label}}</div>
+            <div class="text" ng-class="vm.LessonStatusEnum[vm.viewModal.lessonStatus.val]">
+                {{vm.LessonStatusEnum[vm.viewModal.lessonStatus.val]}}
+            </div>
+        </div>
+
+        <!--If admin or teacher show select-->
+        <div class="field" ng-if="!vm.isStudent">
+            <div class="label">{{vm.viewModal.lessonStatus.label}}</div>
+            <select ng-model="vm.viewModal.lessonStatus.val" ng-class="{
+             'attended': vm.lesson.status === vm.LessonStatusEnum.ATTENDED.enum,
+             'missed': vm.lesson.status === vm.LessonStatusEnum.MISSED.enum}"
+                    ng-change="vm.statusChanged(vm.viewModal.lessonStatus.val)">
+                <option value="" translate="LESSON_NOTES.LESSON_NOTES_POPUP.SELECT"></option>
+                <option ng-repeat="status in vm.lessonStatusArr" value="{{status.enum}}">{{status.val}}</option>
+            </select>
+        </div>
+
     </div>
+
 </div>
