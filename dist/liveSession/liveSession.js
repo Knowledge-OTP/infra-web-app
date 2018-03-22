@@ -225,13 +225,18 @@
                     if (!lesson.lessonSummaryId) {
                         // add lessonSummaryId to scheduledLesson if there isn't
                         const newLessonSummary = ZnkLessonNotesUiSrv.newLessonSummary();
-                        lesson.lessonSummaryId = newLessonSummary.id;
                         ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
-                            .then('getLessonInRange: saveLessonSummary: new lesson summary saved. id: ', newLessonSummary.id)
-                            .catch('getLessonInRange: saveLessonSummary: Failed to save LessonSummary. id: ', newLessonSummary.id);
-                        ZnkLessonNotesSrv.updateLesson(lesson)
-                            .then('getLessonInRange: updateLesson: update Lesson successfully. id: ', lesson.id)
-                            .catch('getLessonInRange: updateLesson: Failed to update Lesson. id: ', lesson.id);
+                            .then(lessonSummaryFromServer => {
+                                lesson.lessonSummaryId = lessonSummaryFromServer.id;
+                                $log.debug('getScheduledLessonMapFromSingleLesson: saveLessonSummary: new lesson summary saved. id: ', lessonSummaryFromServer.id);
+                                ZnkLessonNotesSrv.updateLesson(lesson)
+                                    .then(lessonFromServer => {
+                                        $log.debug('getScheduledLessonMapFromSingleLesson: updateLesson: update Lesson successfully. id: ', lessonFromServer.id);
+                                    })
+                                    .catch(err => $log.error('getScheduledLessonMapFromSingleLesson:' +
+                                        'updateLesson: Failed to update Lesson. id: ', lesson.id, ' Error: ', err));
+                            })
+                            .catch(err => $log.error('getScheduledLessonMapFromSingleLesson: saveLessonSummary: Failed to save LessonSummary. Error: ', err));
                     }
 
                     scheduledLessonMap = scheduledLessonMap ? scheduledLessonMap : {};
@@ -286,13 +291,15 @@
                             if (!b2bLesson.lessonSummaryId) {
                                 // add lessonSummaryId to scheduledLesson or all back2BackLessons if there isn't
                                 const newLessonSummary = ZnkLessonNotesUiSrv.newLessonSummary();
-                                b2bLesson.lessonSummaryId = newLessonSummary.id;
                                 ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
-                                    .then('checkBack2BackLesson: saveLessonSummary: new lesson summary saved. id: ', newLessonSummary.id)
-                                    .catch('checkBack2BackLesson: saveLessonSummary: Failed to save LessonSummary. id: ', newLessonSummary.id);
+                                    .then(lessonSummaryFromServer => {
+                                        b2bLesson.lessonSummaryId = lessonSummaryFromServer.id;
+                                        $log.debug('checkBack2BackLesson: saveLessonSummary: new lesson summary saved. id: ', lessonSummaryFromServer.id);
+                                        b2bLesson.backToBackId = newB2BLessonId;
+                                        updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
+                                    })
+                                    .catch(err => $log.debug('checkBack2BackLesson: saveLessonSummary: Failed to save LessonSummary. Error: ', err));
                             }
-                            b2bLesson.backToBackId = newB2BLessonId;
-                            updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
                         });
                         $q.all(updateB2BLessonProms)
                             .then(() => $log.debug(`checkBack2BackLesson: All back2backLesson are updated.`))

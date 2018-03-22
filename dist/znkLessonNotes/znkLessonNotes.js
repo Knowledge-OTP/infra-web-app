@@ -653,7 +653,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesUiSrv',
-        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "LessonNotesStatusEnum", "UtilitySrv", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, LessonNotesStatusEnum, UtilitySrv) {
+        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "LessonNotesStatusEnum", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, LessonNotesStatusEnum) {
             'ngInject';
 
             this.openLessonNotesPopup = (lesson, lessonSummary, userContext) => {
@@ -680,7 +680,7 @@
 
             this.newLessonSummary = () => {
                 return {
-                    id: UtilitySrv.general.createGuid(),
+                    id: null,
                     startTime: null,
                     endTime: null,
                     liveSessions: [],
