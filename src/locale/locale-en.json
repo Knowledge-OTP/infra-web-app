@@ -645,6 +645,8 @@
             "STATUS": "Status",
             "LESSON_STATUS_REQUIRED": "Please select lesson status",
             "SELECT": "Select",
+            "ATTENDED": "Attended",
+            "MISSED": "Missed",
             "HOUR": "hour",
             "HOURS": "hours",
             "MINUTES": "minutes",

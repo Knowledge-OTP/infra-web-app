@@ -52,7 +52,7 @@
                 },
                 'serviceId': 'service_1',
                 'topicId': 'topic_2',
-                'status': 1,
+                'status': 4,
                 'createTime': 1515514604629,
                 'dbType': 'lesson',
                 'groupId': null,

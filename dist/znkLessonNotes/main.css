@@ -751,7 +751,7 @@ md-dialog.base {
 
 .lesson-details {
   height: 170px;
-  margin: 15px 25px;
+  margin: 10px 25px;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
@@ -760,49 +760,93 @@ md-dialog.base {
       flex-wrap: wrap;
   -ms-flex-pack: justify;
       justify-content: space-between; }
-  .lesson-details .field {
-    width: 50%;
-    height: 40px;
+  .lesson-details .fields-wrapper {
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-align: center;
-        align-items: center; }
-    .lesson-details .field .label {
-      width: 95px;
-      text-align: right;
-      margin-right: 33px;
-      font-size: 14px;
-      color: #4f4d4d;
-      font-family: Lato;
-      font-weight: 100;
-      text-transform: uppercase; }
-    .lesson-details .field .text {
-      text-transform: capitalize; }
-      .lesson-details .field .text.attended {
-        color: #87ca4d; }
-      .lesson-details .field .text.missed {
-        color: #ff6766; }
-    .lesson-details .field select {
-      width: 130px;
-      font-size: 16px;
-      color: #4f4d4d;
-      font-family: Lato;
-      font-weight: 100;
-      border: 1px solid #9A9797;
-      height: 37px;
-      padding-left: 10px;
-      box-sizing: content-box;
-      -webkit-appearance: none;
-      border-radius: 0;
-      background-color: #ffffff;
-      outline: 0;
-      text-transform: capitalize; }
-      .lesson-details .field select.attended {
-        color: #87ca4d; }
-      .lesson-details .field select.missed {
-        color: #ff6766; }
-      .lesson-details .field select option {
-        color: #000000; }
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -ms-flex-pack: justify;
+        justify-content: space-between; }
+    .lesson-details .fields-wrapper .field {
+      width: 48%;
+      height: 40px;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center; }
+      .lesson-details .fields-wrapper .field .label {
+        width: 80px;
+        text-align: left;
+        margin-right: 33px;
+        font-size: 14px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 100;
+        text-transform: uppercase; }
+      .lesson-details .fields-wrapper .field .text {
+        text-transform: capitalize; }
+        .lesson-details .fields-wrapper .field .text.attended {
+          color: #87ca4d; }
+        .lesson-details .fields-wrapper .field .text.missed {
+          color: #ff6766; }
+      .lesson-details .fields-wrapper .field select {
+        width: 130px;
+        font-size: 16px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 100;
+        border: 1px solid #9A9797;
+        height: 37px;
+        padding-left: 10px;
+        box-sizing: content-box;
+        -webkit-appearance: none;
+        border-radius: 0;
+        background-color: #ffffff;
+        outline: 0;
+        text-transform: capitalize; }
+        .lesson-details .fields-wrapper .field select.attended {
+          color: #87ca4d; }
+        .lesson-details .fields-wrapper .field select.missed {
+          color: #ff6766; }
+        .lesson-details .fields-wrapper .field select option {
+          color: #000000; }
+      .lesson-details .fields-wrapper .field.student-list-field {
+        height: auto; }
+        .lesson-details .fields-wrapper .field.student-list-field .student-list {
+          width: 100%;
+          max-height: 85px;
+          overflow: auto;
+          text-transform: capitalize; }
+          .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper {
+            display: -ms-flexbox;
+            display: flex;
+            margin: 3px 0; }
+            .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .student-name {
+              margin-right: 10px; }
+            .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .svg-v-icon, .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .svg-x-icon {
+              outline: none;
+              cursor: pointer;
+              margin-left: 10px; }
+              .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .svg-v-icon *, .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .svg-x-icon * {
+                width: 13px;
+                height: 13px;
+                fill: #b7b7b7; }
+            .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .svg-v-icon * {
+              width: 14px; }
+            .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.attended {
+              color: #87ca4d; }
+              .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.attended .svg-v-icon * {
+                fill: #87ca4d; }
+              .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.attended .svg-x-icon * {
+                fill: #b7b7b7; }
+            .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.missed {
+              color: #ff6766; }
+              .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.missed .svg-v-icon * {
+                fill: #b7b7b7; }
+              .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.missed .svg-x-icon * {
+                fill: #ff6766; }
 
 .lesson-teacher-notes {
   margin: 0 20px;

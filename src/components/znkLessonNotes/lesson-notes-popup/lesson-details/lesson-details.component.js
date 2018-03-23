@@ -11,23 +11,32 @@
             templateUrl: 'components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html',
             controllerAs: 'vm',
             controller: function ($scope, $http, $q, $log, $filter, ENV, $translate, LessonStatusEnum, ZnkLessonNotesSrv,
-                                  ZnkLessonNotesUiSrv, UserTypeContextEnum) {
+                                  ZnkLessonNotesUiSrv, UserTypeContextEnum, UserProfileService) {
                 'ngInject';
 
-                this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
-                this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
-                this.dataPromMap = {};
                 this.nameSpace = 'LESSON_NOTES.LESSON_NOTES_POPUP';
-                this.fields = [];
-                const lessonStatusArr = LessonStatusEnum.getEnumArr();
-                this.lessonStatusArr = lessonStatusArr.filter(status =>
-                    status.enum === LessonStatusEnum.ATTENDED.enum || status.enum === LessonStatusEnum.MISSED.enum);
-                this.LessonStatusEnum = LessonStatusEnum;
+                this.showTooltipV = false;
+                this.showTooltipX = false;
 
                 this.$onInit = function () {
-                    $log.debug('znkLessonInfo: Init');
-                    this.dataPromMap.translate = this.getTranslations();
-                    this.initLessonInfo();
+                    $log.debug('znkLessonDetails: Init');
+                    const translateProm = this.getTranslations();
+                    const userProfileProm = UserProfileService.getProfile();
+                    const serviceListProm = ZnkLessonNotesSrv.getServiceList();
+                    const lessonStatusArr = LessonStatusEnum.getEnumArr();
+                    this.lessonStatusArr = lessonStatusArr.filter(status =>
+                        status.enum === LessonStatusEnum.ATTENDED.enum || status.enum === LessonStatusEnum.MISSED.enum);
+                    this.LessonStatusEnum = LessonStatusEnum;
+                    this.isAdmin = this.userContext === UserTypeContextEnum.ADMIN.enum;
+                    this.isStudent = !this.isAdmin && this.userContext === UserTypeContextEnum.STUDENT.enum;
+
+                    Promise.all([userProfileProm, translateProm, serviceListProm])
+                        .then(([userProfile, translate, serviceListMap]) => {
+                            this.userProfile = userProfile;
+                            this.translate = translate;
+                            this.serviceListMap = serviceListMap;
+                            this.buildViewModal();
+                        });
                 };
 
                 this.getTranslations = () => {
@@ -43,71 +52,105 @@
                     ]);
                 };
 
-                this.initLessonInfo = () => {
-                    this.dataPromMap.serviceList = ZnkLessonNotesSrv.getServiceList();
-                    $q.all(this.dataPromMap).then((dataMap) => {
-                        this.translate = dataMap.translate;
-                        this.serviceListMap = dataMap.serviceList;
-                        this.buildViewModal();
-                    });
-                };
-
                 this.buildViewModal = () => {
-                    Object.keys(this.translate).forEach(translateKey => {
-                        let field = {label: this.translate[translateKey], text: null};
-                        switch (translateKey) {
-                            case `${this.nameSpace}.TEST`:
-                                if (!this.lessonService) {
-                                    this.lessonService = this.serviceListMap[this.lesson.serviceId];
-                                }
-                                field.text = this.lessonService.name;
-                                break;
-                            case `${this.nameSpace}.TOPIC`:
-                                if (!this.lessonService) {
-                                    this.lessonService = this.serviceListMap[this.lesson.serviceId];
-                                }
-                                field.text = this.lessonService.topics[this.lesson.topicId].name;
-                                break;
-                            case `${this.nameSpace}.EDUCATOR`:
-                                field.text = `${this.lesson.educatorFirstName} ${this.lesson.educatorLastName}`;
-                                break;
-                            case `${this.nameSpace}.STUDENT`:
-                                field.text = this.getStudentsNames();
-                                break;
-                            case `${this.nameSpace}.DATE`:
-                                field.text = this.transformDate(this.lesson.date, 'DATE');
-                                break;
-                            case `${this.nameSpace}.START_TIME`:
-                                field.text = this.lessonSummary.startTime ? this.transformDate(this.lessonSummary.startTime, 'START_TIME') : null;
-                                break;
-                            case `${this.nameSpace}.DURATION`:
-                                field.text = this.lessonSummary.startTime && this.lessonSummary.endTime ?
-                                    this.transformDate(this.lessonSummary.endTime - this.lessonSummary.startTime, 'DURATION') : null;
-                                break;
-                            case `${this.nameSpace}.STATUS`:
-                                this.lessonStatus = this.getLessonStatusObj(this.lesson);
-                                field.text = this.lessonStatus.val;
-                                break;
-                        }
-                        this.fields.push(field);
-                    });
+                    this.viewModal = {
+                        serviceName: this.getServiceField(),
+                        topicName: this.getTopicField(),
+                        educatorName: this.getEducatorField(),
+                        studentList: this.getStudentsField(),
+                        lessonDate: this.getLessonDateField(),
+                        startTime: this.getStartTimeField(),
+                        duration: this.getDurationField(),
+                        lessonStatus: this.getLessonStatusField(),
+                    };
                 };
 
-                this.getLessonStatusObj = (lesson) => {
-                    const HOUR_IN_MILISEC = 3600000;
-                    let statusObjToReturn;
-                    if (lesson.status === LessonStatusEnum.ATTENDED.enum ||
-                        lesson.status === LessonStatusEnum.MISSED.enum) {
-                        statusObjToReturn = this.lessonStatusArr.find(status => status.enum === lesson.status);
-                    } else {
-                        // Status Methodology suggestion - if (lesson.date + 2 hours) > now then lesson missed
-                        const seggestStatus = (lesson.date + (HOUR_IN_MILISEC * 2)) > Date.now() ?
-                            LessonStatusEnum.MISSED.enum : LessonStatusEnum.ATTENDED.enum;
-                        statusObjToReturn = this.lessonStatusArr.find(status => status.enum === seggestStatus);
+                this.getServiceField = () => {
+                    const field = {label: null, val: null};
+                    field.label = this.translate[`${this.nameSpace}.TEST`] || null;
+                    const lessonService = this.serviceListMap[this.lesson.serviceId];
+                    if (lessonService && lessonService.name) {
+                        field.val = lessonService.name;
                     }
-
-                    return statusObjToReturn;
+                    return field;
                 };
+
+                this.getTopicField = () => {
+                    const field = {label: null, val: null};
+                    field.label = this.translate[`${this.nameSpace}.TOPIC`] || null;
+                    const lessonService = this.serviceListMap[this.lesson.serviceId];
+                    if (lessonService && lessonService.topics) {
+                        field.val = lessonService.topics[this.lesson.topicId].name;
+                    }
+                    return field;
+                };
+
+                this.getEducatorField = () => {
+                    const field = {label: null, val: null};
+                    field.label = this.translate[`${this.nameSpace}.EDUCATOR`] || null;
+                    if (this.lesson.educatorFirstName || this.lesson.educatorLastName) {
+                        field.val = `${this.lesson.educatorFirstName || ''} ${this.lesson.educatorLastName || ''}`;
+                    }
+                    return field;
+                };
+
+                this.getStudentsField = () => {
+                    const field = {label: null, val: null};
+                    field.label = this.translate[`${this.nameSpace}.STUDENT`] || null;
+                    const studentList = Object.keys(this.lesson.students)
+                        .map(studentId => this.lesson.students[studentId]);
+                    if (studentList.length) {
+                        field.val = studentList;
+                    }
+                    return field;
+                };
+
+                this.getLessonDateField = () => {
+                    const field = {label: null, val: null};
+                    field.label = this.translate[`${this.nameSpace}.DATE`] || null;
+                    if (this.lesson.date) {
+                        field.val = this.transformDate(this.lesson.date, 'DATE');
+                    }
+                    return field;
+                };
+
+                this.getStartTimeField = () => {
+                    const field = {label: null, val: null};
+                    field.label = this.translate[`${this.nameSpace}.START_TIME`] || null;
+                    if (this.lessonSummary.startTime) {
+                        field.val = this.transformDate(this.lessonSummary.startTime, 'START_TIME');
+                    }
+                    return field;
+                };
+
+                this.getDurationField = () => {
+                    const field = {label: null, val: null};
+                    field.label = this.translate[`${this.nameSpace}.DURATION`] || null;
+                    if (this.lessonSummary.startTime && this.lessonSummary.endTime) {
+                        const duration = this.lessonSummary.endTime - this.lessonSummary.startTime;
+                        field.val = this.transformDate(duration, 'DURATION');
+                    }
+                    return field;
+                };
+
+                this.getLessonStatusField = () => {
+                    const field = {label: null, val: ''};
+                    field.label = this.translate[`${this.nameSpace}.STATUS`] || null;
+                    if (this.isStudent) {
+                        field.val = this.lesson.students[this.userProfile.uid].attendanceStatus || null;
+                    } else if (this.lesson.status === LessonStatusEnum.ATTENDED.enum ||
+                        this.lesson.status === LessonStatusEnum.MISSED.enum) {
+                        field.val = String(this.lesson.status);
+                    }
+                    return field;
+                };
+
+                this.updateAttendanceStatus = (student, status) => {
+                    student.attendanceStatus = status;
+                    this.lesson.students[student.uid].attendanceStatus = status;
+                    $scope.$emit('LESSON_CHANGED');
+                };
+
 
                 this.getStudentsNames = () => {
                     let studentsNames = '';
@@ -149,10 +192,9 @@
                     return transformedDate;
                 };
 
-                this.statusChanged = (field, statusEnumObj) => {
-                    field.text = statusEnumObj.val;
-                    this.lesson.status = statusEnumObj.enum;
-                    $scope.$emit('LESSON__STATUS_CHANGED', statusEnumObj.enum);
+                this.statusChanged = (status) => {
+                    this.lesson.status = status ? Number(status): null;
+                    $scope.$emit('LESSON_CHANGED');
                 };
 
             }
