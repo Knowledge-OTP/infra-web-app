@@ -333,20 +333,17 @@
                         this.showStatusError = true;
                         return;
                     }
+
                     this.showSpinner = true;
                     if (ZnkLessonNotesSrv.sendEmailIndicators.sendMailToStudents ||
                         ZnkLessonNotesSrv.sendEmailIndicators.sendMailToParents) {
                         this.lessonSummary.lessonNotes.status =
                             this.lessonSummary.lessonNotes.status === LessonNotesStatusEnum.PENDING_COMPLETION.enum ?
                                 LessonNotesStatusEnum.COMPLETE.enum : this.lessonSummary.lessonNotes.status;
-                        this.saveLessonSummary(ZnkLessonNotesSrv.sendEmailIndicators);
-                    } else {
-                        $log.debug(`lessonNotesPopup: You didn't choose any email to send to`);
-                        let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.NO_MAIL');
-                        translationsProm.then(message => {
-                            ZnkToastSrv.showToast('error', message);
-                        });
+
                     }
+
+                    this.saveLessonSummary(ZnkLessonNotesSrv.sendEmailIndicators);
                 };
 
                 this.doItLater = () => {
