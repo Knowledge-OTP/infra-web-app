@@ -46,8 +46,7 @@
                         `${this.nameSpace}.EDUCATOR`,
                         `${this.nameSpace}.STUDENT`,
                         `${this.nameSpace}.DATE`,
-                        `${this.nameSpace}.START_TIME`,
-                        `${this.nameSpace}.DURATION`,
+                        `${this.nameSpace}.ACTUAL_TIME`,
                         `${this.nameSpace}.STATUS`,
                     ]);
                 };
@@ -59,8 +58,7 @@
                         educatorName: this.getEducatorField(),
                         studentList: this.getStudentsField(),
                         lessonDate: this.getLessonDateField(),
-                        startTime: this.getStartTimeField(),
-                        duration: this.getDurationField(),
+                        actualTime: this.getActualTimeField(),
                         lessonStatus: this.getLessonStatusField(),
                     };
                 };
@@ -114,21 +112,13 @@
                     return field;
                 };
 
-                this.getStartTimeField = () => {
+                this.getActualTimeField = () => {
                     const field = {label: null, val: null};
-                    field.label = this.translate[`${this.nameSpace}.START_TIME`] || null;
-                    if (this.lessonSummary.startTime) {
-                        field.val = this.transformDate(this.lessonSummary.startTime, 'START_TIME');
-                    }
-                    return field;
-                };
-
-                this.getDurationField = () => {
-                    const field = {label: null, val: null};
-                    field.label = this.translate[`${this.nameSpace}.DURATION`] || null;
+                    field.label = this.translate[`${this.nameSpace}.ACTUAL_TIME`] || null;
                     if (this.lessonSummary.startTime && this.lessonSummary.endTime) {
-                        const duration = this.lessonSummary.endTime - this.lessonSummary.startTime;
-                        field.val = this.transformDate(duration, 'DURATION');
+                        const startTimeStr = this.transformDate(this.lessonSummary.startTime, 'ACTUAL_TIME');
+                        const endTimeStr = this.transformDate(this.lessonSummary.endTime, 'ACTUAL_TIME');
+                        field.val = `${startTimeStr} - ${endTimeStr}`;
                     }
                     return field;
                 };
@@ -151,7 +141,6 @@
                     $scope.$emit('LESSON_CHANGED');
                 };
 
-
                 this.getStudentsNames = () => {
                     let studentsNames = '';
                     let studentsKeys = Object.keys(this.lesson.students);
@@ -169,24 +158,12 @@
                     let transformedDate;
                     switch (dateType) {
                         case 'DATE':
-                            pattern = 'MMM d, y';
+                            pattern = 'MMM d, y h:mm a';
                             transformedDate = $filter('date')(timestamp, pattern);
                             break;
-                        case 'START_TIME':
+                        case 'ACTUAL_TIME':
                             pattern = 'h:mm a';
                             transformedDate = $filter('date')(timestamp, pattern);
-                            break;
-                        case 'DURATION':
-                            let convertedDuration = ZnkLessonNotesUiSrv.convertMS(timestamp);
-                            let hourOrMinText;
-                            if (convertedDuration.hour >= 1) {
-                                let translatePath = convertedDuration.hour > 1 ? `${this.nameSpace}.HOURS` : `${this.nameSpace}.HOUR`;
-                                hourOrMinText = $translate.instant(translatePath);
-                                transformedDate = `${convertedDuration.hour} ${hourOrMinText}`;
-                            } else {
-                                hourOrMinText = $translate.instant(`${this.nameSpace}.MINUTES`);
-                                transformedDate = `${convertedDuration.min} ${hourOrMinText}`;
-                            }
                             break;
                     }
                     return transformedDate;

@@ -133,8 +133,7 @@
                         `${this.nameSpace}.EDUCATOR`,
                         `${this.nameSpace}.STUDENT`,
                         `${this.nameSpace}.DATE`,
-                        `${this.nameSpace}.START_TIME`,
-                        `${this.nameSpace}.DURATION`,
+                        `${this.nameSpace}.ACTUAL_TIME`,
                         `${this.nameSpace}.STATUS`,
                     ]);
                 };
@@ -146,8 +145,7 @@
                         educatorName: this.getEducatorField(),
                         studentList: this.getStudentsField(),
                         lessonDate: this.getLessonDateField(),
-                        startTime: this.getStartTimeField(),
-                        duration: this.getDurationField(),
+                        actualTime: this.getActualTimeField(),
                         lessonStatus: this.getLessonStatusField(),
                     };
                 };
@@ -201,21 +199,13 @@
                     return field;
                 };
 
-                this.getStartTimeField = () => {
+                this.getActualTimeField = () => {
                     const field = {label: null, val: null};
-                    field.label = this.translate[`${this.nameSpace}.START_TIME`] || null;
-                    if (this.lessonSummary.startTime) {
-                        field.val = this.transformDate(this.lessonSummary.startTime, 'START_TIME');
-                    }
-                    return field;
-                };
-
-                this.getDurationField = () => {
-                    const field = {label: null, val: null};
-                    field.label = this.translate[`${this.nameSpace}.DURATION`] || null;
+                    field.label = this.translate[`${this.nameSpace}.ACTUAL_TIME`] || null;
                     if (this.lessonSummary.startTime && this.lessonSummary.endTime) {
-                        const duration = this.lessonSummary.endTime - this.lessonSummary.startTime;
-                        field.val = this.transformDate(duration, 'DURATION');
+                        const startTimeStr = this.transformDate(this.lessonSummary.startTime, 'ACTUAL_TIME');
+                        const endTimeStr = this.transformDate(this.lessonSummary.endTime, 'ACTUAL_TIME');
+                        field.val = `${startTimeStr} - ${endTimeStr}`;
                     }
                     return field;
                 };
@@ -238,7 +228,6 @@
                     $scope.$emit('LESSON_CHANGED');
                 };
 
-
                 this.getStudentsNames = () => {
                     let studentsNames = '';
                     let studentsKeys = Object.keys(this.lesson.students);
@@ -256,24 +245,12 @@
                     let transformedDate;
                     switch (dateType) {
                         case 'DATE':
-                            pattern = 'MMM d, y';
+                            pattern = 'MMM d, y h:mm a';
                             transformedDate = $filter('date')(timestamp, pattern);
                             break;
-                        case 'START_TIME':
+                        case 'ACTUAL_TIME':
                             pattern = 'h:mm a';
                             transformedDate = $filter('date')(timestamp, pattern);
-                            break;
-                        case 'DURATION':
-                            let convertedDuration = ZnkLessonNotesUiSrv.convertMS(timestamp);
-                            let hourOrMinText;
-                            if (convertedDuration.hour >= 1) {
-                                let translatePath = convertedDuration.hour > 1 ? `${this.nameSpace}.HOURS` : `${this.nameSpace}.HOUR`;
-                                hourOrMinText = $translate.instant(translatePath);
-                                transformedDate = `${convertedDuration.hour} ${hourOrMinText}`;
-                            } else {
-                                hourOrMinText = $translate.instant(`${this.nameSpace}.MINUTES`);
-                                transformedDate = `${convertedDuration.min} ${hourOrMinText}`;
-                            }
                             break;
                     }
                     return transformedDate;
@@ -907,19 +884,19 @@
 angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function($templateCache) {
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html",
     "<div class=\"lesson-details\" ng-if=\"vm.viewModal\">\n" +
-    "    <div class=\"fields-wrapper\">\n" +
+    "    <div class=\"left-col\">\n" +
     "\n" +
-    "        <div class=\"field\" ng-if=\"vm.viewModal.serviceName.val\">\n" +
+    "        <div class=\"lato-14-n field\" ng-if=\"vm.viewModal.serviceName.val\">\n" +
     "            <div class=\"label\">{{vm.viewModal.serviceName.label}}</div>\n" +
     "            <div class=\"text\">{{vm.viewModal.serviceName.val}}</div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"field\" ng-if=\"vm.viewModal.topicName.val\">\n" +
+    "        <div class=\"lato-14-n field\" ng-if=\"vm.viewModal.topicName.val\">\n" +
     "            <div class=\"label\">{{vm.viewModal.topicName.label}}</div>\n" +
     "            <div class=\"text\">{{vm.viewModal.topicName.val}}</div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"field student-list-field\" ng-if=\"vm.viewModal.studentList.val.length && !vm.isStudent\">\n" +
+    "        <div class=\"lato-14-n field student-list-field\" ng-if=\"vm.viewModal.studentList.val.length && !vm.isStudent\">\n" +
     "            <div class=\"label\">{{vm.viewModal.studentList.label}}</div>\n" +
     "            <div class=\"student-list\">\n" +
     "                <div class=\"student-wrapper\" ng-repeat=\"student in vm.viewModal.studentList.val track by $index\"\n" +
@@ -943,27 +920,30 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "            </div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"field\" ng-if=\"vm.viewModal.educatorName.val && (vm.isAdmin || vm.isStudent)\">\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"right-col\">\n" +
+    "        <div class=\"lato-14-n field\" ng-if=\"vm.viewModal.educatorName.val && (vm.isAdmin || vm.isStudent)\">\n" +
     "            <div class=\"label\">{{vm.viewModal.educatorName.label}}</div>\n" +
     "            <div class=\"text\">{{vm.viewModal.educatorName.val}}</div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"field\" ng-if=\"vm.viewModal.lessonDate.val\">\n" +
+    "        <div class=\"lato-14-n field\" ng-if=\"vm.viewModal.lessonDate.val\">\n" +
     "            <div class=\"label\">{{vm.viewModal.lessonDate.label}}</div>\n" +
     "            <div class=\"text\">{{vm.viewModal.lessonDate.val}}</div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"field\" ng-if=\"vm.viewModal.startTime.val\">\n" +
-    "            <div class=\"label\">{{vm.viewModal.startTime.label}}</div>\n" +
-    "            <div class=\"text\">{{vm.viewModal.startTime.val}}</div>\n" +
+    "        <div class=\"lato-14-n field\" ng-if=\"vm.viewModal.actualTime.val\">\n" +
+    "            <div class=\"label\">{{vm.viewModal.actualTime.label}}</div>\n" +
+    "            <div class=\"text\">{{vm.viewModal.actualTime.val}}</div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"field\" ng-if=\"vm.viewModal.duration.val\">\n" +
+    "        <div class=\"lato-14-n field\" ng-if=\"vm.viewModal.duration.val\">\n" +
     "            <div class=\"label\">{{vm.viewModal.duration.label}}</div>\n" +
     "            <div class=\"text\">{{vm.viewModal.duration.val}}</div>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"field\" ng-if=\"vm.isStudent && vm.viewModal.lessonStatus.val\">\n" +
+    "        <div class=\"lato-14-n field\" ng-if=\"vm.isStudent && vm.viewModal.lessonStatus.val\">\n" +
     "            <div class=\"label\">{{vm.viewModal.lessonStatus.label}}</div>\n" +
     "            <div class=\"text\" ng-class=\"vm.LessonStatusEnum[vm.viewModal.lessonStatus.val]\">\n" +
     "                {{vm.LessonStatusEnum[vm.viewModal.lessonStatus.val]}}\n" +
@@ -971,7 +951,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "        </div>\n" +
     "\n" +
     "        <!--If admin or teacher show select-->\n" +
-    "        <div class=\"field\" ng-if=\"!vm.isStudent\">\n" +
+    "        <div class=\"lato-14-n field\" ng-if=\"!vm.isStudent\">\n" +
     "            <div class=\"label\">{{vm.viewModal.lessonStatus.label}}</div>\n" +
     "            <select ng-model=\"vm.viewModal.lessonStatus.val\" ng-class=\"{\n" +
     "             'attended': vm.lesson.status === vm.LessonStatusEnum.ATTENDED.enum,\n" +
@@ -981,7 +961,6 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
     "                <option ng-repeat=\"status in vm.lessonStatusArr\" value=\"{{status.enum}}\">{{status.val}}</option>\n" +
     "            </select>\n" +
     "        </div>\n" +
-    "\n" +
     "    </div>\n" +
     "\n" +
     "</div>\n" +

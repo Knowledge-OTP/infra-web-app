@@ -9529,48 +9529,43 @@ md-dialog.base {
         margin-top: 5px; }
 
 .lesson-details {
-  height: 170px;
-  margin: 10px 25px;
+  width: 95%;
+  margin: 15px;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-direction: column;
-      flex-direction: column;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -ms-flex-pack: justify;
-      justify-content: space-between; }
-  .lesson-details .fields-wrapper {
+  -ms-flex-pack: center;
+      justify-content: center; }
+  .lesson-details .left-col, .lesson-details .right-col {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-direction: column;
         flex-direction: column;
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
     -ms-flex-pack: justify;
         justify-content: space-between; }
-    .lesson-details .fields-wrapper .field {
-      width: 48%;
+    .lesson-details .left-col .field, .lesson-details .right-col .field {
       height: 40px;
       display: -ms-flexbox;
       display: flex;
       -ms-flex-align: center;
           align-items: center; }
-      .lesson-details .fields-wrapper .field .label {
-        width: 80px;
+      .lesson-details .left-col .field .label, .lesson-details .right-col .field .label {
+        width: 125px;
         text-align: left;
-        margin-right: 33px;
+        margin-right: 15px;
         font-size: 14px;
         color: #4f4d4d;
         font-family: Lato;
         font-weight: 100;
         text-transform: uppercase; }
-      .lesson-details .fields-wrapper .field .text {
+      .lesson-details .left-col .field .text, .lesson-details .right-col .field .text {
         text-transform: capitalize; }
-        .lesson-details .fields-wrapper .field .text.attended {
+        .lesson-details .left-col .field .text.attended, .lesson-details .right-col .field .text.attended {
           color: #87ca4d; }
-        .lesson-details .fields-wrapper .field .text.missed {
+        .lesson-details .left-col .field .text.missed, .lesson-details .right-col .field .text.missed {
           color: #ff6766; }
-      .lesson-details .fields-wrapper .field select {
+      .lesson-details .left-col .field select, .lesson-details .right-col .field select {
         width: 130px;
         font-size: 16px;
         color: #4f4d4d;
@@ -9585,47 +9580,55 @@ md-dialog.base {
         background-color: #ffffff;
         outline: 0;
         text-transform: capitalize; }
-        .lesson-details .fields-wrapper .field select.attended {
+        .lesson-details .left-col .field select.attended, .lesson-details .right-col .field select.attended {
           color: #87ca4d; }
-        .lesson-details .fields-wrapper .field select.missed {
+        .lesson-details .left-col .field select.missed, .lesson-details .right-col .field select.missed {
           color: #ff6766; }
-        .lesson-details .fields-wrapper .field select option {
+        .lesson-details .left-col .field select option, .lesson-details .right-col .field select option {
           color: #000000; }
-      .lesson-details .fields-wrapper .field.student-list-field {
+      .lesson-details .left-col .field.student-list-field, .lesson-details .right-col .field.student-list-field {
         height: auto; }
-        .lesson-details .fields-wrapper .field.student-list-field .student-list {
+        .lesson-details .left-col .field.student-list-field .student-list, .lesson-details .right-col .field.student-list-field .student-list {
           width: 100%;
           max-height: 85px;
           overflow: auto;
           text-transform: capitalize; }
-          .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper {
+          .lesson-details .left-col .field.student-list-field .student-list .student-wrapper, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper {
             display: -ms-flexbox;
             display: flex;
             margin: 3px 0; }
-            .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .student-name {
-              margin-right: 10px; }
-            .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .svg-v-icon, .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .svg-x-icon {
+            .lesson-details .left-col .field.student-list-field .student-list .student-wrapper .student-name, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper .student-name {
+              margin-right: 10px;
+              max-width: 120px;
+              text-overflow: ellipsis;
+              overflow: hidden; }
+            .lesson-details .left-col .field.student-list-field .student-list .student-wrapper .svg-v-icon, .lesson-details .left-col .field.student-list-field .student-list .student-wrapper .svg-x-icon, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper .svg-v-icon, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper .svg-x-icon {
               outline: none;
               cursor: pointer;
               margin-left: 10px; }
-              .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .svg-v-icon *, .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .svg-x-icon * {
+              .lesson-details .left-col .field.student-list-field .student-list .student-wrapper .svg-v-icon *, .lesson-details .left-col .field.student-list-field .student-list .student-wrapper .svg-x-icon *, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper .svg-v-icon *, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper .svg-x-icon * {
                 width: 13px;
                 height: 13px;
                 fill: #b7b7b7; }
-            .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper .svg-v-icon * {
+            .lesson-details .left-col .field.student-list-field .student-list .student-wrapper .svg-v-icon *, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper .svg-v-icon * {
               width: 14px; }
-            .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.attended {
+            .lesson-details .left-col .field.student-list-field .student-list .student-wrapper.attended, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper.attended {
               color: #87ca4d; }
-              .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.attended .svg-v-icon * {
+              .lesson-details .left-col .field.student-list-field .student-list .student-wrapper.attended .svg-v-icon *, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper.attended .svg-v-icon * {
                 fill: #87ca4d; }
-              .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.attended .svg-x-icon * {
+              .lesson-details .left-col .field.student-list-field .student-list .student-wrapper.attended .svg-x-icon *, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper.attended .svg-x-icon * {
                 fill: #b7b7b7; }
-            .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.missed {
+            .lesson-details .left-col .field.student-list-field .student-list .student-wrapper.missed, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper.missed {
               color: #ff6766; }
-              .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.missed .svg-v-icon * {
+              .lesson-details .left-col .field.student-list-field .student-list .student-wrapper.missed .svg-v-icon *, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper.missed .svg-v-icon * {
                 fill: #b7b7b7; }
-              .lesson-details .fields-wrapper .field.student-list-field .student-list .student-wrapper.missed .svg-x-icon * {
+              .lesson-details .left-col .field.student-list-field .student-list .student-wrapper.missed .svg-x-icon *, .lesson-details .right-col .field.student-list-field .student-list .student-wrapper.missed .svg-x-icon * {
                 fill: #ff6766; }
+  .lesson-details .lato-14-n {
+    font-size: 14px;
+    color: #4f4d4d;
+    font-family: Lato;
+    font-weight: 400; }
 
 .lesson-teacher-notes {
   margin: 0 20px;
