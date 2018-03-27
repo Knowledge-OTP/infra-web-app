@@ -1,17 +1,17 @@
 <div class="lesson-details" ng-if="vm.viewModal">
-    <div class="fields-wrapper">
+    <div class="left-col">
 
-        <div class="field" ng-if="vm.viewModal.serviceName.val">
+        <div class="lato-14-n field" ng-if="vm.viewModal.serviceName.val">
             <div class="label">{{vm.viewModal.serviceName.label}}</div>
             <div class="text">{{vm.viewModal.serviceName.val}}</div>
         </div>
 
-        <div class="field" ng-if="vm.viewModal.topicName.val">
+        <div class="lato-14-n field" ng-if="vm.viewModal.topicName.val">
             <div class="label">{{vm.viewModal.topicName.label}}</div>
             <div class="text">{{vm.viewModal.topicName.val}}</div>
         </div>
 
-        <div class="field student-list-field" ng-if="vm.viewModal.studentList.val.length && !vm.isStudent">
+        <div class="lato-14-n field student-list-field" ng-if="vm.viewModal.studentList.val.length && !vm.isStudent">
             <div class="label">{{vm.viewModal.studentList.label}}</div>
             <div class="student-list">
                 <div class="student-wrapper" ng-repeat="student in vm.viewModal.studentList.val track by $index"
@@ -35,27 +35,30 @@
             </div>
         </div>
 
-        <div class="field" ng-if="vm.viewModal.educatorName.val && (vm.isAdmin || vm.isStudent)">
+    </div>
+
+    <div class="right-col">
+        <div class="lato-14-n field" ng-if="vm.viewModal.educatorName.val && (vm.isAdmin || vm.isStudent)">
             <div class="label">{{vm.viewModal.educatorName.label}}</div>
             <div class="text">{{vm.viewModal.educatorName.val}}</div>
         </div>
 
-        <div class="field" ng-if="vm.viewModal.lessonDate.val">
+        <div class="lato-14-n field" ng-if="vm.viewModal.lessonDate.val">
             <div class="label">{{vm.viewModal.lessonDate.label}}</div>
             <div class="text">{{vm.viewModal.lessonDate.val}}</div>
         </div>
 
-        <div class="field" ng-if="vm.viewModal.startTime.val">
-            <div class="label">{{vm.viewModal.startTime.label}}</div>
-            <div class="text">{{vm.viewModal.startTime.val}}</div>
+        <div class="lato-14-n field" ng-if="vm.viewModal.actualTime.val">
+            <div class="label">{{vm.viewModal.actualTime.label}}</div>
+            <div class="text">{{vm.viewModal.actualTime.val}}</div>
         </div>
 
-        <div class="field" ng-if="vm.viewModal.duration.val">
+        <div class="lato-14-n field" ng-if="vm.viewModal.duration.val">
             <div class="label">{{vm.viewModal.duration.label}}</div>
             <div class="text">{{vm.viewModal.duration.val}}</div>
         </div>
 
-        <div class="field" ng-if="vm.isStudent && vm.viewModal.lessonStatus.val">
+        <div class="lato-14-n field" ng-if="vm.isStudent && vm.viewModal.lessonStatus.val">
             <div class="label">{{vm.viewModal.lessonStatus.label}}</div>
             <div class="text" ng-class="vm.LessonStatusEnum[vm.viewModal.lessonStatus.val]">
                 {{vm.LessonStatusEnum[vm.viewModal.lessonStatus.val]}}
@@ -63,7 +66,7 @@
         </div>
 
         <!--If admin or teacher show select-->
-        <div class="field" ng-if="!vm.isStudent">
+        <div class="lato-14-n field" ng-if="!vm.isStudent">
             <div class="label">{{vm.viewModal.lessonStatus.label}}</div>
             <select ng-model="vm.viewModal.lessonStatus.val" ng-class="{
              'attended': vm.lesson.status === vm.LessonStatusEnum.ATTENDED.enum,
@@ -73,7 +76,6 @@
                 <option ng-repeat="status in vm.lessonStatusArr" value="{{status.enum}}">{{status.val}}</option>
             </select>
         </div>
-
     </div>
 
 </div>
