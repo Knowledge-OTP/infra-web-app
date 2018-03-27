@@ -9533,8 +9533,8 @@ md-dialog.base {
   margin: 15px;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: center;
-      justify-content: center; }
+  -ms-flex-pack: distribute;
+      justify-content: space-around; }
   .lesson-details .left-col, .lesson-details .right-col {
     display: -ms-flexbox;
     display: flex;
