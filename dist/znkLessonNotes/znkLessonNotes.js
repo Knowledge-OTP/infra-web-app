@@ -830,9 +830,9 @@
                         backToBackId, ' Error: ', err));
             };
 
-            this.getLessonsByStudentIds = (studentIds, dateRange, educatorId, lessonStatusList) => {
+            this.getLessonsByStudentIds = (studentIds, dateRange, educatorId, lessonStatusList, serviceId) => {
                 const getLessonsByStudentIds = `${schedulingApi}/getLessonsByStudentIds`;
-                return $http.post(getLessonsByStudentIds, {studentIds, dateRange, educatorId, lessonStatusList})
+                return $http.post(getLessonsByStudentIds, {studentIds, dateRange, educatorId, lessonStatusList, serviceId})
                     .then(lessons => lessons.data)
                     .catch((err) => $log.error('getLessonsByStudentIds: Failed to get lessons by studentIds: ',
                         studentIds, ' Error: ', err));

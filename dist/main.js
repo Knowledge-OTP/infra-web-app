@@ -9477,7 +9477,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                                 LessonStatusEnum.MISSED.enum
                             ];
 
-                            return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange, this.educatorProfile.uid, lessonStatusList)
+                            return ZnkLessonNotesSrv.getLessonsByStudentIds([this.student.uid], dateRange,
+                                this.educatorProfile.uid, lessonStatusList, ENV.serviceId)
                                 .then(lessons => {
                                     let lessonToReturn = null;
                                     if (lessons && lessons.length) {
@@ -20475,9 +20476,9 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                         backToBackId, ' Error: ', err));
             };
 
-            this.getLessonsByStudentIds = (studentIds, dateRange, educatorId, lessonStatusList) => {
+            this.getLessonsByStudentIds = (studentIds, dateRange, educatorId, lessonStatusList, serviceId) => {
                 const getLessonsByStudentIds = `${schedulingApi}/getLessonsByStudentIds`;
-                return $http.post(getLessonsByStudentIds, {studentIds, dateRange, educatorId, lessonStatusList})
+                return $http.post(getLessonsByStudentIds, {studentIds, dateRange, educatorId, lessonStatusList, serviceId})
                     .then(lessons => lessons.data)
                     .catch((err) => $log.error('getLessonsByStudentIds: Failed to get lessons by studentIds: ',
                         studentIds, ' Error: ', err));
