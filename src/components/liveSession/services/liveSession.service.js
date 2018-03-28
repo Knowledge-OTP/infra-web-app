@@ -281,7 +281,15 @@
                     .then(isDarkFeaturesValid => {
                         if (isDarkFeaturesValid) {
                             try {
+                                // Update lessonStatus to attended
                                 scheduledLessonFromAdapter.status = LessonStatusEnum.ATTENDED.enum;
+                                // update student attendanceStatus to attended
+                                if (scheduledLessonFromAdapter.students[liveSessionData.studentId]) {
+                                    scheduledLessonFromAdapter.students[liveSessionData.studentId].attendanceStatus = LessonStatusEnum.ATTENDED.enum;
+                                } else {
+                                    $log.debug(`_updateLessonsStatusToAttended: This student does not exist on this lesson. lessonId: ${scheduledLessonFromAdapter.id}, studentId: ${liveSessionData.studentId}`);
+                                }
+
                                 if (liveSessionData.backToBackId) {
                                     return ZnkLessonNotesSrv.updateLessonsStatus(liveSessionData.backToBackId, LessonStatusEnum.ATTENDED.enum, true);
                                 } else {
