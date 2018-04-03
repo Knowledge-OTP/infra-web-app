@@ -15,7 +15,7 @@
 
             this.getLessonById = (lessonId) => {
                 const getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
-                return $http.get(getLessonsApi, {timeout: ENV.promiseTimeOut, cache: true})
+                return $http.get(getLessonsApi, {timeout: ENV.promiseTimeOut, cache: false})
                     .then(lesson => lesson.data)
                     .catch((err) => $log.error('getLessonById: Failed to get lesson summary by  id: ',
                         lessonId, ' Error: ', err));
@@ -23,7 +23,7 @@
 
             this.getLessonSummaryById = (lessonSummaryId) => {
                 const getLessonSummaryApi = `${lessonApi}/getLessonSummaryById?lessonSummaryId=${lessonSummaryId}`;
-                return $http.get(getLessonSummaryApi, {timeout: ENV.promiseTimeOut, cache: true})
+                return $http.get(getLessonSummaryApi, {timeout: ENV.promiseTimeOut, cache: false})
                     .then(lessonSummary => lessonSummary.data)
                     .catch((err) => $log.error('getLessonSummaryById: Failed to get lesson summary by id: ',
                         lessonSummaryId, ' Error: ', err));
