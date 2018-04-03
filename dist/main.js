@@ -19935,6 +19935,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                 this.lessonSummary = this.lessonSummary || {};
                 this.lessonSummary.id = this.lessonSummary.id || UtilitySrv.general.createGuid();
+                this.lessonSummary.dbType = this.lessonSummary.dbType || 'lessonSummary';
                 this.lessonSummary.studentIds = this.lessonSummary.studentIds || Object.keys(this.lesson.students);
                 this.lessonSummary.educatorId = this.lessonSummary.educatorId || this.lesson.educatorId;
                 this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
@@ -20152,6 +20153,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                 this.userContext = UserTypeContextEnum.STUDENT.enum;
                 this.lessonSummary = this.lessonSummary || {};
                 this.lessonSummary.id = this.lessonSummary.id || UtilitySrv.general.createGuid();
+                this.lessonSummary.dbType = this.lessonSummary.dbType || 'lessonSummary';
                 this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
 
                 this.$onInit = function() {
@@ -20423,7 +20425,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 
             this.getLessonById = (lessonId) => {
                 const getLessonsApi = `${schedulingApi}/getLessonById?lessonId=${lessonId}`;
-                return $http.get(getLessonsApi, {timeout: ENV.promiseTimeOut, cache: true})
+                return $http.get(getLessonsApi, {timeout: ENV.promiseTimeOut, cache: false})
                     .then(lesson => lesson.data)
                     .catch((err) => $log.error('getLessonById: Failed to get lesson summary by  id: ',
                         lessonId, ' Error: ', err));
@@ -20431,7 +20433,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
 
             this.getLessonSummaryById = (lessonSummaryId) => {
                 const getLessonSummaryApi = `${lessonApi}/getLessonSummaryById?lessonSummaryId=${lessonSummaryId}`;
-                return $http.get(getLessonSummaryApi, {timeout: ENV.promiseTimeOut, cache: true})
+                return $http.get(getLessonSummaryApi, {timeout: ENV.promiseTimeOut, cache: false})
                     .then(lessonSummary => lessonSummary.data)
                     .catch((err) => $log.error('getLessonSummaryById: Failed to get lesson summary by id: ',
                         lessonSummaryId, ' Error: ', err));

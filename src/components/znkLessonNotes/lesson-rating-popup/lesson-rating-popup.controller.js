@@ -11,6 +11,7 @@
                 this.userContext = UserTypeContextEnum.STUDENT.enum;
                 this.lessonSummary = this.lessonSummary || {};
                 this.lessonSummary.id = this.lessonSummary.id || UtilitySrv.general.createGuid();
+                this.lessonSummary.dbType = this.lessonSummary.dbType || 'lessonSummary';
                 this.lessonSummary.studentFeedback = this.lessonSummary.studentFeedback || {};
 
                 this.$onInit = function() {
