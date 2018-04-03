@@ -14,6 +14,7 @@
                 this.isStudent = this.userContext === UserTypeContextEnum.STUDENT.enum;
                 this.lessonSummary = this.lessonSummary || {};
                 this.lessonSummary.id = this.lessonSummary.id || UtilitySrv.general.createGuid();
+                this.lessonSummary.dbType = this.lessonSummary.dbType || 'lessonSummary';
                 this.lessonSummary.studentIds = this.lessonSummary.studentIds || Object.keys(this.lesson.students);
                 this.lessonSummary.educatorId = this.lessonSummary.educatorId || this.lesson.educatorId;
                 this.lessonSummary.lessonNotes = this.lessonSummary.lessonNotes || {};
