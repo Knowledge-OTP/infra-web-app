@@ -33,6 +33,23 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.znkLessonNotes').factory('EmailStatusEnum',
+        ["EnumSrv", function (EnumSrv) {
+            'ngInject';
+
+            return new EnumSrv.BaseEnum([
+                ['SENT', 1, 'sent'],
+                ['NOT_SENT', 2, 'notSent'],
+                ['PENDING', 3, 'pending']
+            ]);
+        }]
+    );
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.znkLessonNotes').factory('LessonNotesStatusEnum',
         ["EnumSrv", function (EnumSrv) {
             'ngInject';
@@ -677,7 +694,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.znkLessonNotes').service('ZnkLessonNotesUiSrv',
-        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "LessonNotesStatusEnum", "UtilitySrv", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, LessonNotesStatusEnum, UtilitySrv) {
+        ["$log", "$rootScope", "$rootElement", "$http", "ENV", "$mdDialog", "LessonNotesStatusEnum", "EmailStatusEnum", "UtilitySrv", function ($log, $rootScope, $rootElement, $http, ENV, $mdDialog, LessonNotesStatusEnum, EmailStatusEnum, UtilitySrv) {
             'ngInject';
 
             this.openLessonNotesPopup = (lesson, lessonSummary, userContext) => {
@@ -710,7 +727,8 @@
                     liveSessions: [],
                     studentFeedback: null,
                     lessonNotes: {
-                        status: LessonNotesStatusEnum.PENDING_COMPLETION.enum
+                        status: LessonNotesStatusEnum.PENDING_COMPLETION.enum,
+                        emailStatus: EmailStatusEnum.PENDING.enum
                     },
                     dbType: 'lessonSummary'
                 };
