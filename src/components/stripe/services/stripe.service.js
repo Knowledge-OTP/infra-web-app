@@ -21,14 +21,14 @@
                     const defer = $q.defer();
                     const handler = ($window).StripeCheckout.configure({
                         key: stripeToken,
-                        amount: amount * 100, // amount to display: ex: $20 * 100 === $20.00
+                        amount: amount ? amount * 100 : 0, // amount to display: ex: $20 * 100 === $20.00
                         locale: 'auto',
                         token: token => tokenId = token.id
                     });
                     handler.open({
                         name: name || 'Zinkerz',
                         description: description || translate('STRIPE.DESCRIPTION'),
-                        image: image || 'stripe/assets/images/zinkerz_stripe_logo.jpg',
+                        image: image || 'assets/images/zinkerz_stripe_logo.jpg',
                         panelLabel: translate('STRIPE.PAY'),
                         closed: () => defer.resolve(handleModalClosed(tokenId, amount, description))
                     });

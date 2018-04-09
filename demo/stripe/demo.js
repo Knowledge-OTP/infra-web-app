@@ -30,7 +30,8 @@
                 const amount = '20';
                 const name = 'Zinkerz';
                 const description = 'Instance Payment Description';
-                StripeService.openStripeModal(amount, name, description)
+                const image = 'stripe/assets/images/zinkerz_stripe_logo.jpg';
+                StripeService.openStripeModal(amount, name, description, image)
                     .then(result => console.log('result : ', result));
             };
         });
