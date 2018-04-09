@@ -668,5 +668,9 @@
                 }
             }
         }
+    },
+    "STRIPE": {
+        "DESCRIPTION": "Zinkerz Payment",
+        "PAY": "PAY "
     }
 }

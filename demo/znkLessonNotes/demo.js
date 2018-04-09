@@ -82,7 +82,7 @@
                 ZnkLessonNotesUiSrv.openLessonNotesPopup(lesson, lessonSummary, userContext);
             };
 
-            vm.openLessonRatingPopup = (lesson, lessonSummary) => {;
+            vm.openLessonRatingPopup = (lesson, lessonSummary) => {
                 ZnkLessonNotesUiSrv.openLessonRatingPopup(lesson, lessonSummary);
             };
 

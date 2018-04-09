@@ -34,6 +34,7 @@
 "znk.infra-web-app.purchase",
 "znk.infra-web-app.settings",
 "znk.infra-web-app.socialSharing",
+"znk.infra-web-app.stripe",
 "znk.infra-web-app.subjectsOrder",
 "znk.infra-web-app.tests",
 "znk.infra-web-app.tutorials",
@@ -15867,6 +15868,93 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
 })(angular);
 
 angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function($templateCache) {
+
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.stripe',
+        [
+            'ngAnimate',
+            'ui.router',
+            'ngMaterial',
+            'pascalprecht.translate',
+            'znk.infra.svgIcon',
+            'znk.infra.popUp',
+            'znk.infra.enum',
+            'znk.infra.config',
+            'znk.infra.storage',
+            'znk.infra.auth',
+            'znk.infra.analytics'
+        ]);
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.stripe')
+        .service('StripeService',
+            ["$log", "$q", "$window", "$filter", "$http", "AuthService", "ENV", function ($log, $q, $window, $filter, $http, AuthService, ENV) {
+                'ngInject';
+
+                const stripeToken = 'pk_test_VCX5a5aw64Z8WbB811quSQMj';
+                let paymentApi = `${ENV.znkBackendBaseUrl}/payment`;
+
+                /**
+                 * Open stripe payment modal foe instant payment.
+                 * @returns StripeResult object{Subject<boolean>}
+                 *
+                 * stripe test card 4242 4242 4242 4242
+                 */
+                this.openStripeModal = (amount, name, description, image) => {
+                    function createInstantCharge(token) {
+                        const createInstantChargeApi = `${paymentApi}/createinstantcharge`;
+                        AuthService.getAuth().then(authData => {
+                            this.stripeVars.uid = authData.uid;
+                            this.stripeVars.token = token.id;
+                            $http.post(createInstantChargeApi, this.stripeVars)
+                                .then(res => defer.resolve(res.data))
+                                .catch((err) => $log.error('createInstantCharge: Error: ', err));
+                        });
+                    }
+
+                    const defer = $q.defer();
+                    const handler = ($window).StripeCheckout.configure({
+                        key: stripeToken,
+                        amount: amount,
+                        locale: 'auto',
+                        token: createInstantCharge.bind(this)
+                    });
+                    const translate = $filter('translate');
+                    this.stripeVars = {
+                        uid: null,
+                        amount: amount,
+                        currency: 'usd',
+                        description: description
+                    };
+
+                    handler.open({
+                        name: name || 'Zinkerz',
+                        description: description || translate('STRIPE.DESCRIPTION'),
+                        image: image || 'stripe/assets/images/zinkerz_stripe_logo.jpg',
+                        panelLabel: translate('STRIPE.PAY'),
+                        closed: () => {
+                            if (!this.token) {
+                                defer.resolve({ closedByUser: true });
+                            }
+                        }
+                    });
+
+                    return defer.promise;
+                };
+
+            }]
+        );
+})(angular);
+
+angular.module('znk.infra-web-app.stripe').run(['$templateCache', function($templateCache) {
 
 }]);
 
