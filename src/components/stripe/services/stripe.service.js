@@ -7,7 +7,8 @@
                 'ngInject';
 
                 const stripeToken = ENV.stripeToken;
-                let paymentApi = `${ENV.znkBackendBaseUrl}/payment`;
+                const translate = $filter('translate');
+                const paymentApi = `${ENV.znkBackendBaseUrl}/payment`;
 
                 /**
                  * Open stripe payment modal foe instant payment.
@@ -16,49 +17,50 @@
                  * stripe test card 4242 4242 4242 4242
                  */
                 this.openStripeModal = (amount, name, description, image) => {
-                    function createInstantCharge(token) {
-                        this.token = token;
-                        const createInstantChargeApi = `${paymentApi}/createinstantcharge`;
-                        AuthService.getAuth().then(authData => {
-                            this.stripeVars.uid = authData.uid;
-                            this.stripeVars.token = this.token.id;
-                            $http.post(createInstantChargeApi, this.stripeVars)
-                                .then(res => {
-                                    defer.resolve(res.data);
-                                })
-                                .catch((err) => $log.error('createInstantCharge: Error: ', err));
-                        });
-                    }
-
+                    let tokenId = null;
                     const defer = $q.defer();
                     const handler = ($window).StripeCheckout.configure({
                         key: stripeToken,
                         amount: amount * 100, // amount to display: ex: $20 * 100 === $20.00
                         locale: 'auto',
-                        token: createInstantCharge.bind(this)
+                        token: token => tokenId = token.id
                     });
-                    const translate = $filter('translate');
-                    this.stripeVars = {
-                        uid: null,
-                        amount: amount,
-                        currency: 'usd',
-                        description: description
-                    };
-
                     handler.open({
                         name: name || 'Zinkerz',
                         description: description || translate('STRIPE.DESCRIPTION'),
                         image: image || 'stripe/assets/images/zinkerz_stripe_logo.jpg',
                         panelLabel: translate('STRIPE.PAY'),
-                        closed: () => {
-                            if (!this.token) {
-                                defer.resolve({ closedByUser: true });
-                            }
-                        }
+                        closed: () => defer.resolve(handleModalClosed(tokenId, amount, description))
                     });
 
                     return defer.promise;
                 };
+
+                function handleModalClosed(tokenId, amount, description) {
+                    let resToReturn = { closedByUser: true };
+                    if (tokenId) {
+                        resToReturn = createInstantCharge(tokenId, amount, description);
+                    }
+
+                    return resToReturn;
+                }
+
+                function createInstantCharge(tokenId, amount, description) {
+                    const createInstantChargeApi = `${paymentApi}/createinstantcharge`;
+                    return AuthService.getAuth().then(authData => {
+                        const stripeVars = {
+                            token: tokenId,
+                            uid: authData.uid,
+                            amount: amount,
+                            description: description,
+                            currency: 'usd'
+                        };
+
+                        return $http.post(createInstantChargeApi, stripeVars)
+                            .then(res => res.data)
+                            .catch((err) => $log.error('createInstantCharge: Error: ', err));
+                    });
+                }
 
             }
         );
