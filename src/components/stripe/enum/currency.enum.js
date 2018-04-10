@@ -5,7 +5,7 @@
         function(EnumSrv) {
 
             return new EnumSrv.BaseEnum([
-                ['USD', 'usd', 'usd']
+                ['USD', 'usd', 'USD']
             ]);
 
         }]);

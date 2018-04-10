@@ -31,6 +31,7 @@
                         description: description || translate('STRIPE.DESCRIPTION'),
                         image: image || 'assets/images/zinkerz_stripe_logo.jpg',
                         panelLabel: translate('STRIPE.PAY'),
+                        currency: CurrencyEnum.USD.val,
                         closed: () => defer.resolve(handleModalClosed(tokenId, amount, description))
                     });
 
