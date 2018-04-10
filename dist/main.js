@@ -15898,7 +15898,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
         function(EnumSrv) {
 
             return new EnumSrv.BaseEnum([
-                ['USD', 'usd', 'usd']
+                ['USD', 'usd', 'USD']
             ]);
 
         }]);
@@ -15937,6 +15937,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
                         description: description || translate('STRIPE.DESCRIPTION'),
                         image: image || 'assets/images/zinkerz_stripe_logo.jpg',
                         panelLabel: translate('STRIPE.PAY'),
+                        currency: CurrencyEnum.USD.val,
                         closed: () => defer.resolve(handleModalClosed(tokenId, amount, description))
                     });
 
