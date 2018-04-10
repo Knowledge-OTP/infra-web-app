@@ -15894,9 +15894,22 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.stripe').service('CurrencyEnum',['EnumSrv',
+        function(EnumSrv) {
+
+            return new EnumSrv.BaseEnum([
+                ['USD', 'usd', 'usd']
+            ]);
+
+        }]);
+})(angular);
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.stripe')
         .service('StripeService',
-            ["$log", "$q", "$window", "$filter", "$http", "AuthService", "ENV", function ($log, $q, $window, $filter, $http, AuthService, ENV) {
+            ["$log", "$q", "$window", "$filter", "$http", "AuthService", "ENV", "CurrencyEnum", function ($log, $q, $window, $filter, $http, AuthService, ENV, CurrencyEnum) {
                 'ngInject';
 
                 const stripeToken = ENV.stripeToken;
@@ -15912,9 +15925,10 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
                 this.openStripeModal = (amount, name, description, image) => {
                     let tokenId = null;
                     const defer = $q.defer();
+                    const amountInCents = amount ? amount * 100 : 0; // amount to display: ex: $20 * 100 === $20.00
                     const handler = ($window).StripeCheckout.configure({
                         key: stripeToken,
-                        amount: amount ? amount * 100 : 0, // amount to display: ex: $20 * 100 === $20.00
+                        amount: amountInCents,
                         locale: 'auto',
                         token: token => tokenId = token.id
                     });
@@ -15941,17 +15955,23 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
                 function createInstantCharge(tokenId, amount, description) {
                     const createInstantChargeApi = `${paymentApi}/createinstantcharge`;
                     return AuthService.getAuth().then(authData => {
-                        const stripeVars = {
-                            token: tokenId,
-                            uid: authData.uid,
-                            amount: amount,
-                            description: description,
-                            currency: 'usd'
-                        };
+                        if (authData && authData.uid) {
+                            const stripeVars = {
+                                token: tokenId,
+                                uid: authData.uid,
+                                amount: amount,
+                                description: description,
+                                currency: CurrencyEnum.USD.enum
+                            };
 
-                        return $http.post(createInstantChargeApi, stripeVars)
-                            .then(res => res.data)
-                            .catch((err) => $log.error('createInstantCharge: Error: ', err));
+                            return $http.post(createInstantChargeApi, stripeVars)
+                                .then(res => res.data)
+                                .catch((err) => $log.error('createInstantCharge: Error: ', err));
+                        } else {
+                            $log.error('createInstantCharge: Error: uid is required');
+                            return $q.reject(null);
+                        }
+
                     });
                 }
 

@@ -3,7 +3,7 @@
 
     angular.module('znk.infra-web-app.stripe')
         .service('StripeService',
-            function ($log, $q, $window, $filter, $http, AuthService, ENV) {
+            function ($log, $q, $window, $filter, $http, AuthService, ENV, CurrencyEnum) {
                 'ngInject';
 
                 const stripeToken = ENV.stripeToken;
@@ -19,9 +19,10 @@
                 this.openStripeModal = (amount, name, description, image) => {
                     let tokenId = null;
                     const defer = $q.defer();
+                    const amountInCents = amount ? amount * 100 : 0; // amount to display: ex: $20 * 100 === $20.00
                     const handler = ($window).StripeCheckout.configure({
                         key: stripeToken,
-                        amount: amount ? amount * 100 : 0, // amount to display: ex: $20 * 100 === $20.00
+                        amount: amountInCents,
                         locale: 'auto',
                         token: token => tokenId = token.id
                     });
@@ -48,17 +49,23 @@
                 function createInstantCharge(tokenId, amount, description) {
                     const createInstantChargeApi = `${paymentApi}/createinstantcharge`;
                     return AuthService.getAuth().then(authData => {
-                        const stripeVars = {
-                            token: tokenId,
-                            uid: authData.uid,
-                            amount: amount,
-                            description: description,
-                            currency: 'usd'
-                        };
+                        if (authData && authData.uid) {
+                            const stripeVars = {
+                                token: tokenId,
+                                uid: authData.uid,
+                                amount: amount,
+                                description: description,
+                                currency: CurrencyEnum.USD.enum
+                            };
 
-                        return $http.post(createInstantChargeApi, stripeVars)
-                            .then(res => res.data)
-                            .catch((err) => $log.error('createInstantCharge: Error: ', err));
+                            return $http.post(createInstantChargeApi, stripeVars)
+                                .then(res => res.data)
+                                .catch((err) => $log.error('createInstantCharge: Error: ', err));
+                        } else {
+                            $log.error('createInstantCharge: Error: uid is required');
+                            return $q.reject(null);
+                        }
+
                     });
                 }
 
