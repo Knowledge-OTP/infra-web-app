@@ -1,12 +1,12 @@
 {
   "name": "znkinfra",
   "private": true,
-    "scripts": {
-        "dist": "grunt dist",
-        "build": "grunt build",
-        "test": "grunt test",
-        "lint": "grunt ci"
-    },
+  "scripts": {
+    "dist": "grunt dist",
+    "build": "grunt build",
+    "test": "grunt test",
+    "lint": "grunt ci"
+  },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-autoprefixer": "^3.0.4",
@@ -21,7 +21,7 @@
     "grunt-karma": "0.12.0",
     "grunt-ng-annotate": "^2.0.2",
     "grunt-replace": "^1.0.1",
-    "grunt-sass": "^1.1.0",
+    "grunt-sass": "^2.0.0",
     "grunt-wiredep": "^3.0.1",
     "jasmine-core": "^2.4.1",
     "jit-grunt": "0.9.1",
