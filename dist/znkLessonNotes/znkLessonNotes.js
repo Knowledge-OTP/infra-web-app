@@ -724,13 +724,16 @@
                     id: UtilitySrv.general.createGuid(),
                     startTime: null,
                     endTime: null,
+                    studentIds: [],
+                    educatorId: null,
                     liveSessions: [],
                     studentFeedback: null,
                     lessonNotes: {
                         status: LessonNotesStatusEnum.PENDING_COMPLETION.enum,
                         emailStatus: EmailStatusEnum.PENDING.enum
                     },
-                    dbType: 'lessonSummary'
+                    dbType: 'lessonSummary',
+                    createTime: Date.now()
                 };
             };
 
