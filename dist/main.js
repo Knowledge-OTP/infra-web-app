@@ -9526,7 +9526,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     if (!lesson.lessonSummaryId) {
                         // add lessonSummaryId to scheduledLesson if there isn't
                         const newLessonSummary = ZnkLessonNotesUiSrv.newLessonSummary();
-                        newLessonSummary.studentIds = Object.keys(lesson.studentIds);
+                        newLessonSummary.studentIds = Object.keys(lesson.students);
                         newLessonSummary.educatorId = lesson.educatorId;
                         lesson.lessonSummaryId = newLessonSummary.id;
                         ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
@@ -9589,7 +9589,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             if (!b2bLesson.lessonSummaryId) {
                                 // add lessonSummaryId to scheduledLesson or all back2BackLessons if there isn't
                                 const newLessonSummary = ZnkLessonNotesUiSrv.newLessonSummary();
-                                newLessonSummary.studentIds = Object.keys(b2bLesson.studentIds);
+                                newLessonSummary.studentIds = Object.keys(b2bLesson.students);
                                 newLessonSummary.educatorId = b2bLesson.educatorId;
                                 b2bLesson.lessonSummaryId = newLessonSummary.id;
                                 ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
