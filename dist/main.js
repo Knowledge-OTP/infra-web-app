@@ -9526,6 +9526,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     if (!lesson.lessonSummaryId) {
                         // add lessonSummaryId to scheduledLesson if there isn't
                         const newLessonSummary = ZnkLessonNotesUiSrv.newLessonSummary();
+                        newLessonSummary.studentIds = Object.keys(lesson.studentIds);
+                        newLessonSummary.educatorId = lesson.educatorId;
                         lesson.lessonSummaryId = newLessonSummary.id;
                         ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
                             .then('getLessonInRange: saveLessonSummary: new lesson summary saved. id: ', newLessonSummary.id)
@@ -9587,6 +9589,8 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                             if (!b2bLesson.lessonSummaryId) {
                                 // add lessonSummaryId to scheduledLesson or all back2BackLessons if there isn't
                                 const newLessonSummary = ZnkLessonNotesUiSrv.newLessonSummary();
+                                newLessonSummary.studentIds = Object.keys(b2bLesson.studentIds);
+                                newLessonSummary.educatorId = b2bLesson.educatorId;
                                 b2bLesson.lessonSummaryId = newLessonSummary.id;
                                 ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
                                     .then('checkBack2BackLesson: saveLessonSummary: new lesson summary saved. id: ', newLessonSummary.id)
@@ -20492,13 +20496,16 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
                     id: UtilitySrv.general.createGuid(),
                     startTime: null,
                     endTime: null,
+                    studentIds: [],
+                    educatorId: null,
                     liveSessions: [],
                     studentFeedback: null,
                     lessonNotes: {
                         status: LessonNotesStatusEnum.PENDING_COMPLETION.enum,
                         emailStatus: EmailStatusEnum.PENDING.enum
                     },
-                    dbType: 'lessonSummary'
+                    dbType: 'lessonSummary',
+                    createTime: Date.now()
                 };
             };
 
