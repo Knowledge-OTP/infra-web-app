@@ -49,7 +49,7 @@
                  *
                  * stripe test card 4242 4242 4242 4242
                  */
-                this.openStripeModal = (amount, name, description, image) => {
+                this.openStripeModal = (serviceId, productId, amount, name, description, image) => {
                     let tokenId = null;
                     const defer = $q.defer();
                     const amountInCents = amount ? amount * 100 : 0; // amount to display: ex: $20 * 100 === $20.00
@@ -65,26 +65,28 @@
                         image: image || 'assets/images/zinkerz_stripe_logo.jpg',
                         panelLabel: translate('STRIPE.PAY'),
                         currency: CurrencyEnum.USD.val,
-                        closed: () => defer.resolve(handleModalClosed(tokenId, amount, description))
+                        closed: () => defer.resolve(handleModalClosed(serviceId, productId, tokenId, amount, description))
                     });
 
                     return defer.promise;
                 };
 
-                function handleModalClosed(tokenId, amount, description) {
+                function handleModalClosed(serviceId, productId, tokenId, amount, description) {
                     let resToReturn = { closedByUser: true };
                     if (tokenId) {
-                        resToReturn = createInstantCharge(tokenId, amount, description);
+                        resToReturn = createInstantCharge(serviceId, productId, tokenId, amount, description);
                     }
 
                     return resToReturn;
                 }
 
-                function createInstantCharge(tokenId, amount, description) {
+                function createInstantCharge(serviceId, productId, tokenId, amount, description) {
                     const createInstantChargeApi = `${paymentApi}/createinstantcharge`;
                     return AuthService.getAuth().then(authData => {
                         if (authData && authData.uid) {
                             const stripeVars = {
+                                serviceId: serviceId,
+                                productId: productId,
                                 token: tokenId,
                                 uid: authData.uid,
                                 amount: amount,
