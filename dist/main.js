@@ -742,13 +742,6 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                 }
             };
 
-            self.setZinkerzTeacher = function (profileZinkerzTeacherForm) {
-                if (profileZinkerzTeacherForm.$valid && profileZinkerzTeacherForm.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.isZinkerzTeacher)
-                        .then(_profileSuccess, _profileError);
-                }
-            };
-
             self.toggleZinkerzTeacher = function (isZinkerzTeacher) {
                 if (!self.profileData.teacherInfo) {
                     self.profileData.teacherInfo = {};
@@ -883,7 +876,6 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
 
 
                 var self = this;
-                var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
 
                 self.showEducatorProfile = function (userProfile) {
                     if (!userProfile) {
@@ -926,22 +918,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                     });
                     return deferred.promise;
                 };
-                self.setZinkerzTeacher = function (uid, subject, isZinkerzTeacher) {
-                    if (!uid) {
-                        $log.error('setZinkerzTeacher: no uid');
-                        return;
-                    }
-                    if (!subject) {
-                        $log.error('setZinkerzTeacher: no subject');
-                        return;
-                    }
-                    var profile = {
-                        userId: uid,
-                        isZinkerzTeacher: !!isZinkerzTeacher,
-                        teachingSubject: subject
-                    };
-                    return $http.post(profilePath, profile);
-                };
+
             }]
         );
 })(angular);
@@ -1668,8 +1645,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <md-dialog-content>\n" +
     "            <div class=\"container-title md-subheader\" translate=\".EMETADATA.ZINKERZ_EDUCATOR\"></div>\n" +
-    "            <form name=\"profileZinkerzTeacherForm\" novalidate class=\"auth-form\"\n" +
-    "                  ng-submit=\"vm.setZinkerzTeacher(profileZinkerzTeacherForm)\">\n" +
+    "            <form name=\"profileZinkerzTeacherForm\" novalidate class=\"auth-form\">\n" +
     "                <div class=\"znk-input-group\">\n" +
     "                    <label for=\"zinkerzTeacher\">{{'ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR' | translate}}</label>\n" +
     "                    <div class=\"znk-input\">\n" +
@@ -8697,29 +8673,7 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
-    ])
-        .run(["$mdToast", "MyLiveLessons", function ($mdToast, MyLiveLessons) {
-            'ngInject';
-            MyLiveLessons.getClosestLiveLesson().then(function (closestLiveLessonObj) {
-                if (angular.isUndefined(closestLiveLessonObj.startTime)) {
-                    return;
-                }
-
-                var optionsOrPreset = {
-                    templateUrl: 'components/liveLessons/templates/upcomingLessonToast.template.html',
-                    hideDelay: false,
-                    controller: 'UpcomingLessonToasterController',
-                    controllerAs: 'vm',
-                    locals: {
-                        closestLiveLesson: closestLiveLessonObj
-                    }
-                };
-
-                $mdToast.cancel().then(function () {
-                    $mdToast.show(optionsOrPreset);
-                });
-            });
-        }]);
+    ]);
 })(window, angular);
 
 (function (angular) {
@@ -8838,21 +8792,19 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
             'ngInject';
 
             var self = this;
-            var dataAsString;
-            var teachworksIdUrl = ENV.backendEndpoint + ENV.teachworksDataUrl;
             var teachworksId;
             var userId;
 
             function getLiveLessonsSchedule() {
                 var liveLessonsArr = [];
-                return $q.all([_getTeachworksData(), UserProfileService.getCurrUserId()]).then(function (res) {
-                    dataAsString = res[0];
-                    userId = res[1];
+                return $q.all([ UserProfileService.getCurrUserId()]).then(function (res) {
+                   userId = res[0];
                     return UserProfileService.getUserTeachWorksId(userId).then(function (teachworksIdObj) {
                         teachworksId = angular.isDefined(teachworksIdObj) ? teachworksIdObj.id : undefined;
-                        if (teachworksId && dataAsString) {
+                        if (teachworksId) {
+
                             teachworksId = teachworksId.replace(/\s/g, '').toLowerCase();
-                            var allRecordsData = dataAsString.match(/.*DTSTART(.|[\r\n])*?UID/g);
+                            var allRecordsData = [];
                             for (var i = 0; i < allRecordsData.length; i++) {
                                 if (isTeachworksIdMatch(allRecordsData[i])) {
                                     var liveLessonObject = _buildLiveLessonObj(allRecordsData[i]);
@@ -8864,18 +8816,6 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
                         }
                         return liveLessonsArr;
                     });
-                });
-            }
-
-            function _getTeachworksData() {
-                return $http({
-                    method: 'GET',
-                    url: teachworksIdUrl,
-                    cache: true
-                }).then(function successCallback(response) {
-                    return response.data;
-                }, function errorCallback(response) {
-                    $log.debug('myLiveLessons:' + response);
                 });
             }
 

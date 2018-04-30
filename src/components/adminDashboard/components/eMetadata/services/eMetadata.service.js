@@ -8,7 +8,6 @@
 
 
                 var self = this;
-                var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
 
                 self.showEducatorProfile = function (userProfile) {
                     if (!userProfile) {
@@ -51,22 +50,7 @@
                     });
                     return deferred.promise;
                 };
-                self.setZinkerzTeacher = function (uid, subject, isZinkerzTeacher) {
-                    if (!uid) {
-                        $log.error('setZinkerzTeacher: no uid');
-                        return;
-                    }
-                    if (!subject) {
-                        $log.error('setZinkerzTeacher: no subject');
-                        return;
-                    }
-                    var profile = {
-                        userId: uid,
-                        isZinkerzTeacher: !!isZinkerzTeacher,
-                        teachingSubject: subject
-                    };
-                    return $http.post(profilePath, profile);
-                };
+
             }
         );
 })(angular);

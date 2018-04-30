@@ -6,21 +6,19 @@
             'ngInject';
 
             var self = this;
-            var dataAsString;
-            var teachworksIdUrl = ENV.backendEndpoint + ENV.teachworksDataUrl;
             var teachworksId;
             var userId;
 
             function getLiveLessonsSchedule() {
                 var liveLessonsArr = [];
-                return $q.all([_getTeachworksData(), UserProfileService.getCurrUserId()]).then(function (res) {
-                    dataAsString = res[0];
-                    userId = res[1];
+                return $q.all([ UserProfileService.getCurrUserId()]).then(function (res) {
+                   userId = res[0];
                     return UserProfileService.getUserTeachWorksId(userId).then(function (teachworksIdObj) {
                         teachworksId = angular.isDefined(teachworksIdObj) ? teachworksIdObj.id : undefined;
-                        if (teachworksId && dataAsString) {
+                        if (teachworksId) {
+
                             teachworksId = teachworksId.replace(/\s/g, '').toLowerCase();
-                            var allRecordsData = dataAsString.match(/.*DTSTART(.|[\r\n])*?UID/g);
+                            var allRecordsData = [];
                             for (var i = 0; i < allRecordsData.length; i++) {
                                 if (isTeachworksIdMatch(allRecordsData[i])) {
                                     var liveLessonObject = _buildLiveLessonObj(allRecordsData[i]);
@@ -32,18 +30,6 @@
                         }
                         return liveLessonsArr;
                     });
-                });
-            }
-
-            function _getTeachworksData() {
-                return $http({
-                    method: 'GET',
-                    url: teachworksIdUrl,
-                    cache: true
-                }).then(function successCallback(response) {
-                    return response.data;
-                }, function errorCallback(response) {
-                    $log.debug('myLiveLessons:' + response);
                 });
             }
 

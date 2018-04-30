@@ -44,7 +44,6 @@ xdescribe('testing service "LiveSessionSrv":', function () {
         $delegate.mediaEndpoint = '//dfz02hjbsqn5e.cloudfront.net/';
         $delegate.fbGlobalEndPoint = '//znk-dev.firebaseio.com/';
         $delegate.backendEndpoint = '//znk-web-backend-dev.azurewebsites.net/';
-        $delegate.teachworksDataUrl = 'teachworks';
         $delegate.userIdleTime = 30;
         $delegate.idleTimeout = 0;
         $delegate.idleKeepalive = 2;

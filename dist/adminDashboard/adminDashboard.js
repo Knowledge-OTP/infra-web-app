@@ -66,13 +66,6 @@
                 }
             };
 
-            self.setZinkerzTeacher = function (profileZinkerzTeacherForm) {
-                if (profileZinkerzTeacherForm.$valid && profileZinkerzTeacherForm.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.isZinkerzTeacher)
-                        .then(_profileSuccess, _profileError);
-                }
-            };
-
             self.toggleZinkerzTeacher = function (isZinkerzTeacher) {
                 if (!self.profileData.teacherInfo) {
                     self.profileData.teacherInfo = {};
@@ -207,7 +200,6 @@
 
 
                 var self = this;
-                var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
 
                 self.showEducatorProfile = function (userProfile) {
                     if (!userProfile) {
@@ -250,22 +242,7 @@
                     });
                     return deferred.promise;
                 };
-                self.setZinkerzTeacher = function (uid, subject, isZinkerzTeacher) {
-                    if (!uid) {
-                        $log.error('setZinkerzTeacher: no uid');
-                        return;
-                    }
-                    if (!subject) {
-                        $log.error('setZinkerzTeacher: no subject');
-                        return;
-                    }
-                    var profile = {
-                        userId: uid,
-                        isZinkerzTeacher: !!isZinkerzTeacher,
-                        teachingSubject: subject
-                    };
-                    return $http.post(profilePath, profile);
-                };
+
             }]
         );
 })(angular);
@@ -992,8 +969,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <md-dialog-content>\n" +
     "            <div class=\"container-title md-subheader\" translate=\".EMETADATA.ZINKERZ_EDUCATOR\"></div>\n" +
-    "            <form name=\"profileZinkerzTeacherForm\" novalidate class=\"auth-form\"\n" +
-    "                  ng-submit=\"vm.setZinkerzTeacher(profileZinkerzTeacherForm)\">\n" +
+    "            <form name=\"profileZinkerzTeacherForm\" novalidate class=\"auth-form\">\n" +
     "                <div class=\"znk-input-group\">\n" +
     "                    <label for=\"zinkerzTeacher\">{{'ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR' | translate}}</label>\n" +
     "                    <div class=\"znk-input\">\n" +
