@@ -5,7 +5,7 @@
     "Zinkerz"
   ],
   "dependencies": {
-    "infra": "https://4f465f366cf88b5bf2f8e33eaff8e219bfe538da:x-oauth-basic@github.com/Knowledge-OTP/infra.git#~6.0.95",
+    "infra": "https://4f465f366cf88b5bf2f8e33eaff8e219bfe538da:x-oauth-basic@github.com/Knowledge-OTP/infra.git#assaf/new-backend",
     "ng-tags-input": "3.0.0",
     "angular-chart.js": "0.10.2",
     "v-accordion": "1.4.1",
