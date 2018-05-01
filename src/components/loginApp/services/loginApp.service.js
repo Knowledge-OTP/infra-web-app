@@ -291,8 +291,10 @@
                         .then(function () {
                             return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
                                 var appEnvConfig = _getAppEnvConfig(appContext);
-                                // var postUrl = appEnvConfig.backendEndpoint + 'firebase/token2';
-                                var postUrl = 'https://znk-web-backend-dev.azurewebsites.net/firebase/token2';
+                                var postUrl = 'https://znk-web-backend-prod.azurewebsites.net/firebase/token2';
+                                if (appEnvConfig.backendEndpoint.indexOf('dev')>-1){
+                                    postUrl = 'https://znk-web-backend-dev.azurewebsites.net/firebase/token2';
+                                }
                                 var postData = {
                                     email: authData.email || authData.auth.email || authData.auth.token.email,
                                     uid: authData.uid,
