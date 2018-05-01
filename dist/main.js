@@ -14396,7 +14396,8 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
                         studentAppName: backendData[currentApp].studentAppName,
                         dashboardAppName: backendData[currentApp].dashboardAppName,
                         uid: uid,
-                        promoCode: promoCode
+                        promoCode: promoCode,
+                        serviceId: backendData[currentApp].serviceId
                     };
                     return $http.post(promoCodeUpdatekUrl, dataToSend);
                 };
