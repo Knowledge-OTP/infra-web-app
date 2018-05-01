@@ -14336,7 +14336,8 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
                         backendEndpoint: ENV.backendEndpoint,
                         currentAppName: ENV.firebaseAppScopeName,
                         studentAppName: ENV.studentAppName,
-                        dashboardAppName: ENV.dashboardAppName
+                        dashboardAppName: ENV.dashboardAppName,
+                        serviceId: ENV.serviceId
                     };
                 }]);
             } catch(error){
@@ -14354,8 +14355,6 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
 
                 var promoCodeStatus;
                 var INVALID = 'PROMO_CODE.INVALID_CODE';
-                var promoCodeCheckBaseUrl = '%backendEndpoint%/promoCode/check';
-                var promoCodeUpdateBaseUrl = '%backendEndpoint%/promoCode/update';
                 var promoCodeToUpdate;
 
                 var promoCodeStatusText = {};
@@ -14365,11 +14364,10 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
 
                 promoCodeSrv.checkPromoCode = function (promoCode, currentApp) {
                     var backendEndpointUrl = backendData[currentApp].backendEndpoint;
-
-                    var promoCodeCheckUrl = promoCodeCheckBaseUrl;
-                    promoCodeCheckUrl = promoCodeCheckUrl.replace('%backendEndpoint%', backendEndpointUrl);
+                    var promoCodeCheckUrl = backendEndpointUrl + 'promoCode/check';
 
                     var dataToSend = {
+                        serviceId: backendData[currentApp].serviceId,
                         promoCode: promoCode,
                         studentAppName: backendData[currentApp].studentAppName
                     };
@@ -14391,7 +14389,7 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
 
                 promoCodeSrv.updatePromoCode = function (uid, promoCode, currentApp) {
                     var backendEndpointUrl = backendData[currentApp].backendEndpoint;
-                    var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl.replace('%backendEndpoint%', backendEndpointUrl);
+                    var promoCodeUpdatekUrl = backendEndpointUrl + 'promoCode/update';
 
                     var dataToSend = {
                         currentAppName: backendData[currentApp].currentAppName,
