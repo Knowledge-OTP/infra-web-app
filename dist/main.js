@@ -11769,7 +11769,10 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     var providerConfig = SatellizerConfig.providers && SatellizerConfig.providers[provider];
                     if (providerConfig) {
                         providerConfig.clientId = env[provider + 'AppId'];
-                        providerConfig.url = env.backendEndpoint + provider + '/code';
+                        providerConfig.url = 'https://znk-web-backend-prod.azurewebsites.net/' + provider + '/code';
+                        if (env.backendEndpoint.indexOf('dev')>-1){
+                            providerConfig.url = 'https://znk-web-backend-dev.azurewebsites.net/' + provider + '/code';
+                        }
                     }
                     if (provider === 'facebook') {
                         providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/';
