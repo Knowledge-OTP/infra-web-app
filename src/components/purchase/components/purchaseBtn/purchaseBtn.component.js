@@ -6,22 +6,20 @@
             bindings: {
                 purchaseState: '='
             },
-            templateUrl:  'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
+            templateUrl: 'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
             controllerAs: 'vm',
             controller: function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
-                                  $filter, PurchaseStateEnum, $log, znkAnalyticsSrv) {
+                                  $filter, PurchaseStateEnum, $log, znkAnalyticsSrv, StripeService) {
                 'ngInject';
 
                 var vm = this;
-
-                vm.showForm = false;
                 vm.translate = $filter('translate');
 
                 vm.saveAnalytics = function () {
-                    $timeout(function(){
+                    $timeout(function () {
                         vm.purchaseState = PurchaseStateEnum.PENDING.enum;
-                    },0);
-                    znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
+                    }, 0);
+                    znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
                 };
 
                 $scope.$watch(function () {
@@ -31,49 +29,35 @@
                         return;
                     }
 
-                    if (newPurchaseState === PurchaseStateEnum.NONE.enum) {
-                        buildForm();
-                    }
 
                     if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
                         $q.when(purchaseService.getPurchaseData()).then(function (purchaseData) {
-                            if (!angular.equals(purchaseData, {})){
+                            if (!angular.equals(purchaseData, {})) {
                                 vm.upgradeDate = $filter('date')(purchaseData.creationTime, 'mediumDate');
                             }
                         });
                     }
                 });
 
-                function buildForm() {
-                    $q.all([AuthService.getAuth(), purchaseService.getProduct()]).then(function (results) {
-                        var userEmail = results[0].email;
-                        var userId = results[0].uid;
-                        var productId = results[1].id;
-
-                        if (!userEmail) {
-                            $log.error('Invalid user attribute: userEmail is not defined, generating uid email');
-                            userEmail = userId + '@zinkerz.com';
-                        }
-
-                        if (userEmail && userId) {
-                            vm.userEmail = userEmail;
-                            vm.hostedButtonId = ENV.purchasePaypalParams.hostedButtonId;
-                            vm.custom = userId + '#' + productId + '#' + ENV.fbDataEndPoint + '#' + ENV.firebaseAppScopeName;  // userId#productId#dataEndPoint#appName
-                            vm.returnUrlSuccess = buildReturnUrl('purchaseSuccess', '1');
-                            vm.returnUrlFailed = buildReturnUrl('purchaseSuccess', '0');
-                            vm.formAction = trustSrc(ENV.purchasePaypalParams.formAction);
-                            vm.btnImgSrc = trustSrc(ENV.purchasePaypalParams.btnImgSrc);
-                            vm.pixelGifSrc = trustSrc(ENV.purchasePaypalParams.pixelGifSrc);
-                            vm.showForm = true;
-                        } else {
-                            /**
-                             * if case of failure
-                             * TODO: Add atatus notification
-                             */
-                            $log.error('Invalid user attributes: userId or userEmail are not defined, cannot build purchase form');
-                        }
+                vm.purchaseZinkerzPro = function () {
+                    purchaseService.hidePurchaseDialog();
+                    purchaseService.getProduct().then(product => {
+                        $log.debug(`purchaseZinkerzPro: productId: ${product.id}, price: ${product.price}`);
+                        const name = vm.translate('PURCHASE_POPUP.UPGRADE_TO_ZINKERZ_PRO');
+                        const description = vm.translate('PURCHASE_POPUP.DESCRIPTION');
+                        StripeService.openStripeModal(ENV.serviceId, product.id, product.price, name, description)
+                            .then(stripeRes => {
+                                if (!stripeRes.closedByUser) {
+                                    $log.debug(`purchaseZinkerzPro: User is given zinkerz pro`);
+                                    // The stripe web hook should update the firebase
+                                    // and the getAndBindToServer should trigger the event to change purchaseState to pro
+                                } else {
+                                    $log.debug(`purchaseCredits: stripe modal closed by user`);
+                                }
+                            });
                     });
-                }
+
+                };
 
                 vm.showPurchaseError = function () {
                     purchaseService.hidePurchaseDialog().then(function () {
@@ -81,37 +65,6 @@
                     });
                 };
 
-                function buildReturnUrl(param, val) {
-                    return $location.absUrl().split('?')[0] + addUrlParam($location.search(), param, val);
-                }
-
-                // http://stackoverflow.com/questions/21292114/external-resource-not-being-loaded-by-angularjs
-                // in order to use src and action attributes that link to external url's,
-                // you should whitelist them
-                function trustSrc(src) {
-                    return $sce.trustAsResourceUrl(src);
-                }
-
-                function addUrlParam(searchObj, key, val) {
-                    var search = '';
-                    if (!angular.equals(searchObj, {})) {
-                        search = '?';
-                        // parse the search attribute as a string
-                        angular.forEach(searchObj, function (v, k) {
-                            search += k + '=' + v;
-                        });
-                    }
-
-                    var newParam = key + '=' + val,
-                        urlParams = '?' + newParam;
-                    if (search) {
-                        urlParams = search.replace(new RegExp('[\?&]' + key + '[^&]*'), '$1' + newParam);
-                        if (urlParams === search) {
-                            urlParams += '&' + newParam;
-                        }
-                    }
-                    return urlParams;
-                }
             }
         });
 })(angular);

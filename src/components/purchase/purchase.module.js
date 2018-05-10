@@ -13,7 +13,8 @@
             'znk.infra.config',
             'znk.infra.storage',
             'znk.infra.auth',
-            'znk.infra.analytics'
+            'znk.infra.analytics',
+            'znk.infra-web-app.stripe'
         ]);
 })(angular);
 
