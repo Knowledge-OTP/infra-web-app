@@ -42,6 +42,8 @@
                 const stripeToken = ENV.stripeToken;
                 const translate = $filter('translate');
                 const paymentApi = `${ENV.znkBackendBaseUrl}/payment`;
+                const STRIPE_SCRIPT_URL = 'https://checkout.stripe.com/checkout.js';
+                loadStripeScript();
 
                 /**
                  * Open stripe payment modal foe instant payment.
@@ -70,6 +72,14 @@
 
                     return defer.promise;
                 };
+
+                // Load stripe module <script src="https://checkout.stripe.com/checkout.js"></script>
+                function loadStripeScript() {
+                    const scriptTag = document.getElementsByTagName('script')[0];
+                    const newScriptElm = $window.document.createElement('script');
+                    newScriptElm.src = STRIPE_SCRIPT_URL;
+                    scriptTag.parentNode.insertBefore(newScriptElm,scriptTag);
+                }
 
                 function handleModalClosed(serviceId, productId, tokenId, amount, description) {
                     let resToReturn = { closedByUser: true };

@@ -174,7 +174,8 @@
         "PURCHASE_NUDGE_MESSAGE_ALL_FREE_CONTENT": "You've completed all free workouts. It's time to upgrade.",
         "PURCHASE_NUDGE_MESSAGE_ACTION_ALL_FREE_CONTENT": "Lets do it!",
         "PURCHASE_NUDGE_MESSAGE_FIRST_WORKOUT": "Workout {{num}} completed! Upgrade to Zinkerz PRO to get everything you need to ace the TOEFL text.",
-        "PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT": "Lets do it!"
+        "PURCHASE_NUDGE_MESSAGE_ACTION_FIRST_WORKOUT": "Lets do it!",
+        "UPGRADE_TO_ZINKERZ_PRO": "Upgrade To Zinkerz Pro"
     },
     "PROMO_CODE": {
         "GOT_A_PROMO_CODE": "Got a Promo Code?",

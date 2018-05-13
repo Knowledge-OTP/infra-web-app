@@ -14662,7 +14662,8 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             'znk.infra.config',
             'znk.infra.storage',
             'znk.infra.auth',
-            'znk.infra.analytics'
+            'znk.infra.analytics',
+            'znk.infra-web-app.stripe'
         ]);
 })(angular);
 
@@ -14675,22 +14676,20 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             bindings: {
                 purchaseState: '='
             },
-            templateUrl:  'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
+            templateUrl: 'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "znkAnalyticsSrv", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
-                                  $filter, PurchaseStateEnum, $log, znkAnalyticsSrv) {
+            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "znkAnalyticsSrv", "StripeService", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
+                                  $filter, PurchaseStateEnum, $log, znkAnalyticsSrv, StripeService) {
                 'ngInject';
 
                 var vm = this;
-
-                vm.showForm = false;
                 vm.translate = $filter('translate');
 
                 vm.saveAnalytics = function () {
-                    $timeout(function(){
+                    $timeout(function () {
                         vm.purchaseState = PurchaseStateEnum.PENDING.enum;
-                    },0);
-                    znkAnalyticsSrv.eventTrack({ eventName: 'purchaseOrderStarted' });
+                    }, 0);
+                    znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
                 };
 
                 $scope.$watch(function () {
@@ -14700,49 +14699,35 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                         return;
                     }
 
-                    if (newPurchaseState === PurchaseStateEnum.NONE.enum) {
-                        buildForm();
-                    }
 
                     if (newPurchaseState === PurchaseStateEnum.PRO.enum) {
                         $q.when(purchaseService.getPurchaseData()).then(function (purchaseData) {
-                            if (!angular.equals(purchaseData, {})){
+                            if (!angular.equals(purchaseData, {})) {
                                 vm.upgradeDate = $filter('date')(purchaseData.creationTime, 'mediumDate');
                             }
                         });
                     }
                 });
 
-                function buildForm() {
-                    $q.all([AuthService.getAuth(), purchaseService.getProduct()]).then(function (results) {
-                        var userEmail = results[0].email;
-                        var userId = results[0].uid;
-                        var productId = results[1].id;
-
-                        if (!userEmail) {
-                            $log.error('Invalid user attribute: userEmail is not defined, generating uid email');
-                            userEmail = userId + '@zinkerz.com';
-                        }
-
-                        if (userEmail && userId) {
-                            vm.userEmail = userEmail;
-                            vm.hostedButtonId = ENV.purchasePaypalParams.hostedButtonId;
-                            vm.custom = userId + '#' + productId + '#' + ENV.fbDataEndPoint + '#' + ENV.firebaseAppScopeName;  // userId#productId#dataEndPoint#appName
-                            vm.returnUrlSuccess = buildReturnUrl('purchaseSuccess', '1');
-                            vm.returnUrlFailed = buildReturnUrl('purchaseSuccess', '0');
-                            vm.formAction = trustSrc(ENV.purchasePaypalParams.formAction);
-                            vm.btnImgSrc = trustSrc(ENV.purchasePaypalParams.btnImgSrc);
-                            vm.pixelGifSrc = trustSrc(ENV.purchasePaypalParams.pixelGifSrc);
-                            vm.showForm = true;
-                        } else {
-                            /**
-                             * if case of failure
-                             * TODO: Add atatus notification
-                             */
-                            $log.error('Invalid user attributes: userId or userEmail are not defined, cannot build purchase form');
-                        }
+                vm.purchaseZinkerzPro = function () {
+                    purchaseService.hidePurchaseDialog();
+                    purchaseService.getProduct().then(product => {
+                        $log.debug(`purchaseZinkerzPro: productId: ${product.id}, price: ${product.price}`);
+                        const name = vm.translate('PURCHASE_POPUP.UPGRADE_TO_ZINKERZ_PRO');
+                        const description = vm.translate('PURCHASE_POPUP.DESCRIPTION');
+                        StripeService.openStripeModal(ENV.serviceId, product.id, product.price, name, description)
+                            .then(stripeRes => {
+                                if (!stripeRes.closedByUser) {
+                                    $log.debug(`purchaseZinkerzPro: User is given zinkerz pro`);
+                                    // The stripe web hook should update the firebase
+                                    // and the getAndBindToServer should trigger the event to change purchaseState to pro
+                                } else {
+                                    $log.debug(`purchaseCredits: stripe modal closed by user`);
+                                }
+                            });
                     });
-                }
+
+                };
 
                 vm.showPurchaseError = function () {
                     purchaseService.hidePurchaseDialog().then(function () {
@@ -14750,37 +14735,6 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                     });
                 };
 
-                function buildReturnUrl(param, val) {
-                    return $location.absUrl().split('?')[0] + addUrlParam($location.search(), param, val);
-                }
-
-                // http://stackoverflow.com/questions/21292114/external-resource-not-being-loaded-by-angularjs
-                // in order to use src and action attributes that link to external url's,
-                // you should whitelist them
-                function trustSrc(src) {
-                    return $sce.trustAsResourceUrl(src);
-                }
-
-                function addUrlParam(searchObj, key, val) {
-                    var search = '';
-                    if (!angular.equals(searchObj, {})) {
-                        search = '?';
-                        // parse the search attribute as a string
-                        angular.forEach(searchObj, function (v, k) {
-                            search += k + '=' + v;
-                        });
-                    }
-
-                    var newParam = key + '=' + val,
-                        urlParams = '?' + newParam;
-                    if (search) {
-                        urlParams = search.replace(new RegExp('[\?&]' + key + '[^&]*'), '$1' + newParam);
-                        if (urlParams === search) {
-                            urlParams += '&' + newParam;
-                        }
-                    }
-                    return urlParams;
-                }
             }]
         });
 })(angular);
@@ -15158,38 +15112,13 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "    </div>\n" +
     "\n" +
     "    <div ng-switch-when=\"none\">\n" +
-    "        <ng-switch on=\"vm.showForm\">\n" +
-    "            <div ng-switch-when=\"true\">\n" +
-    "                <form\n" +
-    "                    action=\"{{::vm.formAction}}\"\n" +
-    "                    method=\"post\"\n" +
-    "                    target=\"_top\">\n" +
-    "                    <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">\n" +
-    "                    <input type=\"hidden\" name=\"hosted_button_id\" ng-value=\"::vm.hostedButtonId\">\n" +
-    "                    <input type=\"hidden\" name=\"custom\" ng-value=\"::vm.custom\">\n" +
-    "                    <input type=\"hidden\" name=\"return\" ng-value=\"::vm.returnUrlSuccess\">\n" +
-    "                    <input type=\"hidden\" name=\"cancel_return\" ng-value=\"::vm.returnUrlFailed\">\n" +
-    "                    <input type=\"hidden\" name=\"landing_page\" value=\"billing\">\n" +
-    "                    <input type=\"hidden\" name=\"email\" ng-value=\"::vm.userEmail\">\n" +
-    "                    <div class=\"upgrade-btn-wrapper\">\n" +
-    "                        <button class=\"md-button success drop-shadow inline-block\"\n" +
-    "                                ng-click=\"vm.saveAnalytics()\"\n" +
-    "                                translate=\".UPGRADE_NOW\"\n" +
-    "                                name=\"submit\">\n" +
-    "                        </button>\n" +
-    "                    </div>\n" +
-    "                    <!--<input type=\"image\" src=\"{{vm.btnImgSrc}}\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">-->\n" +
-    "                    <img border=\"0\" ng-src=\"{{::vm.pixelGifSrc}}\" width=\"1\" height=\"1\" alt=\"{{vm.translate('PURCHASE_POPUP.PAYPAL_IMG_ALT')}}\" >\n" +
-    "                </form>\n" +
-    "            </div>\n" +
-    "            <div class=\"upgrade-btn-wrapper\" ng-switch-default>\n" +
-    "                <button class=\"upgrade-btn-wrapper md-button success drop-shadow\"\n" +
-    "                        ng-click=\"vm.showPurchaseError()\"\n" +
-    "                        translate=\".UPGRADE_NOW\"\n" +
-    "                        name=\"submit\">\n" +
-    "                </button>\n" +
-    "            </div>\n" +
-    "        </ng-switch>\n" +
+    "        <div class=\"upgrade-btn-wrapper\">\n" +
+    "            <button class=\"md-button success drop-shadow inline-block\"\n" +
+    "                    ng-click=\"vm.purchaseZinkerzPro(); vm.saveAnalytics()\"\n" +
+    "                    translate=\".UPGRADE_NOW\"\n" +
+    "                    name=\"submit\">\n" +
+    "            </button>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "</ng-switch>\n" +
     "");
@@ -15919,6 +15848,8 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
                 const stripeToken = ENV.stripeToken;
                 const translate = $filter('translate');
                 const paymentApi = `${ENV.znkBackendBaseUrl}/payment`;
+                const STRIPE_SCRIPT_URL = 'https://checkout.stripe.com/checkout.js';
+                loadStripeScript();
 
                 /**
                  * Open stripe payment modal foe instant payment.
@@ -15947,6 +15878,14 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
 
                     return defer.promise;
                 };
+
+                // Load stripe module <script src="https://checkout.stripe.com/checkout.js"></script>
+                function loadStripeScript() {
+                    const scriptTag = document.getElementsByTagName('script')[0];
+                    const newScriptElm = $window.document.createElement('script');
+                    newScriptElm.src = STRIPE_SCRIPT_URL;
+                    scriptTag.parentNode.insertBefore(newScriptElm,scriptTag);
+                }
 
                 function handleModalClosed(serviceId, productId, tokenId, amount, description) {
                     let resToReturn = { closedByUser: true };
