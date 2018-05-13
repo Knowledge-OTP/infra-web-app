@@ -75,9 +75,10 @@
 
                 // Load stripe module <script src="https://checkout.stripe.com/checkout.js"></script>
                 function loadStripeScript() {
-                    const scriptElm = $window.document.createElement('script');
-                    scriptElm.src = STRIPE_SCRIPT_URL;
-                    $window.document.body.appendChild(scriptElm);
+                    const scriptTag = document.getElementsByTagName('script')[0];
+                    const newScriptElm = $window.document.createElement('script');
+                    newScriptElm.src = STRIPE_SCRIPT_URL;
+                    scriptTag.parentNode.insertBefore(newScriptElm,scriptTag);
                 }
 
                 function handleModalClosed(serviceId, productId, tokenId, amount, description) {
