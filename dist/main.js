@@ -14685,13 +14685,6 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                 var vm = this;
                 vm.translate = $filter('translate');
 
-                vm.saveAnalytics = function () {
-                    $timeout(function () {
-                        vm.purchaseState = PurchaseStateEnum.PENDING.enum;
-                    }, 0);
-                    znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
-                };
-
                 $scope.$watch(function () {
                     return vm.purchaseState;
                 }, function (newPurchaseState) {
@@ -14711,6 +14704,8 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 
                 vm.purchaseZinkerzPro = function () {
                     purchaseService.hidePurchaseDialog();
+                    $timeout(() => vm.purchaseState = PurchaseStateEnum.PENDING.enum);
+                    znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
                     purchaseService.getProduct().then(product => {
                         $log.debug(`purchaseZinkerzPro: productId: ${product.id}, price: ${product.price}`);
                         const name = vm.translate('PURCHASE_POPUP.UPGRADE_TO_ZINKERZ_PRO');
@@ -14718,11 +14713,14 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                         StripeService.openStripeModal(ENV.serviceId, product.id, product.price, name, description)
                             .then(stripeRes => {
                                 if (!stripeRes.closedByUser) {
-                                    $log.debug(`purchaseZinkerzPro: User is given zinkerz pro`);
+                                    purchaseService.setPendingPurchase();
+                                    $log.debug(`purchaseZinkerzPro: User update to pending purchase`);
                                     // The stripe web hook should update the firebase
                                     // and the getAndBindToServer should trigger the event to change purchaseState to pro
+                                    purchaseService.showPurchaseDialog();
                                 } else {
                                     $log.debug(`purchaseCredits: stripe modal closed by user`);
+                                    $timeout(() => vm.purchaseState = PurchaseStateEnum.NONE.enum);
                                 }
                             });
                     });
@@ -14852,15 +14850,43 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
         }]);
 })(angular);
 
+(function(){
+    'use strict';
+
+    angular.module('znk.infra-web-app.purchase').run(
+        // execute in APP load, to check if the student have zinkerz pro
+        ["$log", "ENV", "purchaseService", function($log, ENV, purchaseService){
+            'ngInject';
+
+            $log.debug('Check Purchase State');
+            const isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
+
+            if (!isTeacherApp) {
+                purchaseService.checkPendingStatus();
+
+                // run FB listener through bingToServer to detect whether the user has upgraded to PRO,
+                // if true, remove the pending purchase from FB
+                purchaseService.listenToPurchaseStatus();
+            }
+
+        }]
+    );
+})();
+
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-    ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-        PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
+        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
+                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
             'ngInject';
 
-            function getPath(param) {
+            var self = this;
+
+            var studentStorageProm = InfraConfigSrv.getStudentStorage();
+            var pendingPurchaseDefer;
+
+            self.getPath = function (param) {
                 return AuthService.getAuth().then(authData => {
                     if (!authData) {
                         $log.error('Invalid user');
@@ -14878,12 +14904,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                             return;
                     }
                 });
-            }
-
-            var self = this;
-
-            var studentStorageProm = InfraConfigSrv.getStudentStorage();
-            var pendingPurchaseDefer;
+            };
 
             self.checkUrlParams = function (params) {
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
@@ -14912,7 +14933,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
             };
 
             self.getPurchaseData = function () {
-                return getPath('purchase').then(purchasePath => {
+                return self.getPath('purchase').then(purchasePath => {
                     if (purchasePath) {
                         return studentStorageProm.then(function (studentStorage) {
                             return studentStorage.getAndBindToServer(purchasePath);
@@ -14925,7 +14946,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 
             self.checkPendingStatus = function () {
                 return studentStorageProm.then(function (studentStorage) {
-                    return getPath('pending').then(pendingPurchasesPath => {
+                    return self.getPath('pending').then(pendingPurchasesPath => {
                         return studentStorage.get(pendingPurchasesPath).then(function (pendingObj) {
                             var isPending = !angular.equals(pendingObj, {});
                             if (isPending) {
@@ -14939,33 +14960,6 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
-                return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm, getPath('pending')]).then(function (res) {
-                    var product = res[0];
-                    var isPurchased = res[1];
-                    var studentStorage = res[2];
-                    var pendingPurchasesPath = res[3];
-
-                    if (!isPurchased) {
-                        var pendingPurchaseVal = {
-                            id: product.id,
-                            purchaseTime: StorageSrv.variables.currTimeStamp
-                        };
-                        studentStorage.set(pendingPurchasesPath, pendingPurchaseVal);
-                    } else {
-                        znkAnalyticsSrv.eventTrack({
-                            eventName: 'purchaseOrderCompleted', props: product
-                        });
-                        if ($window.fbq) {
-                            $window.fbq('track', 'Purchase', {
-                                value: product.price,
-                                currency: 'USD'
-                            });
-                        }
-                    }
-                }).catch(function (err) {
-                    $log.error('setPendingPurchase promise failed', err);
-                    pendingPurchaseDefer.reject(err);
-                });
             };
 
             self.removePendingPurchase = function () {
@@ -14973,7 +14967,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
                     pendingPurchaseDefer.resolve();
                 }
                 studentStorageProm.then(function (studentStorage) {
-                    return getPath('pending').then(pendingPurchasesPath => {
+                    return self.getPath('pending').then(pendingPurchasesPath => {
                         return studentStorage.set(pendingPurchasesPath, null);
                     });
                 });
@@ -15114,7 +15108,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "    <div ng-switch-when=\"none\">\n" +
     "        <div class=\"upgrade-btn-wrapper\">\n" +
     "            <button class=\"md-button success drop-shadow inline-block\"\n" +
-    "                    ng-click=\"vm.purchaseZinkerzPro(); vm.saveAnalytics()\"\n" +
+    "                    ng-click=\"vm.purchaseZinkerzPro()\"\n" +
     "                    translate=\".UPGRADE_NOW\"\n" +
     "                    name=\"submit\">\n" +
     "            </button>\n" +
@@ -15429,7 +15423,8 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
     "                </div>\n" +
     "                <div class=\"action\">\n" +
     "                    <purchase-btn purchase-state=\"vm.purchaseState\" ng-if=\"!vm.promoStatus.isApproved\"></purchase-btn>\n" +
-    "                    <button class=\"upgrade-btn-wrapper md-button success action\" ng-if=\"vm.promoStatus.isApproved\" ng-click=\"vm.enablePromoCode(vm.promoStatus.promoKey)\"\n" +
+    "                    <button class=\"upgrade-btn-wrapper md-button success action\" ng-if=\"vm.promoStatus.isApproved\"\n" +
+    "                            ng-click=\"vm.enablePromoCode(vm.promoStatus.promoKey)\"\n" +
     "                        translate=\".UPGRADE_NOW\" name=\"submit\">\n" +
     "                    </button>\n" +
     "                </div>\n" +
@@ -15842,7 +15837,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
 
     angular.module('znk.infra-web-app.stripe')
         .service('StripeService',
-            ["$log", "$q", "$window", "$filter", "$http", "AuthService", "ENV", "CurrencyEnum", function ($log, $q, $window, $filter, $http, AuthService, ENV, CurrencyEnum) {
+            ["$log", "$q", "$window", "$filter", "$http", "AuthService", "ENV", "CurrencyEnum", "InfraConfigSrv", "purchaseService", "StorageSrv", function ($log, $q, $window, $filter, $http, AuthService, ENV, CurrencyEnum, InfraConfigSrv, purchaseService, StorageSrv) {
                 'ngInject';
 
                 const stripeToken = ENV.stripeToken;
@@ -15890,7 +15885,16 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
                 function handleModalClosed(serviceId, productId, tokenId, amount, description) {
                     let resToReturn = { closedByUser: true };
                     if (tokenId) {
-                        resToReturn = createInstantCharge(serviceId, productId, tokenId, amount, description);
+                        // Write to pending purchase path until the backend webhook will confirm the purchase
+                        resToReturn = $q.all([InfraConfigSrv.getStudentStorage(), purchaseService.getPath('pending')])
+                            .then(([studentStorage, pendingPurchasesPath]) => {
+                                const pendingPurchaseVal = {
+                                    id: productId,
+                                    purchaseTime: StorageSrv.variables.currTimeStamp
+                                };
+                                return studentStorage.set(pendingPurchasesPath, pendingPurchaseVal)
+                                    .then(() => createInstantCharge(serviceId, productId, tokenId, amount, description));
+                            });
                     }
 
                     return resToReturn;
