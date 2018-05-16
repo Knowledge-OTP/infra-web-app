@@ -15,13 +15,6 @@
                 var vm = this;
                 vm.translate = $filter('translate');
 
-                vm.saveAnalytics = function () {
-                    $timeout(function () {
-                        vm.purchaseState = PurchaseStateEnum.PENDING.enum;
-                    }, 0);
-                    znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
-                };
-
                 $scope.$watch(function () {
                     return vm.purchaseState;
                 }, function (newPurchaseState) {
@@ -41,6 +34,8 @@
 
                 vm.purchaseZinkerzPro = function () {
                     purchaseService.hidePurchaseDialog();
+                    $timeout(() => vm.purchaseState = PurchaseStateEnum.PENDING.enum);
+                    znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
                     purchaseService.getProduct().then(product => {
                         $log.debug(`purchaseZinkerzPro: productId: ${product.id}, price: ${product.price}`);
                         const name = vm.translate('PURCHASE_POPUP.UPGRADE_TO_ZINKERZ_PRO');
@@ -48,11 +43,14 @@
                         StripeService.openStripeModal(ENV.serviceId, product.id, product.price, name, description)
                             .then(stripeRes => {
                                 if (!stripeRes.closedByUser) {
-                                    $log.debug(`purchaseZinkerzPro: User is given zinkerz pro`);
+                                    purchaseService.setPendingPurchase();
+                                    $log.debug(`purchaseZinkerzPro: User update to pending purchase`);
                                     // The stripe web hook should update the firebase
                                     // and the getAndBindToServer should trigger the event to change purchaseState to pro
+                                    purchaseService.showPurchaseDialog();
                                 } else {
                                     $log.debug(`purchaseCredits: stripe modal closed by user`);
+                                    $timeout(() => vm.purchaseState = PurchaseStateEnum.NONE.enum);
                                 }
                             });
                     });

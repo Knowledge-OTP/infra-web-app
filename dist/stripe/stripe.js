@@ -36,7 +36,7 @@
 
     angular.module('znk.infra-web-app.stripe')
         .service('StripeService',
-            ["$log", "$q", "$window", "$filter", "$http", "AuthService", "ENV", "CurrencyEnum", function ($log, $q, $window, $filter, $http, AuthService, ENV, CurrencyEnum) {
+            ["$log", "$q", "$window", "$filter", "$http", "AuthService", "ENV", "CurrencyEnum", "InfraConfigSrv", "purchaseService", "StorageSrv", function ($log, $q, $window, $filter, $http, AuthService, ENV, CurrencyEnum, InfraConfigSrv, purchaseService, StorageSrv) {
                 'ngInject';
 
                 const stripeToken = ENV.stripeToken;
@@ -84,7 +84,16 @@
                 function handleModalClosed(serviceId, productId, tokenId, amount, description) {
                     let resToReturn = { closedByUser: true };
                     if (tokenId) {
-                        resToReturn = createInstantCharge(serviceId, productId, tokenId, amount, description);
+                        // Write to pending purchase path until the backend webhook will confirm the purchase
+                        resToReturn = $q.all([InfraConfigSrv.getStudentStorage(), purchaseService.getPath('pending')])
+                            .then(([studentStorage, pendingPurchasesPath]) => {
+                                const pendingPurchaseVal = {
+                                    id: productId,
+                                    purchaseTime: StorageSrv.variables.currTimeStamp
+                                };
+                                return studentStorage.set(pendingPurchasesPath, pendingPurchaseVal)
+                                    .then(() => createInstantCharge(serviceId, productId, tokenId, amount, description));
+                            });
                     }
 
                     return resToReturn;

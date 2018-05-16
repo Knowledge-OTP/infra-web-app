@@ -2,11 +2,16 @@
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-    function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-        PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
+        function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
+                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
             'ngInject';
 
-            function getPath(param) {
+            var self = this;
+
+            var studentStorageProm = InfraConfigSrv.getStudentStorage();
+            var pendingPurchaseDefer;
+
+            self.getPath = function (param) {
                 return AuthService.getAuth().then(authData => {
                     if (!authData) {
                         $log.error('Invalid user');
@@ -24,12 +29,7 @@
                             return;
                     }
                 });
-            }
-
-            var self = this;
-
-            var studentStorageProm = InfraConfigSrv.getStudentStorage();
-            var pendingPurchaseDefer;
+            };
 
             self.checkUrlParams = function (params) {
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
@@ -58,7 +58,7 @@
             };
 
             self.getPurchaseData = function () {
-                return getPath('purchase').then(purchasePath => {
+                return self.getPath('purchase').then(purchasePath => {
                     if (purchasePath) {
                         return studentStorageProm.then(function (studentStorage) {
                             return studentStorage.getAndBindToServer(purchasePath);
@@ -71,7 +71,7 @@
 
             self.checkPendingStatus = function () {
                 return studentStorageProm.then(function (studentStorage) {
-                    return getPath('pending').then(pendingPurchasesPath => {
+                    return self.getPath('pending').then(pendingPurchasesPath => {
                         return studentStorage.get(pendingPurchasesPath).then(function (pendingObj) {
                             var isPending = !angular.equals(pendingObj, {});
                             if (isPending) {
@@ -85,33 +85,6 @@
 
             self.setPendingPurchase = function () {
                 pendingPurchaseDefer = $q.defer();
-                return $q.all([self.getProduct(), self.hasProVersion(), studentStorageProm, getPath('pending')]).then(function (res) {
-                    var product = res[0];
-                    var isPurchased = res[1];
-                    var studentStorage = res[2];
-                    var pendingPurchasesPath = res[3];
-
-                    if (!isPurchased) {
-                        var pendingPurchaseVal = {
-                            id: product.id,
-                            purchaseTime: StorageSrv.variables.currTimeStamp
-                        };
-                        studentStorage.set(pendingPurchasesPath, pendingPurchaseVal);
-                    } else {
-                        znkAnalyticsSrv.eventTrack({
-                            eventName: 'purchaseOrderCompleted', props: product
-                        });
-                        if ($window.fbq) {
-                            $window.fbq('track', 'Purchase', {
-                                value: product.price,
-                                currency: 'USD'
-                            });
-                        }
-                    }
-                }).catch(function (err) {
-                    $log.error('setPendingPurchase promise failed', err);
-                    pendingPurchaseDefer.reject(err);
-                });
             };
 
             self.removePendingPurchase = function () {
@@ -119,7 +92,7 @@
                     pendingPurchaseDefer.resolve();
                 }
                 studentStorageProm.then(function (studentStorage) {
-                    return getPath('pending').then(pendingPurchasesPath => {
+                    return self.getPath('pending').then(pendingPurchasesPath => {
                         return studentStorage.set(pendingPurchasesPath, null);
                     });
                 });
