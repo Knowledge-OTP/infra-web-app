@@ -1353,7 +1353,10 @@
                 translationsPromMap.cancelBtnTitle = $translate('LIVE_SESSION.CANCEL');
                 return $q.all(translationsPromMap)
                     .then(translations => {
-                        PopUpSrv.wait(translations.title, translations.content, translations.cancelBtnTitle);
+                        let popUpInstance = PopUpSrv.wait(translations.title, translations.content, translations.cancelBtnTitle);
+                        return popUpInstance.promise
+                            .then(res => $q.resolve(res))
+                            .catch(err => $q.reject(err));
                     }).catch(err => {
                         $log.error('LiveSessionUiSrv: showEducatorPendingPopUp Error: ' + err);
                         return $q.reject(err);
