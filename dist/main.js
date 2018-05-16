@@ -742,13 +742,6 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                 }
             };
 
-            self.setZinkerzTeacher = function (profileZinkerzTeacherForm) {
-                if (profileZinkerzTeacherForm.$valid && profileZinkerzTeacherForm.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.isZinkerzTeacher)
-                        .then(_profileSuccess, _profileError);
-                }
-            };
-
             self.toggleZinkerzTeacher = function (isZinkerzTeacher) {
                 if (!self.profileData.teacherInfo) {
                     self.profileData.teacherInfo = {};
@@ -883,7 +876,6 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
 
 
                 var self = this;
-                var profilePath = ENV.backendEndpoint + "/teachworks/zinkerzTeacher/all";
 
                 self.showEducatorProfile = function (userProfile) {
                     if (!userProfile) {
@@ -926,22 +918,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
                     });
                     return deferred.promise;
                 };
-                self.setZinkerzTeacher = function (uid, subject, isZinkerzTeacher) {
-                    if (!uid) {
-                        $log.error('setZinkerzTeacher: no uid');
-                        return;
-                    }
-                    if (!subject) {
-                        $log.error('setZinkerzTeacher: no subject');
-                        return;
-                    }
-                    var profile = {
-                        userId: uid,
-                        isZinkerzTeacher: !!isZinkerzTeacher,
-                        teachingSubject: subject
-                    };
-                    return $http.post(profilePath, profile);
-                };
+
             }]
         );
 })(angular);
@@ -1668,8 +1645,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     "\n" +
     "        <md-dialog-content>\n" +
     "            <div class=\"container-title md-subheader\" translate=\".EMETADATA.ZINKERZ_EDUCATOR\"></div>\n" +
-    "            <form name=\"profileZinkerzTeacherForm\" novalidate class=\"auth-form\"\n" +
-    "                  ng-submit=\"vm.setZinkerzTeacher(profileZinkerzTeacherForm)\">\n" +
+    "            <form name=\"profileZinkerzTeacherForm\" novalidate class=\"auth-form\">\n" +
     "                <div class=\"znk-input-group\">\n" +
     "                    <label for=\"zinkerzTeacher\">{{'ADMIN.ESLINK.IS_ZINKERZ_EDUCATOR' | translate}}</label>\n" +
     "                    <div class=\"znk-input\">\n" +
@@ -8697,29 +8673,7 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
-    ])
-        .run(["$mdToast", "MyLiveLessons", function ($mdToast, MyLiveLessons) {
-            'ngInject';
-            MyLiveLessons.getClosestLiveLesson().then(function (closestLiveLessonObj) {
-                if (angular.isUndefined(closestLiveLessonObj.startTime)) {
-                    return;
-                }
-
-                var optionsOrPreset = {
-                    templateUrl: 'components/liveLessons/templates/upcomingLessonToast.template.html',
-                    hideDelay: false,
-                    controller: 'UpcomingLessonToasterController',
-                    controllerAs: 'vm',
-                    locals: {
-                        closestLiveLesson: closestLiveLessonObj
-                    }
-                };
-
-                $mdToast.cancel().then(function () {
-                    $mdToast.show(optionsOrPreset);
-                });
-            });
-        }]);
+    ]);
 })(window, angular);
 
 (function (angular) {
@@ -8834,25 +8788,24 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').service('MyLiveLessons',
-        ["$mdDialog", "UserProfileService", "$http", "$q", "$log", "ENV", "$filter", "InfraConfigSrv", "StudentContextSrv", "InvitationService", function ($mdDialog, UserProfileService, $http, $q, $log, ENV, $filter, InfraConfigSrv, StudentContextSrv, InvitationService) {
+    // Commenting this out - this feature is not relevaant in the MyZinkerz Era...
+        ["$mdDialog", "UserProfileService", "$http", "$q", "$log", "ENV", "$filter", function ($mdDialog, UserProfileService, $http, $q, $log, ENV, $filter) { // , InfraConfigSrv, StudentContextSrv, InvitationService) {
             'ngInject';
 
             var self = this;
-            var dataAsString;
-            var teachworksIdUrl = ENV.backendEndpoint + ENV.teachworksDataUrl;
             var teachworksId;
             var userId;
 
             function getLiveLessonsSchedule() {
                 var liveLessonsArr = [];
-                return $q.all([_getTeachworksData(), UserProfileService.getCurrUserId()]).then(function (res) {
-                    dataAsString = res[0];
-                    userId = res[1];
+                return $q.all([ UserProfileService.getCurrUserId()]).then(function (res) {
+                   userId = res[0];
                     return UserProfileService.getUserTeachWorksId(userId).then(function (teachworksIdObj) {
                         teachworksId = angular.isDefined(teachworksIdObj) ? teachworksIdObj.id : undefined;
-                        if (teachworksId && dataAsString) {
+                        if (teachworksId) {
+
                             teachworksId = teachworksId.replace(/\s/g, '').toLowerCase();
-                            var allRecordsData = dataAsString.match(/.*DTSTART(.|[\r\n])*?UID/g);
+                            var allRecordsData = [];
                             for (var i = 0; i < allRecordsData.length; i++) {
                                 if (isTeachworksIdMatch(allRecordsData[i])) {
                                     var liveLessonObject = _buildLiveLessonObj(allRecordsData[i]);
@@ -8867,31 +8820,21 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
                 });
             }
 
-            function _getTeachworksData() {
-                return $http({
-                    method: 'GET',
-                    url: teachworksIdUrl,
-                    cache: true
-                }).then(function successCallback(response) {
-                    return response.data;
-                }, function errorCallback(response) {
-                    $log.debug('myLiveLessons:' + response);
-                });
-            }
+            // Commenting this out - this feature is not relevaant in the MyZinkerz Era...
 
-            function _getEducatorProfileByTeachworksName(name) {
-                var connectedEducatorsList = _getApprovedEducatorsProfile();
-                var educators = Object.keys(connectedEducatorsList).map(function (keyItem) {
-                    return connectedEducatorsList[keyItem];
-                }).filter(function (EducatorObj) {
-                    return EducatorObj.educatorTeachworksName === name;
-                });
-                return educators.length ? educators[0] : {};
-            }
-            function _getApprovedEducatorsProfile() {
-                return InvitationService.getMyTeachers();
+            // function _getEducatorProfileByTeachworksName(name) {
+            //     var connectedEducatorsList = _getApprovedEducatorsProfile();
+            //     var educators = Object.keys(connectedEducatorsList).map(function (keyItem) {
+            //         return connectedEducatorsList[keyItem];
+            //     }).filter(function (EducatorObj) {
+            //         return EducatorObj.educatorTeachworksName === name;
+            //     });
+            //     return educators.length ? educators[0] : {};
+            // }
+            // function _getApprovedEducatorsProfile() {
+            //     return InvitationService.getMyTeachers();
 
-            }
+            // }
 
             self.getRelevantLiveLessons = function () {
                 return getLiveLessonsSchedule().then(function (liveLessonsArr) {
@@ -8943,26 +8886,28 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
                 });
             };
 
-            self.rescheduleModal = function (lessonObj) {
-                var educatorProfile = _getEducatorProfileByTeachworksName(lessonObj.educatorName);
-                UserProfileService.getProfile().then(function (studentProfile) {
-                    $mdDialog.show({
-                        templateUrl: 'components/liveLessons/templates/rescheduleLessonModal.template.html',
-                        disableParentScroll: false,
-                        clickOutsideToClose: true,
-                        fullscreen: false,
-                        controller: 'RescheduleLessonController',
-                        controllerAs: 'vm',
-                        locals: {
-                            lessonData: lessonObj,
-                            educatorProfileData: educatorProfile,
-                            studentData: {
-                                studentProfile: studentProfile,
-                                userId: userId
-                            }
-                        }
-                    });
-                });
+            self.rescheduleModal = function () { // function (lessonObj) {
+              // Commenting this out - this feature is not relevaant in the MyZinkerz Era...
+
+                // var educatorProfile = _getEducatorProfileByTeachworksName(lessonObj.educatorName);
+                // UserProfileService.getProfile().then(function (studentProfile) {
+                //     $mdDialog.show({
+                //         templateUrl: 'components/liveLessons/templates/rescheduleLessonModal.template.html',
+                //         disableParentScroll: false,
+                //         clickOutsideToClose: true,
+                //         fullscreen: false,
+                //         controller: 'RescheduleLessonController',
+                //         controllerAs: 'vm',
+                //         locals: {
+                //             lessonData: lessonObj,
+                //             educatorProfileData: educatorProfile,
+                //             studentData: {
+                //                 studentProfile: studentProfile,
+                //                 userId: userId
+                //             }
+                //         }
+                //     });
+                // });
             };
 
             // -------------------------------------parsing data------------------------------- //
@@ -11829,7 +11774,10 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                     var providerConfig = SatellizerConfig.providers && SatellizerConfig.providers[provider];
                     if (providerConfig) {
                         providerConfig.clientId = env[provider + 'AppId'];
-                        providerConfig.url = env.backendEndpoint + provider + '/code';
+                        providerConfig.url = 'https://znk-web-backend-prod.azurewebsites.net/' + provider + '/code';
+                        if (env.backendEndpoint.indexOf('dev')>-1){
+                            providerConfig.url = 'https://znk-web-backend-dev.azurewebsites.net/' + provider + '/code';
+                        }
                     }
                     if (provider === 'facebook') {
                         providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/';
@@ -11882,7 +11830,10 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                         .then(function () {
                             return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
                                 var appEnvConfig = _getAppEnvConfig(appContext);
-                                var postUrl = appEnvConfig.backendEndpoint + 'firebase/token2';
+                                var postUrl = 'https://znk-web-backend-prod.azurewebsites.net/firebase/token2';
+                                if (appEnvConfig.backendEndpoint.indexOf('dev')>-1){
+                                    postUrl = 'https://znk-web-backend-dev.azurewebsites.net/firebase/token2';
+                                }
                                 var postData = {
                                     email: authData.email || authData.auth.email || authData.auth.token.email,
                                     uid: authData.uid,
@@ -14393,7 +14344,8 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
                         backendEndpoint: ENV.backendEndpoint,
                         currentAppName: ENV.firebaseAppScopeName,
                         studentAppName: ENV.studentAppName,
-                        dashboardAppName: ENV.dashboardAppName
+                        dashboardAppName: ENV.dashboardAppName,
+                        serviceId: ENV.serviceId
                     };
                 }]);
             } catch(error){
@@ -14411,8 +14363,6 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
 
                 var promoCodeStatus;
                 var INVALID = 'PROMO_CODE.INVALID_CODE';
-                var promoCodeCheckBaseUrl = '%backendEndpoint%/promoCode/check';
-                var promoCodeUpdateBaseUrl = '%backendEndpoint%/promoCode/update';
                 var promoCodeToUpdate;
 
                 var promoCodeStatusText = {};
@@ -14422,11 +14372,10 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
 
                 promoCodeSrv.checkPromoCode = function (promoCode, currentApp) {
                     var backendEndpointUrl = backendData[currentApp].backendEndpoint;
-
-                    var promoCodeCheckUrl = promoCodeCheckBaseUrl;
-                    promoCodeCheckUrl = promoCodeCheckUrl.replace('%backendEndpoint%', backendEndpointUrl);
+                    var promoCodeCheckUrl = backendEndpointUrl + 'promoCode/check';
 
                     var dataToSend = {
+                        serviceId: backendData[currentApp].serviceId,
                         promoCode: promoCode,
                         studentAppName: backendData[currentApp].studentAppName
                     };
@@ -14448,14 +14397,15 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
 
                 promoCodeSrv.updatePromoCode = function (uid, promoCode, currentApp) {
                     var backendEndpointUrl = backendData[currentApp].backendEndpoint;
-                    var promoCodeUpdatekUrl = promoCodeUpdateBaseUrl.replace('%backendEndpoint%', backendEndpointUrl);
+                    var promoCodeUpdatekUrl = backendEndpointUrl + 'promoCode/update';
 
                     var dataToSend = {
                         currentAppName: backendData[currentApp].currentAppName,
                         studentAppName: backendData[currentApp].studentAppName,
                         dashboardAppName: backendData[currentApp].dashboardAppName,
                         uid: uid,
-                        promoCode: promoCode
+                        promoCode: promoCode,
+                        serviceId: backendData[currentApp].serviceId
                     };
                     return $http.post(promoCodeUpdatekUrl, dataToSend);
                 };

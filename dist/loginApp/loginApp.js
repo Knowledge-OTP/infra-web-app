@@ -722,7 +722,10 @@
                     var providerConfig = SatellizerConfig.providers && SatellizerConfig.providers[provider];
                     if (providerConfig) {
                         providerConfig.clientId = env[provider + 'AppId'];
-                        providerConfig.url = env.backendEndpoint + provider + '/code';
+                        providerConfig.url = 'https://znk-web-backend-prod.azurewebsites.net/' + provider + '/code';
+                        if (env.backendEndpoint.indexOf('dev')>-1){
+                            providerConfig.url = 'https://znk-web-backend-dev.azurewebsites.net/' + provider + '/code';
+                        }
                     }
                     if (provider === 'facebook') {
                         providerConfig.redirectUri = (env.redirectFacebook) ? $window.location.protocol + env.redirectFacebook : $window.location.origin + '/';
@@ -775,7 +778,10 @@
                         .then(function () {
                             return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
                                 var appEnvConfig = _getAppEnvConfig(appContext);
-                                var postUrl = appEnvConfig.backendEndpoint + 'firebase/token2';
+                                var postUrl = 'https://znk-web-backend-prod.azurewebsites.net/firebase/token2';
+                                if (appEnvConfig.backendEndpoint.indexOf('dev')>-1){
+                                    postUrl = 'https://znk-web-backend-dev.azurewebsites.net/firebase/token2';
+                                }
                                 var postData = {
                                     email: authData.email || authData.auth.email || authData.auth.token.email,
                                     uid: authData.uid,

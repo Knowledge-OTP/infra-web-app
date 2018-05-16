@@ -18,29 +18,7 @@
             };
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }
-    ])
-        .run(["$mdToast", "MyLiveLessons", function ($mdToast, MyLiveLessons) {
-            'ngInject';
-            MyLiveLessons.getClosestLiveLesson().then(function (closestLiveLessonObj) {
-                if (angular.isUndefined(closestLiveLessonObj.startTime)) {
-                    return;
-                }
-
-                var optionsOrPreset = {
-                    templateUrl: 'components/liveLessons/templates/upcomingLessonToast.template.html',
-                    hideDelay: false,
-                    controller: 'UpcomingLessonToasterController',
-                    controllerAs: 'vm',
-                    locals: {
-                        closestLiveLesson: closestLiveLessonObj
-                    }
-                };
-
-                $mdToast.cancel().then(function () {
-                    $mdToast.show(optionsOrPreset);
-                });
-            });
-        }]);
+    ]);
 })(window, angular);
 
 (function (angular) {
@@ -155,25 +133,24 @@
     'use strict';
 
     angular.module('znk.infra-web-app.liveLessons').service('MyLiveLessons',
-        ["$mdDialog", "UserProfileService", "$http", "$q", "$log", "ENV", "$filter", "InfraConfigSrv", "StudentContextSrv", "InvitationService", function ($mdDialog, UserProfileService, $http, $q, $log, ENV, $filter, InfraConfigSrv, StudentContextSrv, InvitationService) {
+    // Commenting this out - this feature is not relevaant in the MyZinkerz Era...
+        ["$mdDialog", "UserProfileService", "$http", "$q", "$log", "ENV", "$filter", function ($mdDialog, UserProfileService, $http, $q, $log, ENV, $filter) { // , InfraConfigSrv, StudentContextSrv, InvitationService) {
             'ngInject';
 
             var self = this;
-            var dataAsString;
-            var teachworksIdUrl = ENV.backendEndpoint + ENV.teachworksDataUrl;
             var teachworksId;
             var userId;
 
             function getLiveLessonsSchedule() {
                 var liveLessonsArr = [];
-                return $q.all([_getTeachworksData(), UserProfileService.getCurrUserId()]).then(function (res) {
-                    dataAsString = res[0];
-                    userId = res[1];
+                return $q.all([ UserProfileService.getCurrUserId()]).then(function (res) {
+                   userId = res[0];
                     return UserProfileService.getUserTeachWorksId(userId).then(function (teachworksIdObj) {
                         teachworksId = angular.isDefined(teachworksIdObj) ? teachworksIdObj.id : undefined;
-                        if (teachworksId && dataAsString) {
+                        if (teachworksId) {
+
                             teachworksId = teachworksId.replace(/\s/g, '').toLowerCase();
-                            var allRecordsData = dataAsString.match(/.*DTSTART(.|[\r\n])*?UID/g);
+                            var allRecordsData = [];
                             for (var i = 0; i < allRecordsData.length; i++) {
                                 if (isTeachworksIdMatch(allRecordsData[i])) {
                                     var liveLessonObject = _buildLiveLessonObj(allRecordsData[i]);
@@ -188,31 +165,21 @@
                 });
             }
 
-            function _getTeachworksData() {
-                return $http({
-                    method: 'GET',
-                    url: teachworksIdUrl,
-                    cache: true
-                }).then(function successCallback(response) {
-                    return response.data;
-                }, function errorCallback(response) {
-                    $log.debug('myLiveLessons:' + response);
-                });
-            }
+            // Commenting this out - this feature is not relevaant in the MyZinkerz Era...
 
-            function _getEducatorProfileByTeachworksName(name) {
-                var connectedEducatorsList = _getApprovedEducatorsProfile();
-                var educators = Object.keys(connectedEducatorsList).map(function (keyItem) {
-                    return connectedEducatorsList[keyItem];
-                }).filter(function (EducatorObj) {
-                    return EducatorObj.educatorTeachworksName === name;
-                });
-                return educators.length ? educators[0] : {};
-            }
-            function _getApprovedEducatorsProfile() {
-                return InvitationService.getMyTeachers();
+            // function _getEducatorProfileByTeachworksName(name) {
+            //     var connectedEducatorsList = _getApprovedEducatorsProfile();
+            //     var educators = Object.keys(connectedEducatorsList).map(function (keyItem) {
+            //         return connectedEducatorsList[keyItem];
+            //     }).filter(function (EducatorObj) {
+            //         return EducatorObj.educatorTeachworksName === name;
+            //     });
+            //     return educators.length ? educators[0] : {};
+            // }
+            // function _getApprovedEducatorsProfile() {
+            //     return InvitationService.getMyTeachers();
 
-            }
+            // }
 
             self.getRelevantLiveLessons = function () {
                 return getLiveLessonsSchedule().then(function (liveLessonsArr) {
@@ -264,26 +231,28 @@
                 });
             };
 
-            self.rescheduleModal = function (lessonObj) {
-                var educatorProfile = _getEducatorProfileByTeachworksName(lessonObj.educatorName);
-                UserProfileService.getProfile().then(function (studentProfile) {
-                    $mdDialog.show({
-                        templateUrl: 'components/liveLessons/templates/rescheduleLessonModal.template.html',
-                        disableParentScroll: false,
-                        clickOutsideToClose: true,
-                        fullscreen: false,
-                        controller: 'RescheduleLessonController',
-                        controllerAs: 'vm',
-                        locals: {
-                            lessonData: lessonObj,
-                            educatorProfileData: educatorProfile,
-                            studentData: {
-                                studentProfile: studentProfile,
-                                userId: userId
-                            }
-                        }
-                    });
-                });
+            self.rescheduleModal = function () { // function (lessonObj) {
+              // Commenting this out - this feature is not relevaant in the MyZinkerz Era...
+
+                // var educatorProfile = _getEducatorProfileByTeachworksName(lessonObj.educatorName);
+                // UserProfileService.getProfile().then(function (studentProfile) {
+                //     $mdDialog.show({
+                //         templateUrl: 'components/liveLessons/templates/rescheduleLessonModal.template.html',
+                //         disableParentScroll: false,
+                //         clickOutsideToClose: true,
+                //         fullscreen: false,
+                //         controller: 'RescheduleLessonController',
+                //         controllerAs: 'vm',
+                //         locals: {
+                //             lessonData: lessonObj,
+                //             educatorProfileData: educatorProfile,
+                //             studentData: {
+                //                 studentProfile: studentProfile,
+                //                 userId: userId
+                //             }
+                //         }
+                //     });
+                // });
             };
 
             // -------------------------------------parsing data------------------------------- //

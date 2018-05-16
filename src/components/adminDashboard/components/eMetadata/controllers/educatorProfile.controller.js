@@ -33,13 +33,6 @@
                 }
             };
 
-            self.setZinkerzTeacher = function (profileZinkerzTeacherForm) {
-                if (profileZinkerzTeacherForm.$valid && profileZinkerzTeacherForm.$dirty) {
-                    EMetadataService.setZinkerzTeacher(self.profileData.uid, self.profileData.zinkerzTeacherSubject, self.isZinkerzTeacher)
-                        .then(_profileSuccess, _profileError);
-                }
-            };
-
             self.toggleZinkerzTeacher = function (isZinkerzTeacher) {
                 if (!self.profileData.teacherInfo) {
                     self.profileData.teacherInfo = {};
