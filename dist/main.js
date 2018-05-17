@@ -11833,10 +11833,9 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                         .then(function () {
                             return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
                                 var appEnvConfig = _getAppEnvConfig(appContext);
-                                var postUrl = 'https://znk-web-backend-prod.azurewebsites.net/firebase/token2';
-                                if (appEnvConfig.backendEndpoint.indexOf('dev')>-1){
-                                    postUrl = 'https://znk-web-backend-dev.azurewebsites.net/firebase/token2';
-                                }
+                                var appName = appEnvConfig.appName.split('-')[0];
+                                // var postUrl = appEnvConfig.backendEndpoint + 'firebase/token2';
+                                var postUrl = 'https://dev-api.zinkerz.com/token/getservice';
                                 var postData = {
                                     email: authData.email || authData.auth.email || authData.auth.token.email,
                                     uid: authData.uid,
@@ -11844,13 +11843,15 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                                     fbEndpoint: appEnvConfig.fbGlobalEndPoint,
                                     auth: appEnvConfig.dataAuthSecret,
                                     token: authData.refreshToken,
+                                    service: appEnvConfig.serviceId,
                                     projectId: appEnvConfig.firebase_projectId
                                 };
                                 return authData.getIdToken().then((clientToken) => {
                                     postData.token = clientToken;
+                                    $http.defaults.headers.common.Authorization = 'Bearer ' + clientToken;
                                     return $http.post(postUrl, postData).then(function (token) {
                                         var appRef = _getAppRef(appContext, userContext);
-                                        return appRef.auth().signInWithCustomToken(token.data).then(function (res) {
+                                        return appRef.auth().signInWithCustomToken(token.data[appName]).then(function (res) {
                                             isLoginInProgress = false;
                                             if (!signUp) {
                                                 _redirectToPage(appContext, userContext);
