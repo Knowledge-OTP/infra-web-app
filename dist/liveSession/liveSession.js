@@ -183,7 +183,7 @@
                                 .then(lessons => {
                                     let lessonToReturn = null;
                                     if (lessons && lessons.length) {
-                                        lessons.sort(UtilitySrv.array.sortByField('date'));
+                                        lessons.sort((a, b) => a.date - b.date);
                                         lessonToReturn = this.getLessonInRange(lessons);
                                     }
                                     return lessonToReturn;

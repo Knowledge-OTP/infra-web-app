@@ -59,8 +59,7 @@
       -ms-flex-pack: distribute;
           justify-content: space-around; }
       .tutorials-list-pane .tutorials-list-container .flex-container.blur {
-        -webkit-filter: blur(7px);
-                filter: blur(7px);
+        filter: blur(7px);
         opacity: 0.5; }
 
 .tutorial-item {
