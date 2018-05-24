@@ -9429,7 +9429,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                                 .then(lessons => {
                                     let lessonToReturn = null;
                                     if (lessons && lessons.length) {
-                                        lessons.sort(UtilitySrv.array.sortByField('date'));
+                                        lessons.sort((a, b) => a.date - b.date);
                                         lessonToReturn = this.getLessonInRange(lessons);
                                     }
                                     return lessonToReturn;
@@ -9531,16 +9531,20 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
                     if (!back2BackLessons[0].backToBackId) {
                         let newB2BLessonId = UtilitySrv.general.createGuid();
                         let updateB2BLessonProms = [];
+                        if (!back2BackLessons[0].lessonSummaryId) { // scheduledLesson === back2BackLessons[0]
+                            // add lessonSummaryId to scheduledLesson if there isn't
+                            const newLessonSummary = ZnkLessonNotesUiSrv.newLessonSummary();
+                            newLessonSummary.studentIds = Object.keys(back2BackLessons[0].students);
+                            newLessonSummary.educatorId = back2BackLessons[0].educatorId;
+                            back2BackLessons[0].lessonSummaryId = newLessonSummary.id;
+                            ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
+                                .then('checkBack2BackLesson: saveLessonSummary: new lesson summary saved. id: ', newLessonSummary.id)
+                                .catch('checkBack2BackLesson: saveLessonSummary: Failed to save LessonSummary. id: ', newLessonSummary.id);
+                        }
                         back2BackLessons.forEach(b2bLesson => {
+                            // update all back2BackLessons with scheduledLesson.lessonSummaryId
                             if (!b2bLesson.lessonSummaryId) {
-                                // add lessonSummaryId to scheduledLesson or all back2BackLessons if there isn't
-                                const newLessonSummary = ZnkLessonNotesUiSrv.newLessonSummary();
-                                newLessonSummary.studentIds = Object.keys(b2bLesson.students);
-                                newLessonSummary.educatorId = b2bLesson.educatorId;
-                                b2bLesson.lessonSummaryId = newLessonSummary.id;
-                                ZnkLessonNotesSrv.saveLessonSummary(newLessonSummary)
-                                    .then('checkBack2BackLesson: saveLessonSummary: new lesson summary saved. id: ', newLessonSummary.id)
-                                    .catch('checkBack2BackLesson: saveLessonSummary: Failed to save LessonSummary. id: ', newLessonSummary.id);
+                                b2bLesson.lessonSummaryId = back2BackLessons[0].lessonSummaryId;
                             }
                             b2bLesson.backToBackId = newB2BLessonId;
                             updateB2BLessonProms.push(ZnkLessonNotesSrv.updateLesson(b2bLesson));
