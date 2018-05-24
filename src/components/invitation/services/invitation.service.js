@@ -328,6 +328,7 @@
                             teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
                             teacher.educatorTeachworksName = profile.educatorTeachworksName;
                             teacher.educatorAvailabilityHours = profile.educatorAvailabilityHours;
+                            teacher.teacherInfo = profile.teacherInfo;
 
                             myTeachers[teacher.senderUid] = teacher;
                             angular.forEach(registerEvents[StudentContextSrv.getCurrUid()][self.listeners.USER_TEACHERS].cb, function (cb) {
