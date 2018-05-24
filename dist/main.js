@@ -11834,8 +11834,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
                             return globalRef.auth().signInWithEmailAndPassword(formData.email, formData.password).then(function (authData) {
                                 var appEnvConfig = _getAppEnvConfig(appContext);
                                 var appName = appEnvConfig.appName.split('-')[0];
-                                // var postUrl = appEnvConfig.backendEndpoint + 'firebase/token2';
-                                var postUrl = 'https://dev-api.zinkerz.com/token/getservice';
+                                var postUrl = appEnvConfig.znkBackendBaseUrl + '/token/getservice';
                                 var postData = {
                                     email: authData.email || authData.auth.email || authData.auth.token.email,
                                     uid: authData.uid,
