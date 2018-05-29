@@ -19302,6 +19302,9 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
                 vm.subscriptionStatus = pendingPurchaseProm ? '.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
                 vm.myZinkerzUrl = ENV.myZinkerz;
+                vm.showReviewCreditBtn = false;
+                const isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
+                const globalVariablesProm = znkHeaderSrv.getGlobalVariables();
 
                 vm.goToMyZinkerz = function (route) {
                     NavigationService.navigateToMyZinkerz(route);
@@ -19326,6 +19329,14 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                         if (hasProVersion) {
                             vm.purchaseState = PurchaseStateEnum.PRO.enum;
                             vm.subscriptionStatus = '.PROFILE_STATUS_PRO';
+                            if (!isTeacherApp) {
+                                // If we have the current service ID with an amount for initial review credits under the
+                                // globalVariable.manualReviewInitProCredits, then it means the current app is an app
+                                // that uses review credits, so we need to show this component.
+                                globalVariablesProm.then(globalVariables => {
+                                    vm.showReviewCreditBtn = Object.keys(globalVariables.manualReviewInitProCredits).includes(ENV.serviceId);
+                                });
+                            }
                         }
                     });
                 }, true);
@@ -19390,9 +19401,11 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 }
             };
 
-            this.$get = function () {
+            this.$get = ["$http", "$log", "ENV", function ($http, $log, ENV) {
                 'ngInject';
+
                 var navItemsArray = [];
+                const globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
 
                 function addDefaultNavItem(_text, _goToState, _stateOpt) {
 
@@ -19414,9 +19427,15 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 return {
                     getAdditionalItems: function () {
                         return navItemsArray.concat(additionalNavMenuItems);  // return array of default nav items with additional nav items
-                    }
+                    },
+
+                    getGlobalVariables:  function () {
+                    return $http.get(`${globalBackendUrl}`, { timeout: ENV.promiseTimeOut, cache: true })
+                            .then(globalVariables => globalVariables.data)
+                            .catch((err) => $log.error('znkHeaderSrv: getGlobalVariables: Failed to get global variables. Error: ', err));
+                        }
                 };
-            };
+            }];
 
         }
     );
@@ -19445,11 +19464,14 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     "            </md-list>\n" +
     "        </div>\n" +
     "        <div class=\"app-user-area\" layout=\"row\" layout-align=\"center center\">\n" +
-    "            <div class=\"profile-status\" ng-click=\"vm.showPurchaseDialog()\">\n" +
+    "            <div class=\"profile-status\" ng-click=\"vm.showPurchaseDialog()\" ng-if=\"!vm.showReviewCreditBtn\">\n" +
     "                <div class=\"pending-purchase-icon-wrapper\" ng-if=\"vm.purchaseState === 'pending'\">\n" +
     "                    <svg-icon name=\"pending-purchase-clock-icon\"></svg-icon>\n" +
     "                </div>\n" +
     "                <span translate=\"{{vm.subscriptionStatus}}\" translate-compile></span>\n" +
+    "            </div>\n" +
+    "            <div class=\"review-credit-container\" ng-if=\"vm.showReviewCreditBtn\">\n" +
+    "                <purchase-credits-btn></purchase-credits-btn>\n" +
     "            </div>\n" +
     "            <md-menu md-offset=\"-61 68\">\n" +
     "                <md-button ng-click=\"$mdOpenMenu($event); vm.znkOpenModal();\" class=\"md-icon-button profile-open-modal-btn\" aria-label=\"Open sample menu\">\n" +

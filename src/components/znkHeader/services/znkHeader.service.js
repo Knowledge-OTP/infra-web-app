@@ -20,9 +20,11 @@
                 }
             };
 
-            this.$get = function () {
+            this.$get = function ($http, $log, ENV) {
                 'ngInject';
+
                 var navItemsArray = [];
+                const globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
 
                 function addDefaultNavItem(_text, _goToState, _stateOpt) {
 
@@ -44,7 +46,13 @@
                 return {
                     getAdditionalItems: function () {
                         return navItemsArray.concat(additionalNavMenuItems);  // return array of default nav items with additional nav items
-                    }
+                    },
+
+                    getGlobalVariables:  function () {
+                    return $http.get(`${globalBackendUrl}`, { timeout: ENV.promiseTimeOut, cache: true })
+                            .then(globalVariables => globalVariables.data)
+                            .catch((err) => $log.error('znkHeaderSrv: getGlobalVariables: Failed to get global variables. Error: ', err));
+                        }
                 };
             };
 

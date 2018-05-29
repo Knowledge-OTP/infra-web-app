@@ -18,11 +18,14 @@
             </md-list>
         </div>
         <div class="app-user-area" layout="row" layout-align="center center">
-            <div class="profile-status" ng-click="vm.showPurchaseDialog()">
+            <div class="profile-status" ng-click="vm.showPurchaseDialog()" ng-if="!vm.showReviewCreditBtn">
                 <div class="pending-purchase-icon-wrapper" ng-if="vm.purchaseState === 'pending'">
                     <svg-icon name="pending-purchase-clock-icon"></svg-icon>
                 </div>
                 <span translate="{{vm.subscriptionStatus}}" translate-compile></span>
+            </div>
+            <div class="review-credit-container" ng-if="vm.showReviewCreditBtn">
+                <purchase-credits-btn></purchase-credits-btn>
             </div>
             <md-menu md-offset="-61 68">
                 <md-button ng-click="$mdOpenMenu($event); vm.znkOpenModal();" class="md-icon-button profile-open-modal-btn" aria-label="Open sample menu">
