@@ -23,6 +23,9 @@
                 vm.purchaseState = pendingPurchaseProm ? PurchaseStateEnum.PENDING.enum : PurchaseStateEnum.NONE.enum;
                 vm.subscriptionStatus = pendingPurchaseProm ? '.PROFILE_STATUS_PENDING' : '.PROFILE_STATUS_BASIC';
                 vm.myZinkerzUrl = ENV.myZinkerz;
+                vm.showReviewCreditBtn = false;
+                const isTeacherApp = (ENV.appContext.toLowerCase()) === 'dashboard';
+                const globalVariablesProm = znkHeaderSrv.getGlobalVariables();
 
                 vm.goToMyZinkerz = function (route) {
                     NavigationService.navigateToMyZinkerz(route);
@@ -47,6 +50,11 @@
                         if (hasProVersion) {
                             vm.purchaseState = PurchaseStateEnum.PRO.enum;
                             vm.subscriptionStatus = '.PROFILE_STATUS_PRO';
+                            if (!isTeacherApp) {
+                                globalVariablesProm.then(globalVariables => {
+                                    vm.showReviewCreditBtn = Object.keys(globalVariables.manualReviewInitProCredits).includes(ENV.serviceId);
+                                });
+                            }
                         }
                     });
                 }, true);
