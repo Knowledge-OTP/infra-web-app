@@ -79,6 +79,9 @@
                             vm.purchaseState = PurchaseStateEnum.PRO.enum;
                             vm.subscriptionStatus = '.PROFILE_STATUS_PRO';
                             if (!isTeacherApp) {
+                                // If we have the current service ID with an amount for initial review credits under the
+                                // globalVariable.manualReviewInitProCredits, then it means the current app is an app
+                                // that uses review credits, so we need to show this component.
                                 globalVariablesProm.then(globalVariables => {
                                     vm.showReviewCreditBtn = Object.keys(globalVariables.manualReviewInitProCredits).includes(ENV.serviceId);
                                 });
