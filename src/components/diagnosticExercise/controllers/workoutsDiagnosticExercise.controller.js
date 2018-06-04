@@ -7,7 +7,7 @@
         function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                  $translate, ExerciseReviewStatusEnum, CategoryService) {
+                  $translate, ExerciseReviewStatusEnum, CategoryService, MarketingStatusEnum) {
             'ngInject';
             var self = this;
             this.subjectId = (typeof exerciseData.questionsData.subjectId === 'undefined' || exerciseData.questionsData.subjectId === null) ?
@@ -305,7 +305,22 @@
                                 }
                             });
                             if (isLastSubject) {
-                                _goToCurrentState(true);
+                                WorkoutsDiagnosticFlow.getMarketingToeflByStatus(MarketingStatusEnum.DIAGNOSTIC.enum).then(function (status) {
+                                    if (status) {
+                                        WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
+                                            if (globalVariable && globalVariable.abTesting) {
+                                                const abTestingNum = parseFloat(globalVariable.abTesting);
+                                                const selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
+                                                WorkoutsDiagnosticFlow.setMarketingToeflAbTest(selectedNum).then(function () {
+                                                    $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
+                                                    _goToCurrentState(true);
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        _goToCurrentState(true);
+                                    }
+                                });
                             } else {
                                 _goToCurrentState();
                             }

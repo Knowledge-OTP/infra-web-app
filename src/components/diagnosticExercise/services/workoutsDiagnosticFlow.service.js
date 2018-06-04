@@ -10,7 +10,7 @@
         };
 
         this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
+            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService, $http, ENV, StorageSrv) {
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
@@ -34,7 +34,31 @@
                 workoutsDiagnosticFlowObjApi.getCurrentState = function () {
                     return currentState;
                 };
+                workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/status/${marketingStatus}`;
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.get(marketingPath).then(function (status) {
+                            return !!status;
+                        });
+                    });
+                };
 
+                workoutsDiagnosticFlowObjApi.setMarketingToeflAbTest = function (abTest) {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/abTesting`;
+
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.update(marketingPath, abTest).then(function (status) {
+                            return status;
+                        });
+                    });
+                };
+
+                workoutsDiagnosticFlowObjApi.getGlobalVariables = function{
+                    var globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
+                    return $http.get(`${globalBackendUrl}`, {timeout: ENV.promiseTimeOut, cache: true})
+                        .then(globalVariables => globalVariables.data)
+                        .catch((err) => $log.error('getGlobalVariables: Failed to get global variables. Error: ', err));
+                };
                 var diagnosticSettings = workoutsDiagnosticFlowObjApi.getDiagnosticSettings();
 
                 function _getDataProm() {
@@ -152,7 +176,7 @@
                             examResults.$save();
                         }
 
-                        skipIntroBool = forceSkipIntro? forceSkipIntro : false;
+                        skipIntroBool = forceSkipIntro ? forceSkipIntro : false;
 
                         var exerciseResultPromises = _getExerciseResultProms(examResults.sectionResults, exam.id);
 
