@@ -12,7 +12,7 @@
                     resolve: {
                         currentState: function currentState(WorkoutsDiagnosticFlow, $stateParams) {
                             'ngInject';// jshint ignore:line
-                            return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro, $stateParams.forceSkipIntro );
+                            return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro, $stateParams.forceSkipIntro);
                         }
                     },
                     controller: 'WorkoutsDiagnosticController',
@@ -80,16 +80,16 @@
                         var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                         var lastQuestion = questionResults[questionResults.length - 1];
 
-                        var isCurrentQuestion = function(question) {
+                        var isCurrentQuestion = function (question) {
                             return question.questionId === currentSection.currentQuestion.id;
                         };
-                        var isLastQuestion = function() {
+                        var isLastQuestion = function () {
                             return isCurrentQuestion(lastQuestion);
                         };
 
                         if (currentSection.currentQuestion) {
-                            if(!diagnosticSettings.isFixed) {
-                                if(isLastQuestion()) {
+                            if (!diagnosticSettings.isFixed) {
+                                if (isLastQuestion()) {
                                     delete lastQuestion.userAnswer;
                                 } else {
                                     questionResults.pop();
@@ -97,7 +97,7 @@
                                 }
                             } else {
                                 var answersArr = questionResults.filter(isCurrentQuestion);
-                                if(answersArr.length > 0) {
+                                if (answersArr.length > 0) {
                                     delete answersArr[0].userAnswer;
                                 }
                             }
@@ -107,10 +107,17 @@
                 })
                 .state('app.diagnostic.preSummary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
-                    controller: ['$timeout', '$state', function ($timeout, $state) {
+                    controller: ['$timeout', '$state', function ($timeout, $state, ENV, WorkoutsDiagnosticFlow) {
                         var VIDEO_DURATION = 6000;
                         $timeout(function () {
-                            $state.go('app.diagnostic.summary');
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    var state = marketingObj.status === 1 ? 'email' : 'purchase';
+                                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+                                } else {
+                                    $state.go('app.diagnostic.summary');
+                                }
+                            });
                         }, VIDEO_DURATION);
                     }],
                     controllerAs: 'vm'

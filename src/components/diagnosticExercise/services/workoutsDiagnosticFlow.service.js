@@ -42,18 +42,28 @@
                         });
                     });
                 };
-
-                workoutsDiagnosticFlowObjApi.setMarketingToeflAbTest = function (abTest) {
-                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/abTesting`;
-
+                workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                     return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.update(marketingPath, abTest).then(function (status) {
+                        return studentStorage.get(marketingPath).then(function (marketing) {
+                            return marketing;
+                        });
+                    });
+                };
+                workoutsDiagnosticFlowObjApi.setMarketingToeflStatusAndAbTest = function (abTest, status) {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                    var data = {
+                        'abTesting': abTest,
+                        'status': status
+                    };
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.update(marketingPath, data).then(function (status) {
                             return status;
                         });
                     });
                 };
 
-                workoutsDiagnosticFlowObjApi.getGlobalVariables = function{
+                workoutsDiagnosticFlowObjApi.getGlobalVariables = function () {
                     var globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
                     return $http.get(`${globalBackendUrl}`, {timeout: ENV.promiseTimeOut, cache: true})
                         .then(globalVariables => globalVariables.data)
