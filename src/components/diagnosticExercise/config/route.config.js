@@ -112,7 +112,7 @@
                         $timeout(function () {
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                                 if (marketingObj && marketingObj.status) {
-                                    var state = marketingObj.status === 1 ? 'email' : 'purchase';
+                                    var state = marketingObj.status === 2 ? 'email' : 'purchase';
                                     window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
                                 } else {
                                     $state.go('app.diagnostic.summary');

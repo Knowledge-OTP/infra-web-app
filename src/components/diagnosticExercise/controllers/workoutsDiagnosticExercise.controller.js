@@ -311,7 +311,7 @@
                                             if (globalVariable && globalVariable.abTesting) {
                                                 const abTestingNum = parseFloat(globalVariable.abTesting);
                                                 const selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
-                                                const selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PURCHASED.enum;
+                                                const selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
                                                 WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
                                                     $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
                                                     _goToCurrentState(true);
