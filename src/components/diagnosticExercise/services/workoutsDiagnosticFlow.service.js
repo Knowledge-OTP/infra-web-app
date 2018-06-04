@@ -9,8 +9,8 @@
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService, $http, ENV, StorageSrv) {
+        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService', '$http', 'ENV', 'StorageSrv', 'InfraConfigSrv',
+            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService, $http, ENV, StorageSrv, InfraConfigSrv) {
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
