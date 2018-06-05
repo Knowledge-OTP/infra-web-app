@@ -4632,7 +4632,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/status/${marketingStatus}`;
                     return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                         return studentStorage.get(marketingPath).then(function (status) {
-                            return !!status;
+                            return Object.keys(status).length>0;
                         });
                     });
                 };
