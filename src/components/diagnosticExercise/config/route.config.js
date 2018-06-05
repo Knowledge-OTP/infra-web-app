@@ -107,7 +107,7 @@
                 })
                 .state('app.diagnostic.preSummary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
-                    controller: ['$timeout', '$state', function ($timeout, $state, ENV, WorkoutsDiagnosticFlow) {
+                    controller: ['$timeout', '$state', 'ENV', 'WorkoutsDiagnosticFlow', function ($timeout, $state, ENV, WorkoutsDiagnosticFlow) {
                         var VIDEO_DURATION = 6000;
                         $timeout(function () {
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
