@@ -1,0 +1,212 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
+/* Lato fonts from google*/
+@import url(//fonts.googleapis.com/css?family=Lato:300);
+@import url(//fonts.googleapis.com/css?family=Lato:300italic);
+@import url(//fonts.googleapis.com/css?family=Lato:400);
+@import url(//fonts.googleapis.com/css?family=Lato:400italic);
+/* Quicksand fonts */
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+@import url(//fonts.googleapis.com/css?family=Quicksand:300);
+@import url(//fonts.googleapis.com/css?family=Quicksand:700);
+/* Material+Icons */
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
+/* full background image with retina */
+active-panel {
+  outline: none; }
+  active-panel .active-panel {
+    z-index: 9999;
+    height: 40px;
+    background-color: #f7f7f7;
+    border: 1px solid #ebebeb;
+    border-radius: 20px;
+    outline: none; }
+    active-panel .active-panel.ng-animate {
+      transition: 0s none;
+      -webkit-transition: 0s none;
+      animation: 0s none;
+      -webkit-animation: 0s none; }
+    active-panel .active-panel .flex-container {
+      height: 100%;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center;
+      padding: 0 5px; }
+      active-panel .active-panel .flex-container .flex-col.callee-status {
+        -ms-flex-item-align: center;
+            align-self: center;
+        margin: 0 5px; }
+        active-panel .active-panel .flex-container .flex-col.callee-status .online-indicator {
+          display: inline-block;
+          background: #87ca4d;
+          width: 7px;
+          height: 7px;
+          border-radius: 6px; }
+          active-panel .active-panel .flex-container .flex-col.callee-status .online-indicator.offline {
+            background: #B33520; }
+          active-panel .active-panel .flex-container .flex-col.callee-status .online-indicator.online {
+            background: #87ca4d; }
+          active-panel .active-panel .flex-container .flex-col.callee-status .online-indicator.idle {
+            background: #dbb910; }
+      active-panel .active-panel .flex-container .flex-col.callee-name {
+        font-size: 14px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        margin-right: 20px; }
+        active-panel .active-panel .flex-container .flex-col.callee-name .live-session-duration {
+          font-size: 12px;
+          color: #979797;
+          font-family: Lato;
+          font-weight: 400; }
+      active-panel .active-panel .flex-container .flex-col.call-controls {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+            justify-content: center;
+        -ms-flex-align: center;
+            align-items: center; }
+        active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap {
+          display: -ms-flexbox;
+          display: flex; }
+          active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap svg-icon:focus {
+            outline: none; }
+          active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen {
+            display: -ms-flexbox;
+            display: flex; }
+            active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen .show-other-screen.disabled svg-icon.active-panel-track-student-icon,
+            active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen .show-other-screen.disabled svg-icon.active-panel-track-teacher-icon {
+              background-color: #8abec4; }
+            active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen .show-other-screen,
+            active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.share-my-screen,
+            active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.active-panel-stop-sharing-icon {
+              outline: none;
+              margin-left: 10px; }
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen .show-other-screen.disabled,
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen .show-other-screen.disabled svg-icon,
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.share-my-screen.disabled,
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.share-my-screen.disabled svg-icon,
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.active-panel-stop-sharing-icon.disabled,
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.active-panel-stop-sharing-icon.disabled svg-icon {
+                cursor: default;
+                transition: 1.5s; }
+            active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.share-my-screen {
+              cursor: pointer;
+              width: 28px;
+              height: 28px;
+              border-radius: 50%;
+              background-color: #ff931e;
+              margin-left: 10px; }
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.share-my-screen.disabled {
+                background-color: #e1b688; }
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.share-my-screen svg {
+                width: 44%; }
+                active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.share-my-screen svg path {
+                  fill: #ffffff; }
+            active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.active-panel-track-student-icon,
+            active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.active-panel-track-teacher-icon {
+              cursor: pointer;
+              width: 28px;
+              height: 28px;
+              border-radius: 50%;
+              background-color: #0a9bad; }
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.active-panel-track-student-icon svg,
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.active-panel-track-teacher-icon svg {
+                width: 44%; }
+                active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.active-panel-track-student-icon svg path,
+                active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .active-share-screen svg-icon.active-panel-track-teacher-icon svg path {
+                  fill: #ffffff; }
+          active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .end-share-screen {
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            margin-left: 10px;
+            background-color: #ffffff; }
+            active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .end-share-screen svg {
+              width: 100%; }
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .end-share-screen svg .st1 {
+                fill: #ff931e; }
+            active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .end-share-screen.isViewer svg {
+              width: 100%; }
+              active-panel .active-panel .flex-container .flex-col.call-controls .share-screen-icon-wrap .end-share-screen.isViewer svg .st1 {
+                fill: #0a9bad; }
+        active-panel .active-panel .flex-container .flex-col.call-controls call-btn {
+          margin-left: 10px; }
+          active-panel .active-panel .flex-container .flex-col.call-controls call-btn svg-icon.etutoring-phone-icon {
+            width: 28px;
+            height: 28px; }
+            active-panel .active-panel .flex-container .flex-col.call-controls call-btn svg-icon.etutoring-phone-icon svg {
+              width: 46%; }
+        active-panel .active-panel .flex-container .flex-col.call-controls .hangouts-icon {
+          display: block;
+          width: 18px;
+          padding: 5px;
+          border-radius: 50%;
+          border: 1px solid #b7b7b7;
+          margin-left: 10px; }
+          active-panel .active-panel .flex-container .flex-col.call-controls .hangouts-icon svg * {
+            fill: #b7b7b7; }
+          active-panel .active-panel .flex-container .flex-col.call-controls .hangouts-icon.available {
+            cursor: pointer;
+            background-color: #ffffff; }
+            active-panel .active-panel .flex-container .flex-col.call-controls .hangouts-icon.available svg * {
+              fill: #12B347; }
+        active-panel .active-panel .flex-container .flex-col.call-controls .end-session-wrap {
+          display: -ms-flexbox;
+          display: flex; }
+          active-panel .active-panel .flex-container .flex-col.call-controls .end-session-wrap .seperator {
+            width: 2px;
+            height: 28px;
+            background: #e1e1e1;
+            margin: 0 10px; }
+          active-panel .active-panel .flex-container .flex-col.call-controls .end-session-wrap .end-session-btn {
+            font-size: 14px;
+            color: #ffffff;
+            font-family: Lato;
+            font-weight: 400;
+            text-transform: none;
+            background-color: #ff6766;
+            padding: 0;
+            margin: 0;
+            width: 60px;
+            height: 30px;
+            min-height: 30px;
+            min-width: 60px;
+            line-height: 28px;
+            border-radius: 15px;
+            outline: none;
+            cursor: pointer; }
+            active-panel .active-panel .flex-container .flex-col.call-controls .end-session-wrap .end-session-btn:not([disabled]):hover {
+              background-color: #ff6766;
+              border: 1px solid #b7b7b7; }
+            active-panel .active-panel .flex-container .flex-col.call-controls .end-session-wrap .end-session-btn span {
+              text-transform: uppercase; }
+    active-panel .active-panel .active-panel-overlay {
+      width: 100%;
+      height: 42px;
+      position: fixed;
+      top: 8px;
+      opacity: 0; }
+  active-panel.screen-share-mode .active-panel {
+    background-color: #464646; }
+    active-panel.screen-share-mode .active-panel .callee-name {
+      color: #ffffff; }

@@ -1,0 +1,172 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
+/* full background image with retina */
+/* full background image with retina */
+@import url(//fonts.googleapis.com/css?family=Lato:300);
+@import url(//fonts.googleapis.com/css?family=Lato:300italic);
+@import url(//fonts.googleapis.com/css?family=Lato:400);
+@import url(//fonts.googleapis.com/css?family=Lato:400italic);
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+@import url(//fonts.googleapis.com/css?family=Quicksand:300);
+@import url(//fonts.googleapis.com/css?family=Quicksand:700);
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg {
+  width: 12px; }
+  .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg * {
+    fill: #e1dfe3; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starEmpty svg * {
+  fill: #e1dfe3; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starHalf svg .firstPath {
+  fill: #edc811; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starHalf svg .secondPath {
+  fill: #e1dfe3; }
+
+.evaluate-result-wrapper .evaluate-stars-wrapper svg-icon.starFull svg * {
+  fill: #edc811; }
+
+.evaluate-review-states-wrapper {
+  min-height: 80px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  width: 100%;
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.23);
+  margin-top: -23px; }
+  .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase {
+    display: -ms-flexbox;
+    display: flex;
+    margin-top: 15px; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase .upgrade-btn {
+      background: transparent;
+      border: none;
+      margin-left: 10px;
+      font-size: 16px;
+      color: #0a9bad;
+      font-family: Lato;
+      font-weight: 400; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-not-purchase .upgrade-text {
+      font-size: 18px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 400; }
+  .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-pending {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-pending .pending-title {
+      font-size: 18px;
+      color: #4f4d4d;
+      font-family: Quicksand;
+      font-weight: 400;
+      margin-top: 20px;
+      margin-bottom: 3px; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-pending .pending-desc {
+      font-size: 12px;
+      color: #757a83;
+      font-family: Lato;
+      font-weight: 300; }
+  .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated {
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 20px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 400; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluated-answer-title {
+      margin-right: 8px; }
+    .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper {
+      display: -ms-flexbox;
+      display: flex; }
+      .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-status-wrapper {
+        display: -ms-flexbox;
+        display: flex; }
+        .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-status-wrapper .evaluate-text {
+          font-weight: 700;
+          margin-right: 5px; }
+      .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper {
+        margin-left: 15px; }
+        .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon {
+          margin-left: 5px; }
+          .evaluate-review-states-wrapper .evaluate-review-states-switch .evaluate-review-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg {
+            width: 15px; }
+
+.evaluate-question-result-wrapper {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center; }
+  .evaluate-question-result-wrapper .question-index {
+    width: 30px;
+    height: 30px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center;
+    font-size: 16px;
+    color: white;
+    font-family: Lato;
+    font-weight: 400;
+    border-radius: 100%; }
+  .evaluate-question-result-wrapper.skipped .question-index {
+    background-color: #c2c2c2; }
+  .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-text {
+    font-size: 14px;
+    color: #757a83;
+    font-family: Quicksand;
+    font-weight: 400; }
+    .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-text div {
+      margin-left: 10px; }
+  .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    font-size: 18px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 400; }
+    .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-status-wrapper {
+      display: -ms-flexbox;
+      display: flex; }
+      .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-status-wrapper .evaluate-text {
+        margin-right: 5px;
+        margin-left: 10px; }
+    .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper {
+      margin-left: 5px; }
+      .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon {
+        margin-left: 5px; }
+        .evaluate-question-result-wrapper .evaluate-question-result-states-switch .evaluate-question-result-evaluated .evaluate-result-wrapper .evaluate-stars-wrapper svg-icon svg {
+          width: 10px; }
+
+/**
+*  FONTS
+*/
+/* Lato fonts from google*/
+/* Quicksand fonts */
+/* Material+Icons */

@@ -1,0 +1,102 @@
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/* full background image with retina */
+/* full background image with retina */
+.znk-timeline-web-wrapper {
+  height: auto;
+  overflow-x: auto;
+  position: relative; }
+  .znk-timeline-web-wrapper::-webkit-scrollbar {
+    height: 10px; }
+  .znk-timeline-web-wrapper .time-line-wrapper {
+    margin: 30px 0; }
+  .znk-timeline-web-wrapper .progress-val {
+    position: absolute;
+    color: #4f4d4d;
+    font-size: 21px;
+    font-family: Quicksand; }
+    .znk-timeline-web-wrapper .progress-val .goal-wrapper {
+      display: inline;
+      position: relative; }
+    .znk-timeline-web-wrapper .progress-val .progress-title {
+      color: #757a83;
+      font-size: 12px;
+      font-family: Lato;
+      font-weight: 300;
+      margin-top: 10px;
+      min-width: 100px; }
+    .znk-timeline-web-wrapper .progress-val .timeline-plus {
+      position: absolute;
+      top: -7px;
+      right: -25px;
+      font-size: 12px;
+      font-family: Lato;
+      font-weight: 400; }
+      .znk-timeline-web-wrapper .progress-val .timeline-plus.red-point {
+        color: #ff6766; }
+      .znk-timeline-web-wrapper .progress-val .timeline-plus.green-point {
+        color: #87ca4d; }
+  .znk-timeline-web-wrapper .tool-tip-area {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; }
+    .znk-timeline-web-wrapper .tool-tip-area.last-item {
+      width: 50px;
+      height: 50px; }
+
+md-tooltip.tooltip-box {
+  overflow: visible;
+  height: 115px;
+  transform: translateY(-10px);
+  box-shadow: 0px 7px 17px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); }
+  md-tooltip.tooltip-box:after {
+    content: '';
+    border: 10px solid transparent;
+    border-top-color: white;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    margin-left: -10px; }
+  md-tooltip.tooltip-box .tooltip-content {
+    color: black;
+    background-color: white; }
+    md-tooltip.tooltip-box .tooltip-content .exercise-date {
+      margin: 5px auto;
+      font-size: 14px;
+      color: #757a83;
+      font-family: Quicksand;
+      font-weight: 700; }
+    md-tooltip.tooltip-box .tooltip-content .exercise-title {
+      text-transform: capitalize;
+      margin: 5px auto;
+      font-size: 14px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 300; }
+    md-tooltip.tooltip-box .tooltip-content .score-title {
+      text-transform: capitalize;
+      font-size: 12px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 300;
+      margin: 5px auto; }
+    md-tooltip.tooltip-box .tooltip-content .exercise-score {
+      font-size: 16px;
+      color: #4f4d4d;
+      font-family: Lato;
+      font-weight: 400;
+      margin-bottom: 5px; }
