@@ -282,7 +282,7 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", function ($rootScope, OnBoardingService, $state) {
+    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", "ENV", function ($rootScope, OnBoardingService, $state, ENV) {
         'ngInject';
         var isOnBoardingCompleted = false;
         $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
@@ -306,6 +306,36 @@
                             $state.go(ON_BOARDING_STATE_NAME);
                         }
                     } else {
+                        OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                            // 7 - app status
+                            if (marketingObj && marketingObj.status && marketingObj.status !== 7) {
+                                var state = '';
+                                switch (marketingObj.status) {
+                                    case 2:
+                                        state = 'email';
+                                        break;
+                                    case 3:
+                                        state = 'verifyEmail';
+                                        break;
+                                    case 4:
+                                        state = 'purchase';
+                                        break;
+                                    case 5:
+                                        state = 'purchase';
+                                        break;
+                                    case 6:
+                                        state = 'signup';
+                                        break;
+                                    default:
+                                        state = 'purchase';
+                                }
+                                window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+                            } else {
+                                $state.go(toState, toParams, {
+                                    reload: true
+                                });
+                            }
+                        });
                         $state.go(toState, toParams, {
                             reload: true
                         });
@@ -376,7 +406,14 @@
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
-
+            onBoardingServiceObj.getMarketingToefl = function () {
+                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(marketingPath).then(function (marketing) {
+                        return marketing;
+                    });
+                });
+            };
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
                     return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;
@@ -392,7 +429,7 @@
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/onBoarding/directives/onBoardingBar.template.html",
     "<div class=\"on-board-pager-wrap\">\n" +
     "    <div class=\"on-board-pager\">\n" +

@@ -149,7 +149,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\" y=\"0px\"\n" +

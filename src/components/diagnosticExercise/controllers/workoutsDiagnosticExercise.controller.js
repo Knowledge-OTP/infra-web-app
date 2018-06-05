@@ -308,15 +308,19 @@
                                 WorkoutsDiagnosticFlow.getMarketingToeflByStatus(MarketingStatusEnum.DIAGNOSTIC.enum).then(function (status) {
                                     if (status) {
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
+                                            let selectedNum;
+                                            let selectedStatus;
                                             if (globalVariable && globalVariable.abTesting) {
                                                 const abTestingNum = parseFloat(globalVariable.abTesting);
-                                                const selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
-                                                const selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
-                                                WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
-                                                    $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
-                                                    _goToCurrentState(true);
-                                                });
+                                                selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
+                                            } else { // in case the globalVariable or the abTesting is missing
+                                                selectedNum = 1;
                                             }
+                                            selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
+                                            WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
+                                                $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
+                                                _goToCurrentState(true);
+                                            });
                                         });
                                     } else {
                                         _goToCurrentState(true);

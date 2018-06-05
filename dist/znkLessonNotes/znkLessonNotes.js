@@ -904,7 +904,7 @@
     );
 })(angular);
 
-angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html",
     "<div class=\"lesson-details\" ng-if=\"vm.viewModal\">\n" +
     "    <div class=\"left-col\">\n" +
