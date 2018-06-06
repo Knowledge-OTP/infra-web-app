@@ -8819,7 +8819,7 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
 
                 var dataToSend = {
                     emails: [MAIL_TO_SEND],
-                    message: message,
+                    emailParams: {'MESSAGE_CONTENT': message},
                     subject: emailSubject,
                     appName: ENV.firebaseAppScopeName,
                     templateKey: TEMPLATE_KEY,
