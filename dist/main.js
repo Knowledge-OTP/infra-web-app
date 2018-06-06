@@ -435,7 +435,7 @@
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/activePanel/directives/activePanel.template.html",
     "<div class=\"active-panel ng-hide\"\n" +
     "     ng-show=\"d.currStatus === d.states.LIVE_SESSION\"\n" +
@@ -1501,7 +1501,7 @@ angular.module('znk.infra-web-app.activePanel').run(['$templateCache', function(
         );
 })(angular);
 
-angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/adminDashboard/components/eMetadata/svg/admin-profile-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +
@@ -1906,7 +1906,7 @@ angular.module('znk.infra-web-app.adminDashboard').run(['$templateCache', functi
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -2061,7 +2061,7 @@ angular.module('znk.infra-web-app.angularMaterialOverride').run(['$templateCache
     );
 })(angular);
 
-angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.aws').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -3471,7 +3471,7 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function($templat
     );
 })(angular);
 
-angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/completeExercise/assets/svg/book-icon.svg",
     "<svg\n" +
     "    version=\"1.1\"\n" +
@@ -3697,7 +3697,7 @@ angular.module('znk.infra-web-app.completeExercise').run(['$templateCache', func
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.config').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.config').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -3772,7 +3772,7 @@ angular.module('znk.infra-web-app.config').run(['$templateCache', function($temp
     });
 })(angular);
 
-angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -3830,7 +3830,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                     resolve: {
                         currentState: ["WorkoutsDiagnosticFlow", "$stateParams", function currentState(WorkoutsDiagnosticFlow, $stateParams) {
                             'ngInject';// jshint ignore:line
-                            return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro, $stateParams.forceSkipIntro );
+                            return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro, $stateParams.forceSkipIntro);
                         }]
                     },
                     controller: 'WorkoutsDiagnosticController',
@@ -3898,16 +3898,16 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                         var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                         var lastQuestion = questionResults[questionResults.length - 1];
 
-                        var isCurrentQuestion = function(question) {
+                        var isCurrentQuestion = function (question) {
                             return question.questionId === currentSection.currentQuestion.id;
                         };
-                        var isLastQuestion = function() {
+                        var isLastQuestion = function () {
                             return isCurrentQuestion(lastQuestion);
                         };
 
                         if (currentSection.currentQuestion) {
-                            if(!diagnosticSettings.isFixed) {
-                                if(isLastQuestion()) {
+                            if (!diagnosticSettings.isFixed) {
+                                if (isLastQuestion()) {
                                     delete lastQuestion.userAnswer;
                                 } else {
                                     questionResults.pop();
@@ -3915,7 +3915,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                                 }
                             } else {
                                 var answersArr = questionResults.filter(isCurrentQuestion);
-                                if(answersArr.length > 0) {
+                                if (answersArr.length > 0) {
                                     delete answersArr[0].userAnswer;
                                 }
                             }
@@ -3925,10 +3925,17 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 })
                 .state('app.diagnostic.preSummary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
-                    controller: ['$timeout', '$state', function ($timeout, $state) {
+                    controller: ['$timeout', '$state', 'ENV', 'WorkoutsDiagnosticFlow', 'MarketingStatusEnum', function ($timeout, $state, ENV, WorkoutsDiagnosticFlow, MarketingStatusEnum) {
                         var VIDEO_DURATION = 6000;
                         $timeout(function () {
-                            $state.go('app.diagnostic.summary');
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    var state = marketingObj.status === MarketingStatusEnum.GET_EMAIL.enum ? 'email' : 'purchase';
+                                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+                                } else {
+                                    $state.go('app.diagnostic.summary');
+                                }
+                            });
                         }, VIDEO_DURATION);
                     }],
                     controllerAs: 'vm'
@@ -4003,10 +4010,10 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", "MarketingStatusEnum", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                  $translate, ExerciseReviewStatusEnum, CategoryService) {
+                  $translate, ExerciseReviewStatusEnum, CategoryService, MarketingStatusEnum) {
             'ngInject';
             var self = this;
             this.subjectId = (typeof exerciseData.questionsData.subjectId === 'undefined' || exerciseData.questionsData.subjectId === null) ?
@@ -4304,7 +4311,27 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                                 }
                             });
                             if (isLastSubject) {
-                                _goToCurrentState(true);
+                                WorkoutsDiagnosticFlow.getMarketingToeflByStatus(MarketingStatusEnum.DIAGNOSTIC.enum).then(function (status) {
+                                    if (status) {
+                                        WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
+                                            let selectedNum;
+                                            let selectedStatus;
+                                            if (globalVariable && globalVariable.abTesting) {
+                                                const abTestingNum = parseFloat(globalVariable.abTesting);
+                                                selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
+                                            } else { // in case the globalVariable or the abTesting is missing
+                                                selectedNum = 1;
+                                            }
+                                            selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
+                                            WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
+                                                $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
+                                                _goToCurrentState(true);
+                                            });
+                                        });
+                                    } else {
+                                        _goToCurrentState(true);
+                                    }
+                                });
                             } else {
                                 _goToCurrentState();
                             }
@@ -4518,6 +4545,27 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.diagnosticExercise').factory('MarketingStatusEnum',
+        ["EnumSrv", function (EnumSrv) {
+            'ngInject';
+
+            return new EnumSrv.BaseEnum([
+                ['DIAGNOSTIC', 1, 'diagnostic'],
+                ['GET_EMAIL', 2, 'get Email'],
+                ['VALIDATE_EMAIL', 3, 'validate Email'],
+                ['PRE_PURCHASE', 4, 'pre Purchase'],
+                ['PURCHASED', 5, 'Purchased'],
+                ['SIGNUP', 6, 'signup'],
+                ['APP', 7, 'app'],
+            ]);
+        }]
+    );
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.diagnosticExercise').constant('WORKOUTS_DIAGNOSTIC_FLOW', {
         isFixed: false,
         timeLimit: 3 * 60 * 1000,
@@ -4555,8 +4603,8 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
+        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService', '$http', 'ENV', 'StorageSrv', 'InfraConfigSrv',
+            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService, $http, ENV, StorageSrv, InfraConfigSrv) {
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
@@ -4580,7 +4628,41 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                 workoutsDiagnosticFlowObjApi.getCurrentState = function () {
                     return currentState;
                 };
+                workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/status`;
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.get(marketingPath).then(function (marketingObj) {
+                            return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
+                        });
+                    });
+                };
+                workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.get(marketingPath).then(function (marketing) {
+                            return marketing;
+                        });
+                    });
+                };
+                workoutsDiagnosticFlowObjApi.setMarketingToeflStatusAndAbTest = function (abTest, status) {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                    var data = {
+                        'abTesting': abTest,
+                        'status': status
+                    };
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.update(marketingPath, data).then(function (status) {
+                            return status;
+                        });
+                    });
+                };
 
+                workoutsDiagnosticFlowObjApi.getGlobalVariables = function () {
+                    var globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
+                    return $http.get(`${globalBackendUrl}`, {timeout: ENV.promiseTimeOut, cache: true})
+                        .then(globalVariables => globalVariables.data)
+                        .catch((err) => $log.error('getGlobalVariables: Failed to get global variables. Error: ', err));
+                };
                 var diagnosticSettings = workoutsDiagnosticFlowObjApi.getDiagnosticSettings();
 
                 function _getDataProm() {
@@ -4698,7 +4780,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
                             examResults.$save();
                         }
 
-                        skipIntroBool = forceSkipIntro? forceSkipIntro : false;
+                        skipIntroBool = forceSkipIntro ? forceSkipIntro : false;
 
                         var exerciseResultPromises = _getExerciseResultProms(examResults.sectionResults, exam.id);
 
@@ -4897,7 +4979,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function($
 })(angular);
 
 
-angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
@@ -5206,7 +5288,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').provider('DiagnosticIntroSrv
         }];
 }]);
 
-angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/diagnosticIntro/directives/diagnosticIntro.template.html",
     "<div class=\"diagnostic-intro-drv\" translate-namespace=\"DIAGNOSTIC_INTRO\">\n" +
     "    <div class=\"description\">\n" +
@@ -5313,7 +5395,7 @@ angular.module('znk.infra-web-app.diagnosticIntro').run(['$templateCache', funct
         );
 })(angular);
 
-angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -5536,7 +5618,7 @@ angular.module('znk.infra-web-app.elasticSearch').run(['$templateCache', functio
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/estimatedScoreWidget/directives/estimatedScoreWidget.template.html",
     "<div class=\"score-estimate-container base-border-radius base-box-shadow\"\n" +
     "     ng-class=\"{'estimated-score-animation': d.enableEstimatedScoreChangeAnimation}\"\n" +
@@ -6046,7 +6128,7 @@ angular.module('znk.infra-web-app.estimatedScoreWidget').run(['$templateCache', 
     });
 })(angular);
 
-angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/evaluator/svg/star.svg",
     "<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\"\n" +
@@ -6259,7 +6341,7 @@ angular.module('znk.infra-web-app.evaluator').run(['$templateCache', function($t
     });
 })(angular);
 
-angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.faq').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/faq/svg/circle-arrow.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"\n" +
@@ -6439,7 +6521,7 @@ angular.module('znk.infra-web-app.faq').run(['$templateCache', function($templat
 })(angular);
 
 
-angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.feedback').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/feedback/svg/completed-v-feedback.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-1040 834.9 220.4 220.4\" xml:space=\"preserve\" class=\"completed-v-feedback-svg\">\n" +
@@ -6739,7 +6821,7 @@ angular.module('znk.infra-web-app.feedback').run(['$templateCache', function($te
     );
 })(angular);
 
-angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/iapMsg/svg/close-msg.svg",
     "<svg class=\"iap-msg-close-msg-svg\"\n" +
     "     x=\"0px\"\n" +
@@ -6939,7 +7021,7 @@ angular.module('znk.infra-web-app.iapMsg').run(['$templateCache', function($temp
 })(angular);
 
 
-angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/imageZoomer/svg/full-screen-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"\n" +
     "     x=\"0px\" y=\"0px\"\n" +
@@ -7301,7 +7383,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function(
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/infraWebAppZnkExercise/directives/answerExplanation/answerExplanation.template.html",
     "<div class=\"answer-explanation-wrapper\" translate-namespace=\"ANSWER_EXPLANATION\">\n" +
     "    <div class=\"answer-explanation-content-wrapper\"\n" +
@@ -8184,7 +8266,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
     );
 })(angular);
 
-angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.invitation').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/invitation/approveModal/invitationApproveModal.template.html",
     "<md-dialog ng-cloak class=\"invitation-confirm-modal\" translate-namespace=\"INVITE_APPROVE_MODAL\">\n" +
     "    <md-toolbar>\n" +
@@ -8650,7 +8732,7 @@ angular.module('znk.infra-web-app.invitation').run(['$templateCache', function($
         );
 })(angular);
 
-angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -8737,7 +8819,7 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
 
                 var dataToSend = {
                     emails: [MAIL_TO_SEND],
-                    message: message,
+                    emailParams: {'MESSAGE_CONTENT': message},
                     subject: emailSubject,
                     appName: ENV.firebaseAppScopeName,
                     templateKey: TEMPLATE_KEY,
@@ -9000,7 +9082,7 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
     );
 })(angular);
 
-angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/liveLessons/svg/calendar-icon.svg",
     "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" class=\"calendar-icon\"\n" +
     "     viewBox=\"0 0 176.3 200\">\n" +
@@ -10778,7 +10860,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function(
     });
 })(angular);
 
-angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.liveSession').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/liveSession/components/liveSessionBtn/liveSessionBtn.template.html",
     "<md-button class=\"session-btn\" ng-disabled=\"vm.isOffline && !vm.isLiveSessionActive\"\n" +
     "           aria-label=\"{{!vm.isLiveSessionActive ? 'LIVE_SESSION.START_SESSION' : 'LIVE_SESSION.END_SESSION' | translate}}\"\n" +
@@ -11054,7 +11136,7 @@ angular.module('znk.infra-web-app.loadingAnimation', []);
 })(angular);
 
 
-angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -11933,7 +12015,7 @@ angular.module('znk.infra-web-app.loadingAnimation').run(['$templateCache', func
     });
 })(angular);
 
-angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/loginApp/directives/loginApp/loginApp.template.html",
     "<div class=\"login-app\" ng-class=\"{\n" +
     "        student: d.userContext === d.userContextObj.STUDENT,\n" +
@@ -12837,7 +12919,7 @@ angular.module('znk.infra-web-app.loginApp').run(['$templateCache', function($te
         );
 })(angular);
 
-angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/myProfile/components/changePassword/changePassword.template.html",
     "<md-dialog-content ng-switch=\"!!vm.showSuccess\">\n" +
     "    <div class=\"container-title md-subheader\" translate=\".CHANGE_PASSWORD\"></div>\n" +
@@ -13144,7 +13226,7 @@ angular.module('znk.infra-web-app.myProfile').run(['$templateCache', function($t
   }]);
 })(angular);
 
-angular.module('znk.infra-web-app.navigation').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.navigation').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -13306,7 +13388,7 @@ angular.module('znk.infra-web-app.navigation').run(['$templateCache', function($
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.notification').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.notification').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -13402,7 +13484,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController',
-        ["OnBoardingService", "$state", "znkAnalyticsSrv", function(OnBoardingService, $state, znkAnalyticsSrv) {
+        ["OnBoardingService", "$state", "znkAnalyticsSrv", function (OnBoardingService, $state, znkAnalyticsSrv) {
             'ngInject';
 
             var vm = this;
@@ -13410,6 +13492,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 
             vm.showInstructions = angular.isDefined(onBordingSettings.showInstructions) ? onBordingSettings.showInstructions : false;
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
+            getMarketingToefl();
 
             this.setOnboardingCompleted = function (nextState, eventText) {
                 znkAnalyticsSrv.eventTrack({
@@ -13420,13 +13503,19 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                 });
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
                     if (nextState === 'app.diagnostic' && onBordingSettings.forceSkipIntro) {
-                        $state.go(nextState, { forceSkipIntro: true });
+                        $state.go(nextState, {forceSkipIntro: true});
                     } else {
                         $state.go(nextState);
                     }
                 });
             };
-    }]);
+
+            function getMarketingToefl() {
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    vm.isMarketingToefl = !!marketingObj && !!marketingObj.status;
+                });
+            }
+        }]);
 })(angular);
 
 (function (angular) {
@@ -13594,35 +13683,67 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", function ($rootScope, OnBoardingService, $state) {
+    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", "ENV", function ($rootScope, OnBoardingService, $state, ENV) {
         'ngInject';
         var isOnBoardingCompleted = false;
         $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
             if (isOnBoardingCompleted) {
                 return;
             }
-
-            var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
-            var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
-
-            if (isGoingToWorkoutsState) {
-                evt.preventDefault();
-
-                OnBoardingService.isOnBoardingCompleted().then(function (_isOnBoardingCompleted) {
-                    isOnBoardingCompleted = _isOnBoardingCompleted;
-
-                    if (!isOnBoardingCompleted) {
-                        var ON_BOARDING_STATE_NAME = 'app.onBoarding';
-                        var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
-                        if (isNotFromOnBoardingState) {
-                            $state.go(ON_BOARDING_STATE_NAME);
-                        }
+            else {
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    // statuses:  7 - app  , 1 - diagnostic
+                    if (marketingObj && marketingObj.status && marketingObj.status !== 1 && marketingObj.status !== 7) {
+                        handleToeflMarketingRedirect(marketingObj);
                     } else {
-                        $state.go(toState, toParams, {
-                            reload: true
-                        });
+                        var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
+                        var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
+
+                        if (isGoingToWorkoutsState) {
+                            evt.preventDefault();
+
+                            OnBoardingService.isOnBoardingCompleted().then(function (_isOnBoardingCompleted) {
+                                isOnBoardingCompleted = _isOnBoardingCompleted;
+
+                                if (!isOnBoardingCompleted) {
+                                    var ON_BOARDING_STATE_NAME = 'app.onBoarding';
+                                    var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
+                                    if (isNotFromOnBoardingState) {
+                                        $state.go(ON_BOARDING_STATE_NAME);
+                                    }
+                                } else {
+                                    $state.go(toState, toParams, {
+                                        reload: true
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
+            }
+
+            function handleToeflMarketingRedirect(marketingObj) {
+                var state = '';
+                switch (marketingObj.status) {
+                    case 2:
+                        state = 'email';
+                        break;
+                    case 3:
+                        state = 'verifyEmail';
+                        break;
+                    case 4:
+                        state = 'purchase';
+                        break;
+                    case 5:
+                        state = 'purchase';
+                        break;
+                    case 6:
+                        state = 'signup';
+                        break;
+                    default:
+                        state = 'purchase';
+                }
+                window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
             }
         });
     }]);
@@ -13688,7 +13809,14 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
-
+            onBoardingServiceObj.getMarketingToefl = function () {
+                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(marketingPath).then(function (marketing) {
+                        return marketing;
+                    });
+                });
+            };
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
                     return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;
@@ -13704,7 +13832,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
     }]);
 })(angular);
 
-angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/onBoarding/directives/onBoardingBar.template.html",
     "<div class=\"on-board-pager-wrap\">\n" +
     "    <div class=\"on-board-pager\">\n" +
@@ -13953,14 +14081,17 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
   $templateCache.put("components/onBoarding/templates/onBoardingDiagnostic.template.html",
     "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.DIAGNOSTIC\">\n" +
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
-    "    <diagnostic-intro show-instructions=\"vm.showInstructions\" show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
+    "    <diagnostic-intro show-instructions=\"vm.showInstructions\"\n" +
+    "                      show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
-    "            tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
+    "        <md-button ng-if=\"!isMarketingToefl\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
+    "                   tabindex=\"2\" class=\"default sm\"\n" +
+    "                   ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
     "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.START_TEST' | translate}}\"\n" +
-    "            autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
+    "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +
+    "                   ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
@@ -14185,7 +14316,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function($
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.planNotification').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.planNotification').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -14463,7 +14594,7 @@ angular.module('znk.infra-web-app.planNotification').run(['$templateCache', func
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/promoCode/directives/promoCode.template.html",
     "<div class=\"promo-code-wrapper\" translate-namespace=\"PROMO_CODE\"   ng-class=\"{\n" +
     "             'promo-code-accepted': d.promoCodeStatus === d.promoCodeStatusConst.accepted,\n" +
@@ -15037,7 +15168,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function($t
 })(angular);
 
 
-angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.purchase').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/purchase/components/purchaseBtn/purchaseBtn.template.html",
     "<ng-switch on=\"vm.purchaseState\">\n" +
     "\n" +
@@ -15534,7 +15665,7 @@ angular.module('znk.infra-web-app.purchase').run(['$templateCache', function($te
         );
 })(angular);
 
-angular.module('znk.infra-web-app.settings').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.settings').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/settings/svg/change-password-icon.svg",
     "<svg class=\"change-password-icon-wrap\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"0 0 75 75\">\n" +
     "    <style type=\"text/css\">\n" +
@@ -15753,7 +15884,7 @@ angular.module('znk.infra-web-app.settings').run(['$templateCache', function($te
         );
 })(angular);
 
-angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -15887,7 +16018,7 @@ angular.module('znk.infra-web-app.socialSharing').run(['$templateCache', functio
         );
 })(angular);
 
-angular.module('znk.infra-web-app.stripe').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.stripe').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -15925,7 +16056,7 @@ angular.module('znk.infra-web-app.stripe').run(['$templateCache', function($temp
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -16027,7 +16158,7 @@ angular.module('znk.infra-web-app.subjectsOrder').run(['$templateCache', functio
 })(angular);
 
 
-angular.module('znk.infra-web-app.tests').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.tests').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/tests/directives/navigationPane.template.html",
     "<div class=\"app-tests-navigationPane\"\n" +
     "     translate-namespace=\"NAVIGATION_PANE\">\n" +
@@ -16349,7 +16480,7 @@ angular.module('znk.infra-web-app.tutorials').component('tutorialPane', {
     );
 })(angular);
 
-angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/tutorials/components/tutorialList/tutorialList.template.html",
     "<div class=\"tutorials-list-pane base-border-radius base-box-shadow\" translate-namespace=\"TUTORIAL_LIST_COMPONENTS\">\n" +
     "    <div class=\"diagnostic-overlay\" ng-if=\"!vm.isDiagnosticComplete\">\n" +
@@ -16467,7 +16598,7 @@ angular.module('znk.infra-web-app.tutorials').run(['$templateCache', function($t
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.uiTheme').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -16575,7 +16706,7 @@ angular.module('znk.infra-web-app.userGoals').provider('UserGoalsService', [func
     }];
 }]);
 
-angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.userGoals').run(['$templateCache', function ($templateCache) {
 
 }]);
 
@@ -16977,7 +17108,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').service('userGoalsSelecti
 }]);
 
 
-angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/userGoalsSelection/svg/arrow-icon.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\" viewBox=\"-468.2 482.4 96 89.8\" class=\"arrow-icon-wrapper\">\n" +
     "    <style type=\"text/css\">\n" +
@@ -17304,7 +17435,7 @@ angular.module('znk.infra-web-app.userGoalsSelection').run(['$templateCache', fu
 })(angular);
 
 
-angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/webAppScreenSharing/directives/shViewer/shViewer.template.html",
     "<div translate-namespace=\"SH_VIEWER.{{$ctrl.appContext}}\">\n" +
     "    <div class=\"header\">\n" +
@@ -18332,7 +18463,7 @@ angular.module('znk.infra-web-app.webAppScreenSharing').run(['$templateCache', f
     ]);
 })(angular);
 
-angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/workoutsRoadmap/directives/workoutIntroLock/workoutIntroLock.template.html",
     "<div ng-transclude class=\"main-container\"></div>\n" +
     "<div translate-namespace=\"WORKOUTS_ROADMAP_WORKOUT_INTRO_LOCK\"\n" +
@@ -19212,7 +19343,7 @@ angular.module('znk.infra-web-app.workoutsRoadmap').run(['$templateCache', funct
         );
 })(angular);
 
-angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkExerciseStatesUtility/templates/exercise.template.html",
     "<div class=\"exercise-container base-border-radius\">\n" +
     "    <znk-exercise-header subject-id=\"baseZnkExerciseCtrl.exercise.subjectId\"\n" +
@@ -19442,7 +19573,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
 })(angular);
 
 
-angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkHeader/components/znkHeader/znkHeader.template.html",
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
@@ -20601,7 +20732,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function($t
     );
 })(angular);
 
-angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkLessonNotes/lesson-notes-popup/lesson-details/lesson-details.component.html",
     "<div class=\"lesson-details\" ng-if=\"vm.viewModal\">\n" +
     "    <div class=\"left-col\">\n" +
@@ -21110,7 +21241,7 @@ angular.module('znk.infra-web-app.znkLessonNotes').run(['$templateCache', functi
 })(angular);
 
 
-angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkSummary/directives/znkSummaryResults/znkSummaryResults.template.html",
     "<div class=\"gauge-row-wrapper\" translate-namespace=\"ZNK_SUMMARY\">\n" +
     "    <div class=\"overflowWrap\">\n" +
@@ -21407,7 +21538,7 @@ angular.module('znk.infra-web-app.znkSummary').run(['$templateCache', function($
     });
 })(angular);
 
-angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkTimelineWebWrapper/directives/znkTimelineWebWrapper.template.html",
     "<div class=\"znk-timeline-web-wrapper znk-scrollbar\" translate-namespace=\"TIMELINE_WEB_WRAPPER\">\n" +
     "    <div class=\"time-line-wrapper\">\n" +
@@ -21525,7 +21656,7 @@ angular.module('znk.infra-web-app.znkTimelineWebWrapper').run(['$templateCache',
         );
 })(angular);
 
-angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.znkToast').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/znkToast/svg/znkToast-close-popup.svg",
     "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" x=\"0px\" y=\"0px\"\n" +
     "	 viewBox=\"-596.6 492.3 133.2 133.5\" xml:space=\"preserve\" class=\"close-pop-svg\">\n" +

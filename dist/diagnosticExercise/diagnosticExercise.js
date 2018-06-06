@@ -52,7 +52,7 @@
                     resolve: {
                         currentState: ["WorkoutsDiagnosticFlow", "$stateParams", function currentState(WorkoutsDiagnosticFlow, $stateParams) {
                             'ngInject';// jshint ignore:line
-                            return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro, $stateParams.forceSkipIntro );
+                            return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro, $stateParams.forceSkipIntro);
                         }]
                     },
                     controller: 'WorkoutsDiagnosticController',
@@ -120,16 +120,16 @@
                         var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                         var lastQuestion = questionResults[questionResults.length - 1];
 
-                        var isCurrentQuestion = function(question) {
+                        var isCurrentQuestion = function (question) {
                             return question.questionId === currentSection.currentQuestion.id;
                         };
-                        var isLastQuestion = function() {
+                        var isLastQuestion = function () {
                             return isCurrentQuestion(lastQuestion);
                         };
 
                         if (currentSection.currentQuestion) {
-                            if(!diagnosticSettings.isFixed) {
-                                if(isLastQuestion()) {
+                            if (!diagnosticSettings.isFixed) {
+                                if (isLastQuestion()) {
                                     delete lastQuestion.userAnswer;
                                 } else {
                                     questionResults.pop();
@@ -137,7 +137,7 @@
                                 }
                             } else {
                                 var answersArr = questionResults.filter(isCurrentQuestion);
-                                if(answersArr.length > 0) {
+                                if (answersArr.length > 0) {
                                     delete answersArr[0].userAnswer;
                                 }
                             }
@@ -147,10 +147,17 @@
                 })
                 .state('app.diagnostic.preSummary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
-                    controller: ['$timeout', '$state', function ($timeout, $state) {
+                    controller: ['$timeout', '$state', 'ENV', 'WorkoutsDiagnosticFlow', 'MarketingStatusEnum', function ($timeout, $state, ENV, WorkoutsDiagnosticFlow, MarketingStatusEnum) {
                         var VIDEO_DURATION = 6000;
                         $timeout(function () {
-                            $state.go('app.diagnostic.summary');
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    var state = marketingObj.status === MarketingStatusEnum.GET_EMAIL.enum ? 'email' : 'purchase';
+                                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+                                } else {
+                                    $state.go('app.diagnostic.summary');
+                                }
+                            });
                         }, VIDEO_DURATION);
                     }],
                     controllerAs: 'vm'
@@ -225,10 +232,10 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", "MarketingStatusEnum", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                  $translate, ExerciseReviewStatusEnum, CategoryService) {
+                  $translate, ExerciseReviewStatusEnum, CategoryService, MarketingStatusEnum) {
             'ngInject';
             var self = this;
             this.subjectId = (typeof exerciseData.questionsData.subjectId === 'undefined' || exerciseData.questionsData.subjectId === null) ?
@@ -526,7 +533,27 @@
                                 }
                             });
                             if (isLastSubject) {
-                                _goToCurrentState(true);
+                                WorkoutsDiagnosticFlow.getMarketingToeflByStatus(MarketingStatusEnum.DIAGNOSTIC.enum).then(function (status) {
+                                    if (status) {
+                                        WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
+                                            let selectedNum;
+                                            let selectedStatus;
+                                            if (globalVariable && globalVariable.abTesting) {
+                                                const abTestingNum = parseFloat(globalVariable.abTesting);
+                                                selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
+                                            } else { // in case the globalVariable or the abTesting is missing
+                                                selectedNum = 1;
+                                            }
+                                            selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
+                                            WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
+                                                $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
+                                                _goToCurrentState(true);
+                                            });
+                                        });
+                                    } else {
+                                        _goToCurrentState(true);
+                                    }
+                                });
                             } else {
                                 _goToCurrentState();
                             }
@@ -740,6 +767,27 @@
 (function (angular) {
     'use strict';
 
+    angular.module('znk.infra-web-app.diagnosticExercise').factory('MarketingStatusEnum',
+        ["EnumSrv", function (EnumSrv) {
+            'ngInject';
+
+            return new EnumSrv.BaseEnum([
+                ['DIAGNOSTIC', 1, 'diagnostic'],
+                ['GET_EMAIL', 2, 'get Email'],
+                ['VALIDATE_EMAIL', 3, 'validate Email'],
+                ['PRE_PURCHASE', 4, 'pre Purchase'],
+                ['PURCHASED', 5, 'Purchased'],
+                ['SIGNUP', 6, 'signup'],
+                ['APP', 7, 'app'],
+            ]);
+        }]
+    );
+})(angular);
+
+
+(function (angular) {
+    'use strict';
+
     angular.module('znk.infra-web-app.diagnosticExercise').constant('WORKOUTS_DIAGNOSTIC_FLOW', {
         isFixed: false,
         timeLimit: 3 * 60 * 1000,
@@ -777,8 +825,8 @@
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
+        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService', '$http', 'ENV', 'StorageSrv', 'InfraConfigSrv',
+            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService, $http, ENV, StorageSrv, InfraConfigSrv) {
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
@@ -802,7 +850,41 @@
                 workoutsDiagnosticFlowObjApi.getCurrentState = function () {
                     return currentState;
                 };
+                workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/status`;
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.get(marketingPath).then(function (marketingObj) {
+                            return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
+                        });
+                    });
+                };
+                workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.get(marketingPath).then(function (marketing) {
+                            return marketing;
+                        });
+                    });
+                };
+                workoutsDiagnosticFlowObjApi.setMarketingToeflStatusAndAbTest = function (abTest, status) {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                    var data = {
+                        'abTesting': abTest,
+                        'status': status
+                    };
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.update(marketingPath, data).then(function (status) {
+                            return status;
+                        });
+                    });
+                };
 
+                workoutsDiagnosticFlowObjApi.getGlobalVariables = function () {
+                    var globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
+                    return $http.get(`${globalBackendUrl}`, {timeout: ENV.promiseTimeOut, cache: true})
+                        .then(globalVariables => globalVariables.data)
+                        .catch((err) => $log.error('getGlobalVariables: Failed to get global variables. Error: ', err));
+                };
                 var diagnosticSettings = workoutsDiagnosticFlowObjApi.getDiagnosticSettings();
 
                 function _getDataProm() {
@@ -920,7 +1002,7 @@
                             examResults.$save();
                         }
 
-                        skipIntroBool = forceSkipIntro? forceSkipIntro : false;
+                        skipIntroBool = forceSkipIntro ? forceSkipIntro : false;
 
                         var exerciseResultPromises = _getExerciseResultProms(examResults.sectionResults, exam.id);
 
@@ -1119,7 +1201,7 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function ($templateCache) {
   $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +

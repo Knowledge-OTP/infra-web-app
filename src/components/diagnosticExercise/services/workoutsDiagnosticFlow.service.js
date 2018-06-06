@@ -9,8 +9,8 @@
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
+        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService', '$http', 'ENV', 'StorageSrv', 'InfraConfigSrv',
+            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService, $http, ENV, StorageSrv, InfraConfigSrv) {
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
@@ -34,7 +34,41 @@
                 workoutsDiagnosticFlowObjApi.getCurrentState = function () {
                     return currentState;
                 };
+                workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/status`;
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.get(marketingPath).then(function (marketingObj) {
+                            return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
+                        });
+                    });
+                };
+                workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.get(marketingPath).then(function (marketing) {
+                            return marketing;
+                        });
+                    });
+                };
+                workoutsDiagnosticFlowObjApi.setMarketingToeflStatusAndAbTest = function (abTest, status) {
+                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                    var data = {
+                        'abTesting': abTest,
+                        'status': status
+                    };
+                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                        return studentStorage.update(marketingPath, data).then(function (status) {
+                            return status;
+                        });
+                    });
+                };
 
+                workoutsDiagnosticFlowObjApi.getGlobalVariables = function () {
+                    var globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
+                    return $http.get(`${globalBackendUrl}`, {timeout: ENV.promiseTimeOut, cache: true})
+                        .then(globalVariables => globalVariables.data)
+                        .catch((err) => $log.error('getGlobalVariables: Failed to get global variables. Error: ', err));
+                };
                 var diagnosticSettings = workoutsDiagnosticFlowObjApi.getDiagnosticSettings();
 
                 function _getDataProm() {
@@ -152,7 +186,7 @@
                             examResults.$save();
                         }
 
-                        skipIntroBool = forceSkipIntro? forceSkipIntro : false;
+                        skipIntroBool = forceSkipIntro ? forceSkipIntro : false;
 
                         var exerciseResultPromises = _getExerciseResultProms(examResults.sectionResults, exam.id);
 
