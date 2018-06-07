@@ -869,8 +869,8 @@
                 workoutsDiagnosticFlowObjApi.setMarketingToeflStatusAndAbTest = function (abTest, status) {
                     var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                     var data = {
-                        'abTesting': abTest,
-                        'status': status
+                        [marketingPath+'/abTesting']: abTest,
+                        [marketingPath+'/status']: status
                     };
                     return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                         return studentStorage.update(marketingPath, data).then(function (status) {
