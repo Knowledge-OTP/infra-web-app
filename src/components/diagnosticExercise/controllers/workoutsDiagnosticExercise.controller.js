@@ -305,8 +305,8 @@
                                 }
                             });
                             if (isLastSubject) {
-                                WorkoutsDiagnosticFlow.getMarketingToeflByStatus(MarketingStatusEnum.DIAGNOSTIC.enum).then(function (status) {
-                                    if (status) {
+                                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                    if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
                                             let selectedNum;
                                             let selectedStatus;

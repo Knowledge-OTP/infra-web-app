@@ -35,11 +35,8 @@
                     return currentState;
                 };
                 workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
-                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/status`;
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.get(marketingPath).then(function (marketingObj) {
-                            return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
-                        });
+                    return workoutsDiagnosticFlowObjApi.getMarketingToefl().then(function (marketingObj) {
+                        return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
                     });
                 };
                 workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {

@@ -4311,8 +4311,8 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                                 }
                             });
                             if (isLastSubject) {
-                                WorkoutsDiagnosticFlow.getMarketingToeflByStatus(MarketingStatusEnum.DIAGNOSTIC.enum).then(function (status) {
-                                    if (status) {
+                                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                    if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
                                             let selectedNum;
                                             let selectedStatus;
@@ -4629,11 +4629,8 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     return currentState;
                 };
                 workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
-                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/status`;
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.get(marketingPath).then(function (marketingObj) {
-                            return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
-                        });
+                    return workoutsDiagnosticFlowObjApi.getMarketingToefl().then(function (marketingObj) {
+                        return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
                     });
                 };
                 workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
@@ -14084,7 +14081,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
     "    <diagnostic-intro show-instructions=\"vm.showInstructions\"\n" +
     "                      show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button ng-if=\"!isMarketingToefl\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
+    "        <md-button ng-show=\"!isMarketingToefl\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
     "                   tabindex=\"2\" class=\"default sm\"\n" +
     "                   ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +

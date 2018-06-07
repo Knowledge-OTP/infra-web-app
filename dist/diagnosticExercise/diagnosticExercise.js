@@ -533,8 +533,8 @@
                                 }
                             });
                             if (isLastSubject) {
-                                WorkoutsDiagnosticFlow.getMarketingToeflByStatus(MarketingStatusEnum.DIAGNOSTIC.enum).then(function (status) {
-                                    if (status) {
+                                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                    if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
                                             let selectedNum;
                                             let selectedStatus;
@@ -851,11 +851,8 @@
                     return currentState;
                 };
                 workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
-                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/status`;
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.get(marketingPath).then(function (marketingObj) {
-                            return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
-                        });
+                    return workoutsDiagnosticFlowObjApi.getMarketingToefl().then(function (marketingObj) {
+                        return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
                     });
                 };
                 workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
