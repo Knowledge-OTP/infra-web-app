@@ -54,7 +54,7 @@
                         [marketingPath+'/status']: status
                     };
                     return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.update(marketingPath, data).then(function (status) {
+                        return studentStorage.update(data).then(function (status) {
                             return status;
                         });
                     });
