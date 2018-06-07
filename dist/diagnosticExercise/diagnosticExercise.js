@@ -32,7 +32,8 @@
         var svgMap = {
             'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
             'diagnostic-check-mark': 'components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg',
-            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
+            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg',
+            'diagnostic-close-popup': 'components/diagnosticExercise/svg/close-popup.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
     }]);
@@ -206,15 +207,83 @@
 
 (function (angular) {
     'use strict';
+    angular.module('znk.infra-web-app.diagnosticExercise')
+        .controller('leavingSoSoonPopupCtrl',
+
+            ["$log", "$mdDialog", "UserTypeContextEnum", function ($log, $mdDialog, UserTypeContextEnum) {
+                'ngInject';
+
+                const vm = this;
+                this.userContext = UserTypeContextEnum.STUDENT.enum;
+                vm.userEmail = '';
+                vm.notifyTime = '';
+
+                vm.setNotifyTime = function (time, type) {
+                    const MIN_IN_MILISEC = 60000; // minute in milliseconds = 60000
+                    const HOUR_IN_MILISEC = 3600000; // Hour in milliseconds = 60000
+                    switch (type) {
+                        case 'min':
+                            vm.notifyTime = time * MIN_IN_MILISEC;
+                            break;
+                        case 'hour':
+                            vm.notifyTime = time * HOUR_IN_MILISEC;
+                            break;
+                    }
+                };
+
+                vm.sendReminder = function (time, email) {
+                    console.log('sendReminder: time, email: ', time, email);
+                };
+
+                vm.closeModal = function () {
+                    $mdDialog.cancel();
+                };
+
+                this.$onInit = function() {
+                    $log.debug('leavingSoSoonPopup: Init');
+                    this.showSpinner = false;
+                };
+            }]
+        );
+})(angular);
+
+(function (angular) {
+    'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise')
-        .controller('WorkoutsDiagnosticController', ["$state", "currentState", function($state, currentState) {
+        .controller('WorkoutsDiagnosticController', ["$state", "currentState", "$mdDialog", function($state, currentState, $mdDialog) {
         'ngInject';
 
         var EXAM_STATE = 'app.diagnostic';
 
+            function userLeaveEvent(e) {
+                e = e ? e : window.event;
+                var from = e.relatedTarget || e.toElement;
+                if (!from || from.nodeName === "HTML") {
+                    openLeavingSoSoonPopup();
+                }
+            }
 
-        $state.go(EXAM_STATE + currentState.state, currentState.params);
+            function openLeavingSoSoonPopup() {
+                return $mdDialog.show({
+                    controller: 'leavingSoSoonPopupCtrl',
+                    controllerAs: 'vm',
+                    templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
+                    clickOutsideToClose: true,
+                    escapeToClose: true
+                });
+            }
+
+            this.$onInit = function() {
+                // Detect when the mouse leaves the window
+                document.addEventListener('mouseout', userLeaveEvent);
+
+                $state.go(EXAM_STATE + currentState.state, currentState.params);
+            };
+
+            this.$onDestroy = function () {
+                document.removeEventListener('mouseout', userLeaveEvent);
+            };
     }]);
 })(angular);
 
@@ -1119,7 +1188,20 @@
 })(angular);
 
 
-angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function ($templateCache) {
+  $templateCache.put("components/diagnosticExercise/svg/close-popup.svg",
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-1010.6 704.8 137.2 137.5\" style=\"enable-background:new -1010.6 704.8 137.2 137.5;\" xml:space=\"preserve\">\n" +
+    "<path class=\"st0\" d=\"M-412,214.5\"/>\n" +
+    "<g>\n" +
+    "	<path class=\"st1\" d=\"M-879.4,842.3c-1.5,0-3.1-0.6-4.2-1.8l-125.2-125.3c-2.3-2.3-2.3-6.1,0-8.5c2.3-2.3,6.1-2.3,8.5,0l125.2,125.3\n" +
+    "		c2.3,2.3,2.3,6.1,0,8.5C-876.3,841.7-877.9,842.3-879.4,842.3z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-1004.6,842c-1.5,0-3.1-0.6-4.2-1.8c-2.3-2.3-2.3-6.1,0-8.5l125.2-125.2c2.3-2.3,6.1-2.3,8.5,0\n" +
+    "		c2.3,2.3,2.3,6.1,0,8.5l-125.2,125.2C-1001.5,841.4-1003.1,842-1004.6,842z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
@@ -1174,6 +1256,34 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "	</g>\n" +
     "</g>\n" +
     "</svg>\n" +
+    "");
+  $templateCache.put("components/diagnosticExercise/templates/leavingSoSoonPopup.template.html",
+    "<div class=\"leaving-so-soon-popup\">\n" +
+    "\n" +
+    "    <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
+    "        <svg-icon name=\"diagnostic-close-popup\"></svg-icon>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <main class=\"content-wrapper\">\n" +
+    "        <div class=\"quicksand-25-b title\" translate=\"LIVING_SO_SOON_POPUP.TITLE\"></div>\n" +
+    "        <div class=\"quicksand-18-n sub-title\" translate=\"LIVING_SO_SOON_POPUP.SUB_TITLE\"></div>\n" +
+    "\n" +
+    "        <div class=\"btn-group\">\n" +
+    "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.setNotifyTime(10, 'min')\">\n" +
+    "                <div class=\"quicksand-25-b\">10</div>\n" +
+    "                <div class=\"quicksand-18-n\">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "        <div class=\"input-wrapper\">\n" +
+    "            <input type=\"email\"\n" +
+    "                   placeholder=\"{{'LIVING_SO_SOON_POPUP.EMAIL' | translate}}\"\n" +
+    "                   name=\"email\" ng-model=\"vm.userEmail\">\n" +
+    "            <button type=\"button\" class=\"btn-type-1 save-btn\" translate=\"LIVING_SO_SOON_POPUP.GO\"\n" +
+    "                    ng-click=\"vm.sendReminder(vm.notifyTime, vm.userEmail)\">\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "    </main>\n" +
+    "</div>\n" +
     "");
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnostic.template.html",
     "<div class=\"app-workouts-diagnostic\">\n" +

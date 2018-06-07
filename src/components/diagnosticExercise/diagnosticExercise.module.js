@@ -32,7 +32,8 @@
         var svgMap = {
             'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
             'diagnostic-check-mark': 'components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg',
-            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
+            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg',
+            'diagnostic-close-popup': 'components/diagnosticExercise/svg/close-popup.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
     });

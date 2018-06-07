@@ -115,6 +115,6 @@
         }]);
 })(angular);
 
-angular.module('znk.infra-web-app.planNotification').run(['$templateCache', function($templateCache) {
+angular.module('znk.infra-web-app.planNotification').run(['$templateCache', function ($templateCache) {
 
 }]);

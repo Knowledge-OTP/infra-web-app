@@ -1371,6 +1371,92 @@ complete-exercise-progress-bar {
       padding-left: 35px;
       padding-right: 35px; }
 
+.leaving-so-soon-popup {
+  color: #ffffff;
+  width: 700px;
+  border-radius: 15px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+  background-color: #0a9bad; }
+  .leaving-so-soon-popup .close-popup-wrap {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 14px;
+    width: 14px;
+    cursor: pointer; }
+    .leaving-so-soon-popup .close-popup-wrap svg-icon svg {
+      height: 14px;
+      width: 14px;
+      fill: #ffffff; }
+  .leaving-so-soon-popup main.content-wrapper {
+    max-height: inherit;
+    width: 700px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-pack: center;
+        justify-content: center;
+    text-align: center; }
+    .leaving-so-soon-popup main.content-wrapper .title {
+      height: 30px;
+      padding: 30px 0 10px 0;
+      color: #ffffff; }
+    .leaving-so-soon-popup main.content-wrapper .sub-title {
+      margin-bottom: 30px;
+      color: #ffffff; }
+    .leaving-so-soon-popup main.content-wrapper .btn-group {
+      margin: 10px 30px;
+      -ms-flex-item-align: end;
+          align-self: flex-end;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-align: center;
+          align-items: center; }
+      .leaving-so-soon-popup main.content-wrapper .btn-group button {
+        width: 50px;
+        height: 50px;
+        background-color: #3cb0fd;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+            flex-direction: column;
+        -ms-flex-pack: center;
+            justify-content: center;
+        text-align: center; }
+        .leaving-so-soon-popup main.content-wrapper .btn-group button:nth-child(3) {
+          background-color: #87ca4d; }
+    .leaving-so-soon-popup main.content-wrapper .input-wrapper {
+      position: relative; }
+      .leaving-so-soon-popup main.content-wrapper .input-wrapper input {
+        height: 35px;
+        width: 50%;
+        padding-left: 10px;
+        border-radius: 5px;
+        border: none;
+        outline: none; }
+      .leaving-so-soon-popup main.content-wrapper .input-wrapper button {
+        position: absolute;
+        right: 0;
+        top: 4px;
+        border: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 100%;
+        outline: none;
+        text-align: center;
+        font-weight: bold;
+        padding: 2px; }
+        .leaving-so-soon-popup main.content-wrapper .input-wrapper button:hover {
+          cursor: pointer; }
+
 /**
 *  FONTS
 */
