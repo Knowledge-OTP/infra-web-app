@@ -14081,7 +14081,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
     "    <diagnostic-intro show-instructions=\"vm.showInstructions\"\n" +
     "                      show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button ng-if=\"!isMarketingToefl\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
+    "        <md-button ng-if=\"!vm.isMarketingToefl\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
     "                   tabindex=\"2\" class=\"default sm\"\n" +
     "                   ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
