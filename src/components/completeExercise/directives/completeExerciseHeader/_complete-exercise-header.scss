@@ -29,11 +29,10 @@ complete-exercise-header{
         }
 
         .left-part{
-            width: $externalPartWidth;
+            //width: $externalPartWidth;
             overflow: hidden;
 
             .left-title{
-                width: 300px;
                 white-space: nowrap;
                 overflow: hidden;
             }
