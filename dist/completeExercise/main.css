@@ -130,8 +130,7 @@ complete-exercise-header {
       complete-exercise-header .header-container .left-part .left-title {
         width: 300px;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis; }
+        overflow: hidden; }
     complete-exercise-header .header-container .center-part {
       -ms-flex-positive: 1;
           flex-grow: 1;
