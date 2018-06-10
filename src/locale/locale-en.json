@@ -458,7 +458,8 @@
         "HOUR": "hour",
         "HOURS": "hours",
         "EMAIL": "Your email",
-        "GO": "Go"
+        "GO": "Go",
+        "EMAIL_ERR": "Please enter your email"
     },
     "SCHOOL_SELECT": {
         "SELECT_TO_CONTINUE": "Select up to 3 dream schools to continue",

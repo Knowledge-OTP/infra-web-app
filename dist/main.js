@@ -3988,39 +3988,56 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
     angular.module('znk.infra-web-app.diagnosticExercise')
         .controller('leavingSoSoonPopupCtrl',
 
-            ["$log", "$mdDialog", "UserTypeContextEnum", function ($log, $mdDialog, UserTypeContextEnum) {
+            ["$log", "$mdDialog", "WorkoutsDiagnosticFlow", "ENV", "AuthService", "$window", function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window) {
                 'ngInject';
 
                 const vm = this;
-                this.userContext = UserTypeContextEnum.STUDENT.enum;
-                vm.userEmail = '';
-                vm.notifyTime = '';
+                const MIN_IN_MILISEC = 60000; // minute in milliseconds = 60000
+                const HOUR_IN_MILISEC = 3600000; // Hour in milliseconds = 3600000
 
-                vm.setNotifyTime = function (time, type) {
-                    const MIN_IN_MILISEC = 60000; // minute in milliseconds = 60000
-                    const HOUR_IN_MILISEC = 3600000; // Hour in milliseconds = 60000
+                $log.debug('leavingSoSoonPopup: Init');
+                vm.userEmail = '';
+                vm.userTimeout = HOUR_IN_MILISEC;
+                vm.selectedBtnTimeoutElm = 'btnNum3';
+                vm.emailErr = false;
+
+                vm.setNotifyTime = function (userTimeout, type, btnId) {
+                    // for toggle "selected" class
+                    vm.selectedBtnTimeoutElm = btnId;
+
                     switch (type) {
                         case 'min':
-                            vm.notifyTime = time * MIN_IN_MILISEC;
+                            vm.userTimeout = userTimeout * MIN_IN_MILISEC;
                             break;
                         case 'hour':
-                            vm.notifyTime = time * HOUR_IN_MILISEC;
+                            vm.userTimeout = userTimeout * HOUR_IN_MILISEC;
                             break;
                     }
                 };
 
-                vm.sendReminder = function (time, email) {
-                    console.log('sendReminder: time, email: ', time, email);
+                vm.sendReminder = function (userTimeout, email) {
+                    $log.debug('sendReminder: time, email: ', userTimeout, email);
+                    if (userTimeout && email) {
+                        vm.closeModal();
+                        AuthService.getAuth().then(authData => {
+                            WorkoutsDiagnosticFlow.setReminder(ENV.serviceId, authData.uid, userTimeout, email);
+                            saveFlagToSessionStorage();
+                        });
+                    } else if (!email) {
+                        vm.emailErr = true;
+                    }
                 };
 
                 vm.closeModal = function () {
                     $mdDialog.cancel();
                 };
 
-                this.$onInit = function() {
-                    $log.debug('leavingSoSoonPopup: Init');
-                    this.showSpinner = false;
-                };
+                function saveFlagToSessionStorage() {
+                    if ($window.sessionStorage) {
+                        $window.sessionStorage.setItem('isReminderSent', JSON.stringify(true));
+                    }
+                }
+
             }]
         );
 })(angular);
@@ -4029,32 +4046,49 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise')
-        .controller('WorkoutsDiagnosticController', ["$state", "currentState", "$mdDialog", function($state, currentState, $mdDialog) {
-        'ngInject';
+        .controller('WorkoutsDiagnosticController', ["ENV", "$state", "currentState", "$mdDialog", "$window", function (ENV, $state, currentState, $mdDialog, $window) {
+            'ngInject';
 
-        var EXAM_STATE = 'app.diagnostic';
+            const EXAM_STATE = 'app.diagnostic';
 
             function userLeaveEvent(e) {
                 e = e ? e : window.event;
                 var from = e.relatedTarget || e.toElement;
-                if (!from || from.nodeName === "HTML") {
+                if (!from || from.nodeName === 'HTML') {
                     openLeavingSoSoonPopup();
                 }
             }
 
-            function openLeavingSoSoonPopup() {
-                return $mdDialog.show({
-                    controller: 'leavingSoSoonPopupCtrl',
-                    controllerAs: 'vm',
-                    templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
-                    clickOutsideToClose: true,
-                    escapeToClose: true
-                });
+            function getFlagToSessionStorage() {
+                let isReminderSent = false;
+                if ($window.sessionStorage) {
+                    isReminderSent = $window.sessionStorage.getItem('isReminderSent') === 'true';
+                }
+                return isReminderSent;
             }
 
-            this.$onInit = function() {
-                // Detect when the mouse leaves the window
-                document.addEventListener('mouseout', userLeaveEvent);
+            function openLeavingSoSoonPopup() {
+                const isReminderSent = getFlagToSessionStorage();
+
+                if (!isReminderSent) {
+                    return $mdDialog.show({
+                        controller: 'leavingSoSoonPopupCtrl',
+                        controllerAs: 'vm',
+                        templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
+                        clickOutsideToClose: true,
+                        escapeToClose: true
+                    });
+                }
+            }
+
+
+            this.$onInit = function () {
+                const isStudent = (ENV.appContext.toLowerCase()) === 'student';
+                const appName = ENV.appName ? ENV.appName.split('-')[0] : null;
+                if (isStudent && appName === 'toefl') {
+                    // Detect when the mouse leaves the window
+                    document.addEventListener('mouseout', userLeaveEvent);
+                }
 
                 $state.go(EXAM_STATE + currentState.state, currentState.params);
             };
@@ -4062,7 +4096,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
             this.$onDestroy = function () {
                 document.removeEventListener('mouseout', userLeaveEvent);
             };
-    }]);
+        }]);
 })(angular);
 
 
@@ -4624,8 +4658,11 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
+        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "znkAnalyticsSrv", "$injector", "CategoryService", "ENV", "$http", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
+                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http) {
+                'ngInject';
+
+                const reminderApi = `${ENV.znkBackendBaseUrl}/reminders`;
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
@@ -4959,6 +4996,13 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     });
                 };
 
+                workoutsDiagnosticFlowObjApi.setReminder = (serviceId, uid, userTimeout, email) => {
+                    const setReminderApi = `${reminderApi}/setReminder`;
+                    return $http.post(setReminderApi, { serviceId, uid, userTimeout, email })
+                        .then(reminder => reminder.data)
+                        .catch((err) => $log.error('workoutsDiagnosticFlowObjApi.setReminder: Failed to setReminder. Error: ', err));
+                };
+
                 return workoutsDiagnosticFlowObjApi;
             }];
     }]);
@@ -5044,22 +5088,45 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "\n" +
     "    <main class=\"content-wrapper\">\n" +
     "        <div class=\"quicksand-25-b title\" translate=\"LIVING_SO_SOON_POPUP.TITLE\"></div>\n" +
-    "        <div class=\"quicksand-18-n sub-title\" translate=\"LIVING_SO_SOON_POPUP.SUB_TITLE\"></div>\n" +
+    "        <div class=\"quicksand-16-n sub-title\" translate=\"LIVING_SO_SOON_POPUP.SUB_TITLE\"></div>\n" +
     "\n" +
     "        <div class=\"btn-group\">\n" +
-    "            <button type=\"button\" class=\"btn-type-1 save-btn\" ng-click=\"vm.setNotifyTime(10, 'min')\">\n" +
+    "            <button type=\"button\" id=\"btnNum1\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum1'}\"\n" +
+    "                    ng-click=\"vm.setNotifyTime(10, 'min', 'btnNum1')\">\n" +
     "                <div class=\"quicksand-25-b\">10</div>\n" +
-    "                <div class=\"quicksand-18-n\">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" id=\"btnNum2\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum2'}\"\n" +
+    "                    ng-click=\"vm.setNotifyTime(30, 'min', 'btnNum2')\">\n" +
+    "                <div class=\"quicksand-25-b\">30</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" id=\"btnNum3\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum3'}\"\n" +
+    "                    ng-click=\"vm.setNotifyTime(1, 'hour', 'btnNum3')\">\n" +
+    "                <div class=\"quicksand-25-b\">1</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOUR' | translate}}</div>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" id=\"btnNum4\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum4'}\"\n" +
+    "                    ng-click=\"vm.setNotifyTime(5, 'hour', 'btnNum4')\">\n" +
+    "                <div class=\"quicksand-25-b\">5</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" id=\"btnNum5\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum5'}\"\n" +
+    "                    ng-click=\"vm.setNotifyTime(24, 'hour', 'btnNum5')\">\n" +
+    "                <div class=\"quicksand-25-b\">24</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
     "            </button>\n" +
     "        </div>\n" +
     "        <div class=\"input-wrapper\">\n" +
-    "            <input type=\"email\"\n" +
+    "            <input type=\"email\" name=\"email\"\n" +
+    "                   ng-change=\"vm.emailErr = false\"\n" +
     "                   placeholder=\"{{'LIVING_SO_SOON_POPUP.EMAIL' | translate}}\"\n" +
-    "                   name=\"email\" ng-model=\"vm.userEmail\">\n" +
+    "                   ng-model=\"vm.userEmail\">\n" +
     "            <button type=\"button\" class=\"btn-type-1 save-btn\" translate=\"LIVING_SO_SOON_POPUP.GO\"\n" +
-    "                    ng-click=\"vm.sendReminder(vm.notifyTime, vm.userEmail)\">\n" +
+    "                    ng-click=\"vm.sendReminder(vm.userTimeout, vm.userEmail)\">\n" +
     "            </button>\n" +
     "        </div>\n" +
+    "        <div class=\"error-msg\" ng-if=\"vm.emailErr\">{{'LIVING_SO_SOON_POPUP.EMAIL_ERR' | translate}}</div>\n" +
     "    </main>\n" +
     "</div>\n" +
     "");

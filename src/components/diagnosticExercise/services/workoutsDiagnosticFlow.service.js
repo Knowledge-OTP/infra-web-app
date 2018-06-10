@@ -9,8 +9,11 @@
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService) {
+        this.$get = function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
+                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http) {
+                'ngInject';
+
+                const reminderApi = `${ENV.znkBackendBaseUrl}/reminders`;
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
@@ -344,8 +347,15 @@
                     });
                 };
 
+                workoutsDiagnosticFlowObjApi.setReminder = (serviceId, uid, userTimeout, email) => {
+                    const setReminderApi = `${reminderApi}/setReminder`;
+                    return $http.post(setReminderApi, { serviceId, uid, userTimeout, email })
+                        .then(reminder => reminder.data)
+                        .catch((err) => $log.error('workoutsDiagnosticFlowObjApi.setReminder: Failed to setReminder. Error: ', err));
+                };
+
                 return workoutsDiagnosticFlowObjApi;
-            }];
+            };
     }]);
 
 })(angular);

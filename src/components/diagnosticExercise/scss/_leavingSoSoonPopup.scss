@@ -14,13 +14,15 @@
         svg-icon svg {
             height: 14px;
             width: 14px;
-            fill: $bgColor3;
+            * {
+                fill: $bgColor3;
+            }
         }
     }
 
     main.content-wrapper {
         max-height: inherit;
-        width: 700px;
+        width: 500px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -31,12 +33,13 @@
             color: $bgColor3;
         }
         .sub-title {
-            margin-bottom: 30px;
+            width: 80%;
             color: $bgColor3;
+            text-align: center;
         }
 
         .btn-group {
-            margin: 10px;
+            margin: 30px 10px;
             display: flex;
 
             button {
@@ -47,12 +50,13 @@
                 flex-direction: column;
                 justify-content: center;
                 text-align: center;
-                &:nth-child(3) {
+                &.selected {
                     background-color: $bgColor7;
                 }
                 .quicksand-25-b, .quicksand-16-n {
                     color: $bgColor3;
                     text-transform: lowercase;
+                    height: 25px;
                 }
             }
 
@@ -60,11 +64,12 @@
         .input-wrapper {
             position: relative;
             margin-bottom: 25px;
+            width: 60%;
             input {
-                height: 35px;
-                width: 50%;
+                height: 40px;
+                width: calc(100% - 12px);
                 padding-left: 10px;
-                border-radius: 5px;
+                border-radius: 10px;
                 border: none;
                 outline: none;
             }
@@ -72,21 +77,24 @@
                 background-color: $bgColor7;
                 position: absolute;
                 right: 0;
-                top: 4px;
+                top: 0;
                 border: none;
-                height: 20px;
-                width: 20px;
-                border-radius: 100%;
+                width: 50px;
+                height: 100%;
                 outline: none;
                 text-align: center;
                 font-weight: bold;
-                padding: 2px;
+                margin: 0;
+                border-radius: 0 10px 10px 0;
 
                 &:hover {
                     cursor: pointer;
                 }
             }
 
+        }
+        .error-msg {
+            color: $bittersweet;
         }
     }
 

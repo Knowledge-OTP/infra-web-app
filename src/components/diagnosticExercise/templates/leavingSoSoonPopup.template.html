@@ -9,18 +9,41 @@
         <div class="quicksand-16-n sub-title" translate="LIVING_SO_SOON_POPUP.SUB_TITLE"></div>
 
         <div class="btn-group">
-            <button type="button" class="btn-type-1 save-btn" ng-click="vm.setNotifyTime(10, 'min')">
+            <button type="button" id="btnNum1" class="btn-type-1" ng-class="{'selected': vm.selectedBtnTimeoutElm === 'btnNum1'}"
+                    ng-click="vm.setNotifyTime(10, 'min', 'btnNum1')">
                 <div class="quicksand-25-b">10</div>
                 <div class="quicksand-16-n timeType">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>
             </button>
-        </div>
-        <div class="input-wrapper">
-            <input type="email"
-                   placeholder="{{'LIVING_SO_SOON_POPUP.EMAIL' | translate}}"
-                   name="email" ng-model="vm.userEmail">
-            <button type="button" class="btn-type-1 save-btn" translate="LIVING_SO_SOON_POPUP.GO"
-                    ng-click="vm.sendReminder(vm.notifyTime, vm.userEmail)">
+            <button type="button" id="btnNum2" class="btn-type-1" ng-class="{'selected': vm.selectedBtnTimeoutElm === 'btnNum2'}"
+                    ng-click="vm.setNotifyTime(30, 'min', 'btnNum2')">
+                <div class="quicksand-25-b">30</div>
+                <div class="quicksand-16-n timeType">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>
+            </button>
+            <button type="button" id="btnNum3" class="btn-type-1" ng-class="{'selected': vm.selectedBtnTimeoutElm === 'btnNum3'}"
+                    ng-click="vm.setNotifyTime(1, 'hour', 'btnNum3')">
+                <div class="quicksand-25-b">1</div>
+                <div class="quicksand-16-n timeType">{{'LIVING_SO_SOON_POPUP.HOUR' | translate}}</div>
+            </button>
+            <button type="button" id="btnNum4" class="btn-type-1" ng-class="{'selected': vm.selectedBtnTimeoutElm === 'btnNum4'}"
+                    ng-click="vm.setNotifyTime(5, 'hour', 'btnNum4')">
+                <div class="quicksand-25-b">5</div>
+                <div class="quicksand-16-n timeType">{{'LIVING_SO_SOON_POPUP.HOURS' | translate}}</div>
+            </button>
+            <button type="button" id="btnNum5" class="btn-type-1" ng-class="{'selected': vm.selectedBtnTimeoutElm === 'btnNum5'}"
+                    ng-click="vm.setNotifyTime(24, 'hour', 'btnNum5')">
+                <div class="quicksand-25-b">24</div>
+                <div class="quicksand-16-n timeType">{{'LIVING_SO_SOON_POPUP.HOURS' | translate}}</div>
             </button>
         </div>
+        <div class="input-wrapper">
+            <input type="email" name="email"
+                   ng-change="vm.emailErr = false"
+                   placeholder="{{'LIVING_SO_SOON_POPUP.EMAIL' | translate}}"
+                   ng-model="vm.userEmail">
+            <button type="button" class="btn-type-1 save-btn" translate="LIVING_SO_SOON_POPUP.GO"
+                    ng-click="vm.sendReminder(vm.userTimeout, vm.userEmail)">
+            </button>
+        </div>
+        <div class="error-msg" ng-if="vm.emailErr">{{'LIVING_SO_SOON_POPUP.EMAIL_ERR' | translate}}</div>
     </main>
 </div>

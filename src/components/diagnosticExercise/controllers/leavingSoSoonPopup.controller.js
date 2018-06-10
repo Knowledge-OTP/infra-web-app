@@ -3,39 +3,56 @@
     angular.module('znk.infra-web-app.diagnosticExercise')
         .controller('leavingSoSoonPopupCtrl',
 
-            function ($log, $mdDialog, UserTypeContextEnum) {
+            function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window) {
                 'ngInject';
 
                 const vm = this;
-                this.userContext = UserTypeContextEnum.STUDENT.enum;
-                vm.userEmail = '';
-                vm.notifyTime = '';
+                const MIN_IN_MILISEC = 60000; // minute in milliseconds = 60000
+                const HOUR_IN_MILISEC = 3600000; // Hour in milliseconds = 3600000
 
-                vm.setNotifyTime = function (time, type) {
-                    const MIN_IN_MILISEC = 60000; // minute in milliseconds = 60000
-                    const HOUR_IN_MILISEC = 3600000; // Hour in milliseconds = 60000
+                $log.debug('leavingSoSoonPopup: Init');
+                vm.userEmail = '';
+                vm.userTimeout = HOUR_IN_MILISEC;
+                vm.selectedBtnTimeoutElm = 'btnNum3';
+                vm.emailErr = false;
+
+                vm.setNotifyTime = function (userTimeout, type, btnId) {
+                    // for toggle "selected" class
+                    vm.selectedBtnTimeoutElm = btnId;
+
                     switch (type) {
                         case 'min':
-                            vm.notifyTime = time * MIN_IN_MILISEC;
+                            vm.userTimeout = userTimeout * MIN_IN_MILISEC;
                             break;
                         case 'hour':
-                            vm.notifyTime = time * HOUR_IN_MILISEC;
+                            vm.userTimeout = userTimeout * HOUR_IN_MILISEC;
                             break;
                     }
                 };
 
-                vm.sendReminder = function (time, email) {
-                    console.log('sendReminder: time, email: ', time, email);
+                vm.sendReminder = function (userTimeout, email) {
+                    $log.debug('sendReminder: time, email: ', userTimeout, email);
+                    if (userTimeout && email) {
+                        vm.closeModal();
+                        AuthService.getAuth().then(authData => {
+                            WorkoutsDiagnosticFlow.setReminder(ENV.serviceId, authData.uid, userTimeout, email);
+                            saveFlagToSessionStorage();
+                        });
+                    } else if (!email) {
+                        vm.emailErr = true;
+                    }
                 };
 
                 vm.closeModal = function () {
                     $mdDialog.cancel();
                 };
 
-                this.$onInit = function() {
-                    $log.debug('leavingSoSoonPopup: Init');
-                    this.showSpinner = false;
-                };
+                function saveFlagToSessionStorage() {
+                    if ($window.sessionStorage) {
+                        $window.sessionStorage.setItem('isReminderSent', JSON.stringify(true));
+                    }
+                }
+
             }
         );
 })(angular);
