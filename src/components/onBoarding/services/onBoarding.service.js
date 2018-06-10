@@ -57,7 +57,14 @@
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
-
+            onBoardingServiceObj.getMarketingToefl = function () {
+                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(marketingPath).then(function (marketing) {
+                        return marketing;
+                    });
+                });
+            };
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
                     return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;

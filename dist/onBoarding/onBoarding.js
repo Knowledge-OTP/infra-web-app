@@ -90,14 +90,15 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController',
-        ["OnBoardingService", "$state", "znkAnalyticsSrv", function(OnBoardingService, $state, znkAnalyticsSrv) {
+        ["OnBoardingService", "$state", "znkAnalyticsSrv", function (OnBoardingService, $state, znkAnalyticsSrv) {
             'ngInject';
 
             var vm = this;
             var onBordingSettings = OnBoardingService.getOnBoardingSettings();
-
+            vm.isMarketingToefl = false;
             vm.showInstructions = angular.isDefined(onBordingSettings.showInstructions) ? onBordingSettings.showInstructions : false;
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
+            getMarketingToefl();
 
             this.setOnboardingCompleted = function (nextState, eventText) {
                 znkAnalyticsSrv.eventTrack({
@@ -108,13 +109,19 @@
                 });
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
                     if (nextState === 'app.diagnostic' && onBordingSettings.forceSkipIntro) {
-                        $state.go(nextState, { forceSkipIntro: true });
+                        $state.go(nextState, {forceSkipIntro: true});
                     } else {
                         $state.go(nextState);
                     }
                 });
             };
-    }]);
+
+            function getMarketingToefl() {
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    vm.isMarketingToefl = !!marketingObj && !!marketingObj.status;
+                });
+            }
+        }]);
 })(angular);
 
 (function (angular) {
@@ -282,35 +289,67 @@
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", function ($rootScope, OnBoardingService, $state) {
+    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", "ENV", function ($rootScope, OnBoardingService, $state, ENV) {
         'ngInject';
         var isOnBoardingCompleted = false;
         $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
             if (isOnBoardingCompleted) {
                 return;
             }
-
-            var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
-            var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
-
-            if (isGoingToWorkoutsState) {
-                evt.preventDefault();
-
-                OnBoardingService.isOnBoardingCompleted().then(function (_isOnBoardingCompleted) {
-                    isOnBoardingCompleted = _isOnBoardingCompleted;
-
-                    if (!isOnBoardingCompleted) {
-                        var ON_BOARDING_STATE_NAME = 'app.onBoarding';
-                        var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
-                        if (isNotFromOnBoardingState) {
-                            $state.go(ON_BOARDING_STATE_NAME);
-                        }
+            else {
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    // statuses:  7 - app  , 1 - diagnostic
+                    if (marketingObj && marketingObj.status && marketingObj.status !== 1 && marketingObj.status !== 7) {
+                        handleToeflMarketingRedirect(marketingObj);
                     } else {
-                        $state.go(toState, toParams, {
-                            reload: true
-                        });
+                        var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
+                        var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
+
+                        if (isGoingToWorkoutsState) {
+                            evt.preventDefault();
+
+                            OnBoardingService.isOnBoardingCompleted().then(function (_isOnBoardingCompleted) {
+                                isOnBoardingCompleted = _isOnBoardingCompleted;
+
+                                if (!isOnBoardingCompleted) {
+                                    var ON_BOARDING_STATE_NAME = 'app.onBoarding';
+                                    var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
+                                    if (isNotFromOnBoardingState) {
+                                        $state.go(ON_BOARDING_STATE_NAME);
+                                    }
+                                } else {
+                                    $state.go(toState, toParams, {
+                                        reload: true
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
+            }
+
+            function handleToeflMarketingRedirect(marketingObj) {
+                var state = '';
+                switch (marketingObj.status) {
+                    case 2:
+                        state = 'email';
+                        break;
+                    case 3:
+                        state = 'verifyEmail';
+                        break;
+                    case 4:
+                        state = 'purchase';
+                        break;
+                    case 5:
+                        state = 'purchase';
+                        break;
+                    case 6:
+                        state = 'signup';
+                        break;
+                    default:
+                        state = 'purchase';
+                }
+                window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
             }
         });
     }]);
@@ -376,7 +415,14 @@
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
-
+            onBoardingServiceObj.getMarketingToefl = function () {
+                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(marketingPath).then(function (marketing) {
+                        return marketing;
+                    });
+                });
+            };
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
                     return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;
@@ -641,14 +687,17 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
   $templateCache.put("components/onBoarding/templates/onBoardingDiagnostic.template.html",
     "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.DIAGNOSTIC\">\n" +
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
-    "    <diagnostic-intro show-instructions=\"vm.showInstructions\" show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
+    "    <diagnostic-intro show-instructions=\"vm.showInstructions\"\n" +
+    "                      show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
-    "            tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
+    "        <md-button ng-if=\"!vm.isMarketingToefl\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
+    "                   tabindex=\"2\" class=\"default sm\"\n" +
+    "                   ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
     "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.START_TEST' | translate}}\"\n" +
-    "            autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
+    "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +
+    "                   ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
