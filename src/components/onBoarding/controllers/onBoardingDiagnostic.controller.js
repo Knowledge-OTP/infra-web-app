@@ -6,7 +6,7 @@
 
             var vm = this;
             var onBordingSettings = OnBoardingService.getOnBoardingSettings();
-
+            vm.isMarketingToefl = false;
             vm.showInstructions = angular.isDefined(onBordingSettings.showInstructions) ? onBordingSettings.showInstructions : false;
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
             getMarketingToefl();

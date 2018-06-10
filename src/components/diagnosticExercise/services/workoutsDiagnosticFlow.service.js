@@ -35,11 +35,8 @@
                     return currentState;
                 };
                 workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
-                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing/status`;
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.get(marketingPath).then(function (marketingObj) {
-                            return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
-                        });
+                    return workoutsDiagnosticFlowObjApi.getMarketingToefl().then(function (marketingObj) {
+                        return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
                     });
                 };
                 workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
@@ -53,11 +50,11 @@
                 workoutsDiagnosticFlowObjApi.setMarketingToeflStatusAndAbTest = function (abTest, status) {
                     var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                     var data = {
-                        'abTesting': abTest,
-                        'status': status
+                        [marketingPath+'/abTesting']: abTest,
+                        [marketingPath+'/status']: status
                     };
                     return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.update(marketingPath, data).then(function (status) {
+                        return studentStorage.update(data).then(function (status) {
                             return status;
                         });
                     });
