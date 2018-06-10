@@ -3831,7 +3831,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     resolve: {
                         currentState: ["WorkoutsDiagnosticFlow", "$stateParams", function currentState(WorkoutsDiagnosticFlow, $stateParams) {
                             'ngInject';// jshint ignore:line
-                            return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro, $stateParams.forceSkipIntro );
+                            return WorkoutsDiagnosticFlow.getDiagnosticFlowCurrentState(null, $stateParams.skipIntro, $stateParams.forceSkipIntro);
                         }]
                     },
                     controller: 'WorkoutsDiagnosticController',
@@ -3899,16 +3899,16 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                         var diagnosticSettings = WorkoutsDiagnosticFlow.getDiagnosticSettings();
                         var lastQuestion = questionResults[questionResults.length - 1];
 
-                        var isCurrentQuestion = function(question) {
+                        var isCurrentQuestion = function (question) {
                             return question.questionId === currentSection.currentQuestion.id;
                         };
-                        var isLastQuestion = function() {
+                        var isLastQuestion = function () {
                             return isCurrentQuestion(lastQuestion);
                         };
 
                         if (currentSection.currentQuestion) {
-                            if(!diagnosticSettings.isFixed) {
-                                if(isLastQuestion()) {
+                            if (!diagnosticSettings.isFixed) {
+                                if (isLastQuestion()) {
                                     delete lastQuestion.userAnswer;
                                 } else {
                                     questionResults.pop();
@@ -3916,7 +3916,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                                 }
                             } else {
                                 var answersArr = questionResults.filter(isCurrentQuestion);
-                                if(answersArr.length > 0) {
+                                if (answersArr.length > 0) {
                                     delete answersArr[0].userAnswer;
                                 }
                             }
@@ -3926,10 +3926,17 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                 })
                 .state('app.diagnostic.preSummary', {
                     templateUrl: 'components/diagnosticExercise/templates/workoutsDiagnosticPreSummary.template.html',
-                    controller: ['$timeout', '$state', function ($timeout, $state) {
+                    controller: ['$timeout', '$state', 'ENV', 'WorkoutsDiagnosticFlow', 'MarketingStatusEnum', function ($timeout, $state, ENV, WorkoutsDiagnosticFlow, MarketingStatusEnum) {
                         var VIDEO_DURATION = 6000;
                         $timeout(function () {
-                            $state.go('app.diagnostic.summary');
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    var state = marketingObj.status === MarketingStatusEnum.GET_EMAIL.enum ? 'email' : 'purchase';
+                                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+                                } else {
+                                    $state.go('app.diagnostic.summary');
+                                }
+                            });
                         }, VIDEO_DURATION);
                     }],
                     controllerAs: 'vm'
@@ -4106,10 +4113,10 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", "MarketingStatusEnum", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
                   $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
-                  $translate, ExerciseReviewStatusEnum, CategoryService) {
+                  $translate, ExerciseReviewStatusEnum, CategoryService, MarketingStatusEnum) {
             'ngInject';
             var self = this;
             this.subjectId = (typeof exerciseData.questionsData.subjectId === 'undefined' || exerciseData.questionsData.subjectId === null) ?
@@ -4407,7 +4414,27 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                                 }
                             });
                             if (isLastSubject) {
-                                _goToCurrentState(true);
+                                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                    if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
+                                        WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
+                                            let selectedNum;
+                                            let selectedStatus;
+                                            if (globalVariable && globalVariable.abTesting) {
+                                                const abTestingNum = parseFloat(globalVariable.abTesting);
+                                                selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
+                                            } else { // in case the globalVariable or the abTesting is missing
+                                                selectedNum = 1;
+                                            }
+                                            selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
+                                            WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
+                                                $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
+                                                _goToCurrentState(true);
+                                            });
+                                        });
+                                    } else {
+                                        _goToCurrentState(true);
+                                    }
+                                });
                             } else {
                                 _goToCurrentState();
                             }
@@ -4617,6 +4644,27 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
             });
         }]);
 })(angular);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.diagnosticExercise').factory('MarketingStatusEnum',
+        ["EnumSrv", function (EnumSrv) {
+            'ngInject';
+
+            return new EnumSrv.BaseEnum([
+                ['DIAGNOSTIC', 1, 'diagnostic'],
+                ['GET_EMAIL', 2, 'get Email'],
+                ['VALIDATE_EMAIL', 3, 'validate Email'],
+                ['PRE_PURCHASE', 4, 'pre Purchase'],
+                ['PURCHASED', 5, 'Purchased'],
+                ['SIGNUP', 6, 'signup'],
+                ['APP', 7, 'app'],
+            ]);
+        }]
+    );
+})(angular);
+
 
 (function (angular) {
     'use strict';
@@ -8914,7 +8962,7 @@ angular.module('znk.infra-web-app.lazyLoadResource').run(['$templateCache', func
 
                 var dataToSend = {
                     emails: [MAIL_TO_SEND],
-                    message: message,
+                    emailParams: {'MESSAGE_CONTENT': message},
                     subject: emailSubject,
                     appName: ENV.firebaseAppScopeName,
                     templateKey: TEMPLATE_KEY,
@@ -13579,14 +13627,15 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController',
-        ["OnBoardingService", "$state", "znkAnalyticsSrv", function(OnBoardingService, $state, znkAnalyticsSrv) {
+        ["OnBoardingService", "$state", "znkAnalyticsSrv", function (OnBoardingService, $state, znkAnalyticsSrv) {
             'ngInject';
 
             var vm = this;
             var onBordingSettings = OnBoardingService.getOnBoardingSettings();
-
+            vm.isMarketingToefl = false;
             vm.showInstructions = angular.isDefined(onBordingSettings.showInstructions) ? onBordingSettings.showInstructions : false;
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
+            getMarketingToefl();
 
             this.setOnboardingCompleted = function (nextState, eventText) {
                 znkAnalyticsSrv.eventTrack({
@@ -13597,13 +13646,19 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                 });
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
                     if (nextState === 'app.diagnostic' && onBordingSettings.forceSkipIntro) {
-                        $state.go(nextState, { forceSkipIntro: true });
+                        $state.go(nextState, {forceSkipIntro: true});
                     } else {
                         $state.go(nextState);
                     }
                 });
             };
-    }]);
+
+            function getMarketingToefl() {
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    vm.isMarketingToefl = !!marketingObj && !!marketingObj.status;
+                });
+            }
+        }]);
 })(angular);
 
 (function (angular) {
@@ -13771,35 +13826,67 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 (function (angular) {
     'use strict';
 
-    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", function ($rootScope, OnBoardingService, $state) {
+    angular.module('znk.infra-web-app.onBoarding').run(["$rootScope", "OnBoardingService", "$state", "ENV", function ($rootScope, OnBoardingService, $state, ENV) {
         'ngInject';
         var isOnBoardingCompleted = false;
         $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
             if (isOnBoardingCompleted) {
                 return;
             }
-
-            var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
-            var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
-
-            if (isGoingToWorkoutsState) {
-                evt.preventDefault();
-
-                OnBoardingService.isOnBoardingCompleted().then(function (_isOnBoardingCompleted) {
-                    isOnBoardingCompleted = _isOnBoardingCompleted;
-
-                    if (!isOnBoardingCompleted) {
-                        var ON_BOARDING_STATE_NAME = 'app.onBoarding';
-                        var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
-                        if (isNotFromOnBoardingState) {
-                            $state.go(ON_BOARDING_STATE_NAME);
-                        }
+            else {
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    // statuses:  7 - app  , 1 - diagnostic
+                    if (marketingObj && marketingObj.status && marketingObj.status !== 1 && marketingObj.status !== 7) {
+                        handleToeflMarketingRedirect(marketingObj);
                     } else {
-                        $state.go(toState, toParams, {
-                            reload: true
-                        });
+                        var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
+                        var isGoingToWorkoutsState = toState.name.indexOf(APP_WORKOUTS_STATE) !== -1;
+
+                        if (isGoingToWorkoutsState) {
+                            evt.preventDefault();
+
+                            OnBoardingService.isOnBoardingCompleted().then(function (_isOnBoardingCompleted) {
+                                isOnBoardingCompleted = _isOnBoardingCompleted;
+
+                                if (!isOnBoardingCompleted) {
+                                    var ON_BOARDING_STATE_NAME = 'app.onBoarding';
+                                    var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
+                                    if (isNotFromOnBoardingState) {
+                                        $state.go(ON_BOARDING_STATE_NAME);
+                                    }
+                                } else {
+                                    $state.go(toState, toParams, {
+                                        reload: true
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
+            }
+
+            function handleToeflMarketingRedirect(marketingObj) {
+                var state = '';
+                switch (marketingObj.status) {
+                    case 2:
+                        state = 'email';
+                        break;
+                    case 3:
+                        state = 'verifyEmail';
+                        break;
+                    case 4:
+                        state = 'purchase';
+                        break;
+                    case 5:
+                        state = 'purchase';
+                        break;
+                    case 6:
+                        state = 'signup';
+                        break;
+                    default:
+                        state = 'purchase';
+                }
+                window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
             }
         });
     }]);
@@ -13865,7 +13952,14 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
-
+            onBoardingServiceObj.getMarketingToefl = function () {
+                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(marketingPath).then(function (marketing) {
+                        return marketing;
+                    });
+                });
+            };
             onBoardingServiceObj.isOnBoardingCompleted = function () {
                 return getProgress().then(function (onBoardingProgress) {
                     return onBoardingProgress.step === onBoardingServiceObj.steps.ROADMAP;
@@ -14130,14 +14224,17 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
   $templateCache.put("components/onBoarding/templates/onBoardingDiagnostic.template.html",
     "<section class=\"step diagnostic\" translate-namespace=\"ON_BOARDING.DIAGNOSTIC\">\n" +
     "    <div class=\"diagnostic-title\" translate=\".DIAGNOSTIC_TEST\"></div>\n" +
-    "    <diagnostic-intro show-instructions=\"vm.showInstructions\" show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
+    "    <diagnostic-intro show-instructions=\"vm.showInstructions\"\n" +
+    "                      show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
-    "            tabindex=\"2\" class=\"default sm\" ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
+    "        <md-button ng-if=\"!vm.isMarketingToefl\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
+    "                   tabindex=\"2\" class=\"default sm\"\n" +
+    "                   ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
     "        </md-button>\n" +
     "        <md-button aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.START_TEST' | translate}}\"\n" +
-    "            autofocus tabindex=\"1\" class=\"md-sm znk md-primary\" ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
+    "                   autofocus tabindex=\"1\" class=\"md-sm znk md-primary\"\n" +
+    "                   ng-click=\"vm.setOnboardingCompleted('app.diagnostic', 'Start Test')\">\n" +
     "            <span translate=\".START_TEST\"></span>\n" +
     "        </md-button>\n" +
     "    </div>\n" +
