@@ -938,6 +938,8 @@ complete-exercise-header {
     height: 50px;
     display: -ms-flexbox;
     display: flex;
+    -ms-flex-pack: justify;
+        justify-content: space-between;
     -ms-flex-align: center;
         align-items: center;
     padding-right: 28px;
@@ -956,18 +958,8 @@ complete-exercise-header {
       complete-exercise-header .header-container .left-part .left-title {
         white-space: nowrap;
         overflow: hidden; }
-    complete-exercise-header .header-container .center-part {
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-      -ms-flex-pack: center;
-          justify-content: center; }
-    complete-exercise-header .header-container .right-part {
-      width: 400px;
-      text-align: right;
-      -ms-flex-pack: end;
-          justify-content: flex-end; }
-      complete-exercise-header .header-container .right-part .exit {
-        cursor: pointer; }
+    complete-exercise-header .header-container .right-part .exit {
+      cursor: pointer; }
 
 complete-exercise-intro-tutorial {
   display: block;

@@ -29,6 +29,7 @@
 "znk.infra-web-app.navigation",
 "znk.infra-web-app.notification",
 "znk.infra-web-app.onBoarding",
+"znk.infra-web-app.oneSignal",
 "znk.infra-web-app.planNotification",
 "znk.infra-web-app.promoCode",
 "znk.infra-web-app.purchase",
@@ -14194,6 +14195,10 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
     "</section>\n" +
     "<on-boarding-bar step=\"welcome\"></on-boarding-bar>\n" +
     "");
+}]);
+
+angular.module('znk.infra-web-app.oneSignal').run(['$templateCache', function ($templateCache) {
+
 }]);
 
 (function (angular) {
