@@ -8,7 +8,7 @@
         OneSignalService.initOneSignal();
 
         OneSignalService.sendTag("App", "MyZinkerz", (res) => {
-            console.log('tags recieved by server', res);
+            console.log('tags received by server', res);
         });
     });
 })();

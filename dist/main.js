@@ -14227,7 +14227,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
         OneSignalService.initOneSignal();
 
         OneSignalService.sendTag("App", "MyZinkerz", (res) => {
-            console.log('tags recieved by server', res);
+            console.log('tags received by server', res);
         });
     }]);
 })();
