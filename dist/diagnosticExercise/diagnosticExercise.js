@@ -931,7 +931,7 @@
                               znkAnalyticsSrv, $injector, CategoryService, ENV, $http) {
                 'ngInject';
 
-                const reminderApi = `${ENV.znkBackendBaseUrl}/reminders`;
+                const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
