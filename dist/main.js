@@ -14221,13 +14221,21 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
   'use strict';
 
   angular.module('znk.infra-web-app.oneSignal').run(
-    ["OneSignalService", function (OneSignalService) {
+    ["$log", "OneSignalService", "ENV", "AuthService", function ($log, OneSignalService, ENV, AuthService) {
       'ngInject';
 
         OneSignalService.initOneSignal();
 
-        OneSignalService.sendTag("App", "MyZinkerz", (res) => {
-            console.log('tags received by server', res);
+        OneSignalService.sendTag('ServiceId', ENV.serviceId, (res) => {
+            $log.debug('tags received by server', res);
+        });
+
+        AuthService.getAuth().then(authData => {
+            if (authData && authData.uid) {
+                OneSignalService.sendTag('UID', authData.uid, (res) => {
+                    $log.debug('tags received by server', res);
+                });
+            }
         });
     }]);
 })();
