@@ -13690,7 +13690,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
             else {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     // statuses:  7 - app  , 1 - diagnostic
-                    if (marketingObj && marketingObj.status && marketingObj.status !== 1 && marketingObj.status !== 7) {
+                    if (marketingObj && marketingObj.status && marketingObj.status !== 1 && marketingObj.status !== 7 && toState.name !== 'app.diagnostic.preSummary') {
                         handleToeflMarketingRedirect(marketingObj);
                     } else {
                         var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
