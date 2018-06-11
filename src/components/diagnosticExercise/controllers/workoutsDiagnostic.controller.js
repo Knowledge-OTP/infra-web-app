@@ -40,8 +40,7 @@
 
             this.$onInit = function () {
                 const isStudent = (ENV.appContext.toLowerCase()) === 'student';
-                const appName = ENV.appName ? ENV.appName.split('-')[0] : null;
-                if (isStudent && appName === 'toefl') {
+                if (isStudent) {
                     // Detect when the mouse leaves the window
                     document.addEventListener('mouseout', userLeaveEvent);
                 }
