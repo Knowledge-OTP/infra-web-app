@@ -1,0 +1,102 @@
+.leaving-so-soon-popup {
+    color: $bgColor3;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: $bgColor5;
+
+    .close-popup-wrap {
+        @include absolute-position(10px, 10px);
+        height: 14px;
+        width: 14px;
+        cursor: pointer;
+        svg-icon svg {
+            height: 14px;
+            width: 14px;
+            * {
+                fill: $bgColor3;
+            }
+        }
+    }
+
+    main.content-wrapper {
+        max-height: inherit;
+        width: 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .title {
+            padding: 10px 0;
+            color: $bgColor3;
+        }
+        .sub-title {
+            width: 80%;
+            color: $bgColor3;
+            text-align: center;
+        }
+
+        .btn-group {
+            margin: 30px 10px;
+            display: flex;
+
+            button {
+                width: 50px;
+                height: 50px;
+                background-color: #3cb0fd;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                &.selected {
+                    background-color: $bgColor7;
+                }
+                .quicksand-25-b, .quicksand-16-n {
+                    color: $bgColor3;
+                    text-transform: lowercase;
+                    height: 25px;
+                }
+            }
+
+        }
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+            width: 60%;
+            input {
+                height: 40px;
+                width: calc(100% - 12px);
+                padding-left: 10px;
+                border-radius: 10px;
+                border: none;
+                outline: none;
+            }
+            button {
+                background-color: $bgColor7;
+                position: absolute;
+                right: 0;
+                top: 0;
+                border: none;
+                width: 50px;
+                height: 100%;
+                outline: none;
+                text-align: center;
+                font-weight: bold;
+                margin: 0;
+                border-radius: 0 10px 10px 0;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+        }
+        .error-msg {
+            color: $bittersweet;
+        }
+    }
+
+}
+

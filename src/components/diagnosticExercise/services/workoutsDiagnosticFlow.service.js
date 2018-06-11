@@ -9,8 +9,11 @@
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService', '$http', 'ENV', 'StorageSrv', 'InfraConfigSrv',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService, $http, ENV, StorageSrv, InfraConfigSrv) {
+        this.$get = function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
+                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http) {
+                'ngInject';
+
+                const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
@@ -34,38 +37,7 @@
                 workoutsDiagnosticFlowObjApi.getCurrentState = function () {
                     return currentState;
                 };
-                workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
-                    return workoutsDiagnosticFlowObjApi.getMarketingToefl().then(function (marketingObj) {
-                        return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
-                    });
-                };
-                workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
-                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.get(marketingPath).then(function (marketing) {
-                            return marketing;
-                        });
-                    });
-                };
-                workoutsDiagnosticFlowObjApi.setMarketingToeflStatusAndAbTest = function (abTest, status) {
-                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
-                    var data = {
-                        [marketingPath+'/abTesting']: abTest,
-                        [marketingPath+'/status']: status
-                    };
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.update(data).then(function (status) {
-                            return status;
-                        });
-                    });
-                };
 
-                workoutsDiagnosticFlowObjApi.getGlobalVariables = function () {
-                    var globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
-                    return $http.get(`${globalBackendUrl}`, {timeout: ENV.promiseTimeOut, cache: true})
-                        .then(globalVariables => globalVariables.data)
-                        .catch((err) => $log.error('getGlobalVariables: Failed to get global variables. Error: ', err));
-                };
                 var diagnosticSettings = workoutsDiagnosticFlowObjApi.getDiagnosticSettings();
 
                 function _getDataProm() {
@@ -183,7 +155,7 @@
                             examResults.$save();
                         }
 
-                        skipIntroBool = forceSkipIntro ? forceSkipIntro : false;
+                        skipIntroBool = forceSkipIntro? forceSkipIntro : false;
 
                         var exerciseResultPromises = _getExerciseResultProms(examResults.sectionResults, exam.id);
 
@@ -375,8 +347,15 @@
                     });
                 };
 
+                workoutsDiagnosticFlowObjApi.setReminder = (serviceId, uid, userTimeout, email) => {
+                    const setReminderApi = `${reminderApi}/setReminder`;
+                    return $http.post(setReminderApi, { serviceId, uid, userTimeout, email })
+                        .then(reminder => reminder.data)
+                        .catch((err) => $log.error('workoutsDiagnosticFlowObjApi.setReminder: Failed to setReminder. Error: ', err));
+                };
+
                 return workoutsDiagnosticFlowObjApi;
-            }];
+            };
     }]);
 
 })(angular);
