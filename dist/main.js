@@ -14342,10 +14342,6 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
     "");
 }]);
 
-angular.module('znk.infra-web-app.oneSignal').run(['$templateCache', function ($templateCache) {
-
-}]);
-
 (function (angular) {
     'use strict';
 
