@@ -13486,7 +13486,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 
             var vm = this;
             var onBordingSettings = OnBoardingService.getOnBoardingSettings();
-            vm.isMarketingToefl = false;
+            vm.showLaterButton = false;
             vm.showInstructions = angular.isDefined(onBordingSettings.showInstructions) ? onBordingSettings.showInstructions : false;
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
             getMarketingToefl();
@@ -13509,7 +13509,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 
             function getMarketingToefl() {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                    vm.isMarketingToefl = !!marketingObj && !!marketingObj.status;
+                    vm.showLaterButton = !(marketingObj && marketingObj.status);
                 });
             }
         }]);
@@ -14081,7 +14081,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
     "    <diagnostic-intro show-instructions=\"vm.showInstructions\"\n" +
     "                      show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button ng-if=\"!vm.isMarketingToefl\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
+    "        <md-button ng-if=\"vm.showLaterButton\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
     "                   tabindex=\"2\" class=\"default sm\"\n" +
     "                   ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
@@ -19421,6 +19421,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 var pendingPurchaseProm = purchaseService.getPendingPurchase();
                 ActivePanelSrv.loadActivePanel();
                 vm.expandIcon = 'expand_more';
+                vm.showheaderlinks = false;
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
                 vm.showMyProfile = MyProfileSrv.showMyProfile;
@@ -19448,7 +19449,9 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
                 });
-
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    vm.showheaderlinks = !(marketingObj && marketingObj.status);
+                });
                 $scope.$watch(function () {
                     return vm.purchaseData;
                 }, function (newPurchaseState) {
@@ -19580,7 +19583,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "            </svg-icon>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"app-states-list\">\n" +
+    "        <div ng-if=\"vm.showheaderlinks\" class=\"app-states-list\">\n" +
     "            <md-list flex=\"grow\" layout=\"row\" layout-align=\"start center\">\n" +
     "                <div ng-repeat=\"headerItem in vm.additionalItems\">\n" +
     "                    <md-list-item md-ink-ripple ui-sref-active=\"active\">\n" +

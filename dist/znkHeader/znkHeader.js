@@ -42,6 +42,7 @@
                 var pendingPurchaseProm = purchaseService.getPendingPurchase();
                 ActivePanelSrv.loadActivePanel();
                 vm.expandIcon = 'expand_more';
+                vm.showheaderlinks = false;
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
                 vm.showMyProfile = MyProfileSrv.showMyProfile;
@@ -69,7 +70,9 @@
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
                 });
-
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    vm.showheaderlinks = !(marketingObj && marketingObj.status);
+                });
                 $scope.$watch(function () {
                     return vm.purchaseData;
                 }, function (newPurchaseState) {
@@ -201,7 +204,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "            </svg-icon>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"app-states-list\">\n" +
+    "        <div ng-if=\"vm.showheaderlinks\" class=\"app-states-list\">\n" +
     "            <md-list flex=\"grow\" layout=\"row\" layout-align=\"start center\">\n" +
     "                <div ng-repeat=\"headerItem in vm.additionalItems\">\n" +
     "                    <md-list-item md-ink-ripple ui-sref-active=\"active\">\n" +

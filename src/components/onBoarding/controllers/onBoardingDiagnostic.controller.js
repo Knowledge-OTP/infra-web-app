@@ -6,7 +6,7 @@
 
             var vm = this;
             var onBordingSettings = OnBoardingService.getOnBoardingSettings();
-            vm.isMarketingToefl = false;
+            vm.showLaterButton = false;
             vm.showInstructions = angular.isDefined(onBordingSettings.showInstructions) ? onBordingSettings.showInstructions : false;
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
             getMarketingToefl();
@@ -29,7 +29,7 @@
 
             function getMarketingToefl() {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                    vm.isMarketingToefl = !!marketingObj && !!marketingObj.status;
+                    vm.showLaterButton = !(marketingObj && marketingObj.status);
                 });
             }
         });

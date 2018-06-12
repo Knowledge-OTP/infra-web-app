@@ -6,7 +6,7 @@
             </svg-icon>
         </div>
 
-        <div class="app-states-list">
+        <div ng-if="vm.showheaderlinks" class="app-states-list">
             <md-list flex="grow" layout="row" layout-align="start center">
                 <div ng-repeat="headerItem in vm.additionalItems">
                     <md-list-item md-ink-ripple ui-sref-active="active">

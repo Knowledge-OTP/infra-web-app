@@ -3,7 +3,7 @@
     <diagnostic-intro show-instructions="vm.showInstructions"
                       show-icons-section="vm.showIconsSection"></diagnostic-intro>
     <div class="btn-wrap">
-        <md-button ng-if="!vm.isMarketingToefl" aria-label="{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}"
+        <md-button ng-if="vm.showLaterButton" aria-label="{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}"
                    tabindex="2" class="default sm"
                    ng-click="vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')">
             <span translate=".TAKE_IT_LATER"></span>
