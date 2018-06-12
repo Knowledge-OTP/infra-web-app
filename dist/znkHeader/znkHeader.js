@@ -225,7 +225,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "            <div class=\"review-credit-container\" ng-if=\"vm.showReviewCreditBtn\">\n" +
     "                <purchase-credits-btn></purchase-credits-btn>\n" +
     "            </div>\n" +
-    "            <md-menu md-offset=\"-61 68\">\n" +
+    "            <md-menu md-offset=\"-61 68\" ng-if=\"vm.showheaderlinks\">\n" +
     "                <md-button ng-click=\"$mdOpenMenu($event); vm.znkOpenModal();\" class=\"md-icon-button profile-open-modal-btn\" aria-label=\"Open sample menu\">\n" +
     "                    <div>{{vm.userProfile.username}}</div>\n" +
     "                    <md-icon class=\"material-icons\">{{vm.expandIcon}}</md-icon>\n" +
