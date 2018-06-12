@@ -29,6 +29,7 @@
 "znk.infra-web-app.navigation",
 "znk.infra-web-app.notification",
 "znk.infra-web-app.onBoarding",
+"znk.infra-web-app.oneSignal",
 "znk.infra-web-app.planNotification",
 "znk.infra-web-app.promoCode",
 "znk.infra-web-app.purchase",
@@ -3810,7 +3811,8 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
         var svgMap = {
             'diagnostic-dropdown-arrow-icon': 'components/diagnosticExercise/svg/dropdown-arrow.svg',
             'diagnostic-check-mark': 'components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg',
-            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg'
+            'diagnostic-flag-icon': 'components/diagnosticExercise/svg/flag-icon.svg',
+            'diagnostic-close-popup': 'components/diagnosticExercise/svg/close-popup.svg'
         };
         SvgIconSrvProvider.registerSvgSources(svgMap);
     }]);
@@ -3991,16 +3993,117 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
 
 (function (angular) {
     'use strict';
+    angular.module('znk.infra-web-app.diagnosticExercise')
+        .controller('leavingSoSoonPopupCtrl',
+
+            ["$log", "$mdDialog", "WorkoutsDiagnosticFlow", "ENV", "AuthService", "$window", function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window) {
+                'ngInject';
+
+                const vm = this;
+                const MIN_IN_MILISEC = 60000; // minute in milliseconds = 60000
+                const HOUR_IN_MILISEC = 3600000; // Hour in milliseconds = 3600000
+
+                $log.debug('leavingSoSoonPopup: Init');
+                vm.userEmail = '';
+                vm.userTimeout = HOUR_IN_MILISEC;
+                vm.selectedBtnTimeoutElm = 'btnNum3';
+                vm.emailErr = false;
+
+                vm.setNotifyTime = function (userTimeout, type, btnId) {
+                    // for toggle "selected" class
+                    vm.selectedBtnTimeoutElm = btnId;
+
+                    switch (type) {
+                        case 'min':
+                            vm.userTimeout = userTimeout * MIN_IN_MILISEC;
+                            break;
+                        case 'hour':
+                            vm.userTimeout = userTimeout * HOUR_IN_MILISEC;
+                            break;
+                    }
+                };
+
+                vm.sendReminder = function (userTimeout, email) {
+                    $log.debug('sendReminder: time, email: ', userTimeout, email);
+                    if (userTimeout && email) {
+                        vm.closeModal();
+                        AuthService.getAuth().then(authData => {
+                            WorkoutsDiagnosticFlow.setReminder(ENV.serviceId, authData.uid, userTimeout, email);
+                            saveFlagToSessionStorage();
+                        });
+                    } else if (!email) {
+                        vm.emailErr = true;
+                    }
+                };
+
+                vm.closeModal = function () {
+                    $mdDialog.cancel();
+                };
+
+                function saveFlagToSessionStorage() {
+                    if ($window.sessionStorage) {
+                        $window.sessionStorage.setItem('isReminderSent', JSON.stringify(true));
+                    }
+                }
+
+            }]
+        );
+})(angular);
+
+(function (angular) {
+    'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise')
-        .controller('WorkoutsDiagnosticController', ["$state", "currentState", function($state, currentState) {
-        'ngInject';
+        .controller('WorkoutsDiagnosticController', ["ENV", "$state", "currentState", "$mdDialog", "$window", function (ENV, $state, currentState, $mdDialog, $window) {
+            'ngInject';
 
-        var EXAM_STATE = 'app.diagnostic';
+            const EXAM_STATE = 'app.diagnostic';
+
+            function userLeaveEvent(e) {
+                e = e ? e : window.event;
+                var from = e.relatedTarget || e.toElement;
+                if (!from || from.nodeName === 'HTML') {
+                    openLeavingSoSoonPopup();
+                }
+            }
+
+            function getFlagToSessionStorage() {
+                let isReminderSent = false;
+                if ($window.sessionStorage) {
+                    isReminderSent = $window.sessionStorage.getItem('isReminderSent') === 'true';
+                }
+                return isReminderSent;
+            }
+
+            function openLeavingSoSoonPopup() {
+                const isReminderSent = getFlagToSessionStorage();
+
+                if (!isReminderSent) {
+                    return $mdDialog.show({
+                        controller: 'leavingSoSoonPopupCtrl',
+                        controllerAs: 'vm',
+                        templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
+                        clickOutsideToClose: true,
+                        escapeToClose: true
+                    });
+                }
+            }
 
 
-        $state.go(EXAM_STATE + currentState.state, currentState.params);
-    }]);
+            this.$onInit = function () {
+                const isStudent = (ENV.appContext.toLowerCase()) === 'student';
+                if (isStudent) {
+                    // Detect when the mouse leaves the window
+                    document.addEventListener('mouseout', userLeaveEvent);
+                }
+
+                $state.go(EXAM_STATE + currentState.state, currentState.params);
+            };
+
+            this.$onDestroy = function () {
+                document.removeEventListener('mouseout', userLeaveEvent);
+            };
+        }]);
 })(angular);
 
 
@@ -4603,8 +4706,11 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
             _diagnosticSettings = diagnosticSettings;
         };
 
-        this.$get = ['WORKOUTS_DIAGNOSTIC_FLOW', '$log', 'ExerciseTypeEnum', '$q', 'ExamSrv', 'ExerciseResultSrv', 'znkAnalyticsSrv', '$injector', 'CategoryService', '$http', 'ENV', 'StorageSrv', 'InfraConfigSrv',
-            function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, znkAnalyticsSrv, $injector, CategoryService, $http, ENV, StorageSrv, InfraConfigSrv) {
+        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "znkAnalyticsSrv", "$injector", "CategoryService", "ENV", "$http", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
+                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http) {
+                'ngInject';
+
+                const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
                 var workoutsDiagnosticFlowObjApi = {};
                 var currentSectionData = {};
                 var questionsByOrderAndDifficultyArr = null;
@@ -4628,38 +4734,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                 workoutsDiagnosticFlowObjApi.getCurrentState = function () {
                     return currentState;
                 };
-                workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
-                    return workoutsDiagnosticFlowObjApi.getMarketingToefl().then(function (marketingObj) {
-                        return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
-                    });
-                };
-                workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
-                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.get(marketingPath).then(function (marketing) {
-                            return marketing;
-                        });
-                    });
-                };
-                workoutsDiagnosticFlowObjApi.setMarketingToeflStatusAndAbTest = function (abTest, status) {
-                    var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
-                    var data = {
-                        [marketingPath+'/abTesting']: abTest,
-                        [marketingPath+'/status']: status
-                    };
-                    return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                        return studentStorage.update(data).then(function (status) {
-                            return status;
-                        });
-                    });
-                };
 
-                workoutsDiagnosticFlowObjApi.getGlobalVariables = function () {
-                    var globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
-                    return $http.get(`${globalBackendUrl}`, {timeout: ENV.promiseTimeOut, cache: true})
-                        .then(globalVariables => globalVariables.data)
-                        .catch((err) => $log.error('getGlobalVariables: Failed to get global variables. Error: ', err));
-                };
                 var diagnosticSettings = workoutsDiagnosticFlowObjApi.getDiagnosticSettings();
 
                 function _getDataProm() {
@@ -4777,7 +4852,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                             examResults.$save();
                         }
 
-                        skipIntroBool = forceSkipIntro ? forceSkipIntro : false;
+                        skipIntroBool = forceSkipIntro? forceSkipIntro : false;
 
                         var exerciseResultPromises = _getExerciseResultProms(examResults.sectionResults, exam.id);
 
@@ -4969,6 +5044,13 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     });
                 };
 
+                workoutsDiagnosticFlowObjApi.setReminder = (serviceId, uid, userTimeout, email) => {
+                    const setReminderApi = `${reminderApi}/setReminder`;
+                    return $http.post(setReminderApi, { serviceId, uid, userTimeout, email })
+                        .then(reminder => reminder.data)
+                        .catch((err) => $log.error('workoutsDiagnosticFlowObjApi.setReminder: Failed to setReminder. Error: ', err));
+                };
+
                 return workoutsDiagnosticFlowObjApi;
             }];
     }]);
@@ -4977,6 +5059,19 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
 
 
 angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', function ($templateCache) {
+  $templateCache.put("components/diagnosticExercise/svg/close-popup.svg",
+    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+    "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+    "	 viewBox=\"-1010.6 704.8 137.2 137.5\" style=\"enable-background:new -1010.6 704.8 137.2 137.5;\" xml:space=\"preserve\">\n" +
+    "<path class=\"st0\" d=\"M-412,214.5\"/>\n" +
+    "<g>\n" +
+    "	<path class=\"st1\" d=\"M-879.4,842.3c-1.5,0-3.1-0.6-4.2-1.8l-125.2-125.3c-2.3-2.3-2.3-6.1,0-8.5c2.3-2.3,6.1-2.3,8.5,0l125.2,125.3\n" +
+    "		c2.3,2.3,2.3,6.1,0,8.5C-876.3,841.7-877.9,842.3-879.4,842.3z\"/>\n" +
+    "	<path class=\"st1\" d=\"M-1004.6,842c-1.5,0-3.1-0.6-4.2-1.8c-2.3-2.3-2.3-6.1,0-8.5l125.2-125.2c2.3-2.3,6.1-2.3,8.5,0\n" +
+    "		c2.3,2.3,2.3,6.1,0,8.5l-125.2,125.2C-1001.5,841.4-1003.1,842-1004.6,842z\"/>\n" +
+    "</g>\n" +
+    "</svg>\n" +
+    "");
   $templateCache.put("components/diagnosticExercise/svg/diagnostic-check-mark-icon.svg",
     "<svg version=\"1.1\"\n" +
     "     xmlns=\"http://www.w3.org/2000/svg\"x=\"0px\"\n" +
@@ -5031,6 +5126,57 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "	</g>\n" +
     "</g>\n" +
     "</svg>\n" +
+    "");
+  $templateCache.put("components/diagnosticExercise/templates/leavingSoSoonPopup.template.html",
+    "<div class=\"leaving-so-soon-popup\">\n" +
+    "\n" +
+    "    <div class=\"close-popup-wrap\" ng-click=\"vm.closeModal()\">\n" +
+    "        <svg-icon name=\"diagnostic-close-popup\"></svg-icon>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <main class=\"content-wrapper\">\n" +
+    "        <div class=\"quicksand-25-b title\" translate=\"LIVING_SO_SOON_POPUP.TITLE\"></div>\n" +
+    "        <div class=\"quicksand-16-n sub-title\" translate=\"LIVING_SO_SOON_POPUP.SUB_TITLE\"></div>\n" +
+    "\n" +
+    "        <div class=\"btn-group\">\n" +
+    "            <button type=\"button\" id=\"btnNum1\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum1'}\"\n" +
+    "                    ng-click=\"vm.setNotifyTime(10, 'min', 'btnNum1')\">\n" +
+    "                <div class=\"quicksand-25-b\">10</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" id=\"btnNum2\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum2'}\"\n" +
+    "                    ng-click=\"vm.setNotifyTime(30, 'min', 'btnNum2')\">\n" +
+    "                <div class=\"quicksand-25-b\">30</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" id=\"btnNum3\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum3'}\"\n" +
+    "                    ng-click=\"vm.setNotifyTime(1, 'hour', 'btnNum3')\">\n" +
+    "                <div class=\"quicksand-25-b\">1</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOUR' | translate}}</div>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" id=\"btnNum4\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum4'}\"\n" +
+    "                    ng-click=\"vm.setNotifyTime(5, 'hour', 'btnNum4')\">\n" +
+    "                <div class=\"quicksand-25-b\">5</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" id=\"btnNum5\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum5'}\"\n" +
+    "                    ng-click=\"vm.setNotifyTime(24, 'hour', 'btnNum5')\">\n" +
+    "                <div class=\"quicksand-25-b\">24</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "        <div class=\"input-wrapper\">\n" +
+    "            <input type=\"email\" name=\"email\"\n" +
+    "                   ng-change=\"vm.emailErr = false\"\n" +
+    "                   placeholder=\"{{'LIVING_SO_SOON_POPUP.EMAIL' | translate}}\"\n" +
+    "                   ng-model=\"vm.userEmail\">\n" +
+    "            <button type=\"button\" class=\"btn-type-1 save-btn\" translate=\"LIVING_SO_SOON_POPUP.GO\"\n" +
+    "                    ng-click=\"vm.sendReminder(vm.userTimeout, vm.userEmail)\">\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "        <div class=\"error-msg\" ng-if=\"vm.emailErr\">{{'LIVING_SO_SOON_POPUP.EMAIL_ERR' | translate}}</div>\n" +
+    "    </main>\n" +
+    "</div>\n" +
     "");
   $templateCache.put("components/diagnosticExercise/templates/workoutsDiagnostic.template.html",
     "<div class=\"app-workouts-diagnostic\">\n" +
@@ -14194,6 +14340,111 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
     "</section>\n" +
     "<on-boarding-bar step=\"welcome\"></on-boarding-bar>\n" +
     "");
+}]);
+
+angular.module('znk.infra-web-app.oneSignal').run(['$templateCache', function ($templateCache) {
+
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.oneSignal',
+        [
+            'ngAnimate',
+            'ui.router',
+            'ngMaterial',
+            'pascalprecht.translate',
+            'znk.infra.svgIcon',
+            'znk.infra.popUp',
+            'znk.infra.enum',
+            'znk.infra.config',
+            'znk.infra.storage',
+            'znk.infra.auth',
+            'znk.infra.analytics'
+        ]);
+})(angular);
+
+
+(function () {
+  'use strict';
+
+  angular.module('znk.infra-web-app.oneSignal').run(
+    ["$log", "OneSignalService", "ENV", "AuthService", function ($log, OneSignalService, ENV, AuthService) {
+      'ngInject';
+
+        OneSignalService.initOneSignal();
+
+        OneSignalService.sendTag('ServiceId', ENV.serviceId, (res) => {
+            $log.debug('tags received by server', res);
+        });
+
+        AuthService.getAuth().then(authData => {
+            if (authData && authData.uid) {
+                OneSignalService.sendTag('UID', authData.uid, (res) => {
+                    $log.debug('tags received by server', res);
+                });
+            }
+        });
+    }]);
+})();
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.oneSignal')
+        .service('OneSignalService',
+            ["$log", "ENV", "$window", function ($log, ENV, $window) {
+                'ngInject';
+
+                $log.debug('OneSignalService: Init');
+                const ONE_SIGNAL_SCRIPT_URL = 'https://cdn.onesignal.com/sdks/OneSignalSDK.js';
+                const MANIFEST_PATH = '../assets/files/manifest.json';
+                loadManifestLink();
+                loadOneSignalScript();
+
+                // https://documentation.onesignal.com/docs/web-push-sdk#section--init-
+                this.initOneSignal = () => {
+                    const oneSignal = $window.OneSignal || [];
+                    oneSignal.push(() => {
+                        oneSignal.init({
+                            appId: ENV.oneSignalAppId,
+                            allowLocalhostAsSecureOrigin: true
+                        });
+                    });
+                };
+
+                this.sendTag = (key, value, callback) => {
+                    const oneSignal = $window.OneSignal || [];
+                    oneSignal.push(() => {
+                        oneSignal.sendTag(key, value, callback);
+                    });
+                };
+
+                // Load manifest link <link rel="manifest" href="/manifest.json" />
+                function loadManifestLink() {
+                    const linkTag = document.getElementsByTagName('link')[0];
+                    const newLinkElm = $window.document.createElement('link');
+                    newLinkElm.href = MANIFEST_PATH;
+                    newLinkElm.rel = 'manifest';
+                    linkTag.parentNode.insertBefore(newLinkElm,linkTag);
+                }
+
+                // Load oneSignal module <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+                function loadOneSignalScript() {
+                    const scriptTag = document.getElementsByTagName('script')[0];
+                    const newScriptElm = $window.document.createElement('script');
+                    newScriptElm.src = ONE_SIGNAL_SCRIPT_URL;
+                    newScriptElm.async = true;
+                    scriptTag.parentNode.insertBefore(newScriptElm,scriptTag);
+                }
+
+            }]
+        );
+})(angular);
+
+angular.module('znk.infra-web-app.oneSignal').run(['$templateCache', function ($templateCache) {
+
 }]);
 
 (function (angular) {

@@ -2,13 +2,55 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise')
-        .controller('WorkoutsDiagnosticController', function($state, currentState) {
-        'ngInject';
+        .controller('WorkoutsDiagnosticController', function (ENV, $state, currentState, $mdDialog, $window) {
+            'ngInject';
 
-        var EXAM_STATE = 'app.diagnostic';
+            const EXAM_STATE = 'app.diagnostic';
+
+            function userLeaveEvent(e) {
+                e = e ? e : window.event;
+                var from = e.relatedTarget || e.toElement;
+                if (!from || from.nodeName === 'HTML') {
+                    openLeavingSoSoonPopup();
+                }
+            }
+
+            function getFlagToSessionStorage() {
+                let isReminderSent = false;
+                if ($window.sessionStorage) {
+                    isReminderSent = $window.sessionStorage.getItem('isReminderSent') === 'true';
+                }
+                return isReminderSent;
+            }
+
+            function openLeavingSoSoonPopup() {
+                const isReminderSent = getFlagToSessionStorage();
+
+                if (!isReminderSent) {
+                    return $mdDialog.show({
+                        controller: 'leavingSoSoonPopupCtrl',
+                        controllerAs: 'vm',
+                        templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
+                        clickOutsideToClose: true,
+                        escapeToClose: true
+                    });
+                }
+            }
 
 
-        $state.go(EXAM_STATE + currentState.state, currentState.params);
-    });
+            this.$onInit = function () {
+                const isStudent = (ENV.appContext.toLowerCase()) === 'student';
+                if (isStudent) {
+                    // Detect when the mouse leaves the window
+                    document.addEventListener('mouseout', userLeaveEvent);
+                }
+
+                $state.go(EXAM_STATE + currentState.state, currentState.params);
+            };
+
+            this.$onDestroy = function () {
+                document.removeEventListener('mouseout', userLeaveEvent);
+            };
+        });
 })(angular);
 

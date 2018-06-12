@@ -451,6 +451,16 @@
     "WORKOUTS_DIAGNOSTIC_PRE_SUMMARY": {
         "READY": "Ready to see your scores?"
     },
+    "LIVING_SO_SOON_POPUP" : {
+        "TITLE": "Living so Soon?",
+        "SUB_TITLE": "We know that you're busy, you can set a reminder \r\nand we'll notify you to complete the diagnostic test",
+        "MIN": "min",
+        "HOUR": "hour",
+        "HOURS": "hours",
+        "EMAIL": "Your email",
+        "GO": "Go",
+        "EMAIL_ERR": "Please enter your email"
+    },
     "SCHOOL_SELECT": {
         "SELECT_TO_CONTINUE": "Select up to 3 dream schools to continue",
         "SCHOOLS": "Schools",

@@ -938,6 +938,8 @@ complete-exercise-header {
     height: 50px;
     display: -ms-flexbox;
     display: flex;
+    -ms-flex-pack: justify;
+        justify-content: space-between;
     -ms-flex-align: center;
         align-items: center;
     padding-right: 28px;
@@ -952,25 +954,12 @@ complete-exercise-header {
       -ms-flex-align: center;
           align-items: center; }
     complete-exercise-header .header-container .left-part {
-      width: 400px;
       overflow: hidden; }
       complete-exercise-header .header-container .left-part .left-title {
-        width: 300px;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis; }
-    complete-exercise-header .header-container .center-part {
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-      -ms-flex-pack: center;
-          justify-content: center; }
-    complete-exercise-header .header-container .right-part {
-      width: 400px;
-      text-align: right;
-      -ms-flex-pack: end;
-          justify-content: flex-end; }
-      complete-exercise-header .header-container .right-part .exit {
-        cursor: pointer; }
+        overflow: hidden; }
+    complete-exercise-header .header-container .right-part .exit {
+      cursor: pointer; }
 
 complete-exercise-intro-tutorial {
   display: block;
@@ -1370,6 +1359,96 @@ complete-exercise-progress-bar {
       text-transform: inherit;
       padding-left: 35px;
       padding-right: 35px; }
+
+.leaving-so-soon-popup {
+  color: #ffffff;
+  border-radius: 15px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+  background-color: #0a9bad; }
+  .leaving-so-soon-popup .close-popup-wrap {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 14px;
+    width: 14px;
+    cursor: pointer; }
+    .leaving-so-soon-popup .close-popup-wrap svg-icon svg {
+      height: 14px;
+      width: 14px; }
+      .leaving-so-soon-popup .close-popup-wrap svg-icon svg * {
+        fill: #ffffff; }
+  .leaving-so-soon-popup main.content-wrapper {
+    max-height: inherit;
+    width: 500px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center; }
+    .leaving-so-soon-popup main.content-wrapper .title {
+      padding: 10px 0;
+      color: #ffffff; }
+    .leaving-so-soon-popup main.content-wrapper .sub-title {
+      width: 80%;
+      color: #ffffff;
+      text-align: center; }
+    .leaving-so-soon-popup main.content-wrapper .btn-group {
+      margin: 30px 10px;
+      display: -ms-flexbox;
+      display: flex; }
+      .leaving-so-soon-popup main.content-wrapper .btn-group button {
+        width: 50px;
+        height: 50px;
+        background-color: #3cb0fd;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+            flex-direction: column;
+        -ms-flex-pack: center;
+            justify-content: center;
+        text-align: center; }
+        .leaving-so-soon-popup main.content-wrapper .btn-group button.selected {
+          background-color: #87ca4d; }
+        .leaving-so-soon-popup main.content-wrapper .btn-group button .quicksand-25-b, .leaving-so-soon-popup main.content-wrapper .btn-group button .quicksand-16-n {
+          color: #ffffff;
+          text-transform: lowercase;
+          height: 25px; }
+    .leaving-so-soon-popup main.content-wrapper .input-wrapper {
+      position: relative;
+      margin-bottom: 25px;
+      width: 60%; }
+      .leaving-so-soon-popup main.content-wrapper .input-wrapper input {
+        height: 40px;
+        width: calc(100% - 12px);
+        padding-left: 10px;
+        border-radius: 10px;
+        border: none;
+        outline: none; }
+      .leaving-so-soon-popup main.content-wrapper .input-wrapper button {
+        background-color: #87ca4d;
+        position: absolute;
+        right: 0;
+        top: 0;
+        border: none;
+        width: 50px;
+        height: 100%;
+        outline: none;
+        text-align: center;
+        font-weight: bold;
+        margin: 0;
+        border-radius: 0 10px 10px 0; }
+        .leaving-so-soon-popup main.content-wrapper .input-wrapper button:hover {
+          cursor: pointer; }
+    .leaving-so-soon-popup main.content-wrapper .error-msg {
+      color: #ff6766; }
 
 /**
 *  FONTS
