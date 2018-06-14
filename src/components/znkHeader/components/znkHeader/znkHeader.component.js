@@ -14,6 +14,7 @@
                 var pendingPurchaseProm = purchaseService.getPendingPurchase();
                 ActivePanelSrv.loadActivePanel();
                 vm.expandIcon = 'expand_more';
+                vm.showheaderlinks = false;
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
                 vm.showMyProfile = MyProfileSrv.showMyProfile;
@@ -41,7 +42,9 @@
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
                 });
-
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    vm.showheaderlinks = !(marketingObj && marketingObj.status);
+                });
                 $scope.$watch(function () {
                     return vm.purchaseData;
                 }, function (newPurchaseState) {

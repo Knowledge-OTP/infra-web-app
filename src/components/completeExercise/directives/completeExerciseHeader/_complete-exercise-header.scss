@@ -7,9 +7,9 @@ complete-exercise-header{
     }
 
     .header-container{
-        $externalPartWidth: 400px;
         height: 50px;
         display: flex;
+        justify-content: space-between;
         align-items: center;
         padding: {
             right: 28px;
@@ -29,27 +29,15 @@ complete-exercise-header{
         }
 
         .left-part{
-            width: $externalPartWidth;
             overflow: hidden;
 
             .left-title{
-                width: 300px;
                 white-space: nowrap;
                 overflow: hidden;
-                text-overflow: ellipsis;
             }
         }
 
-        .center-part{
-            flex-grow: 1;
-            justify-content: center;
-        }
-
         .right-part{
-            width: $externalPartWidth;
-            text-align: right;
-            justify-content: flex-end;
-
             .exit{
                 cursor: pointer;
             }

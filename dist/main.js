@@ -29,6 +29,7 @@
 "znk.infra-web-app.navigation",
 "znk.infra-web-app.notification",
 "znk.infra-web-app.onBoarding",
+"znk.infra-web-app.oneSignal",
 "znk.infra-web-app.planNotification",
 "znk.infra-web-app.promoCode",
 "znk.infra-web-app.purchase",
@@ -4704,354 +4705,384 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
         this.setDiagnosticSettings = function (diagnosticSettings) {
             _diagnosticSettings = diagnosticSettings;
         };
+        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "znkAnalyticsSrv", "$injector", "CategoryService", "ENV", "$http", "StorageSrv", "InfraConfigSrv", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
+                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
+            'ngInject';
 
-        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "znkAnalyticsSrv", "$injector", "CategoryService", "ENV", "$http", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
-                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http) {
-                'ngInject';
+            const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
+            var workoutsDiagnosticFlowObjApi = {};
+            var currentSectionData = {};
+            var questionsByOrderAndDifficultyArr = null;
+            var currentState;
 
-                const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
-                var workoutsDiagnosticFlowObjApi = {};
-                var currentSectionData = {};
-                var questionsByOrderAndDifficultyArr = null;
-                var currentState;
+            workoutsDiagnosticFlowObjApi.getDiagnosticSettings = function () {
+                var diagnosticData = $injector.invoke(_diagnosticSettings);
+                return angular.extend(WORKOUTS_DIAGNOSTIC_FLOW, diagnosticData);
+            };
 
-                workoutsDiagnosticFlowObjApi.getDiagnosticSettings = function () {
-                    var diagnosticData = $injector.invoke(_diagnosticSettings);
-                    return angular.extend(WORKOUTS_DIAGNOSTIC_FLOW, diagnosticData);
-                };
+            workoutsDiagnosticFlowObjApi.setCurrentQuestion = function (questionId, index) {
+                currentSectionData.currentQuestion = {id: questionId, index: index};
+            };
+            workoutsDiagnosticFlowObjApi.markSectionAsDoneToggle = function (isDone) {
+                currentSectionData.done = isDone;
+            };
+            workoutsDiagnosticFlowObjApi.getCurrentSection = function () {
+                return currentSectionData;
+            };
 
-                workoutsDiagnosticFlowObjApi.setCurrentQuestion = function (questionId, index) {
-                    currentSectionData.currentQuestion = {id: questionId, index: index};
-                };
-                workoutsDiagnosticFlowObjApi.markSectionAsDoneToggle = function (isDone) {
-                    currentSectionData.done = isDone;
-                };
-                workoutsDiagnosticFlowObjApi.getCurrentSection = function () {
-                    return currentSectionData;
-                };
+            workoutsDiagnosticFlowObjApi.getCurrentState = function () {
+                return currentState;
+            };
 
-                workoutsDiagnosticFlowObjApi.getCurrentState = function () {
-                    return currentState;
-                };
+            var diagnosticSettings = workoutsDiagnosticFlowObjApi.getDiagnosticSettings();
 
-                var diagnosticSettings = workoutsDiagnosticFlowObjApi.getDiagnosticSettings();
+            function _getDataProm() {
+                var examId = diagnosticSettings.diagnosticId;
+                var getExamProm = ExamSrv.getExam(examId);
+                var getExamResultProm = ExerciseResultSrv.getExamResult(examId);
+                return [getExamProm, getExamResultProm];
+            }
 
-                function _getDataProm() {
-                    var examId = diagnosticSettings.diagnosticId;
-                    var getExamProm = ExamSrv.getExam(examId);
-                    var getExamResultProm = ExerciseResultSrv.getExamResult(examId);
-                    return [getExamProm, getExamResultProm];
+            function _getExerciseResultProms(sectionResults, examId) {
+                if (angular.isUndefined(sectionResults)) {
+                    sectionResults = [];
                 }
 
-                function _getExerciseResultProms(sectionResults, examId) {
-                    if (angular.isUndefined(sectionResults)) {
-                        sectionResults = [];
+                var sectionResultsKeys = Object.keys(sectionResults);
+                var exerciseResultPromises = [];
+
+                angular.forEach(sectionResultsKeys, function (sectionId) {
+                    sectionId = +sectionId;
+                    var exerciseResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, sectionId, examId);
+                    exerciseResultPromises.push(exerciseResultProm);
+                });
+
+                return exerciseResultPromises;
+            }
+
+            function _getStateDataByExamAndExerciseResult(exam, exerciseResult) {
+                var currentSection;
+                var currentQuestionResults;
+                var currentExercise;
+
+                var sectionsByOrder = exam.sections.sort(function (a, b) {
+                    return a.order > b.order;
+                });
+
+                var exerciseResultByKey = exerciseResult.reduce(function (previousValue, currentValue) {
+                    previousValue[currentValue.exerciseId] = currentValue;
+                    return previousValue;
+                }, {});
+
+                for (var i = 0, ii = sectionsByOrder.length; i < ii; i++) {
+                    currentSection = sectionsByOrder[i];
+                    currentExercise = exerciseResultByKey[currentSection.id];
+                    if (currentExercise) {
+                        if (!currentExercise.isComplete) {
+                            currentQuestionResults = true;
+                            break;
+                        }
+                    } else if (!currentExercise) {
+                        currentQuestionResults = void(0);
+                        break;
+                    }
+                }
+
+                return {
+                    currentQuestionResults: currentQuestionResults,
+                    currentSection: currentSection
+                };
+            }
+
+            function _getNextDifficulty(difficulty, type) {
+                var veryEasyNumLevel = diagnosticSettings.levels.very_easy.num;
+                var veryHardNumLevel = diagnosticSettings.levels.very_hard.num;
+                var nextDifficulty;
+                if (type === 'increment') {
+                    nextDifficulty = (difficulty + 1 > veryHardNumLevel) ? difficulty : difficulty + 1;
+                } else if (type === 'decrement') {
+                    nextDifficulty = (difficulty - 1 >= veryEasyNumLevel) ? difficulty - 1 : difficulty;
+                } else {
+                    nextDifficulty = difficulty;
+                }
+                return nextDifficulty;
+            }
+
+            function _tryGetDifficulty(questionsByOrder) {
+                var sortedDiagnosticKeys = Object.keys(diagnosticSettings.levels).sort(function (a, b) {
+                    return diagnosticSettings.levels[a].num < diagnosticSettings.levels[b].num;
+                });
+                var selectedDifficulty = null;
+                for (var i = 0; i < sortedDiagnosticKeys.length; i++) {
+                    var key = sortedDiagnosticKeys[i];
+                    var difficultyKey = diagnosticSettings.levels[key].num;
+                    if (angular.isObject(questionsByOrder[difficultyKey])) {
+                        selectedDifficulty = difficultyKey;
+                        break;
+                    }
+                }
+                return selectedDifficulty;
+            }
+
+            workoutsDiagnosticFlowObjApi.getDiagnosticFlowCurrentState = function (flagForPreSummery, skipIntroBool, forceSkipIntro) {
+                $log.debug('WorkoutsDiagnosticFlow getDiagnosticFlowCurrentState: initial func', arguments);
+                currentState = {state: '', params: '', subjectId: ''};
+                var getDataProm = _getDataProm();
+                return $q.all(getDataProm).then(function (results) {
+                    if (!results[0]) {
+                        $log.error('WorkoutsDiagnosticFlow getDiagnosticFlowCurrentState: crucial data is missing! getExamProm (results[0]): ' + results[0]);
+                    }
+                    var exam = results[0];
+                    var examResults = results[1];
+
+                    if (examResults.isComplete) {
+                        if (flagForPreSummery) {
+                            znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
+                        }
+                        currentState.state = flagForPreSummery ? '.preSummary' : '.summary';
+                        return currentState;
                     }
 
-                    var sectionResultsKeys = Object.keys(sectionResults);
-                    var exerciseResultPromises = [];
+                    if (!examResults.isStarted) {
+                        znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
+                        znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
+                        examResults.isStarted = true;
+                        skipIntroBool = false;
+                        examResults.$save();
+                    }
 
-                    angular.forEach(sectionResultsKeys, function (sectionId) {
-                        sectionId = +sectionId;
-                        var exerciseResultProm = ExerciseResultSrv.getExerciseResult(ExerciseTypeEnum.SECTION.enum, sectionId, examId);
-                        exerciseResultPromises.push(exerciseResultProm);
+                    skipIntroBool = forceSkipIntro ? forceSkipIntro : false;
+
+                    var exerciseResultPromises = _getExerciseResultProms(examResults.sectionResults, exam.id);
+
+                    return $q.all(exerciseResultPromises).then(function (exerciseResult) {
+                        var stateResults = _getStateDataByExamAndExerciseResult(exam, exerciseResult);
+                        var currentQuestionResults = stateResults.currentQuestionResults;
+                        var currentSection = stateResults.currentSection;
+                        currentState.subjectId = (typeof currentSection.subjectId === 'undefined' || currentSection.subjectId === null) ?
+                            CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId) : currentSection.subjectId;
+
+                        if (angular.isUndefined(currentQuestionResults) && !skipIntroBool) {
+                            currentState.state = '.intro';
+                            currentState.params = {
+                                id: exam.id,
+                                subjectId: currentState.subjectId,
+                                sectionId: currentSection.id,
+                                order: currentSection.order
+                            };
+                        } else {
+                            currentState.state = '.exercise';
+                            currentState.params = {id: exam.id, sectionId: currentSection.id};
+                        }
+                        return currentState;
                     });
+                });
+            };
 
-                    return exerciseResultPromises;
+
+            /**
+             * get Question By Difficulty And Order
+             * @function
+             * @param difficulty
+             * @param order
+             * @param cb
+             */
+            workoutsDiagnosticFlowObjApi.getQuestionsByDifficultyAndOrder = function (questions, difficulty, order, cb) {
+                $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: initial func', arguments);
+                var diagnosticFlowResults = {};
+
+                //in case initQuestionsByDifficultyAndOrder function was not called.
+                if (!questionsByOrderAndDifficultyArr) {
+                    $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr is null, calling initQuestionsByDifficultyAndOrder function');
+                    workoutsDiagnosticFlowObjApi.initQuestionsByDifficultyAndOrder(questions);
                 }
+                if (!questionsByOrderAndDifficultyArr || (angular.isArray(questionsByOrderAndDifficultyArr) && questionsByOrderAndDifficultyArr.length === 0)) {
+                    $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr is empty or not initialized.');
+                    return;
+                }
+                var question = null;
+                if (questionsByOrderAndDifficultyArr[order]) {
+                    if (questionsByOrderAndDifficultyArr[order][difficulty]) {
+                        question = questionsByOrderAndDifficultyArr[order][difficulty];
+                    }
+                    //could not find question by difficulty
+                    else {
+                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no difficulty key:' + difficulty);
+                        //try find new difficulty
+                        var newDifficulty = _tryGetDifficulty(questionsByOrderAndDifficultyArr[order]);
+                        if (newDifficulty !== null) {
+                            question = questionsByOrderAndDifficultyArr[order][newDifficulty];
+                        }
+                        //did not find a new difficulty, return
+                        else {
+                            $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: _getDifficultySafeCheck could not find new difficulty.');
+                            return;
+                        }
+                    }
+                }
+                //could not find question by order, return
+                else {
+                    $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no order key:' + order);
+                    return;
+                }
+                diagnosticFlowResults.question = question;
+                diagnosticFlowResults.result = {
+                    questionId: question.id,
+                    categoryId: question.categoryId,
+                    categoryId2: question.categoryId2,
+                    difficulty: question.difficulty
+                };
+                if (cb && angular.isFunction(cb)) {
+                    cb(diagnosticFlowResults);
+                }
+                else {
+                    $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: no callback function passed as argument');
+                }
+            };
+            /**
+             * init Question map object By Difficulty And Order
+             * @function
+             * @param questions
+             */
+            workoutsDiagnosticFlowObjApi.initQuestionsByDifficultyAndOrder = function (questions) {
+                if (!angular.isArray(questions) || questions.length === 0) {
+                    $log.error('WorkoutsDiagnosticFlow initQuestionsByDifficultyAndOrder: questions array is empty or not defined');
+                    return;
+                }
+                questionsByOrderAndDifficultyArr = [];
+                angular.forEach(questions, function (question) {
+                    questionsByOrderAndDifficultyArr[question.order] = questionsByOrderAndDifficultyArr[question.order] || {};
 
-                function _getStateDataByExamAndExerciseResult(exam, exerciseResult) {
-                    var currentSection;
-                    var currentQuestionResults;
-                    var currentExercise;
+                    var questionByOrderObj = questionsByOrderAndDifficultyArr[question.order];
 
-                    var sectionsByOrder = exam.sections.sort(function (a, b) {
-                        return a.order > b.order;
+                    questionByOrderObj[question.difficulty] = questionByOrderObj[question.difficulty] || {};
+                    questionByOrderObj[question.difficulty] = question;
+
+                    if (!questionByOrderObj.maxDifficultyQuestion || questionByOrderObj.maxDifficultyQuestion.difficulty < question.difficulty) {
+                        questionByOrderObj.maxDifficultyQuestion = question;
+                    }
+
+                    return questionsByOrderAndDifficultyArr;
+                });
+                angular.forEach(questionsByOrderAndDifficultyArr, function (questionByOrder) {
+                    Object.keys(diagnosticSettings.levels).forEach(function (key) {
+                        var difficulty = diagnosticSettings.levels[key].num;
+                        if (!questionByOrder[difficulty]) {
+                            questionByOrder[difficulty] = questionByOrder.maxDifficultyQuestion;
+                        }
                     });
+                });
+            };
+            workoutsDiagnosticFlowObjApi.getDifficulty = function (currentDifficulty, isAnswerCorrectly, startedTime) {
+                var newDifficulty;
+                $log.debug('WorkoutsDiagnosticFlow getDifficulty: initial func', arguments);
+                if (startedTime > diagnosticSettings.timeLimit) {
+                    newDifficulty = currentDifficulty;
+                } else if (isAnswerCorrectly) {
+                    newDifficulty = _getNextDifficulty(currentDifficulty, 'increment');
+                } else {
+                    newDifficulty = _getNextDifficulty(currentDifficulty, 'decrement');
+                }
+                $log.debug('WorkoutsDiagnosticFlow getDifficulty: newDifficulty returned value', newDifficulty);
+                return newDifficulty;
+            };
 
-                    var exerciseResultByKey = exerciseResult.reduce(function (previousValue, currentValue) {
-                        previousValue[currentValue.exerciseId] = currentValue;
-                        return previousValue;
-                    }, {});
+            workoutsDiagnosticFlowObjApi.getDiagnostic = function () {
+                return ExerciseResultSrv.getExamResult(diagnosticSettings.diagnosticId);
+            };
 
-                    for (var i = 0, ii = sectionsByOrder.length; i < ii; i++) {
-                        currentSection = sectionsByOrder[i];
-                        currentExercise = exerciseResultByKey[currentSection.id];
-                        if (currentExercise) {
-                            if (!currentExercise.isComplete) {
-                                currentQuestionResults = true;
+            workoutsDiagnosticFlowObjApi.getDiagnosticExam = function () {
+                return ExamSrv.getExam(diagnosticSettings.diagnosticId);
+            };
+
+            workoutsDiagnosticFlowObjApi.getActiveSubject = function () {
+                var activeSubject;
+                var COMPLETED = 'all';
+                var NO_ACTIVE_SUBJECT = 'none';
+
+                var diagnosticProms = [workoutsDiagnosticFlowObjApi.getDiagnosticExam(), workoutsDiagnosticFlowObjApi.getDiagnostic()];
+                return $q.all(diagnosticProms).then(function (diagnostic) {
+                    var diagnosticExam = diagnostic[0];
+                    var diagnosticResults = diagnostic[1];
+
+                    if (diagnosticResults.isComplete) {
+                        return COMPLETED;
+                    }
+
+                    var exerciseResultPromises = _getExerciseResultProms(diagnosticResults.sectionResults, diagnosticSettings.diagnosticId);
+                    return $q.all(exerciseResultPromises).then(function (completedSections) {
+                        if (completedSections.length === 0 && !diagnosticResults.isStarted) {
+                            return NO_ACTIVE_SUBJECT;
+                        }
+                        // reduce the array to an object so we can reference an object by an id
+                        var completedSectionsObject = completedSections.reduce(function (o, v) {
+                            o[v.exerciseId] = v.isComplete;
+                            return o;
+                        }, {});
+
+                        // sort sections by order
+                        var sectionsByOrder = diagnosticExam.sections.sort(function (a, b) {
+                            return a.order > b.order;
+                        });
+
+                        for (var i = 0; i < sectionsByOrder.length; i++) {
+                            var value = sectionsByOrder[i];
+                            if (!completedSectionsObject[value.id]) {
+                                activeSubject = value.subjectId;
                                 break;
                             }
-                        } else if (!currentExercise) {
-                            currentQuestionResults = void(0);
-                            break;
                         }
-                    }
-
-                    return {
-                        currentQuestionResults: currentQuestionResults,
-                        currentSection: currentSection
-                    };
-                }
-
-                function _getNextDifficulty(difficulty, type) {
-                    var veryEasyNumLevel = diagnosticSettings.levels.very_easy.num;
-                    var veryHardNumLevel = diagnosticSettings.levels.very_hard.num;
-                    var nextDifficulty;
-                    if (type === 'increment') {
-                        nextDifficulty = (difficulty + 1 > veryHardNumLevel) ? difficulty : difficulty + 1;
-                    } else if (type === 'decrement') {
-                        nextDifficulty = (difficulty - 1 >= veryEasyNumLevel) ? difficulty - 1 : difficulty;
-                    } else {
-                        nextDifficulty = difficulty;
-                    }
-                    return nextDifficulty;
-                }
-
-                function _tryGetDifficulty(questionsByOrder) {
-                    var sortedDiagnosticKeys = Object.keys(diagnosticSettings.levels).sort(function (a, b) {
-                        return diagnosticSettings.levels[a].num < diagnosticSettings.levels[b].num;
+                        return activeSubject; // subjectId
                     });
-                    var selectedDifficulty = null;
-                    for (var i = 0; i < sortedDiagnosticKeys.length; i++) {
-                        var key = sortedDiagnosticKeys[i];
-                        var difficultyKey = diagnosticSettings.levels[key].num;
-                        if (angular.isObject(questionsByOrder[difficultyKey])) {
-                            selectedDifficulty = difficultyKey;
-                            break;
-                        }
-                    }
-                    return selectedDifficulty;
-                }
+                });
+            };
 
-                workoutsDiagnosticFlowObjApi.getDiagnosticFlowCurrentState = function (flagForPreSummery, skipIntroBool, forceSkipIntro) {
-                    $log.debug('WorkoutsDiagnosticFlow getDiagnosticFlowCurrentState: initial func', arguments);
-                    currentState = {state: '', params: '', subjectId: ''};
-                    var getDataProm = _getDataProm();
-                    return $q.all(getDataProm).then(function (results) {
-                        if (!results[0]) {
-                            $log.error('WorkoutsDiagnosticFlow getDiagnosticFlowCurrentState: crucial data is missing! getExamProm (results[0]): ' + results[0]);
-                        }
-                        var exam = results[0];
-                        var examResults = results[1];
-
-                        if (examResults.isComplete) {
-                            if (flagForPreSummery) {
-                                znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
-                            }
-                            currentState.state = flagForPreSummery ? '.preSummary' : '.summary';
-                            return currentState;
-                        }
-
-                        if (!examResults.isStarted) {
-                            znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
-                            znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
-                            examResults.isStarted = true;
-                            skipIntroBool = false;
-                            examResults.$save();
-                        }
-
-                        skipIntroBool = forceSkipIntro? forceSkipIntro : false;
-
-                        var exerciseResultPromises = _getExerciseResultProms(examResults.sectionResults, exam.id);
-
-                        return $q.all(exerciseResultPromises).then(function (exerciseResult) {
-                            var stateResults = _getStateDataByExamAndExerciseResult(exam, exerciseResult);
-                            var currentQuestionResults = stateResults.currentQuestionResults;
-                            var currentSection = stateResults.currentSection;
-                            currentState.subjectId = (typeof currentSection.subjectId === 'undefined' || currentSection.subjectId === null) ?
-                                CategoryService.getCategoryLevel1ParentByIdSync(currentSection.categoryId) : currentSection.subjectId;
-
-                            if (angular.isUndefined(currentQuestionResults) && !skipIntroBool) {
-                                currentState.state = '.intro';
-                                currentState.params = {
-                                    id: exam.id,
-                                    subjectId: currentState.subjectId,
-                                    sectionId: currentSection.id,
-                                    order: currentSection.order
-                                };
-                            } else {
-                                currentState.state = '.exercise';
-                                currentState.params = {id: exam.id, sectionId: currentSection.id};
-                            }
-                            return currentState;
-                        });
+            workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
+                return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
+                    return !!diagnostic.isComplete;
+                });
+            };
+            workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
+                return workoutsDiagnosticFlowObjApi.getMarketingToefl().then(function (marketingObj) {
+                    return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
+                });
+            };
+            workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
+                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(marketingPath).then(function (marketing) {
+                        return marketing;
                     });
+                });
+            };
+            workoutsDiagnosticFlowObjApi.setMarketingToeflStatusAndAbTest = function (abTest, status) {
+                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                var data = {
+                    [marketingPath + '/abTesting']: abTest,
+                    [marketingPath + '/status']: status
                 };
-
-
-                /**
-                 * get Question By Difficulty And Order
-                 * @function
-                 * @param difficulty
-                 * @param order
-                 * @param cb
-                 */
-                workoutsDiagnosticFlowObjApi.getQuestionsByDifficultyAndOrder = function (questions, difficulty, order, cb) {
-                    $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: initial func', arguments);
-                    var diagnosticFlowResults = {};
-
-                    //in case initQuestionsByDifficultyAndOrder function was not called.
-                    if (!questionsByOrderAndDifficultyArr) {
-                        $log.debug('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr is null, calling initQuestionsByDifficultyAndOrder function');
-                        workoutsDiagnosticFlowObjApi.initQuestionsByDifficultyAndOrder(questions);
-                    }
-                    if (!questionsByOrderAndDifficultyArr || (angular.isArray(questionsByOrderAndDifficultyArr) && questionsByOrderAndDifficultyArr.length === 0)) {
-                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr is empty or not initialized.');
-                        return;
-                    }
-                    var question = null;
-                    if (questionsByOrderAndDifficultyArr[order]) {
-                        if (questionsByOrderAndDifficultyArr[order][difficulty]) {
-                            question = questionsByOrderAndDifficultyArr[order][difficulty];
-                        }
-                        //could not find question by difficulty
-                        else {
-                            $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no difficulty key:' + difficulty);
-                            //try find new difficulty
-                            var newDifficulty = _tryGetDifficulty(questionsByOrderAndDifficultyArr[order]);
-                            if (newDifficulty !== null) {
-                                question = questionsByOrderAndDifficultyArr[order][newDifficulty];
-                            }
-                            //did not find a new difficulty, return
-                            else {
-                                $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: _getDifficultySafeCheck could not find new difficulty.');
-                                return;
-                            }
-                        }
-                    }
-                    //could not find question by order, return
-                    else {
-                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: questionsByOrderAndDifficultyArr has no order key:' + order);
-                        return;
-                    }
-                    diagnosticFlowResults.question = question;
-                    diagnosticFlowResults.result = {
-                        questionId: question.id,
-                        categoryId: question.categoryId,
-                        categoryId2: question.categoryId2,
-                        difficulty: question.difficulty
-                    };
-                    if (cb && angular.isFunction(cb)) {
-                        cb(diagnosticFlowResults);
-                    }
-                    else {
-                        $log.error('WorkoutsDiagnosticFlow getQuestionsByDifficultyAndOrder: no callback function passed as argument');
-                    }
-                };
-                /**
-                 * init Question map object By Difficulty And Order
-                 * @function
-                 * @param questions
-                 */
-                workoutsDiagnosticFlowObjApi.initQuestionsByDifficultyAndOrder = function (questions) {
-                    if (!angular.isArray(questions) || questions.length === 0) {
-                        $log.error('WorkoutsDiagnosticFlow initQuestionsByDifficultyAndOrder: questions array is empty or not defined');
-                        return;
-                    }
-                    questionsByOrderAndDifficultyArr = [];
-                    angular.forEach(questions, function (question) {
-                        questionsByOrderAndDifficultyArr[question.order] = questionsByOrderAndDifficultyArr[question.order] || {};
-
-                        var questionByOrderObj = questionsByOrderAndDifficultyArr[question.order];
-
-                        questionByOrderObj[question.difficulty] = questionByOrderObj[question.difficulty] || {};
-                        questionByOrderObj[question.difficulty] = question;
-
-                        if (!questionByOrderObj.maxDifficultyQuestion || questionByOrderObj.maxDifficultyQuestion.difficulty < question.difficulty) {
-                            questionByOrderObj.maxDifficultyQuestion = question;
-                        }
-
-                        return questionsByOrderAndDifficultyArr;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.update(data).then(function (status) {
+                        return status;
                     });
-                    angular.forEach(questionsByOrderAndDifficultyArr, function (questionByOrder) {
-                        Object.keys(diagnosticSettings.levels).forEach(function (key) {
-                            var difficulty = diagnosticSettings.levels[key].num;
-                            if (!questionByOrder[difficulty]) {
-                                questionByOrder[difficulty] = questionByOrder.maxDifficultyQuestion;
-                            }
-                        });
-                    });
-                };
-                workoutsDiagnosticFlowObjApi.getDifficulty = function (currentDifficulty, isAnswerCorrectly, startedTime) {
-                    var newDifficulty;
-                    $log.debug('WorkoutsDiagnosticFlow getDifficulty: initial func', arguments);
-                    if (startedTime > diagnosticSettings.timeLimit) {
-                        newDifficulty = currentDifficulty;
-                    } else if (isAnswerCorrectly) {
-                        newDifficulty = _getNextDifficulty(currentDifficulty, 'increment');
-                    } else {
-                        newDifficulty = _getNextDifficulty(currentDifficulty, 'decrement');
-                    }
-                    $log.debug('WorkoutsDiagnosticFlow getDifficulty: newDifficulty returned value', newDifficulty);
-                    return newDifficulty;
-                };
+                });
+            };
 
-                workoutsDiagnosticFlowObjApi.getDiagnostic = function () {
-                    return ExerciseResultSrv.getExamResult(diagnosticSettings.diagnosticId);
-                };
+            workoutsDiagnosticFlowObjApi.getGlobalVariables = function () {
+                var globalBackendUrl = `${ENV.znkBackendBaseUrl}/global`;
+                return $http.get(`${globalBackendUrl}`, {timeout: ENV.promiseTimeOut, cache: true})
+                    .then(globalVariables => globalVariables.data)
+                    .catch((err) => $log.error('getGlobalVariables: Failed to get global variables. Error: ', err));
+            };
+            workoutsDiagnosticFlowObjApi.setReminder = (serviceId, uid, userTimeout, email) => {
+                const setReminderApi = `${reminderApi}/setReminder`;
+                return $http.post(setReminderApi, {serviceId, uid, userTimeout, email})
+                    .then(reminder => reminder.data)
+                    .catch((err) => $log.error('workoutsDiagnosticFlowObjApi.setReminder: Failed to setReminder. Error: ', err));
+            };
 
-                workoutsDiagnosticFlowObjApi.getDiagnosticExam = function () {
-                    return ExamSrv.getExam(diagnosticSettings.diagnosticId);
-                };
-
-                workoutsDiagnosticFlowObjApi.getActiveSubject = function () {
-                    var activeSubject;
-                    var COMPLETED = 'all';
-                    var NO_ACTIVE_SUBJECT = 'none';
-
-                    var diagnosticProms = [workoutsDiagnosticFlowObjApi.getDiagnosticExam(), workoutsDiagnosticFlowObjApi.getDiagnostic()];
-                    return $q.all(diagnosticProms).then(function (diagnostic) {
-                        var diagnosticExam = diagnostic[0];
-                        var diagnosticResults = diagnostic[1];
-
-                        if (diagnosticResults.isComplete) {
-                            return COMPLETED;
-                        }
-
-                        var exerciseResultPromises = _getExerciseResultProms(diagnosticResults.sectionResults, diagnosticSettings.diagnosticId);
-                        return $q.all(exerciseResultPromises).then(function (completedSections) {
-                            if (completedSections.length === 0 && !diagnosticResults.isStarted) {
-                                return NO_ACTIVE_SUBJECT;
-                            }
-                            // reduce the array to an object so we can reference an object by an id
-                            var completedSectionsObject = completedSections.reduce(function (o, v) {
-                                o[v.exerciseId] = v.isComplete;
-                                return o;
-                            }, {});
-
-                            // sort sections by order
-                            var sectionsByOrder = diagnosticExam.sections.sort(function (a, b) {
-                                return a.order > b.order;
-                            });
-
-                            for (var i = 0; i < sectionsByOrder.length; i++) {
-                                var value = sectionsByOrder[i];
-                                if (!completedSectionsObject[value.id]) {
-                                    activeSubject = value.subjectId;
-                                    break;
-                                }
-                            }
-                            return activeSubject; // subjectId
-                        });
-                    });
-                };
-
-                workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
-                    return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
-                        return !!diagnostic.isComplete;
-                    });
-                };
-
-                workoutsDiagnosticFlowObjApi.setReminder = (serviceId, uid, userTimeout, email) => {
-                    const setReminderApi = `${reminderApi}/setReminder`;
-                    return $http.post(setReminderApi, { serviceId, uid, userTimeout, email })
-                        .then(reminder => reminder.data)
-                        .catch((err) => $log.error('workoutsDiagnosticFlowObjApi.setReminder: Failed to setReminder. Error: ', err));
-                };
-
-                return workoutsDiagnosticFlowObjApi;
-            }];
+            return workoutsDiagnosticFlowObjApi;
+        }];
     }]);
 
 })(angular);
@@ -13631,7 +13662,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 
             var vm = this;
             var onBordingSettings = OnBoardingService.getOnBoardingSettings();
-            vm.isMarketingToefl = false;
+            vm.showLaterButton = false;
             vm.showInstructions = angular.isDefined(onBordingSettings.showInstructions) ? onBordingSettings.showInstructions : false;
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
             getMarketingToefl();
@@ -13654,7 +13685,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 
             function getMarketingToefl() {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                    vm.isMarketingToefl = !!marketingObj && !!marketingObj.status;
+                    vm.showLaterButton = !(marketingObj && marketingObj.status);
                 });
             }
         }]);
@@ -13835,7 +13866,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
             else {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     // statuses:  7 - app  , 1 - diagnostic
-                    if (marketingObj && marketingObj.status && marketingObj.status !== 1 && marketingObj.status !== 7) {
+                    if (marketingObj && marketingObj.status && marketingObj.status !== 1 && marketingObj.status !== 7 && toState.name !== 'app.diagnostic.preSummary') {
                         handleToeflMarketingRedirect(marketingObj);
                     } else {
                         var APP_WORKOUTS_STATE = 'app.workouts.roadmap';
@@ -14226,7 +14257,7 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
     "    <diagnostic-intro show-instructions=\"vm.showInstructions\"\n" +
     "                      show-icons-section=\"vm.showIconsSection\"></diagnostic-intro>\n" +
     "    <div class=\"btn-wrap\">\n" +
-    "        <md-button ng-if=\"!vm.isMarketingToefl\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
+    "        <md-button ng-if=\"vm.showLaterButton\" aria-label=\"{{'ON_BOARDING.DIAGNOSTIC.TAKE_IT_LATER' | translate}}\"\n" +
     "                   tabindex=\"2\" class=\"default sm\"\n" +
     "                   ng-click=\"vm.setOnboardingCompleted('app.workouts.roadmap', 'Take It Later')\">\n" +
     "            <span translate=\".TAKE_IT_LATER\"></span>\n" +
@@ -14339,6 +14370,107 @@ angular.module('znk.infra-web-app.onBoarding').run(['$templateCache', function (
     "</section>\n" +
     "<on-boarding-bar step=\"welcome\"></on-boarding-bar>\n" +
     "");
+}]);
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.oneSignal',
+        [
+            'ngAnimate',
+            'ui.router',
+            'ngMaterial',
+            'pascalprecht.translate',
+            'znk.infra.svgIcon',
+            'znk.infra.popUp',
+            'znk.infra.enum',
+            'znk.infra.config',
+            'znk.infra.storage',
+            'znk.infra.auth',
+            'znk.infra.analytics'
+        ]);
+})(angular);
+
+
+(function () {
+  'use strict';
+
+  angular.module('znk.infra-web-app.oneSignal').run(
+    ["$log", "OneSignalService", "ENV", "AuthService", function ($log, OneSignalService, ENV, AuthService) {
+      'ngInject';
+
+        OneSignalService.initOneSignal();
+
+        OneSignalService.sendTag('ServiceId', ENV.serviceId, (res) => {
+            $log.debug('tags received by server', res);
+        });
+
+        AuthService.getAuth().then(authData => {
+            if (authData && authData.uid) {
+                OneSignalService.sendTag('UID', authData.uid, (res) => {
+                    $log.debug('tags received by server', res);
+                });
+            }
+        });
+    }]);
+})();
+
+(function (angular) {
+    'use strict';
+
+    angular.module('znk.infra-web-app.oneSignal')
+        .service('OneSignalService',
+            ["$log", "ENV", "$window", function ($log, ENV, $window) {
+                'ngInject';
+
+                $log.debug('OneSignalService: Init');
+                const ONE_SIGNAL_SCRIPT_URL = 'https://cdn.onesignal.com/sdks/OneSignalSDK.js';
+                const MANIFEST_PATH = '../assets/files/manifest.json';
+                loadManifestLink();
+                loadOneSignalScript();
+
+                // https://documentation.onesignal.com/docs/web-push-sdk#section--init-
+                this.initOneSignal = () => {
+                    const oneSignal = $window.OneSignal || [];
+                    oneSignal.push(() => {
+                        oneSignal.init({
+                            appId: ENV.oneSignalAppId,
+                            allowLocalhostAsSecureOrigin: true
+                        });
+                    });
+                };
+
+                this.sendTag = (key, value, callback) => {
+                    const oneSignal = $window.OneSignal || [];
+                    oneSignal.push(() => {
+                        oneSignal.sendTag(key, value, callback);
+                    });
+                };
+
+                // Load manifest link <link rel="manifest" href="/manifest.json" />
+                function loadManifestLink() {
+                    const linkTag = document.getElementsByTagName('link')[0];
+                    const newLinkElm = $window.document.createElement('link');
+                    newLinkElm.href = MANIFEST_PATH;
+                    newLinkElm.rel = 'manifest';
+                    linkTag.parentNode.insertBefore(newLinkElm,linkTag);
+                }
+
+                // Load oneSignal module <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+                function loadOneSignalScript() {
+                    const scriptTag = document.getElementsByTagName('script')[0];
+                    const newScriptElm = $window.document.createElement('script');
+                    newScriptElm.src = ONE_SIGNAL_SCRIPT_URL;
+                    newScriptElm.async = true;
+                    scriptTag.parentNode.insertBefore(newScriptElm,scriptTag);
+                }
+
+            }]
+        );
+})(angular);
+
+angular.module('znk.infra-web-app.oneSignal').run(['$templateCache', function ($templateCache) {
+
 }]);
 
 (function (angular) {
@@ -19566,6 +19698,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 var pendingPurchaseProm = purchaseService.getPendingPurchase();
                 ActivePanelSrv.loadActivePanel();
                 vm.expandIcon = 'expand_more';
+                vm.showheaderlinks = false;
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
                 vm.showMyProfile = MyProfileSrv.showMyProfile;
@@ -19593,7 +19726,9 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 purchaseService.getPurchaseData().then(function (purchaseData) {
                     vm.purchaseData = purchaseData;
                 });
-
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    vm.showheaderlinks = !(marketingObj && marketingObj.status);
+                });
                 $scope.$watch(function () {
                     return vm.purchaseData;
                 }, function (newPurchaseState) {
@@ -19725,7 +19860,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "            </svg-icon>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"app-states-list\">\n" +
+    "        <div ng-if=\"vm.showheaderlinks\" class=\"app-states-list\">\n" +
     "            <md-list flex=\"grow\" layout=\"row\" layout-align=\"start center\">\n" +
     "                <div ng-repeat=\"headerItem in vm.additionalItems\">\n" +
     "                    <md-list-item md-ink-ripple ui-sref-active=\"active\">\n" +
@@ -19746,7 +19881,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "            <div class=\"review-credit-container\" ng-if=\"vm.showReviewCreditBtn\">\n" +
     "                <purchase-credits-btn></purchase-credits-btn>\n" +
     "            </div>\n" +
-    "            <md-menu md-offset=\"-61 68\">\n" +
+    "            <md-menu md-offset=\"-61 68\" ng-if=\"vm.showheaderlinks\">\n" +
     "                <md-button ng-click=\"$mdOpenMenu($event); vm.znkOpenModal();\" class=\"md-icon-button profile-open-modal-btn\" aria-label=\"Open sample menu\">\n" +
     "                    <div>{{vm.userProfile.username}}</div>\n" +
     "                    <md-icon class=\"material-icons\">{{vm.expandIcon}}</md-icon>\n" +
