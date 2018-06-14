@@ -33,16 +33,21 @@
             };
 
             this.goToExercise = function () {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'diagnosticSectionStarted',
-                    props: {
-                        sectionId: vm.params.sectionId,
-                        order: vm.params.order,
-                        subjectId: vm.params.subjectId
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'diagnosticSectionStarted',
+                //     props: {
+                //         sectionId: vm.params.sectionId,
+                //         order: vm.params.order,
+                //         subjectId: vm.params.subjectId
+                //     }
+                // });
+                // znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
+                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                    if(marketingObj && marketingObj.status){
+                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-start`);
                     }
+                    $state.go('app.diagnostic.exercise');
                 });
-                znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
-                $state.go('app.diagnostic.exercise');
             };
 
             $rootScope.$on('$translateChangeSuccess', function () {

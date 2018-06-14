@@ -295,17 +295,21 @@
                     WorkoutsDiagnosticFlow.markSectionAsDoneToggle(true);
                     _onDoneSaveResultsData().then(function () {
                         _isLastSubject().then(function (isLastSubject) {
-                            znkAnalyticsSrv.eventTrack({
-                                eventName: 'diagnosticSectionCompleted',
-                                questionsArr: exerciseData.resultsData.questionResults,
-                                props: {
-                                    sectionId: exerciseData.questionsData.id,
-                                    order: exerciseData.questionsData.order,
-                                    subjectId: self.subjectId
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`);
                                 }
-                            });
-                            if (isLastSubject) {
-                                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                // znkAnalyticsSrv.eventTrack({
+                                //     eventName: 'diagnosticSectionCompleted',
+                                //     questionsArr: exerciseData.resultsData.questionResults,
+                                //     props: {
+                                //         sectionId: exerciseData.questionsData.id,
+                                //         order: exerciseData.questionsData.order,
+                                //         subjectId: self.subjectId
+                                //     }
+                                // });
+                                if (isLastSubject) {
+
                                     if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
                                             let selectedNum;
@@ -325,10 +329,11 @@
                                     } else {
                                         _goToCurrentState(true);
                                     }
-                                });
-                            } else {
-                                _goToCurrentState();
-                            }
+                                    //
+                                } else {
+                                    _goToCurrentState();
+                                }
+                            });
                         });
                     });
                 },

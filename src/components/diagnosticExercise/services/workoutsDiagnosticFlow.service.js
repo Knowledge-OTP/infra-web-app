@@ -1,3 +1,5 @@
+/*jshint -W117 */
+
 (function (angular) {
     'use strict';
 
@@ -339,7 +341,31 @@
                     });
                 });
             };
+            workoutsDiagnosticFlowObjApi.setPage = function (pageName) {
+                ga('set', 'page', `/${pageName}.html`);
+            };
 
+            workoutsDiagnosticFlowObjApi.sendPage = function () {
+                ga('send', 'pageview');
+            };
+
+            workoutsDiagnosticFlowObjApi.updatePage = function (pageName) {
+                workoutsDiagnosticFlowObjApi.setPage(pageName);
+                workoutsDiagnosticFlowObjApi.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             */
+            workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventAction,
+                    eventLabel: 'Toefl Campaign'
+                });
+            };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
                     return !!diagnostic.isComplete;

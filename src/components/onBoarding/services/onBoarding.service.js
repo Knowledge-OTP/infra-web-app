@@ -1,3 +1,5 @@
+/*jshint -W117 */
+/*jshint unused:false*/
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
@@ -40,6 +42,31 @@
                     return setProgress(progress);
                 });
             };
+            onBoardingServiceObj.setPage = function (pageName) {
+                ga('set', 'page', `/${pageName}.html`);
+            };
+
+            onBoardingServiceObj.sendPage = function () {
+                ga('send', 'pageview');
+            };
+
+            onBoardingServiceObj.updatePage = function (pageName) {
+                onBoardingServiceObj.setPage(pageName);
+                onBoardingServiceObj.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             */
+            onBoardingServiceObj.sendEvent = function (eventCategory, eventAction) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventAction,
+                    eventLabel: 'Toefl Campaign'
+                });
+            };
 
             function getProgress() {
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
@@ -57,6 +84,7 @@
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
+
             onBoardingServiceObj.getMarketingToefl = function () {
                 var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {

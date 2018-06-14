@@ -4404,17 +4404,21 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     WorkoutsDiagnosticFlow.markSectionAsDoneToggle(true);
                     _onDoneSaveResultsData().then(function () {
                         _isLastSubject().then(function (isLastSubject) {
-                            znkAnalyticsSrv.eventTrack({
-                                eventName: 'diagnosticSectionCompleted',
-                                questionsArr: exerciseData.resultsData.questionResults,
-                                props: {
-                                    sectionId: exerciseData.questionsData.id,
-                                    order: exerciseData.questionsData.order,
-                                    subjectId: self.subjectId
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`);
                                 }
-                            });
-                            if (isLastSubject) {
-                                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                // znkAnalyticsSrv.eventTrack({
+                                //     eventName: 'diagnosticSectionCompleted',
+                                //     questionsArr: exerciseData.resultsData.questionResults,
+                                //     props: {
+                                //         sectionId: exerciseData.questionsData.id,
+                                //         order: exerciseData.questionsData.order,
+                                //         subjectId: self.subjectId
+                                //     }
+                                // });
+                                if (isLastSubject) {
+
                                     if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
                                             let selectedNum;
@@ -4434,10 +4438,11 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                                     } else {
                                         _goToCurrentState(true);
                                     }
-                                });
-                            } else {
-                                _goToCurrentState();
-                            }
+                                    //
+                                } else {
+                                    _goToCurrentState();
+                                }
+                            });
                         });
                     });
                 },
@@ -4505,16 +4510,21 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
             };
 
             this.goToExercise = function () {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'diagnosticSectionStarted',
-                    props: {
-                        sectionId: vm.params.sectionId,
-                        order: vm.params.order,
-                        subjectId: vm.params.subjectId
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'diagnosticSectionStarted',
+                //     props: {
+                //         sectionId: vm.params.sectionId,
+                //         order: vm.params.order,
+                //         subjectId: vm.params.subjectId
+                //     }
+                // });
+                // znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
+                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                    if(marketingObj && marketingObj.status){
+                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-start`);
                     }
+                    $state.go('app.diagnostic.exercise');
                 });
-                znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
-                $state.go('app.diagnostic.exercise');
             };
 
             $rootScope.$on('$translateChangeSuccess', function () {
@@ -4694,6 +4704,8 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
 
 })(angular);
 
+
+/*jshint -W117 */
 
 (function (angular) {
     'use strict';
@@ -5036,7 +5048,31 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     });
                 });
             };
+            workoutsDiagnosticFlowObjApi.setPage = function (pageName) {
+                ga('set', 'page', `/${pageName}.html`);
+            };
 
+            workoutsDiagnosticFlowObjApi.sendPage = function () {
+                ga('send', 'pageview');
+            };
+
+            workoutsDiagnosticFlowObjApi.updatePage = function (pageName) {
+                workoutsDiagnosticFlowObjApi.setPage(pageName);
+                workoutsDiagnosticFlowObjApi.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             */
+            workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventAction,
+                    eventLabel: 'Toefl Campaign'
+                });
+            };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
                     return !!diagnostic.isComplete;
@@ -13657,7 +13693,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController',
-        ["OnBoardingService", "$state", "znkAnalyticsSrv", function (OnBoardingService, $state, znkAnalyticsSrv) {
+        ["OnBoardingService", "$state", function (OnBoardingService, $state) {
             'ngInject';
 
             var vm = this;
@@ -13668,12 +13704,16 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
             getMarketingToefl();
 
             this.setOnboardingCompleted = function (nextState, eventText) {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'onBoardingDiagnosticStep',
-                    props: {
-                        clicked: eventText
-                    }
-                });
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'onBoardingDiagnosticStep',
+                //     props: {
+                //         clicked: eventText
+                //     }
+                // });
+                if(!vm.showLaterButton){
+                    OnBoardingService.sendEvent('diagnostic', `click-${eventText}`);
+                }
+
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
                     if (nextState === 'app.diagnostic' && onBordingSettings.forceSkipIntro) {
                         $state.go(nextState, {forceSkipIntro: true});
@@ -13694,7 +13734,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingGoalsController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
-        function ($state, OnBoardingService, znkAnalyticsSrv) {
+        function ($state, OnBoardingService) {
 
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.userGoalsSetting = {
@@ -13706,20 +13746,25 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
             };
 
             this.saveGoals = function () {
-                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingGoalsStep'});
-                var nextStep;
-                var nextState;
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    if (marketingObj && marketingObj.status) {
+                        OnBoardingService.sendEvent('diagnostic', 'click-save&continue');
+                    }
+                    //      znkAnalyticsSrv.eventTrack({eventName: 'onBoardingGoalsStep'});
+                    var nextStep;
+                    var nextState;
 
-                if (onBoardingSettings && onBoardingSettings.showTestToTake) {
-                    nextStep = OnBoardingService.steps.INTRO_TEST_TO_TAKE;
-                    nextState = 'app.onBoarding.introTestToTake';
-                } else {
-                    nextStep = OnBoardingService.steps.DIAGNOSTIC;
-                    nextState = 'app.onBoarding.diagnostic';
-                }
+                    if (onBoardingSettings && onBoardingSettings.showTestToTake) {
+                        nextStep = OnBoardingService.steps.INTRO_TEST_TO_TAKE;
+                        nextState = 'app.onBoarding.introTestToTake';
+                    } else {
+                        nextStep = OnBoardingService.steps.DIAGNOSTIC;
+                        nextState = 'app.onBoarding.diagnostic';
+                    }
 
-                OnBoardingService.setOnBoardingStep(nextStep);
-                $state.go(nextState);
+                    OnBoardingService.setOnBoardingStep(nextStep);
+                    $state.go(nextState);
+                });
             };
         }]);
 })(angular);
@@ -13860,11 +13905,17 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
         'ngInject';
         var isOnBoardingCompleted = false;
         $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
-            if (isOnBoardingCompleted) {
-                return;
-            }
-            else {
-                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+            evt.preventDefault();
+            OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                if (isOnBoardingCompleted) {
+                    if (marketingObj && marketingObj.status) {
+                        OnBoardingService.updatePage(toState.name);
+                    }
+                    $state.go(toState, toParams, {
+                        reload: true
+                    });
+                }
+                else {
                     // statuses:  7 - app  , 1 - diagnostic
                     if (marketingObj && marketingObj.status && marketingObj.status !== 1 && marketingObj.status !== 7 && toState.name !== 'app.diagnostic.preSummary') {
                         handleToeflMarketingRedirect(marketingObj);
@@ -13882,9 +13933,15 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                                     var ON_BOARDING_STATE_NAME = 'app.onBoarding';
                                     var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
                                     if (isNotFromOnBoardingState) {
+                                        if (marketingObj && marketingObj.status) {
+                                            OnBoardingService.updatePage(ON_BOARDING_STATE_NAME);
+                                        }
                                         $state.go(ON_BOARDING_STATE_NAME);
                                     }
                                 } else {
+                                    if (marketingObj && marketingObj.status) {
+                                        OnBoardingService.updatePage(toState.name);
+                                    }
                                     $state.go(toState, toParams, {
                                         reload: true
                                     });
@@ -13892,37 +13949,39 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                             });
                         }
                     }
-                });
-            }
-
-            function handleToeflMarketingRedirect(marketingObj) {
-                var state = '';
-                switch (marketingObj.status) {
-                    case 2:
-                        state = 'email';
-                        break;
-                    case 3:
-                        state = 'verifyEmail';
-                        break;
-                    case 4:
-                        state = 'purchase';
-                        break;
-                    case 5:
-                        state = 'purchase';
-                        break;
-                    case 6:
-                        state = 'signup';
-                        break;
-                    default:
-                        state = 'purchase';
                 }
-                window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
-            }
+
+                function handleToeflMarketingRedirect(marketingObj) {
+                    var state = '';
+                    switch (marketingObj.status) {
+                        case 2:
+                            state = 'email';
+                            break;
+                        case 3:
+                            state = 'verifyEmail';
+                            break;
+                        case 4:
+                            state = 'purchase';
+                            break;
+                        case 5:
+                            state = 'purchase';
+                            break;
+                        case 6:
+                            state = 'signup';
+                            break;
+                        default:
+                            state = 'purchase';
+                    }
+                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+                }
+            });
         });
     }]);
 
 })(angular);
 
+/*jshint -W117 */
+/*jshint unused:false*/
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
@@ -13965,6 +14024,31 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                     return setProgress(progress);
                 });
             };
+            onBoardingServiceObj.setPage = function (pageName) {
+                ga('set', 'page', `/${pageName}.html`);
+            };
+
+            onBoardingServiceObj.sendPage = function () {
+                ga('send', 'pageview');
+            };
+
+            onBoardingServiceObj.updatePage = function (pageName) {
+                onBoardingServiceObj.setPage(pageName);
+                onBoardingServiceObj.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             */
+            onBoardingServiceObj.sendEvent = function (eventCategory, eventAction) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventAction,
+                    eventLabel: 'Toefl Campaign'
+                });
+            };
 
             function getProgress() {
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
@@ -13982,6 +14066,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
+
             onBoardingServiceObj.getMarketingToefl = function () {
                 var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {

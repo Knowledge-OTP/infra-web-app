@@ -625,17 +625,21 @@
                     WorkoutsDiagnosticFlow.markSectionAsDoneToggle(true);
                     _onDoneSaveResultsData().then(function () {
                         _isLastSubject().then(function (isLastSubject) {
-                            znkAnalyticsSrv.eventTrack({
-                                eventName: 'diagnosticSectionCompleted',
-                                questionsArr: exerciseData.resultsData.questionResults,
-                                props: {
-                                    sectionId: exerciseData.questionsData.id,
-                                    order: exerciseData.questionsData.order,
-                                    subjectId: self.subjectId
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`);
                                 }
-                            });
-                            if (isLastSubject) {
-                                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                // znkAnalyticsSrv.eventTrack({
+                                //     eventName: 'diagnosticSectionCompleted',
+                                //     questionsArr: exerciseData.resultsData.questionResults,
+                                //     props: {
+                                //         sectionId: exerciseData.questionsData.id,
+                                //         order: exerciseData.questionsData.order,
+                                //         subjectId: self.subjectId
+                                //     }
+                                // });
+                                if (isLastSubject) {
+
                                     if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
                                             let selectedNum;
@@ -655,10 +659,11 @@
                                     } else {
                                         _goToCurrentState(true);
                                     }
-                                });
-                            } else {
-                                _goToCurrentState();
-                            }
+                                    //
+                                } else {
+                                    _goToCurrentState();
+                                }
+                            });
                         });
                     });
                 },
@@ -726,16 +731,21 @@
             };
 
             this.goToExercise = function () {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'diagnosticSectionStarted',
-                    props: {
-                        sectionId: vm.params.sectionId,
-                        order: vm.params.order,
-                        subjectId: vm.params.subjectId
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'diagnosticSectionStarted',
+                //     props: {
+                //         sectionId: vm.params.sectionId,
+                //         order: vm.params.order,
+                //         subjectId: vm.params.subjectId
+                //     }
+                // });
+                // znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
+                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                    if(marketingObj && marketingObj.status){
+                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-start`);
                     }
+                    $state.go('app.diagnostic.exercise');
                 });
-                znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
-                $state.go('app.diagnostic.exercise');
             };
 
             $rootScope.$on('$translateChangeSuccess', function () {
@@ -915,6 +925,8 @@
 
 })(angular);
 
+
+/*jshint -W117 */
 
 (function (angular) {
     'use strict';
@@ -1257,7 +1269,31 @@
                     });
                 });
             };
+            workoutsDiagnosticFlowObjApi.setPage = function (pageName) {
+                ga('set', 'page', `/${pageName}.html`);
+            };
 
+            workoutsDiagnosticFlowObjApi.sendPage = function () {
+                ga('send', 'pageview');
+            };
+
+            workoutsDiagnosticFlowObjApi.updatePage = function (pageName) {
+                workoutsDiagnosticFlowObjApi.setPage(pageName);
+                workoutsDiagnosticFlowObjApi.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             */
+            workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventAction,
+                    eventLabel: 'Toefl Campaign'
+                });
+            };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
                     return !!diagnostic.isComplete;

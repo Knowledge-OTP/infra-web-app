@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController',
-        function (OnBoardingService, $state, znkAnalyticsSrv) {
+        function (OnBoardingService, $state) {
             'ngInject';
 
             var vm = this;
@@ -12,12 +12,16 @@
             getMarketingToefl();
 
             this.setOnboardingCompleted = function (nextState, eventText) {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'onBoardingDiagnosticStep',
-                    props: {
-                        clicked: eventText
-                    }
-                });
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'onBoardingDiagnosticStep',
+                //     props: {
+                //         clicked: eventText
+                //     }
+                // });
+                if(!vm.showLaterButton){
+                    OnBoardingService.sendEvent('diagnostic', `click-${eventText}`);
+                }
+
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
                     if (nextState === 'app.diagnostic' && onBordingSettings.forceSkipIntro) {
                         $state.go(nextState, {forceSkipIntro: true});
