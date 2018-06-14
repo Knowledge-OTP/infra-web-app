@@ -7,9 +7,25 @@
 
             const EXAM_STATE = 'app.diagnostic';
 
+            // To prevent the openLeavingSoSoonPopup the pop when the microphone permission popup appear
+            let isMicrophonePermissionAsked = null;
+            hasMicrophonePermissions();
+
+            function hasMicrophonePermissions() {
+                if (ENV.firebaseAppScopeName.split('_')[0] === 'toefl') {
+                    $window.RaccoonRecorder.getMicrophoneAccess(
+                        // successCallback = permission granted
+                        () => isMicrophonePermissionAsked = true,
+                        // errorCallback = permission denied
+                        () => isMicrophonePermissionAsked = true);
+                } else {
+                    isMicrophonePermissionAsked = true;
+                }
+            }
+
             function userLeaveEvent(e) {
                 e = e ? e : window.event;
-                var from = e.relatedTarget || e.toElement;
+                const from = e.relatedTarget || e.toElement;
                 if (!from || from.nodeName === 'HTML') {
                     openLeavingSoSoonPopup();
                 }
@@ -23,10 +39,12 @@
                 return isReminderSent;
             }
 
+
             function openLeavingSoSoonPopup() {
                 const isReminderSent = getFlagToSessionStorage();
+                const isOpen = !!document.querySelector('.leaving-so-soon-popup');
 
-                if (!isReminderSent) {
+                if (!isOpen && !isReminderSent && isMicrophonePermissionAsked !== null) {
                     return $mdDialog.show({
                         controller: 'leavingSoSoonPopupCtrl',
                         controllerAs: 'vm',
