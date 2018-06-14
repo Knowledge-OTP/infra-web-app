@@ -43,9 +43,7 @@
                         });
                     }
                 }
-                $state.go(toState, toParams, {
-                    reload: true
-                });
+                $state.go(toState, toParams);
 
 
                 function handleToeflMarketingRedirect(marketingObj) {

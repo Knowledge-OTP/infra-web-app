@@ -13943,9 +13943,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                         });
                     }
                 }
-                $state.go(toState, toParams, {
-                    reload: true
-                });
+                $state.go(toState, toParams);
 
 
                 function handleToeflMarketingRedirect(marketingObj) {
