@@ -149,8 +149,8 @@
                     }
 
                     if (!examResults.isStarted) {
-                        znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
-                        znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
+                        // znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
+                        // znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
                         examResults.isStarted = true;
                         skipIntroBool = false;
                         examResults.$save();

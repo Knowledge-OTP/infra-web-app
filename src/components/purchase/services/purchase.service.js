@@ -1,9 +1,12 @@
+/*jshint -W117 */
+/*jshint unused:false*/
+
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
         function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
+                  PopUpSrv, StorageSrv, AuthService) {
             'ngInject';
 
             var self = this;
@@ -11,6 +14,39 @@
             var studentStorageProm = InfraConfigSrv.getStudentStorage();
             var pendingPurchaseDefer;
 
+            self.setPage = function (pageName) {
+                ga('set', 'page', `/${pageName}.html`);
+            };
+
+            self.sendPage = function () {
+                ga('send', 'pageview');
+            };
+
+            self.updatePage = function (pageName) {
+                self.setPage(pageName);
+                self.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             */
+            self.sendEvent = function (eventCategory, eventAction) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventAction,
+                    eventLabel: 'Toefl Campaign'
+                });
+            };
+            self.getMarketingToefl = function () {
+                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(marketingPath).then(function (marketing) {
+                        return marketing;
+                    });
+                });
+            };
             self.getPath = function (param) {
                 return AuthService.getAuth().then(authData => {
                     if (!authData) {
@@ -35,9 +71,9 @@
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
                     if (+params.purchaseSuccess === 1) {
                         self.setPendingPurchase();
-                        znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
+                      //  znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
                     } else {
-                        znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
+                       // znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
                     }
                     self.showPurchaseDialog();
                 } else {
@@ -107,9 +143,9 @@
             };
 
             self.showPurchaseDialog = function () {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'purchaseModalOpened'
-                });
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'purchaseModalOpened'
+                // });
                 return $mdDialog.show({
                     controller: 'PurchaseDialogController',
                     templateUrl: 'components/purchase/templates/purchasePopup.template.html',

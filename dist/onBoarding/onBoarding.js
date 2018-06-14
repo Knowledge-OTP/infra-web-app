@@ -107,7 +107,7 @@
                 //         clicked: eventText
                 //     }
                 // });
-                if(!vm.showLaterButton){
+                if (!vm.showLaterButton) {
                     OnBoardingService.sendEvent('diagnostic', `click-${eventText}`);
                 }
 
@@ -122,7 +122,12 @@
 
             function getMarketingToefl() {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                    vm.showLaterButton = !(marketingObj && marketingObj.status);
+                    if (marketingObj && marketingObj.status) {
+                        vm.showLaterButton = false;
+                        OnBoardingService.updatePage('onBoardingDiagnostic');
+                    } else {
+                        vm.showLaterButton = true;
+                    }
                 });
             }
         }]);
@@ -141,7 +146,12 @@
                     showSaveIcon: true
                 }
             };
+            OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                if (marketingObj && marketingObj.status) {
+                    OnBoardingService.updatePage('onBoardingGoals');
+                }
 
+            });
             this.saveGoals = function () {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     if (marketingObj && marketingObj.status) {
@@ -189,17 +199,17 @@
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController', ['$state', 'OnBoardingService', 'userGoalsSelectionService', 'znkAnalyticsSrv', '$timeout',
         function($state, OnBoardingService, userGoalsSelectionService, znkAnalyticsSrv, $timeout) {
 
-            function _addEvent(clicked) {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'onBoardingSchoolsStep',
-                    props: {
-                        clicked: clicked
-                    }
-                });
-            }
+            // function _addEvent(clicked) {
+            //     // znkAnalyticsSrv.eventTrack({
+            //     //     eventName: 'onBoardingSchoolsStep',
+            //     //     props: {
+            //     //         clicked: clicked
+            //     //     }
+            //     // });
+            // }
 
-            function _goToGoalsState(newUserSchools, evtName) {
-                _addEvent(evtName);
+            function _goToGoalsState(newUserSchools) {
+              //  _addEvent(evtName);
                 userGoalsSelectionService.setDreamSchools(newUserSchools, true).then(function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.GOALS).then(function () {
                         $timeout(function () {
@@ -255,15 +265,20 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingWelcomesController', ['userProfile', 'OnBoardingService', '$state', 'znkAnalyticsSrv',
-        function (userProfile, OnBoardingService, $state, znkAnalyticsSrv) {
+        function (userProfile, OnBoardingService, $state) {
 
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.username = userProfile.nickname || '';
+            OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                if (marketingObj && marketingObj.status) {
+                    OnBoardingService.updatePage('onBoardingWelcome');
+                }
 
+            });
             this.nextStep = function () {
                 var nextStep;
                 var nextState;
-                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingWelcomeStep'});
+              //  znkAnalyticsSrv.eventTrack({eventName: 'onBoardingWelcomeStep'});
                 if (onBoardingSettings && onBoardingSettings.showSchoolStep) {
                     nextStep = OnBoardingService.steps.SCHOOLS;
                     nextState = 'app.onBoarding.schools';
@@ -302,14 +317,11 @@
         'ngInject';
         var isOnBoardingCompleted = false;
         $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
-            OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                if (isOnBoardingCompleted) {
-                    if (marketingObj && marketingObj.status) {
-                        OnBoardingService.updatePage(toState.name);
-                    }
-                    return;
-                }
-                else {
+            if (isOnBoardingCompleted) {
+                return;
+            }
+            else {
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     // statuses:  7 - app  , 1 - diagnostic
                     if (marketingObj && marketingObj.status && marketingObj.status !== 1 && marketingObj.status !== 7 && toState.name !== 'app.diagnostic.preSummary') {
                         handleToeflMarketingRedirect(marketingObj);
@@ -327,15 +339,9 @@
                                     var ON_BOARDING_STATE_NAME = 'app.onBoarding';
                                     var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
                                     if (isNotFromOnBoardingState) {
-                                        if (marketingObj && marketingObj.status) {
-                                            OnBoardingService.updatePage(ON_BOARDING_STATE_NAME);
-                                        }
                                         $state.go(ON_BOARDING_STATE_NAME);
                                     }
                                 } else {
-                                    if (marketingObj && marketingObj.status) {
-                                        OnBoardingService.updatePage(toState.name);
-                                    }
                                     $state.go(toState, toParams, {
                                         reload: true
                                     });
@@ -343,32 +349,32 @@
                             });
                         }
                     }
-                }
+                });
+            }
 
-                function handleToeflMarketingRedirect(marketingObj) {
-                    var state = '';
-                    switch (marketingObj.status) {
-                        case 2:
-                            state = 'email';
-                            break;
-                        case 3:
-                            state = 'verifyEmail';
-                            break;
-                        case 4:
-                            state = 'purchase';
-                            break;
-                        case 5:
-                            state = 'purchase';
-                            break;
-                        case 6:
-                            state = 'signup';
-                            break;
-                        default:
-                            state = 'purchase';
-                    }
-                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+            function handleToeflMarketingRedirect(marketingObj) {
+                var state = '';
+                switch (marketingObj.status) {
+                    case 2:
+                        state = 'email';
+                        break;
+                    case 3:
+                        state = 'verifyEmail';
+                        break;
+                    case 4:
+                        state = 'purchase';
+                        break;
+                    case 5:
+                        state = 'purchase';
+                        break;
+                    case 6:
+                        state = 'signup';
+                        break;
+                    default:
+                        state = 'purchase';
                 }
-            });
+                window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+            }
         });
     }]);
 

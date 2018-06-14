@@ -3,17 +3,17 @@
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController', ['$state', 'OnBoardingService', 'userGoalsSelectionService', 'znkAnalyticsSrv', '$timeout',
         function($state, OnBoardingService, userGoalsSelectionService, znkAnalyticsSrv, $timeout) {
 
-            function _addEvent(clicked) {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'onBoardingSchoolsStep',
-                    props: {
-                        clicked: clicked
-                    }
-                });
-            }
+            // function _addEvent(clicked) {
+            //     // znkAnalyticsSrv.eventTrack({
+            //     //     eventName: 'onBoardingSchoolsStep',
+            //     //     props: {
+            //     //         clicked: clicked
+            //     //     }
+            //     // });
+            // }
 
-            function _goToGoalsState(newUserSchools, evtName) {
-                _addEvent(evtName);
+            function _goToGoalsState(newUserSchools) {
+              //  _addEvent(evtName);
                 userGoalsSelectionService.setDreamSchools(newUserSchools, true).then(function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.GOALS).then(function () {
                         $timeout(function () {

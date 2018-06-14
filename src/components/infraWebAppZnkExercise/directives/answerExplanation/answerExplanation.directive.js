@@ -12,7 +12,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         })
         .directive('answerExplanation',
-        function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout, CategoryService) {
+        function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
             'ngInject';
 
             var directive = {
@@ -25,8 +25,8 @@
                     var ngModelCtrl = ctrls[1];
                     var viewMode = questionBuilderCtrl.getViewMode();
                     var question = questionBuilderCtrl.question;
-                    var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
-                        CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]) : question.subjectId;
+                    // var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                    //     CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]) : question.subjectId;
 
                     scope.d = {};
 
@@ -45,25 +45,25 @@
                                 element.addClass('answer-explanation-visible');
                             }, 0, false);
 
-                            var analyticsProps = {
-                                subjectType: questionSubjectId,
-                                questionId: question.id
-                            };
+                            // var analyticsProps = {
+                            //     subjectType: questionSubjectId,
+                            //     questionId: question.id
+                            // };
 
                             scope.$watch('d.showWrittenSln', function (isVisible) {
                                 if (isVisible || isVisible === false) {
-                                    if (isVisible) {
-                                        znkAnalyticsSrv.eventTrack({
-                                            eventName: 'writtenSolutionClicked',
-                                            props: analyticsProps
-                                        });
-                                        znkAnalyticsSrv.timeTrack({ eventName: 'writtenSolutionClosed' });
-                                    } else {
-                                        znkAnalyticsSrv.eventTrack({
-                                            eventName: 'writtenSolutionClosed',
-                                            props: analyticsProps
-                                        });
-                                    }
+                                    // if (isVisible) {
+                                    //     znkAnalyticsSrv.eventTrack({
+                                    //         eventName: 'writtenSolutionClicked',
+                                    //         props: analyticsProps
+                                    //     });
+                                    //     znkAnalyticsSrv.timeTrack({ eventName: 'writtenSolutionClosed' });
+                                    // } else {
+                                    //     znkAnalyticsSrv.eventTrack({
+                                    //         eventName: 'writtenSolutionClosed',
+                                    //         props: analyticsProps
+                                    //     });
+                                    // }
                                 }
                             });
 

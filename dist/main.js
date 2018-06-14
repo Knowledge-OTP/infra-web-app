@@ -4856,8 +4856,8 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     }
 
                     if (!examResults.isStarted) {
-                        znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
-                        znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
+                        // znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
+                        // znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
                         examResults.isStarted = true;
                         skipIntroBool = false;
                         examResults.$save();
@@ -7358,7 +7358,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function 
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-        ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", "CategoryService", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout, CategoryService) {
+        ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
             'ngInject';
 
             var directive = {
@@ -7371,8 +7371,8 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function 
                     var ngModelCtrl = ctrls[1];
                     var viewMode = questionBuilderCtrl.getViewMode();
                     var question = questionBuilderCtrl.question;
-                    var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
-                        CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]) : question.subjectId;
+                    // var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                    //     CategoryService.getCategoryLevel1ParentSync([question.categoryId, question.categoryId]) : question.subjectId;
 
                     scope.d = {};
 
@@ -7391,25 +7391,25 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function 
                                 element.addClass('answer-explanation-visible');
                             }, 0, false);
 
-                            var analyticsProps = {
-                                subjectType: questionSubjectId,
-                                questionId: question.id
-                            };
+                            // var analyticsProps = {
+                            //     subjectType: questionSubjectId,
+                            //     questionId: question.id
+                            // };
 
                             scope.$watch('d.showWrittenSln', function (isVisible) {
                                 if (isVisible || isVisible === false) {
-                                    if (isVisible) {
-                                        znkAnalyticsSrv.eventTrack({
-                                            eventName: 'writtenSolutionClicked',
-                                            props: analyticsProps
-                                        });
-                                        znkAnalyticsSrv.timeTrack({ eventName: 'writtenSolutionClosed' });
-                                    } else {
-                                        znkAnalyticsSrv.eventTrack({
-                                            eventName: 'writtenSolutionClosed',
-                                            props: analyticsProps
-                                        });
-                                    }
+                                    // if (isVisible) {
+                                    //     znkAnalyticsSrv.eventTrack({
+                                    //         eventName: 'writtenSolutionClicked',
+                                    //         props: analyticsProps
+                                    //     });
+                                    //     znkAnalyticsSrv.timeTrack({ eventName: 'writtenSolutionClosed' });
+                                    // } else {
+                                    //     znkAnalyticsSrv.eventTrack({
+                                    //         eventName: 'writtenSolutionClosed',
+                                    //         props: analyticsProps
+                                    //     });
+                                    // }
                                 }
                             });
 
@@ -7478,7 +7478,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function 
     'use strict';
 
     angular.module('znk.infra-web-app.infraWebAppZnkExercise').directive('answerExplanationContent',
-        ["ENV", "$sce", "znkAnalyticsSrv", "CategoryService", function (ENV, $sce, znkAnalyticsSrv, CategoryService) {
+        ["ENV", "$sce", function (ENV, $sce) {
             'ngInject';
 
             return {
@@ -7490,14 +7490,14 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function 
                 },
                 link: function (scope, element, attrs, questionBuilderCtrl) {
                     var question = questionBuilderCtrl.question;
-                    var questionCategoryForSubjectId = question.categoryId || question.categoryId2;
-                    var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
-                        CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId) : question.subjectId;
+                  //  var questionCategoryForSubjectId = question.categoryId || question.categoryId2;
+                    // var questionSubjectId = (typeof question.subjectId === 'undefined' || question.subjectId === null) ?
+                    //     CategoryService.getCategoryLevel1ParentByIdSync(questionCategoryForSubjectId) : question.subjectId;
                     var isPlayFlag = false;
-                    var analyticsProps = {
-                        subjectType: questionSubjectId,
-                        questionId: question.id
-                    };
+                    // var analyticsProps = {
+                    //     subjectType: questionSubjectId,
+                    //     questionId: question.id
+                    // };
 
                     scope.d = {};
 
@@ -7512,20 +7512,20 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function 
                     scope.d.quid = question.quid || question.id;
 
                     scope.d.onVideoEnded = function () {
-                        znkAnalyticsSrv.eventTrack({
-                            eventName: 'videoClosed',
-                            props: analyticsProps
-                        });
+                        // znkAnalyticsSrv.eventTrack({
+                        //     eventName: 'videoClosed',
+                        //     props: analyticsProps
+                        // });
                     };
 
                     scope.d.onVideoPlay = function () {
                         if (!isPlayFlag) {
                             isPlayFlag = true;
-                            znkAnalyticsSrv.eventTrack({
-                                eventName: 'videoClicked',
-                                props: analyticsProps
-                            });
-                            znkAnalyticsSrv.timeTrack({eventName: 'videoClosed'});
+                            // znkAnalyticsSrv.eventTrack({
+                            //     eventName: 'videoClicked',
+                            //     props: analyticsProps
+                            // });
+                            // znkAnalyticsSrv.timeTrack({eventName: 'videoClosed'});
                         }
                     };
 
@@ -13710,7 +13710,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                 //         clicked: eventText
                 //     }
                 // });
-                if(!vm.showLaterButton){
+                if (!vm.showLaterButton) {
                     OnBoardingService.sendEvent('diagnostic', `click-${eventText}`);
                 }
 
@@ -13725,7 +13725,12 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 
             function getMarketingToefl() {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                    vm.showLaterButton = !(marketingObj && marketingObj.status);
+                    if (marketingObj && marketingObj.status) {
+                        vm.showLaterButton = false;
+                        OnBoardingService.updatePage('onBoardingDiagnostic');
+                    } else {
+                        vm.showLaterButton = true;
+                    }
                 });
             }
         }]);
@@ -13744,7 +13749,12 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                     showSaveIcon: true
                 }
             };
+            OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                if (marketingObj && marketingObj.status) {
+                    OnBoardingService.updatePage('onBoardingGoals');
+                }
 
+            });
             this.saveGoals = function () {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     if (marketingObj && marketingObj.status) {
@@ -13792,17 +13802,17 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController', ['$state', 'OnBoardingService', 'userGoalsSelectionService', 'znkAnalyticsSrv', '$timeout',
         function($state, OnBoardingService, userGoalsSelectionService, znkAnalyticsSrv, $timeout) {
 
-            function _addEvent(clicked) {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'onBoardingSchoolsStep',
-                    props: {
-                        clicked: clicked
-                    }
-                });
-            }
+            // function _addEvent(clicked) {
+            //     // znkAnalyticsSrv.eventTrack({
+            //     //     eventName: 'onBoardingSchoolsStep',
+            //     //     props: {
+            //     //         clicked: clicked
+            //     //     }
+            //     // });
+            // }
 
-            function _goToGoalsState(newUserSchools, evtName) {
-                _addEvent(evtName);
+            function _goToGoalsState(newUserSchools) {
+              //  _addEvent(evtName);
                 userGoalsSelectionService.setDreamSchools(newUserSchools, true).then(function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.GOALS).then(function () {
                         $timeout(function () {
@@ -13858,15 +13868,20 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingWelcomesController', ['userProfile', 'OnBoardingService', '$state', 'znkAnalyticsSrv',
-        function (userProfile, OnBoardingService, $state, znkAnalyticsSrv) {
+        function (userProfile, OnBoardingService, $state) {
 
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.username = userProfile.nickname || '';
+            OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                if (marketingObj && marketingObj.status) {
+                    OnBoardingService.updatePage('onBoardingWelcome');
+                }
 
+            });
             this.nextStep = function () {
                 var nextStep;
                 var nextState;
-                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingWelcomeStep'});
+              //  znkAnalyticsSrv.eventTrack({eventName: 'onBoardingWelcomeStep'});
                 if (onBoardingSettings && onBoardingSettings.showSchoolStep) {
                     nextStep = OnBoardingService.steps.SCHOOLS;
                     nextState = 'app.onBoarding.schools';
@@ -13905,14 +13920,11 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
         'ngInject';
         var isOnBoardingCompleted = false;
         $rootScope.$on('$stateChangeStart', function (evt, toState, toParams, fromState) {//eslint-disable-line
-            OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                if (isOnBoardingCompleted) {
-                    if (marketingObj && marketingObj.status) {
-                        OnBoardingService.updatePage(toState.name);
-                    }
-                    return;
-                }
-                else {
+            if (isOnBoardingCompleted) {
+                return;
+            }
+            else {
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     // statuses:  7 - app  , 1 - diagnostic
                     if (marketingObj && marketingObj.status && marketingObj.status !== 1 && marketingObj.status !== 7 && toState.name !== 'app.diagnostic.preSummary') {
                         handleToeflMarketingRedirect(marketingObj);
@@ -13930,15 +13942,9 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                                     var ON_BOARDING_STATE_NAME = 'app.onBoarding';
                                     var isNotFromOnBoardingState = fromState.name.indexOf(ON_BOARDING_STATE_NAME) === -1;
                                     if (isNotFromOnBoardingState) {
-                                        if (marketingObj && marketingObj.status) {
-                                            OnBoardingService.updatePage(ON_BOARDING_STATE_NAME);
-                                        }
                                         $state.go(ON_BOARDING_STATE_NAME);
                                     }
                                 } else {
-                                    if (marketingObj && marketingObj.status) {
-                                        OnBoardingService.updatePage(toState.name);
-                                    }
                                     $state.go(toState, toParams, {
                                         reload: true
                                     });
@@ -13946,32 +13952,32 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                             });
                         }
                     }
-                }
+                });
+            }
 
-                function handleToeflMarketingRedirect(marketingObj) {
-                    var state = '';
-                    switch (marketingObj.status) {
-                        case 2:
-                            state = 'email';
-                            break;
-                        case 3:
-                            state = 'verifyEmail';
-                            break;
-                        case 4:
-                            state = 'purchase';
-                            break;
-                        case 5:
-                            state = 'purchase';
-                            break;
-                        case 6:
-                            state = 'signup';
-                            break;
-                        default:
-                            state = 'purchase';
-                    }
-                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+            function handleToeflMarketingRedirect(marketingObj) {
+                var state = '';
+                switch (marketingObj.status) {
+                    case 2:
+                        state = 'email';
+                        break;
+                    case 3:
+                        state = 'verifyEmail';
+                        break;
+                    case 4:
+                        state = 'purchase';
+                        break;
+                    case 5:
+                        state = 'purchase';
+                        break;
+                    case 6:
+                        state = 'signup';
+                        break;
+                    default:
+                        state = 'purchase';
                 }
-            });
+                window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+            }
         });
     }]);
 
@@ -15123,8 +15129,8 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
             },
             templateUrl: 'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "znkAnalyticsSrv", "StripeService", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
-                                  $filter, PurchaseStateEnum, $log, znkAnalyticsSrv, StripeService) {
+            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "StripeService", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
+                                  $filter, PurchaseStateEnum, $log, StripeService) {
                 'ngInject';
 
                 var vm = this;
@@ -15150,26 +15156,30 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
                 vm.purchaseZinkerzPro = function () {
                     purchaseService.hidePurchaseDialog();
                     $timeout(() => vm.purchaseState = PurchaseStateEnum.PENDING.enum);
-                    znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
-                    purchaseService.getProduct().then(product => {
-                        $log.debug(`purchaseZinkerzPro: productId: ${product.id}, price: ${product.price}`);
-                        const name = vm.translate('PURCHASE_POPUP.UPGRADE_TO_ZINKERZ_PRO');
-                        const description = vm.translate('PURCHASE_POPUP.DESCRIPTION');
-                        StripeService.openStripeModal(ENV.serviceId, product.id, product.price, name, description)
-                            .then(stripeRes => {
-                                if (!stripeRes.closedByUser) {
-                                    purchaseService.setPendingPurchase();
-                                    $log.debug(`purchaseZinkerzPro: User update to pending purchase`);
-                                    // The stripe web hook should update the firebase
-                                    // and the getAndBindToServer should trigger the event to change purchaseState to pro
-                                    purchaseService.showPurchaseDialog();
-                                } else {
-                                    $log.debug(`purchaseCredits: stripe modal closed by user`);
-                                    $timeout(() => vm.purchaseState = PurchaseStateEnum.NONE.enum);
-                                }
-                            });
+                   // znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
+                    purchaseService.getMarketingToefl().then(function (marketingObj) {
+                        if (marketingObj && marketingObj.status) {
+                            purchaseService.sendEvent('diagnostic', 'click-upgrade');
+                        }
+                        purchaseService.getProduct().then(product => {
+                            $log.debug(`purchaseZinkerzPro: productId: ${product.id}, price: ${product.price}`);
+                            const name = vm.translate('PURCHASE_POPUP.UPGRADE_TO_ZINKERZ_PRO');
+                            const description = vm.translate('PURCHASE_POPUP.DESCRIPTION');
+                            StripeService.openStripeModal(ENV.serviceId, product.id, product.price, name, description)
+                                .then(stripeRes => {
+                                    if (!stripeRes.closedByUser) {
+                                        purchaseService.setPendingPurchase();
+                                        $log.debug(`purchaseZinkerzPro: User update to pending purchase`);
+                                        // The stripe web hook should update the firebase
+                                        // and the getAndBindToServer should trigger the event to change purchaseState to pro
+                                        purchaseService.showPurchaseDialog();
+                                    } else {
+                                        $log.debug(`purchaseCredits: stripe modal closed by user`);
+                                        $timeout(() => vm.purchaseState = PurchaseStateEnum.NONE.enum);
+                                    }
+                                });
+                        });
                     });
-
                 };
 
                 vm.showPurchaseError = function () {
@@ -15318,12 +15328,15 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
     );
 })();
 
+/*jshint -W117 */
+/*jshint unused:false*/
+
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
+        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
+                  PopUpSrv, StorageSrv, AuthService) {
             'ngInject';
 
             var self = this;
@@ -15331,6 +15344,39 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
             var studentStorageProm = InfraConfigSrv.getStudentStorage();
             var pendingPurchaseDefer;
 
+            self.setPage = function (pageName) {
+                ga('set', 'page', `/${pageName}.html`);
+            };
+
+            self.sendPage = function () {
+                ga('send', 'pageview');
+            };
+
+            self.updatePage = function (pageName) {
+                self.setPage(pageName);
+                self.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             */
+            self.sendEvent = function (eventCategory, eventAction) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventAction,
+                    eventLabel: 'Toefl Campaign'
+                });
+            };
+            self.getMarketingToefl = function () {
+                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(marketingPath).then(function (marketing) {
+                        return marketing;
+                    });
+                });
+            };
             self.getPath = function (param) {
                 return AuthService.getAuth().then(authData => {
                     if (!authData) {
@@ -15355,9 +15401,9 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
                     if (+params.purchaseSuccess === 1) {
                         self.setPendingPurchase();
-                        znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
+                      //  znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
                     } else {
-                        znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
+                       // znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
                     }
                     self.showPurchaseDialog();
                 } else {
@@ -15427,9 +15473,9 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
             };
 
             self.showPurchaseDialog = function () {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'purchaseModalOpened'
-                });
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'purchaseModalOpened'
+                // });
                 return $mdDialog.show({
                     controller: 'PurchaseDialogController',
                     templateUrl: 'components/purchase/templates/purchasePopup.template.html',

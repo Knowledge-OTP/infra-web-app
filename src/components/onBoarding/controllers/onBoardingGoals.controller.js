@@ -11,7 +11,12 @@
                     showSaveIcon: true
                 }
             };
+            OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                if (marketingObj && marketingObj.status) {
+                    OnBoardingService.updatePage('onBoardingGoals');
+                }
 
+            });
             this.saveGoals = function () {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     if (marketingObj && marketingObj.status) {

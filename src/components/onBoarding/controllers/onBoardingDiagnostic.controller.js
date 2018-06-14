@@ -18,7 +18,7 @@
                 //         clicked: eventText
                 //     }
                 // });
-                if(!vm.showLaterButton){
+                if (!vm.showLaterButton) {
                     OnBoardingService.sendEvent('diagnostic', `click-${eventText}`);
                 }
 
@@ -33,7 +33,12 @@
 
             function getMarketingToefl() {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                    vm.showLaterButton = !(marketingObj && marketingObj.status);
+                    if (marketingObj && marketingObj.status) {
+                        vm.showLaterButton = false;
+                        OnBoardingService.updatePage('onBoardingDiagnostic');
+                    } else {
+                        vm.showLaterButton = true;
+                    }
                 });
             }
         });
