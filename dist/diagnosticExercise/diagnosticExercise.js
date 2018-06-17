@@ -938,7 +938,7 @@
         this.setDiagnosticSettings = function (diagnosticSettings) {
             _diagnosticSettings = diagnosticSettings;
         };
-        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "$injector", "CategoryService", "ENV", "$http", "StorageSrv", "InfraConfigSrv", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
+        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "$injector", "CategoryService", "ENV", "$http", "StorageSrv", "InfraConfigSrv", "AuthService", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv, AuthService) {
             'ngInject';
 
             const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
@@ -1286,11 +1286,14 @@
              * @param eventAction - The type of interaction (e.g. 'play')
              */
             workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction) {
-                ga('send', {
-                    hitType: 'event',
-                    eventCategory: eventCategory,
-                    eventAction: eventAction,
-                    eventLabel: 'Toefl Campaign'
+                AuthService.getAuth().then(userAuth => {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventAction,
+                        eventLabel: 'Toefl Campaign',
+                        eventValue: userAuth && userAuth.uid ? userAuth.uid : '',
+                    });
                 });
             };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {

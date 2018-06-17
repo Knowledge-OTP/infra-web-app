@@ -385,7 +385,9 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
-        this.$get = ['InfraConfigSrv', 'StorageSrv', function (InfraConfigSrv, StorageSrv) {
+        this.$get = ["InfraConfigSrv", "StorageSrv", "AuthService", function (InfraConfigSrv, StorageSrv, AuthService) {
+            'ngInject';
+
             var self = this;
             var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
             var onBoardingServiceObj = {};
@@ -442,11 +444,14 @@
              * @param eventAction - The type of interaction (e.g. 'play')
              */
             onBoardingServiceObj.sendEvent = function (eventCategory, eventAction) {
-                ga('send', {
-                    hitType: 'event',
-                    eventCategory: eventCategory,
-                    eventAction: eventAction,
-                    eventLabel: 'Toefl Campaign'
+                AuthService.getAuth().then(userAuth => {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventAction,
+                        eventLabel: 'Toefl Campaign',
+                        eventValue: userAuth && userAuth.uid ? userAuth.uid : '',
+                    });
                 });
             };
 
