@@ -4479,7 +4479,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
-        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "znkAnalyticsSrv", "$translate", "$filter", "$rootScope", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv, $translate, $filter, $rootScope) {
+        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "$translate", "$filter", "$rootScope", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, $translate, $filter, $rootScope) {
         'ngInject';
             var vm = this;
 
@@ -4717,8 +4717,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
         this.setDiagnosticSettings = function (diagnosticSettings) {
             _diagnosticSettings = diagnosticSettings;
         };
-        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "znkAnalyticsSrv", "$injector", "CategoryService", "ENV", "$http", "StorageSrv", "InfraConfigSrv", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
-                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
+        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "$injector", "CategoryService", "ENV", "$http", "StorageSrv", "InfraConfigSrv", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
             'ngInject';
 
             const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
@@ -4848,9 +4847,9 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     var examResults = results[1];
 
                     if (examResults.isComplete) {
-                        if (flagForPreSummery) {
-                            znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
-                        }
+                        // if (flagForPreSummery) {
+                        //     znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
+                        // }
                         currentState.state = flagForPreSummery ? '.preSummary' : '.summary';
                         return currentState;
                     }
@@ -7358,7 +7357,7 @@ angular.module('znk.infra-web-app.imageZoomer').run(['$templateCache', function 
             SvgIconSrvProvider.registerSvgSources(svgMap);
         }])
         .directive('answerExplanation',
-        ["ZnkExerciseViewModeEnum", "znkAnalyticsSrv", "$timeout", function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+        ["ZnkExerciseViewModeEnum", "$timeout", function (ZnkExerciseViewModeEnum, $timeout) {
             'ngInject';
 
             var directive = {
@@ -13800,7 +13799,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController', ['$state', 'OnBoardingService', 'userGoalsSelectionService', 'znkAnalyticsSrv', '$timeout',
-        function($state, OnBoardingService, userGoalsSelectionService, znkAnalyticsSrv, $timeout) {
+        function($state, OnBoardingService, userGoalsSelectionService, $timeout) {
 
             // function _addEvent(clicked) {
             //     // znkAnalyticsSrv.eventTrack({
@@ -13838,7 +13837,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController',
-        ["$state", "OnBoardingService", "znkAnalyticsSrv", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
+        ["$state", "OnBoardingService", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
             'ngInject';
 
             this.completeExerciseDetails = {

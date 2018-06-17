@@ -700,7 +700,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
-        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "znkAnalyticsSrv", "$translate", "$filter", "$rootScope", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv, $translate, $filter, $rootScope) {
+        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "$translate", "$filter", "$rootScope", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, $translate, $filter, $rootScope) {
         'ngInject';
             var vm = this;
 
@@ -938,8 +938,7 @@
         this.setDiagnosticSettings = function (diagnosticSettings) {
             _diagnosticSettings = diagnosticSettings;
         };
-        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "znkAnalyticsSrv", "$injector", "CategoryService", "ENV", "$http", "StorageSrv", "InfraConfigSrv", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
-                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
+        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "$injector", "CategoryService", "ENV", "$http", "StorageSrv", "InfraConfigSrv", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
             'ngInject';
 
             const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
@@ -1069,9 +1068,9 @@
                     var examResults = results[1];
 
                     if (examResults.isComplete) {
-                        if (flagForPreSummery) {
-                            znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
-                        }
+                        // if (flagForPreSummery) {
+                        //     znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
+                        // }
                         currentState.state = flagForPreSummery ? '.preSummary' : '.summary';
                         return currentState;
                     }

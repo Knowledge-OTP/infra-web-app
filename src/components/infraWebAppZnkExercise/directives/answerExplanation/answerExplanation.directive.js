@@ -12,7 +12,7 @@
             SvgIconSrvProvider.registerSvgSources(svgMap);
         })
         .directive('answerExplanation',
-        function (ZnkExerciseViewModeEnum, znkAnalyticsSrv, $timeout) {
+        function (ZnkExerciseViewModeEnum, $timeout) {
             'ngInject';
 
             var directive = {

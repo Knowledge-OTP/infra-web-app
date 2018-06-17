@@ -10,8 +10,7 @@
         this.setDiagnosticSettings = function (diagnosticSettings) {
             _diagnosticSettings = diagnosticSettings;
         };
-        this.$get = function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
-                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
+        this.$get = function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
             'ngInject';
 
             const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
@@ -141,9 +140,9 @@
                     var examResults = results[1];
 
                     if (examResults.isComplete) {
-                        if (flagForPreSummery) {
-                            znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
-                        }
+                        // if (flagForPreSummery) {
+                        //     znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
+                        // }
                         currentState.state = flagForPreSummery ? '.preSummary' : '.summary';
                         return currentState;
                     }

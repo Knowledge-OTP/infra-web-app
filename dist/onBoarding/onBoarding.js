@@ -197,7 +197,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController', ['$state', 'OnBoardingService', 'userGoalsSelectionService', 'znkAnalyticsSrv', '$timeout',
-        function($state, OnBoardingService, userGoalsSelectionService, znkAnalyticsSrv, $timeout) {
+        function($state, OnBoardingService, userGoalsSelectionService, $timeout) {
 
             // function _addEvent(clicked) {
             //     // znkAnalyticsSrv.eventTrack({
@@ -235,7 +235,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController',
-        ["$state", "OnBoardingService", "znkAnalyticsSrv", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
+        ["$state", "OnBoardingService", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
             'ngInject';
 
             this.completeExerciseDetails = {

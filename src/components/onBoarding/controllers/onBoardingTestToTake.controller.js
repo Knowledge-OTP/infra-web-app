@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController',
-        function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
+        function ($state, OnBoardingService, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
             'ngInject';
 
             this.completeExerciseDetails = {
