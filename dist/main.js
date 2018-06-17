@@ -2777,8 +2777,8 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function ($templa
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "CategoryService", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "CategoryService", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+                  $log, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
                   UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
             'ngInject';
 
@@ -3018,13 +3018,13 @@ angular.module('znk.infra-web-app.aws').run(['$templateCache', function ($templa
                         onQuestionAnswered: function onQuestionAnswered() {
                             exerciseResult.$save();
                         },
-                        onSlideChange: function (currQuestion, currentIndex) {
-                            var indexPlusOne = currentIndex + 1;
-                            znkAnalyticsSrv.pageTrack({
-                                props: {
-                                    url: $location.url() + '/index/' + indexPlusOne + '/questionId/' + (currQuestion.id || '')
-                                }
-                            });
+                        onSlideChange: function () {
+                            // var indexPlusOne = currentIndex + 1;
+                            // znkAnalyticsSrv.pageTrack({
+                            //     props: {
+                            //         url: $location.url() + '/index/' + indexPlusOne + '/questionId/' + (currQuestion.id || '')
+                            //     }
+                            // });
                         },
                         onExit: function () {
                             if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {
@@ -4113,9 +4113,9 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", "MarketingStatusEnum", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", "MarketingStatusEnum", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, StatsEventsHandlerSrv,
                   $translate, ExerciseReviewStatusEnum, CategoryService, MarketingStatusEnum) {
             'ngInject';
             var self = this;
@@ -4376,7 +4376,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     if (!_isLastQuestion()) {
                         numQuestionCounter = numQuestionCounter + 1;
                         _setNumSlideForNgModel(numQuestionCounter);
-                        znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
+                        // znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
                     } else {
                         self.actions.forceDoneBtnDisplay(true);
                     }

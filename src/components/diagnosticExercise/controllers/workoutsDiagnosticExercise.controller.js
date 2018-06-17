@@ -6,7 +6,7 @@
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
         function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, StatsEventsHandlerSrv,
                   $translate, ExerciseReviewStatusEnum, CategoryService, MarketingStatusEnum) {
             'ngInject';
             var self = this;
@@ -267,7 +267,7 @@
                     if (!_isLastQuestion()) {
                         numQuestionCounter = numQuestionCounter + 1;
                         _setNumSlideForNgModel(numQuestionCounter);
-                        znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
+                        // znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
                     } else {
                         self.actions.forceDoneBtnDisplay(true);
                     }
