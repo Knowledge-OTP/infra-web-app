@@ -1,0 +1,102 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
+/* full background image with retina */
+/* full background image with retina */
+.raccoon-in-app {
+  position: fixed;
+  bottom: 20px;
+  right: 40px;
+  z-index: 999;
+  width: 528px;
+  height: 380px; }
+  .raccoon-in-app .svg-wrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    background-color: #cacaca;
+    border-radius: 3px;
+    box-sizing: border-box;
+    cursor: pointer; }
+  .raccoon-in-app .bubble-wrap {
+    position: absolute;
+    left: 0;
+    top: 0; }
+    .raccoon-in-app .bubble-wrap .msg-wrap {
+      position: relative; }
+      .raccoon-in-app .bubble-wrap .msg-wrap .msg {
+        font-size: 18px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 600;
+        text-align: center;
+        position: absolute;
+        top: 38px;
+        left: 59px;
+        width: 291px;
+        height: 90px; }
+      .raccoon-in-app .bubble-wrap .msg-wrap .hint-bubble-svg {
+        width: 400px; }
+  .raccoon-in-app.hint-raccoon .raccoon {
+    position: absolute;
+    right: 0;
+    bottom: 0; }
+    .raccoon-in-app.hint-raccoon .raccoon div {
+      /*CSS for basic styling and non-retina image path:*/
+      background-image: url("/assets/images/hint-raccoon.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      display: inline-block;
+      width: 194px;
+      height: 278px;
+      /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+      @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+        .raccoon-in-app.hint-raccoon .raccoon div {
+          background-image: url("/assets/images/hint-raccoon@2x.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          display: inline-block;
+          width: 194px;
+          height: 278px; } }
+  .raccoon-in-app.hint-raccoon-for-practice .raccoon {
+    position: absolute;
+    right: -15px;
+    bottom: 0;
+    text-align: right; }
+    .raccoon-in-app.hint-raccoon-for-practice .raccoon div {
+      /*CSS for basic styling and non-retina image path:*/
+      background-image: url("/assets/images/hint-raccoon-practice-more.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      display: inline-block;
+      width: 253px;
+      height: 290px;
+      /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+      @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+        .raccoon-in-app.hint-raccoon-for-practice .raccoon div {
+          background-image: url("/assets/images/hint-raccoon-practice-more@2x.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          display: inline-block;
+          width: 253px;
+          height: 290px; } }

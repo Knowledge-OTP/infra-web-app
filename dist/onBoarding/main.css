@@ -1,0 +1,428 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
+/* full background image with retina */
+/* full background image with retina */
+@import url(//fonts.googleapis.com/css?family=Lato:300);
+@import url(//fonts.googleapis.com/css?family=Lato:300italic);
+@import url(//fonts.googleapis.com/css?family=Lato:400);
+@import url(//fonts.googleapis.com/css?family=Lato:400italic);
+@import url(//fonts.googleapis.com/css?family=Quicksand);
+@import url(//fonts.googleapis.com/css?family=Quicksand:300);
+@import url(//fonts.googleapis.com/css?family=Quicksand:700);
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
+on-boarding-bar {
+  position: absolute;
+  bottom: -70px;
+  width: 100%; }
+  on-boarding-bar .on-board-pager-wrap .on-board-pager {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
+    background-color: white;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 40px;
+    padding: 5px; }
+    on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: 2px solid #87ca4d;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -webkit-flex-direction: column;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -webkit-justify-content: center; }
+      on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon {
+        width: 30px;
+        margin: auto;
+        display: block; }
+        on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle .icon * {
+          fill: #87ca4d; }
+      on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.heart-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.target-circle-selected, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.hat-circle-selected {
+        background-color: #87ca4d; }
+        on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.heart-circle-selected .icon *, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.target-circle-selected .icon *, on-boarding-bar .on-board-pager-wrap .on-board-pager .icon-circle.hat-circle-selected .icon * {
+          fill: white; }
+    on-boarding-bar .on-board-pager-wrap .on-board-pager .divider {
+      width: 21px;
+      border-top: 1px solid #87ca4d;
+      height: 1px;
+      margin-left: 20px;
+      margin-right: 20px; }
+
+/**
+*  FONTS
+*/
+/* Lato fonts from google*/
+/* Quicksand fonts */
+/* Material+Icons */
+.on-board {
+  /**
+     *  SVG
+     */
+  position: relative; }
+  .on-board .svg-wrapper {
+    height: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center; }
+  .on-board .clearfix:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both; }
+  .on-board .main-title {
+    font-size: 32px;
+    color: #4f4d4d;
+    font-family: Quicksand;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 20px; }
+  .on-board .inline-block {
+    display: inline-block; }
+  .on-board .base-border-radius {
+    border-radius: 15px; }
+  .on-board .base-box-shadow {
+    box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.27); }
+  .on-board .smile-raccoon {
+    /*CSS for basic styling and non-retina image path:*/
+    background-image: url("/assets/images/smile-raccoon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: inline-block;
+    width: 293px;
+    height: 373px;
+    /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+    @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+      .on-board .smile-raccoon {
+        background-image: url("/assets/images/smile-raccoon@2x.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        display: inline-block;
+        width: 293px;
+        height: 373px; } }
+  .on-board .thinking-raccoon {
+    /*CSS for basic styling and non-retina image path:*/
+    background-image: url("/assets/images/thinking-raccoon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: inline-block;
+    width: 360px;
+    height: 217px;
+    /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+    @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+      .on-board .thinking-raccoon {
+        background-image: url("/assets/images/thinking-raccoon@2x.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        display: inline-block;
+        width: 360px;
+        height: 217px; } }
+  .on-board .container {
+    min-height: 535px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    position: relative; }
+    .on-board .container .step {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-pack: center;
+          justify-content: center; }
+      .on-board .container .step .welcome .main-title {
+        margin-bottom: 50px; }
+      .on-board .container .step .welcome .sub-title {
+        font-size: 22px;
+        color: #161616;
+        font-family: Lato;
+        font-weight: 300;
+        margin-bottom: 8px; }
+        .on-board .container .step .welcome .sub-title div {
+          display: inline-block; }
+        .on-board .container .step .welcome .sub-title span {
+          color: #0a9bad;
+          font-weight: 400;
+          margin-left: 4px; }
+      .on-board .container .step .welcome .btn-wrap {
+        margin-top: 105px;
+        text-align: center; }
+        .on-board .container .step .welcome .btn-wrap .md-button {
+          height: 38px;
+          border-radius: 50px;
+          font-size: 14px;
+          color: white;
+          font-family: Lato;
+          font-weight: 400;
+          padding-right: 45px;
+          padding-left: 45px; }
+          .on-board .container .step .welcome .btn-wrap .md-button .btn-text {
+            display: -ms-flexbox;
+            display: flex; }
+            .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon {
+              display: -ms-inline-flexbox;
+              display: inline-flex;
+              margin-left: 10px; }
+              .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg {
+                width: 14px;
+                display: -ms-inline-flexbox;
+                display: inline-flex;
+                transform: rotate(-90deg); }
+                .on-board .container .step .welcome .btn-wrap .md-button .btn-text .dropdown-arrow-icon svg polyline {
+                  stroke: #ffffff; }
+      .on-board .container .step .goals .sub-title {
+        font-size: 24px;
+        color: #161616;
+        font-family: Quicksand;
+        font-weight: 400;
+        text-align: center;
+        margin-top: 32px;
+        margin-bottom: 10px; }
+      .on-board .container .step .goals .light-title {
+        font-size: 12px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 300;
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        outline: none; }
+      .on-board .container .step .goals .select-schools-title {
+        font-size: 16px;
+        color: #161616;
+        font-family: Lato;
+        font-weight: 300;
+        margin-bottom: 20px;
+        text-align: center; }
+      .on-board .container .step .bg-wrap {
+        position: absolute;
+        bottom: 0;
+        left: calc(50% - 180px); }
+        .on-board .container .step .bg-wrap .thinking-raccoon {
+          display: block; }
+      .on-board .container .step.make-padding {
+        -ms-flex-direction: row;
+            flex-direction: row;
+        padding-top: 61px;
+        padding-bottom: 61px; }
+      .on-board .container .step.diagnostic .diagnostic-title {
+        font-size: 32px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 600;
+        text-align: center;
+        margin-top: 20px; }
+      .on-board .container .step.diagnostic .diagnostic-intro-drv {
+        text-align: center; }
+        .on-board .container .step.diagnostic .diagnostic-intro-drv .diagnostic-text {
+          margin: 20px auto;
+          max-height: 45px;
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 300; }
+      .on-board .container .step.diagnostic .diagnostic-sub-title {
+        font-size: 16px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 300;
+        text-align: center;
+        margin-top: 15px; }
+      .on-board .container .step.diagnostic .raccoon-img-container {
+        position: relative; }
+        .on-board .container .step.diagnostic .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+          position: relative;
+          top: -48px;
+          background-size: contain; }
+      .on-board .container .step.diagnostic .icons-section {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
+        width: 40%;
+        margin: 0 auto;
+        min-height: 140px; }
+      .on-board .container .step.diagnostic .section-question {
+        font-size: 18px;
+        color: #757a83;
+        font-family: Lato;
+        font-weight: 400;
+        text-transform: uppercase; }
+        .on-board .container .step.diagnostic .section-question .diagnostic-instructions {
+          margin-top: 40px;
+          text-transform: none;
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-direction: column;
+              flex-direction: column;
+          padding-right: 110px;
+          padding-left: 110px; }
+          .on-board .container .step.diagnostic .section-question .diagnostic-instructions .diagnostic-instructions-title {
+            font-size: 16px;
+            color: #4f4d4d;
+            font-family: Lato;
+            font-weight: 400; }
+          .on-board .container .step.diagnostic .section-question .diagnostic-instructions .diagnostic-instructions-text {
+            font-size: 16px;
+            color: #4f4d4d;
+            font-family: Lato;
+            font-weight: 300;
+            margin-top: 5px;
+            min-height: 38px; }
+      .on-board .container .step.diagnostic .btn-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: row;
+            flex-direction: row;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+        margin: 0 20px 15px 0; }
+        .on-board .container .step.diagnostic .btn-wrap button {
+          display: inline-block;
+          padding-right: 45px;
+          padding-left: 45px;
+          height: 38px; }
+          .on-board .container .step.diagnostic .btn-wrap button.default {
+            color: #0a9bad;
+            border: none;
+            padding: 0;
+            width: 130px;
+            text-transform: none;
+            font-family: Lato;
+            font-weight: 400;
+            font-size: 16px; }
+      .on-board .container .step.diagnostic diagnostic-intro .section-question {
+        margin-top: 10px; }
+      .on-board .container .step.intro-test-to-take .diagnostic-title {
+        font-size: 32px;
+        color: #4f4d4d;
+        font-family: Quicksand;
+        font-weight: 600;
+        text-align: center;
+        margin-top: 20px; }
+      .on-board .container .step.intro-test-to-take .diagnostic-intro-drv {
+        text-align: center; }
+        .on-board .container .step.intro-test-to-take .diagnostic-intro-drv .diagnostic-text {
+          margin: 20px auto;
+          max-height: 45px;
+          font-size: 16px;
+          color: #4f4d4d;
+          font-family: Lato;
+          font-weight: 300; }
+      .on-board .container .step.intro-test-to-take .raccoon-img-container {
+        position: relative;
+        text-align: center; }
+        .on-board .container .step.intro-test-to-take .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+          position: relative;
+          top: -34px;
+          background-size: contain;
+          /*CSS for basic styling and non-retina image path:*/
+          background-image: url("/assets/images/sat-sm-on-boarding-raccoon.png");
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          display: inline-block;
+          width: 164px;
+          height: 166px;
+          /*CSS for serving the retina image to devices with a high "device-pixel-ratio":*/ }
+          @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+            .on-board .container .step.intro-test-to-take .raccoon-img-container .raccoon-img-wrapper .diagnostic-raccoon {
+              background-image: url("/assets/images/sat-sm-on-boarding-raccoon@2x.png");
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: cover;
+              display: inline-block;
+              width: 164px;
+              height: 166px; } }
+      .on-board .container .step.intro-test-to-take .diagnostic-text-or {
+        width: 100px;
+        text-align: center;
+        font-size: 16px;
+        color: #4f4d4d;
+        font-family: Lato;
+        font-weight: 400; }
+      .on-board .container .step.intro-test-to-take .icons-section {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
+        width: 40%;
+        margin: 0 auto;
+        min-height: 140px; }
+        .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper {
+          height: 100%;
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-align: center;
+              align-items: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+          vertical-align: top; }
+          .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper svg-icon.on-boarding-bubble {
+            display: block;
+            width: 146px;
+            height: 104px; }
+            .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper svg-icon.on-boarding-bubble svg line {
+              stroke: #AF89D2;
+              stroke-width: 30px; }
+          .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper.onlySubjectIcon svg-icon.section-complete {
+            display: none; }
+          .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper.onlySubjectIcon .subject-icon {
+            display: inline-block; }
+          .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper.onlyDoneIcon .subject-icon {
+            display: none; }
+          .on-board .container .step.intro-test-to-take .icons-section .icon-wrapper.onlyDoneIcon svg-icon.section-complete {
+            display: inline-block; }
+      .on-board .container .step.intro-test-to-take .btn-wrap {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: row;
+            flex-direction: row;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+        margin: 0 20px 15px 0; }
+        .on-board .container .step.intro-test-to-take .btn-wrap button {
+          display: inline-block;
+          height: 38px; }
+          .on-board .container .step.intro-test-to-take .btn-wrap button.start-test {
+            padding-right: 45px;
+            padding-left: 45px; }
+          .on-board .container .step.intro-test-to-take .btn-wrap button.default {
+            border: none;
+            padding: 0;
+            width: 180px;
+            text-transform: none;
+            height: 38px;
+            border-radius: 50px;
+            font-size: 14px;
+            color: #0a9bad;
+            font-family: Lato;
+            font-weight: 400; }

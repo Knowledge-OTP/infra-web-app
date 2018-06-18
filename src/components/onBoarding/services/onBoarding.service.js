@@ -3,7 +3,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
-        this.$get = function (InfraConfigSrv, StorageSrv, AuthService) {
+        this.$get = function (InfraConfigSrv, StorageSrv) {
             'ngInject';
 
             var self = this;
