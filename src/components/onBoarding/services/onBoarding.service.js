@@ -62,15 +62,15 @@
              * @param eventAction - The type of interaction (e.g. 'play')
              */
             onBoardingServiceObj.sendEvent = function (eventCategory, eventAction) {
-                AuthService.getAuth().then(userAuth => {
+            ////    AuthService.getAuth().then(userAuth => {
                     ga('send', {
                         hitType: 'event',
                         eventCategory: eventCategory,
                         eventAction: eventAction,
                         eventLabel: 'Toefl Campaign',
-                        eventValue: userAuth && userAuth.uid ? userAuth.uid : '',
+              //          eventValue: userAuth && userAuth.uid ? userAuth.uid : '',
                     });
-                });
+              //  });
             };
 
             function getProgress() {
