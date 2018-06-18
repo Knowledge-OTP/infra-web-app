@@ -90,7 +90,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController',
-        ["OnBoardingService", "$state", "znkAnalyticsSrv", function (OnBoardingService, $state, znkAnalyticsSrv) {
+        ["OnBoardingService", "$state", function (OnBoardingService, $state) {
             'ngInject';
 
             var vm = this;
@@ -101,12 +101,16 @@
             getMarketingToefl();
 
             this.setOnboardingCompleted = function (nextState, eventText) {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'onBoardingDiagnosticStep',
-                    props: {
-                        clicked: eventText
-                    }
-                });
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'onBoardingDiagnosticStep',
+                //     props: {
+                //         clicked: eventText
+                //     }
+                // });
+                if (!vm.showLaterButton) {
+                    OnBoardingService.sendEvent('diagnostic', `click-${eventText}`);
+                }
+
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
                     if (nextState === 'app.diagnostic' && onBordingSettings.forceSkipIntro) {
                         $state.go(nextState, {forceSkipIntro: true});
@@ -118,7 +122,12 @@
 
             function getMarketingToefl() {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                    vm.showLaterButton = !(marketingObj && marketingObj.status);
+                    if (marketingObj && marketingObj.status) {
+                        vm.showLaterButton = false;
+                        OnBoardingService.updatePage('onBoardingDiagnostic');
+                    } else {
+                        vm.showLaterButton = true;
+                    }
                 });
             }
         }]);
@@ -127,7 +136,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingGoalsController', ['$state', 'OnBoardingService', 'znkAnalyticsSrv',
-        function ($state, OnBoardingService, znkAnalyticsSrv) {
+        function ($state, OnBoardingService) {
 
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.userGoalsSetting = {
@@ -137,22 +146,32 @@
                     showSaveIcon: true
                 }
             };
-
-            this.saveGoals = function () {
-                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingGoalsStep'});
-                var nextStep;
-                var nextState;
-
-                if (onBoardingSettings && onBoardingSettings.showTestToTake) {
-                    nextStep = OnBoardingService.steps.INTRO_TEST_TO_TAKE;
-                    nextState = 'app.onBoarding.introTestToTake';
-                } else {
-                    nextStep = OnBoardingService.steps.DIAGNOSTIC;
-                    nextState = 'app.onBoarding.diagnostic';
+            OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                if (marketingObj && marketingObj.status) {
+                    OnBoardingService.updatePage('onBoardingGoals');
                 }
 
-                OnBoardingService.setOnBoardingStep(nextStep);
-                $state.go(nextState);
+            });
+            this.saveGoals = function () {
+                OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                    if (marketingObj && marketingObj.status) {
+                        OnBoardingService.sendEvent('diagnostic', 'click-save&continue');
+                    }
+                    //      znkAnalyticsSrv.eventTrack({eventName: 'onBoardingGoalsStep'});
+                    var nextStep;
+                    var nextState;
+
+                    if (onBoardingSettings && onBoardingSettings.showTestToTake) {
+                        nextStep = OnBoardingService.steps.INTRO_TEST_TO_TAKE;
+                        nextState = 'app.onBoarding.introTestToTake';
+                    } else {
+                        nextStep = OnBoardingService.steps.DIAGNOSTIC;
+                        nextState = 'app.onBoarding.diagnostic';
+                    }
+
+                    OnBoardingService.setOnBoardingStep(nextStep);
+                    $state.go(nextState);
+                });
             };
         }]);
 })(angular);
@@ -178,19 +197,19 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingSchoolsController', ['$state', 'OnBoardingService', 'userGoalsSelectionService', 'znkAnalyticsSrv', '$timeout',
-        function($state, OnBoardingService, userGoalsSelectionService, znkAnalyticsSrv, $timeout) {
+        function($state, OnBoardingService, userGoalsSelectionService, $timeout) {
 
-            function _addEvent(clicked) {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'onBoardingSchoolsStep',
-                    props: {
-                        clicked: clicked
-                    }
-                });
-            }
+            // function _addEvent(clicked) {
+            //     // znkAnalyticsSrv.eventTrack({
+            //     //     eventName: 'onBoardingSchoolsStep',
+            //     //     props: {
+            //     //         clicked: clicked
+            //     //     }
+            //     // });
+            // }
 
-            function _goToGoalsState(newUserSchools, evtName) {
-                _addEvent(evtName);
+            function _goToGoalsState(newUserSchools) {
+              //  _addEvent(evtName);
                 userGoalsSelectionService.setDreamSchools(newUserSchools, true).then(function () {
                     OnBoardingService.setOnBoardingStep(OnBoardingService.steps.GOALS).then(function () {
                         $timeout(function () {
@@ -216,7 +235,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingTestToTakeController',
-        ["$state", "OnBoardingService", "znkAnalyticsSrv", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, znkAnalyticsSrv, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
+        ["$state", "OnBoardingService", "ExerciseTypeEnum", "ExerciseParentEnum", "ENV", function ($state, OnBoardingService, ExerciseTypeEnum, ExerciseParentEnum, ENV) {
             'ngInject';
 
             this.completeExerciseDetails = {
@@ -246,15 +265,20 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingWelcomesController', ['userProfile', 'OnBoardingService', '$state', 'znkAnalyticsSrv',
-        function (userProfile, OnBoardingService, $state, znkAnalyticsSrv) {
+        function (userProfile, OnBoardingService, $state) {
 
             var onBoardingSettings = OnBoardingService.getOnBoardingSettings();
             this.username = userProfile.nickname || '';
+            OnBoardingService.getMarketingToefl().then(function (marketingObj) {
+                if (marketingObj && marketingObj.status) {
+                    OnBoardingService.updatePage('onBoardingWelcome');
+                }
 
+            });
             this.nextStep = function () {
                 var nextStep;
                 var nextState;
-                znkAnalyticsSrv.eventTrack({eventName: 'onBoardingWelcomeStep'});
+              //  znkAnalyticsSrv.eventTrack({eventName: 'onBoardingWelcomeStep'});
                 if (onBoardingSettings && onBoardingSettings.showSchoolStep) {
                     nextStep = OnBoardingService.steps.SCHOOLS;
                     nextState = 'app.onBoarding.schools';
@@ -356,10 +380,14 @@
 
 })(angular);
 
+/*jshint -W117 */
+/*jshint unused:false*/
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
-        this.$get = ['InfraConfigSrv', 'StorageSrv', function (InfraConfigSrv, StorageSrv) {
+        this.$get = ["InfraConfigSrv", "StorageSrv", function (InfraConfigSrv, StorageSrv) {
+            'ngInject';
+
             var self = this;
             var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
             var onBoardingServiceObj = {};
@@ -398,6 +426,34 @@
                     return setProgress(progress);
                 });
             };
+            onBoardingServiceObj.setPage = function (pageName) {
+                ga('set', 'page', `/${pageName}.html`);
+            };
+
+            onBoardingServiceObj.sendPage = function () {
+                ga('send', 'pageview');
+            };
+
+            onBoardingServiceObj.updatePage = function (pageName) {
+                onBoardingServiceObj.setPage(pageName);
+                onBoardingServiceObj.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             */
+            onBoardingServiceObj.sendEvent = function (eventCategory, eventAction) {
+            ////    AuthService.getAuth().then(userAuth => {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventAction,
+                        eventLabel: 'Toefl Campaign',
+              //          eventValue: userAuth && userAuth.uid ? userAuth.uid : '',
+                    });
+              //  });
+            };
 
             function getProgress() {
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
@@ -415,6 +471,7 @@
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
+
             onBoardingServiceObj.getMarketingToefl = function () {
                 var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {

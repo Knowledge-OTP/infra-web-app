@@ -1,3 +1,5 @@
+/*jshint -W117 */
+
 (function (angular) {
     'use strict';
 
@@ -8,8 +10,7 @@
         this.setDiagnosticSettings = function (diagnosticSettings) {
             _diagnosticSettings = diagnosticSettings;
         };
-        this.$get = function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
-                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
+        this.$get = function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
             'ngInject';
 
             const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
@@ -139,16 +140,16 @@
                     var examResults = results[1];
 
                     if (examResults.isComplete) {
-                        if (flagForPreSummery) {
-                            znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
-                        }
+                        // if (flagForPreSummery) {
+                        //     znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
+                        // }
                         currentState.state = flagForPreSummery ? '.preSummary' : '.summary';
                         return currentState;
                     }
 
                     if (!examResults.isStarted) {
-                        znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
-                        znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
+                        // znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
+                        // znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
                         examResults.isStarted = true;
                         skipIntroBool = false;
                         examResults.$save();
@@ -339,7 +340,34 @@
                     });
                 });
             };
+            workoutsDiagnosticFlowObjApi.setPage = function (pageName) {
+                ga('set', 'page', `/${pageName}.html`);
+            };
 
+            workoutsDiagnosticFlowObjApi.sendPage = function () {
+                ga('send', 'pageview');
+            };
+
+            workoutsDiagnosticFlowObjApi.updatePage = function (pageName) {
+                workoutsDiagnosticFlowObjApi.setPage(pageName);
+                workoutsDiagnosticFlowObjApi.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             */
+            workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction) {
+             //   AuthService.getAuth().then(userAuth => {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventAction,
+                        eventLabel: 'Toefl Campaign',
+            //            eventValue: userAuth && userAuth.uid ? userAuth.uid : '',
+                    });
+         //       });
+            };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
                     return !!diagnostic.isComplete;

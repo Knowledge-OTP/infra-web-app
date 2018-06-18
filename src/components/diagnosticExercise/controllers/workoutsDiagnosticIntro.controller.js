@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
-        function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv, $translate, $filter, $rootScope) {
+        function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, $translate, $filter, $rootScope) {
         'ngInject';
             var vm = this;
 
@@ -33,16 +33,21 @@
             };
 
             this.goToExercise = function () {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'diagnosticSectionStarted',
-                    props: {
-                        sectionId: vm.params.sectionId,
-                        order: vm.params.order,
-                        subjectId: vm.params.subjectId
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'diagnosticSectionStarted',
+                //     props: {
+                //         sectionId: vm.params.sectionId,
+                //         order: vm.params.order,
+                //         subjectId: vm.params.subjectId
+                //     }
+                // });
+                // znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
+                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                    if(marketingObj && marketingObj.status){
+                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-start`);
                     }
+                    $state.go('app.diagnostic.exercise');
                 });
-                znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
-                $state.go('app.diagnostic.exercise');
             };
 
             $rootScope.$on('$translateChangeSuccess', function () {
