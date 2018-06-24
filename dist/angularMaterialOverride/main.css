@@ -1,0 +1,45 @@
+/* fonts size */
+/* general */
+/* paths */
+/* general */
+/*border color*/
+/*background*/
+/* box shadow */
+/* font color*/
+/*********** MY ZINKERZ COLORS ***********/
+/*colors*/
+/*Buttons States Colors*/
+/*Topics Colors*/
+/* Services Colors */
+/* Opacity Colors */
+/* Input Colors */
+/* full background image with retina */
+/* full background image with retina */
+md-progress-linear.znk-progress-linear-exercise-bar .md-bar {
+  background-color: #c5cae9;
+  transition: 0.4s; }
+
+md-progress-linear.green-state .md-bar {
+  background-color: #d67914; }
+
+md-progress-linear.orange-state .md-bar {
+  background-color: #ff931e; }
+
+md-progress-linear.red-state .md-bar {
+  background-color: #E8E8E8; }
+
+md-input-container.md-input-has-value [ng-messages] {
+  opacity: 0;
+  margin-top: -100px; }
+
+md-input-container:not(.md-input-invalid) .md-input {
+  border-color: #161616; }
+
+md-input-container:not(.md-input-invalid) label {
+  color: #161616; }
+
+md-dialog .close-popup {
+  width: 16px; }
+
+.md-dialog-container {
+  overflow: visible; }

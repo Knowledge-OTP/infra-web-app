@@ -70,7 +70,7 @@
                     eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
                     eventLabel: 'Toefl Campaign',
                 });
-                if (isFb) {
+                if (isFb && fbq) {
                     fbq('track', eventAction);
 
                 }

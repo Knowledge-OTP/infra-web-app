@@ -31,13 +31,17 @@
              * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
              * @param eventAction - The type of interaction (e.g. 'play')
              */
-            self.sendEvent = function (eventCategory, eventAction) {
+            self.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
                 ga('send', {
                     hitType: 'event',
                     eventCategory: eventCategory,
-                    eventAction: eventAction,
-                    eventLabel: 'Toefl Campaign'
+                    eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                    eventLabel: 'Toefl Campaign',
                 });
+                if (isFb && fbq) {
+                    fbq('track', eventAction);
+
+                }
             };
             self.getMarketingToefl = function () {
                 var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
