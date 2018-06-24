@@ -60,6 +60,7 @@
                     purchaseService.getMarketingToefl().then(function (marketingObj) {
                         if (marketingObj && marketingObj.status) {
                             purchaseService.sendEvent('diagnostic', 'click-upgrade');
+                            purchaseService.sendEvent('diagnostic', `App_Purchase_Start`, 'click', true);
                         }
                         purchaseService.getProduct().then(product => {
                             $log.debug(`purchaseZinkerzPro: productId: ${product.id}, price: ${product.price}`);
@@ -68,6 +69,7 @@
                             StripeService.openStripeModal(ENV.serviceId, product.id, product.price, name, description)
                                 .then(stripeRes => {
                                     if (!stripeRes.closedByUser) {
+                                        purchaseService.sendEvent('diagnostic', `App_Purchase_Completed`, 'click', true);
                                         purchaseService.setPendingPurchase();
                                         $log.debug(`purchaseZinkerzPro: User update to pending purchase`);
                                         // The stripe web hook should update the firebase
@@ -137,7 +139,11 @@
                 vm.promoStatus = {
                     isApproved: false
                 };
-
+                purchaseService.getMarketingToefl().then(function (marketingObj) {
+                    if (marketingObj && marketingObj.status) {
+                        purchaseService.sendEvent('diagnostic', `App_Purchase_Page_Show`, 'click', true);
+                    }
+                });
                 vm.enablePromoCode = function (promoCodeId) {
                     var translate = $filter('translate');
                     AuthService.getAuth().then(authData => {
@@ -260,6 +266,8 @@
              * sendEvent
              * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
              * @param eventAction - The type of interaction (e.g. 'play')
+             * @param eventType - click etc.
+             * @param isFb - use facebook event
              */
             self.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
                 ga('send', {

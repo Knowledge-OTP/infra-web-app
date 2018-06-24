@@ -217,7 +217,7 @@
     angular.module('znk.infra-web-app.diagnosticExercise')
         .controller('leavingSoSoonPopupCtrl',
 
-            ["$log", "$mdDialog", "WorkoutsDiagnosticFlow", "ENV", "AuthService", "$window", function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window) {
+            ["$log", "$mdDialog", "WorkoutsDiagnosticFlow", "ENV", "AuthService", "$window", "$state", function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window, $state) {
                 'ngInject';
 
                 const vm = this;
@@ -250,6 +250,12 @@
                         vm.closeModal();
                         AuthService.getAuth().then(authData => {
                             WorkoutsDiagnosticFlow.setReminder(ENV.serviceId, authData.uid, userTimeout, email);
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Reminder_Submit`, 'click', true);
+                                }
+                                $state.go('app.diagnostic.exercise');
+                            });
                             saveFlagToSessionStorage();
                         });
                     } else if (!email) {
@@ -645,7 +651,7 @@
                         _isLastSubject().then(function (isLastSubject) {
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                                 if (marketingObj && marketingObj.status) {
-                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`,'click');
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`, 'click', false);
                                 }
                                 // znkAnalyticsSrv.eventTrack({
                                 //     eventName: 'diagnosticSectionCompleted',
@@ -657,8 +663,8 @@
                                 //     }
                                 // });
                                 if (isLastSubject) {
-
                                     if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
+                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_End`, 'click', true);
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
                                             let selectedNum;
                                             let selectedStatus;
@@ -679,6 +685,9 @@
                                     }
                                     //
                                 } else {
+                                    if (marketingObj && marketingObj.status) {
+                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_End`, 'click', true);
+                                    }
                                     _goToCurrentState();
                                 }
                             });
@@ -760,7 +769,7 @@
                 // znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
                 WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                     if (marketingObj && marketingObj.status) {
-                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Start`, 'click', true);
+                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_Start`, 'click', true);
                     }
                     $state.go('app.diagnostic.exercise');
                 });

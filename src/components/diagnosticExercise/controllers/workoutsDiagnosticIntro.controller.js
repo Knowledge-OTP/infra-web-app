@@ -44,7 +44,7 @@
                 // znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
                 WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                     if (marketingObj && marketingObj.status) {
-                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Start`, 'click', true);
+                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_Start`, 'click', true);
                     }
                     $state.go('app.diagnostic.exercise');
                 });

@@ -100,7 +100,7 @@
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
             getMarketingToefl();
 
-            this.setOnboardingCompleted = function (nextState, eventText) {
+            this.setOnboardingCompleted = function (nextState) {
                 // znkAnalyticsSrv.eventTrack({
                 //     eventName: 'onBoardingDiagnosticStep',
                 //     props: {
@@ -108,7 +108,7 @@
                 //     }
                 // });
                 if (!vm.showLaterButton) {
-                    OnBoardingService.sendEvent('diagnostic', `${eventText}`, 'click');
+                    OnBoardingService.sendEvent('diagnostic', `Diagnostic_Start`, 'click', true);
                 }
 
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
@@ -155,7 +155,7 @@
             this.saveGoals = function () {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     if (marketingObj && marketingObj.status) {
-                        OnBoardingService.sendEvent('diagnostic', 'click-save&continue');
+                        OnBoardingService.sendEvent('diagnostic', 'Goals_Continue', 'click',true);
                     }
                     //      znkAnalyticsSrv.eventTrack({eventName: 'onBoardingGoalsStep'});
                     var nextStep;

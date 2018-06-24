@@ -30,6 +30,8 @@
              * sendEvent
              * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
              * @param eventAction - The type of interaction (e.g. 'play')
+             * @param eventType - click etc.
+             * @param isFb - use facebook event
              */
             self.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
                 ga('send', {

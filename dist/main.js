@@ -3996,7 +3996,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
     angular.module('znk.infra-web-app.diagnosticExercise')
         .controller('leavingSoSoonPopupCtrl',
 
-            ["$log", "$mdDialog", "WorkoutsDiagnosticFlow", "ENV", "AuthService", "$window", function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window) {
+            ["$log", "$mdDialog", "WorkoutsDiagnosticFlow", "ENV", "AuthService", "$window", "$state", function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window, $state) {
                 'ngInject';
 
                 const vm = this;
@@ -4029,6 +4029,12 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                         vm.closeModal();
                         AuthService.getAuth().then(authData => {
                             WorkoutsDiagnosticFlow.setReminder(ENV.serviceId, authData.uid, userTimeout, email);
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Reminder_Submit`, 'click', true);
+                                }
+                                $state.go('app.diagnostic.exercise');
+                            });
                             saveFlagToSessionStorage();
                         });
                     } else if (!email) {
@@ -4424,7 +4430,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                         _isLastSubject().then(function (isLastSubject) {
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                                 if (marketingObj && marketingObj.status) {
-                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`,'click');
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`, 'click', false);
                                 }
                                 // znkAnalyticsSrv.eventTrack({
                                 //     eventName: 'diagnosticSectionCompleted',
@@ -4436,8 +4442,8 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                                 //     }
                                 // });
                                 if (isLastSubject) {
-
                                     if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
+                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_End`, 'click', true);
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
                                             let selectedNum;
                                             let selectedStatus;
@@ -4458,6 +4464,9 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                                     }
                                     //
                                 } else {
+                                    if (marketingObj && marketingObj.status) {
+                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_End`, 'click', true);
+                                    }
                                     _goToCurrentState();
                                 }
                             });
@@ -4539,7 +4548,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                 // znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
                 WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                     if (marketingObj && marketingObj.status) {
-                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Start`, 'click', true);
+                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_Start`, 'click', true);
                     }
                     $state.go('app.diagnostic.exercise');
                 });
@@ -13726,7 +13735,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
             getMarketingToefl();
 
-            this.setOnboardingCompleted = function (nextState, eventText) {
+            this.setOnboardingCompleted = function (nextState) {
                 // znkAnalyticsSrv.eventTrack({
                 //     eventName: 'onBoardingDiagnosticStep',
                 //     props: {
@@ -13734,7 +13743,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                 //     }
                 // });
                 if (!vm.showLaterButton) {
-                    OnBoardingService.sendEvent('diagnostic', `${eventText}`, 'click');
+                    OnBoardingService.sendEvent('diagnostic', `Diagnostic_Start`, 'click', true);
                 }
 
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
@@ -13781,7 +13790,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
             this.saveGoals = function () {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     if (marketingObj && marketingObj.status) {
-                        OnBoardingService.sendEvent('diagnostic', 'click-save&continue');
+                        OnBoardingService.sendEvent('diagnostic', 'Goals_Continue', 'click',true);
                     }
                     //      znkAnalyticsSrv.eventTrack({eventName: 'onBoardingGoalsStep'});
                     var nextStep;
@@ -15191,6 +15200,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
                     purchaseService.getMarketingToefl().then(function (marketingObj) {
                         if (marketingObj && marketingObj.status) {
                             purchaseService.sendEvent('diagnostic', 'click-upgrade');
+                            purchaseService.sendEvent('diagnostic', `App_Purchase_Start`, 'click', true);
                         }
                         purchaseService.getProduct().then(product => {
                             $log.debug(`purchaseZinkerzPro: productId: ${product.id}, price: ${product.price}`);
@@ -15199,6 +15209,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
                             StripeService.openStripeModal(ENV.serviceId, product.id, product.price, name, description)
                                 .then(stripeRes => {
                                     if (!stripeRes.closedByUser) {
+                                        purchaseService.sendEvent('diagnostic', `App_Purchase_Completed`, 'click', true);
                                         purchaseService.setPendingPurchase();
                                         $log.debug(`purchaseZinkerzPro: User update to pending purchase`);
                                         // The stripe web hook should update the firebase
@@ -15268,7 +15279,11 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
                 vm.promoStatus = {
                     isApproved: false
                 };
-
+                purchaseService.getMarketingToefl().then(function (marketingObj) {
+                    if (marketingObj && marketingObj.status) {
+                        purchaseService.sendEvent('diagnostic', `App_Purchase_Page_Show`, 'click', true);
+                    }
+                });
                 vm.enablePromoCode = function (promoCodeId) {
                     var translate = $filter('translate');
                     AuthService.getAuth().then(authData => {
@@ -15391,6 +15406,8 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
              * sendEvent
              * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
              * @param eventAction - The type of interaction (e.g. 'play')
+             * @param eventType - click etc.
+             * @param isFb - use facebook event
              */
             self.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
                 ga('send', {
