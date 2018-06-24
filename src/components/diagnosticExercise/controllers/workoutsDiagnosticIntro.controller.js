@@ -2,21 +2,21 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
-        function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, $translate, $filter, $rootScope) {
-        'ngInject';
+        function (WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, $translate, $filter, $rootScope) {
+            'ngInject';
             var vm = this;
 
             vm.params = WorkoutsDiagnosticFlow.getCurrentState().params;
             vm.diagnosticId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
 
-            function _setHeaderTitle(){
+            function _setHeaderTitle() {
                 var subjectTranslateKey = 'SUBJECTS.' + 'DIAGNOSTIC_TITLE.' + vm.params.subjectId;
-                $translate(subjectTranslateKey).then(function(subjectTranslation){
+                $translate(subjectTranslateKey).then(function (subjectTranslation) {
                     var translateFilter = $filter('translate');
-                    vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE',{
+                    vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE', {
                         subject: $filter('capitalize')(subjectTranslation)
                     });
-                },function(err){
+                }, function (err) {
                     $log.error('WorkoutsDiagnosticIntroController: ' + err);
                 });
             }
@@ -43,8 +43,8 @@
                 // });
                 // znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
                 WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
-                    if(marketingObj && marketingObj.status){
-                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-start`);
+                    if (marketingObj && marketingObj.status) {
+                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Start`, 'click', true);
                     }
                     $state.go('app.diagnostic.exercise');
                 });
@@ -53,5 +53,5 @@
             $rootScope.$on('$translateChangeSuccess', function () {
                 _setHeaderTitle();
             });
-    });
+        });
 })(angular);

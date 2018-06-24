@@ -19,7 +19,7 @@
                 //     }
                 // });
                 if (!vm.showLaterButton) {
-                    OnBoardingService.sendEvent('diagnostic', `click-${eventText}`);
+                    OnBoardingService.sendEvent('diagnostic', `${eventText}`, 'click');
                 }
 
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {

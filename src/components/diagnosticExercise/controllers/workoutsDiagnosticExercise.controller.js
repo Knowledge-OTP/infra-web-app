@@ -297,7 +297,7 @@
                         _isLastSubject().then(function (isLastSubject) {
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                                 if (marketingObj && marketingObj.status) {
-                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`);
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`,'click');
                                 }
                                 // znkAnalyticsSrv.eventTrack({
                                 //     eventName: 'diagnosticSectionCompleted',

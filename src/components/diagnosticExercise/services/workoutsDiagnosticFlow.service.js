@@ -356,17 +356,20 @@
              * sendEvent
              * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
              * @param eventAction - The type of interaction (e.g. 'play')
+             * @param eventType - click etc.
+             * @param isFb - use facebook event
              */
-            workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction) {
-             //   AuthService.getAuth().then(userAuth => {
-                    ga('send', {
-                        hitType: 'event',
-                        eventCategory: eventCategory,
-                        eventAction: eventAction,
-                        eventLabel: 'Toefl Campaign',
-            //            eventValue: userAuth && userAuth.uid ? userAuth.uid : '',
-                    });
-         //       });
+            workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                    eventLabel: 'Toefl Campaign',
+                });
+                if (isFb) {
+                    fbq('track', eventAction);
+
+                }
             };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
