@@ -4067,11 +4067,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
 
             // To prevent the openLeavingSoSoonPopup the pop when the microphone permission popup appear
             let isMicrophonePermissionAsked = null;
-            let onBoardingProgressStatus;
             hasMicrophonePermissions();
-            WorkoutsDiagnosticFlow.getBoardingProgressStatus().then(status => {
-                onBoardingProgressStatus = status;
-            });
 
             function hasMicrophonePermissions() {
                 if (ENV.firebaseAppScopeName.split('_')[0] === 'toefl') {
@@ -4088,7 +4084,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
             function userLeaveEvent(e) {
                 e = e ? e : window.event;
                 const from = e.relatedTarget || e.toElement;
-                if (!from || from.nodeName === 'HTML' && onBoardingProgressStatus && onBoardingProgressStatus === 4) {
+                if (!from || from.nodeName === 'HTML') {
                     openLeavingSoSoonPopup();
                 }
             }
@@ -4103,18 +4099,22 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
 
 
             function openLeavingSoSoonPopup() {
-                const isReminderSent = getFlagToSessionStorage();
-                const isOpen = !!document.querySelector('.leaving-so-soon-popup');
+                WorkoutsDiagnosticFlow.isToeflDiagnosticCompleted().then(completed => {
+                    if (completed) {
+                        const isReminderSent = getFlagToSessionStorage();
+                        const isOpen = !!document.querySelector('.leaving-so-soon-popup');
 
-                if (!isOpen && !isReminderSent && isMicrophonePermissionAsked !== null) {
-                    return $mdDialog.show({
-                        controller: 'leavingSoSoonPopupCtrl',
-                        controllerAs: 'vm',
-                        templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
-                        clickOutsideToClose: true,
-                        escapeToClose: true
-                    });
-                }
+                        if (!isOpen && !isReminderSent && isMicrophonePermissionAsked !== null) {
+                            return $mdDialog.show({
+                                controller: 'leavingSoSoonPopupCtrl',
+                                controllerAs: 'vm',
+                                templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
+                                clickOutsideToClose: true,
+                                escapeToClose: true
+                            });
+                        }
+                    }
+                });
             }
 
 
@@ -4446,26 +4446,28 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                                 //     }
                                 // });
                                 if (isLastSubject) {
-                                    if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
-                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_End`, 'click', true);
-                                        WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
-                                            let selectedNum;
-                                            let selectedStatus;
-                                            if (globalVariable && globalVariable.abTesting) {
-                                                const abTestingNum = parseFloat(globalVariable.abTesting);
-                                                selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
-                                            } else { // in case the globalVariable or the abTesting is missing
-                                                selectedNum = 1;
-                                            }
-                                            selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
-                                            WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
-                                                $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
-                                                _goToCurrentState(true);
+                                    WorkoutsDiagnosticFlow.setDiagnosticComplete().then(()=>{
+                                        if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
+                                            WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_End`, 'click', true);
+                                            WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
+                                                let selectedNum;
+                                                let selectedStatus;
+                                                if (globalVariable && globalVariable.abTesting) {
+                                                    const abTestingNum = parseFloat(globalVariable.abTesting);
+                                                    selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
+                                                } else { // in case the globalVariable or the abTesting is missing
+                                                    selectedNum = 1;
+                                                }
+                                                selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
+                                                WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
+                                                    $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
+                                                    _goToCurrentState(true);
+                                                });
                                             });
-                                        });
-                                    } else {
-                                        _goToCurrentState(true);
-                                    }
+                                        } else {
+                                            _goToCurrentState(true);
+                                        }
+                                    });
                                     //
                                 } else {
                                     if (marketingObj && marketingObj.status) {
@@ -5114,6 +5116,20 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     fbq('track', eventAction);
 
                 }
+            };
+            workoutsDiagnosticFlowObjApi.setDiagnosticComplete = function () {
+                const path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.update(path, true);
+                });
+            };
+            workoutsDiagnosticFlowObjApi.isToeflDiagnosticCompleted = function () {
+                var path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(path).then(function (isDiagnosticComplete) {
+                        return !!isDiagnosticComplete;
+                    });
+                });
             };
             workoutsDiagnosticFlowObjApi.getBoardingProgressStatus = function () {
                 var path = StorageSrv.variables.appUserSpacePath + `/onBoardingProgress/step`;

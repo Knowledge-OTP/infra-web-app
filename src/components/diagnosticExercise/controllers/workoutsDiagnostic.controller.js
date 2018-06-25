@@ -9,11 +9,7 @@
 
             // To prevent the openLeavingSoSoonPopup the pop when the microphone permission popup appear
             let isMicrophonePermissionAsked = null;
-            let onBoardingProgressStatus;
             hasMicrophonePermissions();
-            WorkoutsDiagnosticFlow.getBoardingProgressStatus().then(status => {
-                onBoardingProgressStatus = status;
-            });
 
             function hasMicrophonePermissions() {
                 if (ENV.firebaseAppScopeName.split('_')[0] === 'toefl') {
@@ -30,7 +26,7 @@
             function userLeaveEvent(e) {
                 e = e ? e : window.event;
                 const from = e.relatedTarget || e.toElement;
-                if (!from || from.nodeName === 'HTML' && onBoardingProgressStatus && onBoardingProgressStatus === 4) {
+                if (!from || from.nodeName === 'HTML') {
                     openLeavingSoSoonPopup();
                 }
             }
@@ -45,18 +41,22 @@
 
 
             function openLeavingSoSoonPopup() {
-                const isReminderSent = getFlagToSessionStorage();
-                const isOpen = !!document.querySelector('.leaving-so-soon-popup');
+                WorkoutsDiagnosticFlow.isToeflDiagnosticCompleted().then(completed => {
+                    if (completed) {
+                        const isReminderSent = getFlagToSessionStorage();
+                        const isOpen = !!document.querySelector('.leaving-so-soon-popup');
 
-                if (!isOpen && !isReminderSent && isMicrophonePermissionAsked !== null) {
-                    return $mdDialog.show({
-                        controller: 'leavingSoSoonPopupCtrl',
-                        controllerAs: 'vm',
-                        templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
-                        clickOutsideToClose: true,
-                        escapeToClose: true
-                    });
-                }
+                        if (!isOpen && !isReminderSent && isMicrophonePermissionAsked !== null) {
+                            return $mdDialog.show({
+                                controller: 'leavingSoSoonPopupCtrl',
+                                controllerAs: 'vm',
+                                templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
+                                clickOutsideToClose: true,
+                                escapeToClose: true
+                            });
+                        }
+                    }
+                });
             }
 
 

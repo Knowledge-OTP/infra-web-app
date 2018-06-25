@@ -377,6 +377,20 @@
 
                 }
             };
+            workoutsDiagnosticFlowObjApi.setDiagnosticComplete = function () {
+                const path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.update(path, true);
+                });
+            };
+            workoutsDiagnosticFlowObjApi.isToeflDiagnosticCompleted = function () {
+                var path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(path).then(function (isDiagnosticComplete) {
+                        return !!isDiagnosticComplete;
+                    });
+                });
+            };
             workoutsDiagnosticFlowObjApi.getBoardingProgressStatus = function () {
                 var path = StorageSrv.variables.appUserSpacePath + `/onBoardingProgress/step`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {

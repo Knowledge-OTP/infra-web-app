@@ -309,26 +309,28 @@
                                 //     }
                                 // });
                                 if (isLastSubject) {
-                                    if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
-                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_End`, 'click', true);
-                                        WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
-                                            let selectedNum;
-                                            let selectedStatus;
-                                            if (globalVariable && globalVariable.abTesting) {
-                                                const abTestingNum = parseFloat(globalVariable.abTesting);
-                                                selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
-                                            } else { // in case the globalVariable or the abTesting is missing
-                                                selectedNum = 1;
-                                            }
-                                            selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
-                                            WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
-                                                $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
-                                                _goToCurrentState(true);
+                                    WorkoutsDiagnosticFlow.setDiagnosticComplete().then(()=>{
+                                        if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
+                                            WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_End`, 'click', true);
+                                            WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
+                                                let selectedNum;
+                                                let selectedStatus;
+                                                if (globalVariable && globalVariable.abTesting) {
+                                                    const abTestingNum = parseFloat(globalVariable.abTesting);
+                                                    selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
+                                                } else { // in case the globalVariable or the abTesting is missing
+                                                    selectedNum = 1;
+                                                }
+                                                selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
+                                                WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
+                                                    $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
+                                                    _goToCurrentState(true);
+                                                });
                                             });
-                                        });
-                                    } else {
-                                        _goToCurrentState(true);
-                                    }
+                                        } else {
+                                            _goToCurrentState(true);
+                                        }
+                                    });
                                     //
                                 } else {
                                     if (marketingObj && marketingObj.status) {
