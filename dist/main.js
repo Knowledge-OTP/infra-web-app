@@ -4100,7 +4100,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
 
             function openLeavingSoSoonPopup() {
                 WorkoutsDiagnosticFlow.isToeflDiagnosticCompleted().then(completed => {
-                    if (completed) {
+                    if (!completed) {
                         const isReminderSent = getFlagToSessionStorage();
                         const isOpen = !!document.querySelector('.leaving-so-soon-popup');
 
