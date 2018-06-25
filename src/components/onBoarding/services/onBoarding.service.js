@@ -60,17 +60,20 @@
              * sendEvent
              * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
              * @param eventAction - The type of interaction (e.g. 'play')
+             * @param eventType - click etc.
+             * @param isFb - use facebook event
              */
-            onBoardingServiceObj.sendEvent = function (eventCategory, eventAction) {
-            ////    AuthService.getAuth().then(userAuth => {
-                    ga('send', {
-                        hitType: 'event',
-                        eventCategory: eventCategory,
-                        eventAction: eventAction,
-                        eventLabel: 'Toefl Campaign',
-              //          eventValue: userAuth && userAuth.uid ? userAuth.uid : '',
-                    });
-              //  });
+            onBoardingServiceObj.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                    eventLabel: 'Toefl Campaign',
+                });
+                if (isFb && fbq) {
+                    fbq('track', eventAction);
+
+                }
             };
 
             function getProgress() {

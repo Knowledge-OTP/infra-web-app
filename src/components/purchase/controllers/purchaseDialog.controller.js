@@ -22,7 +22,11 @@
                 vm.promoStatus = {
                     isApproved: false
                 };
-
+                purchaseService.getMarketingToefl().then(function (marketingObj) {
+                    if (marketingObj && marketingObj.status) {
+                        purchaseService.sendEvent('diagnostic', `App_Purchase_Page_Show`, 'click', true);
+                    }
+                });
                 vm.enablePromoCode = function (promoCodeId) {
                     var translate = $filter('translate');
                     AuthService.getAuth().then(authData => {

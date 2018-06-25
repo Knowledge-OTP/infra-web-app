@@ -154,7 +154,7 @@
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                                 if (marketingObj && marketingObj.status) {
                                     var state = marketingObj.status === MarketingStatusEnum.GET_EMAIL.enum ? 'email' : 'purchase';
-                                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+                                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}?app=true`;
                                 } else {
                                     $state.go('app.diagnostic.summary');
                                 }
@@ -217,7 +217,7 @@
     angular.module('znk.infra-web-app.diagnosticExercise')
         .controller('leavingSoSoonPopupCtrl',
 
-            ["$log", "$mdDialog", "WorkoutsDiagnosticFlow", "ENV", "AuthService", "$window", function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window) {
+            ["$log", "$mdDialog", "WorkoutsDiagnosticFlow", "ENV", "AuthService", "$window", "$state", function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window, $state) {
                 'ngInject';
 
                 const vm = this;
@@ -250,6 +250,12 @@
                         vm.closeModal();
                         AuthService.getAuth().then(authData => {
                             WorkoutsDiagnosticFlow.setReminder(ENV.serviceId, authData.uid, userTimeout, email);
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Reminder_Submit`, 'click', true);
+                                }
+                                $state.go('app.diagnostic.exercise');
+                            });
                             saveFlagToSessionStorage();
                         });
                     } else if (!email) {
@@ -645,7 +651,7 @@
                         _isLastSubject().then(function (isLastSubject) {
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                                 if (marketingObj && marketingObj.status) {
-                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`);
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})-order(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`, 'click', false);
                                 }
                                 // znkAnalyticsSrv.eventTrack({
                                 //     eventName: 'diagnosticSectionCompleted',
@@ -657,8 +663,8 @@
                                 //     }
                                 // });
                                 if (isLastSubject) {
-
                                     if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
+                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_End`, 'click', true);
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
                                             let selectedNum;
                                             let selectedStatus;
@@ -679,6 +685,9 @@
                                     }
                                     //
                                 } else {
+                                    if (marketingObj && marketingObj.status) {
+                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_End`, 'click', true);
+                                    }
                                     _goToCurrentState();
                                 }
                             });
@@ -718,21 +727,21 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
-        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "$translate", "$filter", "$rootScope", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, $translate, $filter, $rootScope) {
-        'ngInject';
+        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "$translate", "$filter", "$rootScope", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, $translate, $filter, $rootScope) {
+            'ngInject';
             var vm = this;
 
             vm.params = WorkoutsDiagnosticFlow.getCurrentState().params;
             vm.diagnosticId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
 
-            function _setHeaderTitle(){
+            function _setHeaderTitle() {
                 var subjectTranslateKey = 'SUBJECTS.' + 'DIAGNOSTIC_TITLE.' + vm.params.subjectId;
-                $translate(subjectTranslateKey).then(function(subjectTranslation){
+                $translate(subjectTranslateKey).then(function (subjectTranslation) {
                     var translateFilter = $filter('translate');
-                    vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE',{
+                    vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE', {
                         subject: $filter('capitalize')(subjectTranslation)
                     });
-                },function(err){
+                }, function (err) {
                     $log.error('WorkoutsDiagnosticIntroController: ' + err);
                 });
             }
@@ -759,8 +768,8 @@
                 // });
                 // znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
                 WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
-                    if(marketingObj && marketingObj.status){
-                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-start`);
+                    if (marketingObj && marketingObj.status) {
+                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_Start`, 'click', true);
                     }
                     $state.go('app.diagnostic.exercise');
                 });
@@ -769,7 +778,7 @@
             $rootScope.$on('$translateChangeSuccess', function () {
                 _setHeaderTitle();
             });
-    }]);
+        }]);
 })(angular);
 
 (function (angular) {
@@ -1302,17 +1311,20 @@
              * sendEvent
              * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
              * @param eventAction - The type of interaction (e.g. 'play')
+             * @param eventType - click etc.
+             * @param isFb - use facebook event
              */
-            workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction) {
-             //   AuthService.getAuth().then(userAuth => {
-                    ga('send', {
-                        hitType: 'event',
-                        eventCategory: eventCategory,
-                        eventAction: eventAction,
-                        eventLabel: 'Toefl Campaign',
-            //            eventValue: userAuth && userAuth.uid ? userAuth.uid : '',
-                    });
-         //       });
+            workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                    eventLabel: 'Toefl Campaign',
+                });
+                if (isFb && fbq) {
+                    fbq('track', eventAction);
+
+                }
             };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {

@@ -20,7 +20,7 @@
             this.saveGoals = function () {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     if (marketingObj && marketingObj.status) {
-                        OnBoardingService.sendEvent('diagnostic', 'click-save&continue');
+                        OnBoardingService.sendEvent('diagnostic', 'Goals_Continue', 'click',true);
                     }
                     //      znkAnalyticsSrv.eventTrack({eventName: 'onBoardingGoalsStep'});
                     var nextStep;

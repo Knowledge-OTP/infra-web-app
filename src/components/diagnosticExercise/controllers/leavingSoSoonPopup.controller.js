@@ -3,7 +3,7 @@
     angular.module('znk.infra-web-app.diagnosticExercise')
         .controller('leavingSoSoonPopupCtrl',
 
-            function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window) {
+            function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window, $state) {
                 'ngInject';
 
                 const vm = this;
@@ -36,6 +36,12 @@
                         vm.closeModal();
                         AuthService.getAuth().then(authData => {
                             WorkoutsDiagnosticFlow.setReminder(ENV.serviceId, authData.uid, userTimeout, email);
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Reminder_Submit`, 'click', true);
+                                }
+                                $state.go('app.diagnostic.exercise');
+                            });
                             saveFlagToSessionStorage();
                         });
                     } else if (!email) {

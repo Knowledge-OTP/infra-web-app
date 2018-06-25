@@ -11,7 +11,7 @@
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
             getMarketingToefl();
 
-            this.setOnboardingCompleted = function (nextState, eventText) {
+            this.setOnboardingCompleted = function (nextState) {
                 // znkAnalyticsSrv.eventTrack({
                 //     eventName: 'onBoardingDiagnosticStep',
                 //     props: {
@@ -19,7 +19,7 @@
                 //     }
                 // });
                 if (!vm.showLaterButton) {
-                    OnBoardingService.sendEvent('diagnostic', `click-${eventText}`);
+                    OnBoardingService.sendEvent('diagnostic', `Diagnostic_Start`, 'click', true);
                 }
 
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {

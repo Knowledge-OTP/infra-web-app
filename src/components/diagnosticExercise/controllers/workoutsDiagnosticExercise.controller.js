@@ -297,7 +297,7 @@
                         _isLastSubject().then(function (isLastSubject) {
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                                 if (marketingObj && marketingObj.status) {
-                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `click-done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`);
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})-order(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`, 'click', false);
                                 }
                                 // znkAnalyticsSrv.eventTrack({
                                 //     eventName: 'diagnosticSectionCompleted',
@@ -309,8 +309,8 @@
                                 //     }
                                 // });
                                 if (isLastSubject) {
-
                                     if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
+                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_End`, 'click', true);
                                         WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
                                             let selectedNum;
                                             let selectedStatus;
@@ -331,6 +331,9 @@
                                     }
                                     //
                                 } else {
+                                    if (marketingObj && marketingObj.status) {
+                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_End`, 'click', true);
+                                    }
                                     _goToCurrentState();
                                 }
                             });
