@@ -2,14 +2,18 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise')
-        .controller('WorkoutsDiagnosticController', function (ENV, $state, currentState, $mdDialog, $window) {
+        .controller('WorkoutsDiagnosticController', function (ENV, $state, currentState, $mdDialog, $window, WorkoutsDiagnosticFlow) {
             'ngInject';
 
             const EXAM_STATE = 'app.diagnostic';
 
             // To prevent the openLeavingSoSoonPopup the pop when the microphone permission popup appear
             let isMicrophonePermissionAsked = null;
+            let onBoardingProgressStatus;
             hasMicrophonePermissions();
+            WorkoutsDiagnosticFlow.getBoardingProgressStatus().then(status => {
+                onBoardingProgressStatus = status;
+            });
 
             function hasMicrophonePermissions() {
                 if (ENV.firebaseAppScopeName.split('_')[0] === 'toefl') {
@@ -26,7 +30,7 @@
             function userLeaveEvent(e) {
                 e = e ? e : window.event;
                 const from = e.relatedTarget || e.toElement;
-                if (!from || from.nodeName === 'HTML') {
+                if (!from || from.nodeName === 'HTML' && onBoardingProgressStatus && onBoardingProgressStatus === 4) {
                     openLeavingSoSoonPopup();
                 }
             }

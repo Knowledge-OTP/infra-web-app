@@ -4060,14 +4060,18 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise')
-        .controller('WorkoutsDiagnosticController', ["ENV", "$state", "currentState", "$mdDialog", "$window", function (ENV, $state, currentState, $mdDialog, $window) {
+        .controller('WorkoutsDiagnosticController', ["ENV", "$state", "currentState", "$mdDialog", "$window", "WorkoutsDiagnosticFlow", function (ENV, $state, currentState, $mdDialog, $window, WorkoutsDiagnosticFlow) {
             'ngInject';
 
             const EXAM_STATE = 'app.diagnostic';
 
             // To prevent the openLeavingSoSoonPopup the pop when the microphone permission popup appear
             let isMicrophonePermissionAsked = null;
+            let onBoardingProgressStatus;
             hasMicrophonePermissions();
+            WorkoutsDiagnosticFlow.getBoardingProgressStatus().then(status => {
+                onBoardingProgressStatus = status;
+            });
 
             function hasMicrophonePermissions() {
                 if (ENV.firebaseAppScopeName.split('_')[0] === 'toefl') {
@@ -4084,7 +4088,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
             function userLeaveEvent(e) {
                 e = e ? e : window.event;
                 const from = e.relatedTarget || e.toElement;
-                if (!from || from.nodeName === 'HTML') {
+                if (!from || from.nodeName === 'HTML' && onBoardingProgressStatus && onBoardingProgressStatus === 4) {
                     openLeavingSoSoonPopup();
                 }
             }
@@ -5075,11 +5079,15 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                 });
             };
             workoutsDiagnosticFlowObjApi.setPage = function (pageName) {
-                ga('set', 'page', `/${pageName}.html`);
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
             };
 
             workoutsDiagnosticFlowObjApi.sendPage = function () {
-                ga('send', 'pageview');
+                if (ga) {
+                    ga('send', 'pageview');
+                }
             };
 
             workoutsDiagnosticFlowObjApi.updatePage = function (pageName) {
@@ -5094,16 +5102,26 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
              * @param isFb - use facebook event
              */
             workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
-                ga('send', {
-                    hitType: 'event',
-                    eventCategory: eventCategory,
-                    eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
-                    eventLabel: 'Toefl Campaign',
-                });
+                if (ga) {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                        eventLabel: 'Toefl Campaign',
+                    });
+                }
                 if (isFb && fbq) {
                     fbq('track', eventAction);
 
                 }
+            };
+            workoutsDiagnosticFlowObjApi.getBoardingProgressStatus = function () {
+                var path = StorageSrv.variables.appUserSpacePath + `/onBoardingProgress/step`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(path).then(function (status) {
+                        return status;
+                    });
+                });
             };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
@@ -14062,11 +14080,15 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                 });
             };
             onBoardingServiceObj.setPage = function (pageName) {
-                ga('set', 'page', `/${pageName}.html`);
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
             };
 
             onBoardingServiceObj.sendPage = function () {
-                ga('send', 'pageview');
+                if (ga) {
+                    ga('send', 'pageview');
+                }
             };
 
             onBoardingServiceObj.updatePage = function (pageName) {
@@ -14081,12 +14103,14 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
              * @param isFb - use facebook event
              */
             onBoardingServiceObj.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
-                ga('send', {
-                    hitType: 'event',
-                    eventCategory: eventCategory,
-                    eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
-                    eventLabel: 'Toefl Campaign',
-                });
+                if (ga) {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                        eventLabel: 'Toefl Campaign',
+                    });
+                }
                 if (isFb && fbq) {
                     fbq('track', eventAction);
 
@@ -15390,11 +15414,15 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
             var pendingPurchaseDefer;
 
             self.setPage = function (pageName) {
-                ga('set', 'page', `/${pageName}.html`);
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
             };
 
             self.sendPage = function () {
-                ga('send', 'pageview');
+                if (ga) {
+                    ga('send', 'pageview');
+                }
             };
 
             self.updatePage = function (pageName) {
@@ -15452,9 +15480,9 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
                     if (+params.purchaseSuccess === 1) {
                         self.setPendingPurchase();
-                      //  znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
+                        //  znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
                     } else {
-                       // znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
+                        // znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
                     }
                     self.showPurchaseDialog();
                 } else {

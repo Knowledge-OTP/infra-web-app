@@ -281,14 +281,18 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise')
-        .controller('WorkoutsDiagnosticController', ["ENV", "$state", "currentState", "$mdDialog", "$window", function (ENV, $state, currentState, $mdDialog, $window) {
+        .controller('WorkoutsDiagnosticController', ["ENV", "$state", "currentState", "$mdDialog", "$window", "WorkoutsDiagnosticFlow", function (ENV, $state, currentState, $mdDialog, $window, WorkoutsDiagnosticFlow) {
             'ngInject';
 
             const EXAM_STATE = 'app.diagnostic';
 
             // To prevent the openLeavingSoSoonPopup the pop when the microphone permission popup appear
             let isMicrophonePermissionAsked = null;
+            let onBoardingProgressStatus;
             hasMicrophonePermissions();
+            WorkoutsDiagnosticFlow.getBoardingProgressStatus().then(status => {
+                onBoardingProgressStatus = status;
+            });
 
             function hasMicrophonePermissions() {
                 if (ENV.firebaseAppScopeName.split('_')[0] === 'toefl') {
@@ -305,7 +309,7 @@
             function userLeaveEvent(e) {
                 e = e ? e : window.event;
                 const from = e.relatedTarget || e.toElement;
-                if (!from || from.nodeName === 'HTML') {
+                if (!from || from.nodeName === 'HTML' && onBoardingProgressStatus && onBoardingProgressStatus === 4) {
                     openLeavingSoSoonPopup();
                 }
             }
@@ -1296,11 +1300,15 @@
                 });
             };
             workoutsDiagnosticFlowObjApi.setPage = function (pageName) {
-                ga('set', 'page', `/${pageName}.html`);
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
             };
 
             workoutsDiagnosticFlowObjApi.sendPage = function () {
-                ga('send', 'pageview');
+                if (ga) {
+                    ga('send', 'pageview');
+                }
             };
 
             workoutsDiagnosticFlowObjApi.updatePage = function (pageName) {
@@ -1315,16 +1323,26 @@
              * @param isFb - use facebook event
              */
             workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
-                ga('send', {
-                    hitType: 'event',
-                    eventCategory: eventCategory,
-                    eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
-                    eventLabel: 'Toefl Campaign',
-                });
+                if (ga) {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                        eventLabel: 'Toefl Campaign',
+                    });
+                }
                 if (isFb && fbq) {
                     fbq('track', eventAction);
 
                 }
+            };
+            workoutsDiagnosticFlowObjApi.getBoardingProgressStatus = function () {
+                var path = StorageSrv.variables.appUserSpacePath + `/onBoardingProgress/step`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(path).then(function (status) {
+                        return status;
+                    });
+                });
             };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
