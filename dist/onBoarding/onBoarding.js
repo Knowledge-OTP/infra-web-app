@@ -373,7 +373,7 @@
                     default:
                         state = 'purchase';
                 }
-                window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}?app=true`;
+                window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
             }
         });
     }]);
