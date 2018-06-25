@@ -3933,7 +3933,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                                 if (marketingObj && marketingObj.status) {
                                     var state = marketingObj.status === MarketingStatusEnum.GET_EMAIL.enum ? 'email' : 'purchase';
-                                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+                                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}?app=true`;
                                 } else {
                                     $state.go('app.diagnostic.summary');
                                 }
