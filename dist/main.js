@@ -15199,7 +15199,6 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
                    // znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
                     purchaseService.getMarketingToefl().then(function (marketingObj) {
                         if (marketingObj && marketingObj.status) {
-                            purchaseService.sendEvent('diagnostic', 'click-upgrade');
                             purchaseService.sendEvent('diagnostic', `App_Purchase_Start`, 'click', true);
                         }
                         purchaseService.getProduct().then(product => {
