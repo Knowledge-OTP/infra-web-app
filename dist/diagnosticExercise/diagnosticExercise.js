@@ -651,7 +651,7 @@
                         _isLastSubject().then(function (isLastSubject) {
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                                 if (marketingObj && marketingObj.status) {
-                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})order-(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`, 'click', false);
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})-order(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`, 'click', false);
                                 }
                                 // znkAnalyticsSrv.eventTrack({
                                 //     eventName: 'diagnosticSectionCompleted',
