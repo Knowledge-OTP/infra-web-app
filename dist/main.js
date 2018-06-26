@@ -5127,7 +5127,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                 var path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.get(path).then(function (isDiagnosticComplete) {
-                        return !!isDiagnosticComplete;
+                        return typeof(isDiagnosticComplete) === 'boolean' && isDiagnosticComplete === true;
                     });
                 });
             };
