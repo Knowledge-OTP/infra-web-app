@@ -1,7 +1,11 @@
+/*jshint -W117 */
+/*jshint unused:false*/
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
-        this.$get = ['InfraConfigSrv', 'StorageSrv', function (InfraConfigSrv, StorageSrv) {
+        this.$get = function (InfraConfigSrv, StorageSrv) {
+            'ngInject';
+
             var self = this;
             var ONBOARDING_PATH = StorageSrv.variables.appUserSpacePath + '/' + 'onBoardingProgress';
             var onBoardingServiceObj = {};
@@ -40,6 +44,43 @@
                     return setProgress(progress);
                 });
             };
+            onBoardingServiceObj.setPage = function (pageName) {
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
+            };
+
+            onBoardingServiceObj.sendPage = function () {
+                if (ga) {
+                    ga('send', 'pageview');
+                }
+            };
+
+            onBoardingServiceObj.updatePage = function (pageName) {
+                onBoardingServiceObj.setPage(pageName);
+                onBoardingServiceObj.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             * @param eventType - click etc.
+             * @param isFb - use facebook event
+             */
+            onBoardingServiceObj.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
+                if (ga) {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                        eventLabel: 'Toefl Campaign',
+                    });
+                }
+                if (isFb && fbq) {
+                    fbq('track', eventAction);
+
+                }
+            };
 
             function getProgress() {
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
@@ -57,6 +98,7 @@
                     return studentStorage.set(ONBOARDING_PATH, progress);
                 });
             }
+
             onBoardingServiceObj.getMarketingToefl = function () {
                 var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
@@ -76,6 +118,6 @@
             };
 
             return onBoardingServiceObj;
-        }];
+        };
     }]);
 })(angular);

@@ -154,7 +154,7 @@
                             WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
                                 if (marketingObj && marketingObj.status) {
                                     var state = marketingObj.status === MarketingStatusEnum.GET_EMAIL.enum ? 'email' : 'purchase';
-                                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}`;
+                                    window.location.href = `${ENV.zinkerzWebsiteBaseUrl}myzinkerz/toefl/${state}?app=true`;
                                 } else {
                                     $state.go('app.diagnostic.summary');
                                 }
@@ -217,7 +217,7 @@
     angular.module('znk.infra-web-app.diagnosticExercise')
         .controller('leavingSoSoonPopupCtrl',
 
-            ["$log", "$mdDialog", "WorkoutsDiagnosticFlow", "ENV", "AuthService", "$window", function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window) {
+            ["$log", "$mdDialog", "WorkoutsDiagnosticFlow", "ENV", "AuthService", "$window", "$state", function ($log, $mdDialog, WorkoutsDiagnosticFlow, ENV, AuthService, $window, $state) {
                 'ngInject';
 
                 const vm = this;
@@ -250,6 +250,12 @@
                         vm.closeModal();
                         AuthService.getAuth().then(authData => {
                             WorkoutsDiagnosticFlow.setReminder(ENV.serviceId, authData.uid, userTimeout, email);
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Reminder_Submit`, 'click', true);
+                                }
+                                $state.go('app.diagnostic.exercise');
+                            });
                             saveFlagToSessionStorage();
                         });
                     } else if (!email) {
@@ -275,7 +281,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise')
-        .controller('WorkoutsDiagnosticController', ["ENV", "$state", "currentState", "$mdDialog", "$window", function (ENV, $state, currentState, $mdDialog, $window) {
+        .controller('WorkoutsDiagnosticController', ["ENV", "$state", "currentState", "$mdDialog", "$window", "WorkoutsDiagnosticFlow", function (ENV, $state, currentState, $mdDialog, $window, WorkoutsDiagnosticFlow) {
             'ngInject';
 
             const EXAM_STATE = 'app.diagnostic';
@@ -314,18 +320,22 @@
 
 
             function openLeavingSoSoonPopup() {
-                const isReminderSent = getFlagToSessionStorage();
-                const isOpen = !!document.querySelector('.leaving-so-soon-popup');
+                WorkoutsDiagnosticFlow.isToeflDiagnosticCompleted().then(completed => {
+                    if (!completed) {
+                        const isReminderSent = getFlagToSessionStorage();
+                        const isOpen = !!document.querySelector('.leaving-so-soon-popup');
 
-                if (!isOpen && !isReminderSent && isMicrophonePermissionAsked !== null) {
-                    return $mdDialog.show({
-                        controller: 'leavingSoSoonPopupCtrl',
-                        controllerAs: 'vm',
-                        templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
-                        clickOutsideToClose: true,
-                        escapeToClose: true
-                    });
-                }
+                        if (!isOpen && !isReminderSent && isMicrophonePermissionAsked !== null) {
+                            return $mdDialog.show({
+                                controller: 'leavingSoSoonPopupCtrl',
+                                controllerAs: 'vm',
+                                templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
+                                clickOutsideToClose: true,
+                                escapeToClose: true
+                            });
+                        }
+                    }
+                });
             }
 
 
@@ -352,9 +362,9 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
-        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "znkAnalyticsSrv", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", "MarketingStatusEnum", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
+        ["ZnkExerciseSlideDirectionEnum", "ZnkExerciseViewModeEnum", "exerciseData", "WorkoutsDiagnosticFlow", "$location", "$log", "$state", "ExerciseResultSrv", "ExerciseTypeEnum", "$q", "$timeout", "ZnkExerciseUtilitySrv", "$rootScope", "ExamTypeEnum", "exerciseEventsConst", "$filter", "SubjectEnum", "StatsEventsHandlerSrv", "$translate", "ExerciseReviewStatusEnum", "CategoryService", "MarketingStatusEnum", function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, StatsEventsHandlerSrv,
                   $translate, ExerciseReviewStatusEnum, CategoryService, MarketingStatusEnum) {
             'ngInject';
             var self = this;
@@ -615,7 +625,7 @@
                     if (!_isLastQuestion()) {
                         numQuestionCounter = numQuestionCounter + 1;
                         _setNumSlideForNgModel(numQuestionCounter);
-                        znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
+                        // znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
                     } else {
                         self.actions.forceDoneBtnDisplay(true);
                     }
@@ -643,40 +653,50 @@
                     WorkoutsDiagnosticFlow.markSectionAsDoneToggle(true);
                     _onDoneSaveResultsData().then(function () {
                         _isLastSubject().then(function (isLastSubject) {
-                            znkAnalyticsSrv.eventTrack({
-                                eventName: 'diagnosticSectionCompleted',
-                                questionsArr: exerciseData.resultsData.questionResults,
-                                props: {
-                                    sectionId: exerciseData.questionsData.id,
-                                    order: exerciseData.questionsData.order,
-                                    subjectId: self.subjectId
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})-order(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`, 'click', false);
+                                }
+                                // znkAnalyticsSrv.eventTrack({
+                                //     eventName: 'diagnosticSectionCompleted',
+                                //     questionsArr: exerciseData.resultsData.questionResults,
+                                //     props: {
+                                //         sectionId: exerciseData.questionsData.id,
+                                //         order: exerciseData.questionsData.order,
+                                //         subjectId: self.subjectId
+                                //     }
+                                // });
+                                if (isLastSubject) {
+                                    WorkoutsDiagnosticFlow.setDiagnosticComplete().then(()=>{
+                                        if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
+                                            WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_End`, 'click', true);
+                                            WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
+                                                let selectedNum;
+                                                let selectedStatus;
+                                                if (globalVariable && globalVariable.abTesting) {
+                                                    const abTestingNum = parseFloat(globalVariable.abTesting);
+                                                    selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
+                                                } else { // in case the globalVariable or the abTesting is missing
+                                                    selectedNum = 1;
+                                                }
+                                                selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
+                                                WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
+                                                    $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
+                                                    _goToCurrentState(true);
+                                                });
+                                            });
+                                        } else {
+                                            _goToCurrentState(true);
+                                        }
+                                    });
+                                    //
+                                } else {
+                                    if (marketingObj && marketingObj.status) {
+                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_End`, 'click', true);
+                                    }
+                                    _goToCurrentState();
                                 }
                             });
-                            if (isLastSubject) {
-                                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
-                                    if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
-                                        WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
-                                            let selectedNum;
-                                            let selectedStatus;
-                                            if (globalVariable && globalVariable.abTesting) {
-                                                const abTestingNum = parseFloat(globalVariable.abTesting);
-                                                selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
-                                            } else { // in case the globalVariable or the abTesting is missing
-                                                selectedNum = 1;
-                                            }
-                                            selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
-                                            WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
-                                                $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
-                                                _goToCurrentState(true);
-                                            });
-                                        });
-                                    } else {
-                                        _goToCurrentState(true);
-                                    }
-                                });
-                            } else {
-                                _goToCurrentState();
-                            }
                         });
                     });
                 },
@@ -713,21 +733,21 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticIntroController',
-        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "znkAnalyticsSrv", "$translate", "$filter", "$rootScope", function(WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, znkAnalyticsSrv, $translate, $filter, $rootScope) {
-        'ngInject';
+        ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "$state", "WorkoutsDiagnosticFlow", "$translate", "$filter", "$rootScope", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, $state, WorkoutsDiagnosticFlow, $translate, $filter, $rootScope) {
+            'ngInject';
             var vm = this;
 
             vm.params = WorkoutsDiagnosticFlow.getCurrentState().params;
             vm.diagnosticId = WorkoutsDiagnosticFlow.getDiagnosticSettings().diagnosticId;
 
-            function _setHeaderTitle(){
+            function _setHeaderTitle() {
                 var subjectTranslateKey = 'SUBJECTS.' + 'DIAGNOSTIC_TITLE.' + vm.params.subjectId;
-                $translate(subjectTranslateKey).then(function(subjectTranslation){
+                $translate(subjectTranslateKey).then(function (subjectTranslation) {
                     var translateFilter = $filter('translate');
-                    vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE',{
+                    vm.headerTitle = translateFilter('WORKOUTS_DIAGNOSTIC_INTRO.HEADER_TITLE', {
                         subject: $filter('capitalize')(subjectTranslation)
                     });
-                },function(err){
+                }, function (err) {
                     $log.error('WorkoutsDiagnosticIntroController: ' + err);
                 });
             }
@@ -744,22 +764,27 @@
             };
 
             this.goToExercise = function () {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'diagnosticSectionStarted',
-                    props: {
-                        sectionId: vm.params.sectionId,
-                        order: vm.params.order,
-                        subjectId: vm.params.subjectId
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'diagnosticSectionStarted',
+                //     props: {
+                //         sectionId: vm.params.sectionId,
+                //         order: vm.params.order,
+                //         subjectId: vm.params.subjectId
+                //     }
+                // });
+                // znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
+                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                    if (marketingObj && marketingObj.status) {
+                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_Start`, 'click', true);
                     }
+                    $state.go('app.diagnostic.exercise');
                 });
-                znkAnalyticsSrv.timeTrack({ eventName: 'diagnosticSectionCompleted' });
-                $state.go('app.diagnostic.exercise');
             };
 
             $rootScope.$on('$translateChangeSuccess', function () {
                 _setHeaderTitle();
             });
-    }]);
+        }]);
 })(angular);
 
 (function (angular) {
@@ -934,6 +959,8 @@
 })(angular);
 
 
+/*jshint -W117 */
+
 (function (angular) {
     'use strict';
 
@@ -944,8 +971,7 @@
         this.setDiagnosticSettings = function (diagnosticSettings) {
             _diagnosticSettings = diagnosticSettings;
         };
-        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "znkAnalyticsSrv", "$injector", "CategoryService", "ENV", "$http", "StorageSrv", "InfraConfigSrv", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
-                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
+        this.$get = ["WORKOUTS_DIAGNOSTIC_FLOW", "$log", "ExerciseTypeEnum", "$q", "ExamSrv", "ExerciseResultSrv", "$injector", "CategoryService", "ENV", "$http", "StorageSrv", "InfraConfigSrv", function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
             'ngInject';
 
             const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
@@ -1075,16 +1101,16 @@
                     var examResults = results[1];
 
                     if (examResults.isComplete) {
-                        if (flagForPreSummery) {
-                            znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
-                        }
+                        // if (flagForPreSummery) {
+                        //     znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
+                        // }
                         currentState.state = flagForPreSummery ? '.preSummary' : '.summary';
                         return currentState;
                     }
 
                     if (!examResults.isStarted) {
-                        znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
-                        znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
+                        // znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
+                        // znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
                         examResults.isStarted = true;
                         skipIntroBool = false;
                         examResults.$save();
@@ -1275,7 +1301,65 @@
                     });
                 });
             };
+            workoutsDiagnosticFlowObjApi.setPage = function (pageName) {
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
+            };
 
+            workoutsDiagnosticFlowObjApi.sendPage = function () {
+                if (ga) {
+                    ga('send', 'pageview');
+                }
+            };
+
+            workoutsDiagnosticFlowObjApi.updatePage = function (pageName) {
+                workoutsDiagnosticFlowObjApi.setPage(pageName);
+                workoutsDiagnosticFlowObjApi.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             * @param eventType - click etc.
+             * @param isFb - use facebook event
+             */
+            workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
+                if (ga) {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                        eventLabel: 'Toefl Campaign',
+                    });
+                }
+                if (isFb && fbq) {
+                    fbq('track', eventAction);
+
+                }
+            };
+            workoutsDiagnosticFlowObjApi.setDiagnosticComplete = function () {
+                const path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.update(path, true);
+                });
+            };
+            workoutsDiagnosticFlowObjApi.isToeflDiagnosticCompleted = function () {
+                var path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(path).then(function (isDiagnosticComplete) {
+                        return typeof(isDiagnosticComplete) === 'boolean' && isDiagnosticComplete === true;
+                    });
+                });
+            };
+            workoutsDiagnosticFlowObjApi.getBoardingProgressStatus = function () {
+                var path = StorageSrv.variables.appUserSpacePath + `/onBoardingProgress/step`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(path).then(function (status) {
+                        return status;
+                    });
+                });
+            };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
                     return !!diagnostic.isComplete;

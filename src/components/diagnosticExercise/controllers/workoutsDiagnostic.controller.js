@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('znk.infra-web-app.diagnosticExercise')
-        .controller('WorkoutsDiagnosticController', function (ENV, $state, currentState, $mdDialog, $window) {
+        .controller('WorkoutsDiagnosticController', function (ENV, $state, currentState, $mdDialog, $window, WorkoutsDiagnosticFlow) {
             'ngInject';
 
             const EXAM_STATE = 'app.diagnostic';
@@ -41,18 +41,22 @@
 
 
             function openLeavingSoSoonPopup() {
-                const isReminderSent = getFlagToSessionStorage();
-                const isOpen = !!document.querySelector('.leaving-so-soon-popup');
+                WorkoutsDiagnosticFlow.isToeflDiagnosticCompleted().then(completed => {
+                    if (!completed) {
+                        const isReminderSent = getFlagToSessionStorage();
+                        const isOpen = !!document.querySelector('.leaving-so-soon-popup');
 
-                if (!isOpen && !isReminderSent && isMicrophonePermissionAsked !== null) {
-                    return $mdDialog.show({
-                        controller: 'leavingSoSoonPopupCtrl',
-                        controllerAs: 'vm',
-                        templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
-                        clickOutsideToClose: true,
-                        escapeToClose: true
-                    });
-                }
+                        if (!isOpen && !isReminderSent && isMicrophonePermissionAsked !== null) {
+                            return $mdDialog.show({
+                                controller: 'leavingSoSoonPopupCtrl',
+                                controllerAs: 'vm',
+                                templateUrl: 'components/diagnosticExercise/templates/leavingSoSoonPopup.template.html',
+                                clickOutsideToClose: true,
+                                escapeToClose: true
+                            });
+                        }
+                    }
+                });
             }
 
 

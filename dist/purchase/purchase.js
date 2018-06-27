@@ -29,8 +29,8 @@
             },
             templateUrl: 'components/purchase/components/purchaseBtn/purchaseBtn.template.html',
             controllerAs: 'vm',
-            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "znkAnalyticsSrv", "StripeService", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
-                                  $filter, PurchaseStateEnum, $log, znkAnalyticsSrv, StripeService) {
+            controller: ["$scope", "ENV", "$q", "$sce", "AuthService", "$location", "purchaseService", "$timeout", "$filter", "PurchaseStateEnum", "$log", "StripeService", function ($scope, ENV, $q, $sce, AuthService, $location, purchaseService, $timeout,
+                                  $filter, PurchaseStateEnum, $log, StripeService) {
                 'ngInject';
 
                 var vm = this;
@@ -56,26 +56,31 @@
                 vm.purchaseZinkerzPro = function () {
                     purchaseService.hidePurchaseDialog();
                     $timeout(() => vm.purchaseState = PurchaseStateEnum.PENDING.enum);
-                    znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
-                    purchaseService.getProduct().then(product => {
-                        $log.debug(`purchaseZinkerzPro: productId: ${product.id}, price: ${product.price}`);
-                        const name = vm.translate('PURCHASE_POPUP.UPGRADE_TO_ZINKERZ_PRO');
-                        const description = vm.translate('PURCHASE_POPUP.DESCRIPTION');
-                        StripeService.openStripeModal(ENV.serviceId, product.id, product.price, name, description)
-                            .then(stripeRes => {
-                                if (!stripeRes.closedByUser) {
-                                    purchaseService.setPendingPurchase();
-                                    $log.debug(`purchaseZinkerzPro: User update to pending purchase`);
-                                    // The stripe web hook should update the firebase
-                                    // and the getAndBindToServer should trigger the event to change purchaseState to pro
-                                    purchaseService.showPurchaseDialog();
-                                } else {
-                                    $log.debug(`purchaseCredits: stripe modal closed by user`);
-                                    $timeout(() => vm.purchaseState = PurchaseStateEnum.NONE.enum);
-                                }
-                            });
+                   // znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderStarted'});
+                    purchaseService.getMarketingToefl().then(function (marketingObj) {
+                        if (marketingObj && marketingObj.status) {
+                            purchaseService.sendEvent('diagnostic', `App_Purchase_Start`, 'click', true);
+                        }
+                        purchaseService.getProduct().then(product => {
+                            $log.debug(`purchaseZinkerzPro: productId: ${product.id}, price: ${product.price}`);
+                            const name = vm.translate('PURCHASE_POPUP.UPGRADE_TO_ZINKERZ_PRO');
+                            const description = vm.translate('PURCHASE_POPUP.DESCRIPTION');
+                            StripeService.openStripeModal(ENV.serviceId, product.id, product.price, name, description)
+                                .then(stripeRes => {
+                                    if (!stripeRes.closedByUser) {
+                                        purchaseService.sendEvent('diagnostic', `App_Purchase_Completed`, 'click', true);
+                                        purchaseService.setPendingPurchase();
+                                        $log.debug(`purchaseZinkerzPro: User update to pending purchase`);
+                                        // The stripe web hook should update the firebase
+                                        // and the getAndBindToServer should trigger the event to change purchaseState to pro
+                                        purchaseService.showPurchaseDialog();
+                                    } else {
+                                        $log.debug(`purchaseCredits: stripe modal closed by user`);
+                                        $timeout(() => vm.purchaseState = PurchaseStateEnum.NONE.enum);
+                                    }
+                                });
+                        });
                     });
-
                 };
 
                 vm.showPurchaseError = function () {
@@ -133,7 +138,11 @@
                 vm.promoStatus = {
                     isApproved: false
                 };
-
+                purchaseService.getMarketingToefl().then(function (marketingObj) {
+                    if (marketingObj && marketingObj.status) {
+                        purchaseService.sendEvent('diagnostic', `App_Purchase_Page_Show`, 'click', true);
+                    }
+                });
                 vm.enablePromoCode = function (promoCodeId) {
                     var translate = $filter('translate');
                     AuthService.getAuth().then(authData => {
@@ -224,12 +233,15 @@
     );
 })();
 
+/*jshint -W117 */
+/*jshint unused:false*/
+
 (function (angular) {
     'use strict';
 
     angular.module('znk.infra-web-app.purchase').service('purchaseService',
-        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "znkAnalyticsSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
-                  PopUpSrv, znkAnalyticsSrv, StorageSrv, AuthService) {
+        ["$rootScope", "$state", "$q", "$mdDialog", "$filter", "InfraConfigSrv", "ENV", "$log", "$mdToast", "$window", "PopUpSrv", "StorageSrv", "AuthService", function ($rootScope, $state, $q, $mdDialog, $filter, InfraConfigSrv, ENV, $log, $mdToast, $window,
+                  PopUpSrv, StorageSrv, AuthService) {
             'ngInject';
 
             var self = this;
@@ -237,6 +249,49 @@
             var studentStorageProm = InfraConfigSrv.getStudentStorage();
             var pendingPurchaseDefer;
 
+            self.setPage = function (pageName) {
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
+            };
+
+            self.sendPage = function () {
+                if (ga) {
+                    ga('send', 'pageview');
+                }
+            };
+
+            self.updatePage = function (pageName) {
+                self.setPage(pageName);
+                self.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             * @param eventType - click etc.
+             * @param isFb - use facebook event
+             */
+            self.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
+                ga('send', {
+                    hitType: 'event',
+                    eventCategory: eventCategory,
+                    eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                    eventLabel: 'Toefl Campaign',
+                });
+                if (isFb && fbq) {
+                    fbq('track', eventAction);
+
+                }
+            };
+            self.getMarketingToefl = function () {
+                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(marketingPath).then(function (marketing) {
+                        return marketing;
+                    });
+                });
+            };
             self.getPath = function (param) {
                 return AuthService.getAuth().then(authData => {
                     if (!authData) {
@@ -261,9 +316,9 @@
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
                     if (+params.purchaseSuccess === 1) {
                         self.setPendingPurchase();
-                        znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
+                        //  znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
                     } else {
-                        znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
+                        // znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
                     }
                     self.showPurchaseDialog();
                 } else {
@@ -333,9 +388,9 @@
             };
 
             self.showPurchaseDialog = function () {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'purchaseModalOpened'
-                });
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'purchaseModalOpened'
+                // });
                 return $mdDialog.show({
                     controller: 'PurchaseDialogController',
                     templateUrl: 'components/purchase/templates/purchasePopup.template.html',

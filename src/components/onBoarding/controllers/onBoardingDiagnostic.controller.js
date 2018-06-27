@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').controller('OnBoardingDiagnosticController',
-        function (OnBoardingService, $state, znkAnalyticsSrv) {
+        function (OnBoardingService, $state) {
             'ngInject';
 
             var vm = this;
@@ -11,13 +11,17 @@
             vm.showIconsSection = angular.isDefined(onBordingSettings.showIconsSection) ? onBordingSettings.showIconsSection : true;
             getMarketingToefl();
 
-            this.setOnboardingCompleted = function (nextState, eventText) {
-                znkAnalyticsSrv.eventTrack({
-                    eventName: 'onBoardingDiagnosticStep',
-                    props: {
-                        clicked: eventText
-                    }
-                });
+            this.setOnboardingCompleted = function (nextState) {
+                // znkAnalyticsSrv.eventTrack({
+                //     eventName: 'onBoardingDiagnosticStep',
+                //     props: {
+                //         clicked: eventText
+                //     }
+                // });
+                if (!vm.showLaterButton) {
+                    OnBoardingService.sendEvent('diagnostic', `Diagnostic_Start`, 'click', true);
+                }
+
                 OnBoardingService.setOnBoardingStep(OnBoardingService.steps.ROADMAP).then(function () {
                     if (nextState === 'app.diagnostic' && onBordingSettings.forceSkipIntro) {
                         $state.go(nextState, {forceSkipIntro: true});
@@ -29,7 +33,12 @@
 
             function getMarketingToefl() {
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                    vm.showLaterButton = !(marketingObj && marketingObj.status);
+                    if (marketingObj && marketingObj.status) {
+                        vm.showLaterButton = false;
+                        OnBoardingService.updatePage('onBoardingDiagnostic');
+                    } else {
+                        vm.showLaterButton = true;
+                    }
                 });
             }
         });

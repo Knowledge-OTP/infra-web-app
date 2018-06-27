@@ -709,8 +709,8 @@
      *
      * */
     angular.module('znk.infra-web-app.completeExercise').controller('CompleteExerciseBaseZnkExerciseCtrl',
-        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "znkAnalyticsSrv", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "CategoryService", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
-                  $log, znkAnalyticsSrv, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
+        ["settings", "ExerciseTypeEnum", "ZnkExerciseUtilitySrv", "ZnkExerciseViewModeEnum", "$q", "$translate", "PopUpSrv", "$log", "ZnkExerciseSrv", "exerciseEventsConst", "StatsEventsHandlerSrv", "$rootScope", "$location", "ENV", "UtilitySrv", "ExerciseCycleSrv", "ExerciseReviewStatusEnum", "znkSessionDataSrv", "CategoryService", function (settings, ExerciseTypeEnum, ZnkExerciseUtilitySrv, ZnkExerciseViewModeEnum, $q, $translate, PopUpSrv,
+                  $log, ZnkExerciseSrv, exerciseEventsConst, StatsEventsHandlerSrv, $rootScope, $location, ENV,
                   UtilitySrv, ExerciseCycleSrv, ExerciseReviewStatusEnum, znkSessionDataSrv, CategoryService) {
             'ngInject';
 
@@ -950,13 +950,13 @@
                         onQuestionAnswered: function onQuestionAnswered() {
                             exerciseResult.$save();
                         },
-                        onSlideChange: function (currQuestion, currentIndex) {
-                            var indexPlusOne = currentIndex + 1;
-                            znkAnalyticsSrv.pageTrack({
-                                props: {
-                                    url: $location.url() + '/index/' + indexPlusOne + '/questionId/' + (currQuestion.id || '')
-                                }
-                            });
+                        onSlideChange: function () {
+                            // var indexPlusOne = currentIndex + 1;
+                            // znkAnalyticsSrv.pageTrack({
+                            //     props: {
+                            //         url: $location.url() + '/index/' + indexPlusOne + '/questionId/' + (currQuestion.id || '')
+                            //     }
+                            // });
                         },
                         onExit: function () {
                             if (viewMode !== ZnkExerciseViewModeEnum.REVIEW.enum) {

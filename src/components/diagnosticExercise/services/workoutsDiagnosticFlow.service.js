@@ -1,3 +1,5 @@
+/*jshint -W117 */
+
 (function (angular) {
     'use strict';
 
@@ -8,8 +10,7 @@
         this.setDiagnosticSettings = function (diagnosticSettings) {
             _diagnosticSettings = diagnosticSettings;
         };
-        this.$get = function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv,
-                              znkAnalyticsSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
+        this.$get = function (WORKOUTS_DIAGNOSTIC_FLOW, $log, ExerciseTypeEnum, $q, ExamSrv, ExerciseResultSrv, $injector, CategoryService, ENV, $http, StorageSrv, InfraConfigSrv) {
             'ngInject';
 
             const reminderApi = `${ENV.znkBackendBaseUrl}/reminder`;
@@ -139,16 +140,16 @@
                     var examResults = results[1];
 
                     if (examResults.isComplete) {
-                        if (flagForPreSummery) {
-                            znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
-                        }
+                        // if (flagForPreSummery) {
+                        //     znkAnalyticsSrv.eventTrack({eventName: 'diagnosticEnd'});
+                        // }
                         currentState.state = flagForPreSummery ? '.preSummary' : '.summary';
                         return currentState;
                     }
 
                     if (!examResults.isStarted) {
-                        znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
-                        znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
+                        // znkAnalyticsSrv.eventTrack({eventName: 'diagnosticStart'});
+                        // znkAnalyticsSrv.timeTrack({eventName: 'diagnosticEnd'});
                         examResults.isStarted = true;
                         skipIntroBool = false;
                         examResults.$save();
@@ -339,7 +340,65 @@
                     });
                 });
             };
+            workoutsDiagnosticFlowObjApi.setPage = function (pageName) {
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
+            };
 
+            workoutsDiagnosticFlowObjApi.sendPage = function () {
+                if (ga) {
+                    ga('send', 'pageview');
+                }
+            };
+
+            workoutsDiagnosticFlowObjApi.updatePage = function (pageName) {
+                workoutsDiagnosticFlowObjApi.setPage(pageName);
+                workoutsDiagnosticFlowObjApi.sendPage();
+            };
+            /**
+             * sendEvent
+             * @param eventCategory - Typically the object that was interacted with (e.g. 'Video')
+             * @param eventAction - The type of interaction (e.g. 'play')
+             * @param eventType - click etc.
+             * @param isFb - use facebook event
+             */
+            workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
+                if (ga) {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                        eventLabel: 'Toefl Campaign',
+                    });
+                }
+                if (isFb && fbq) {
+                    fbq('track', eventAction);
+
+                }
+            };
+            workoutsDiagnosticFlowObjApi.setDiagnosticComplete = function () {
+                const path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.update(path, true);
+                });
+            };
+            workoutsDiagnosticFlowObjApi.isToeflDiagnosticCompleted = function () {
+                var path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(path).then(function (isDiagnosticComplete) {
+                        return typeof(isDiagnosticComplete) === 'boolean' && isDiagnosticComplete === true;
+                    });
+                });
+            };
+            workoutsDiagnosticFlowObjApi.getBoardingProgressStatus = function () {
+                var path = StorageSrv.variables.appUserSpacePath + `/onBoardingProgress/step`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(path).then(function (status) {
+                        return status;
+                    });
+                });
+            };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
                     return !!diagnostic.isComplete;

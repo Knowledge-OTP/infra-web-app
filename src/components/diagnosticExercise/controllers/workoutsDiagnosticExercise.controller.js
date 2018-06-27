@@ -6,7 +6,7 @@
     angular.module('znk.infra-web-app.diagnosticExercise').controller('WorkoutsDiagnosticExerciseController',
         function (ZnkExerciseSlideDirectionEnum, ZnkExerciseViewModeEnum, exerciseData, WorkoutsDiagnosticFlow, $location,
                   $log, $state, ExerciseResultSrv, ExerciseTypeEnum, $q, $timeout, ZnkExerciseUtilitySrv,
-                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, znkAnalyticsSrv, StatsEventsHandlerSrv,
+                  $rootScope, ExamTypeEnum, exerciseEventsConst, $filter, SubjectEnum, StatsEventsHandlerSrv,
                   $translate, ExerciseReviewStatusEnum, CategoryService, MarketingStatusEnum) {
             'ngInject';
             var self = this;
@@ -267,7 +267,7 @@
                     if (!_isLastQuestion()) {
                         numQuestionCounter = numQuestionCounter + 1;
                         _setNumSlideForNgModel(numQuestionCounter);
-                        znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
+                        // znkAnalyticsSrv.pageTrack({props: {url: $location.url() + '/index/' + numQuestionCounter + '/questionId/' + (value.id || '')}});
                     } else {
                         self.actions.forceDoneBtnDisplay(true);
                     }
@@ -295,40 +295,50 @@
                     WorkoutsDiagnosticFlow.markSectionAsDoneToggle(true);
                     _onDoneSaveResultsData().then(function () {
                         _isLastSubject().then(function (isLastSubject) {
-                            znkAnalyticsSrv.eventTrack({
-                                eventName: 'diagnosticSectionCompleted',
-                                questionsArr: exerciseData.resultsData.questionResults,
-                                props: {
-                                    sectionId: exerciseData.questionsData.id,
-                                    order: exerciseData.questionsData.order,
-                                    subjectId: self.subjectId
+                            WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
+                                if (marketingObj && marketingObj.status) {
+                                    WorkoutsDiagnosticFlow.sendEvent('diagnostic', `done-questionId(${exerciseData.questionsData.id})-subjectId(${self.subjectId})-order(${exerciseData.questionsData.order})-isLastSubject(${isLastSubject})`, 'click', false);
+                                }
+                                // znkAnalyticsSrv.eventTrack({
+                                //     eventName: 'diagnosticSectionCompleted',
+                                //     questionsArr: exerciseData.resultsData.questionResults,
+                                //     props: {
+                                //         sectionId: exerciseData.questionsData.id,
+                                //         order: exerciseData.questionsData.order,
+                                //         subjectId: self.subjectId
+                                //     }
+                                // });
+                                if (isLastSubject) {
+                                    WorkoutsDiagnosticFlow.setDiagnosticComplete().then(()=>{
+                                        if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
+                                            WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_End`, 'click', true);
+                                            WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
+                                                let selectedNum;
+                                                let selectedStatus;
+                                                if (globalVariable && globalVariable.abTesting) {
+                                                    const abTestingNum = parseFloat(globalVariable.abTesting);
+                                                    selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
+                                                } else { // in case the globalVariable or the abTesting is missing
+                                                    selectedNum = 1;
+                                                }
+                                                selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
+                                                WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
+                                                    $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
+                                                    _goToCurrentState(true);
+                                                });
+                                            });
+                                        } else {
+                                            _goToCurrentState(true);
+                                        }
+                                    });
+                                    //
+                                } else {
+                                    if (marketingObj && marketingObj.status) {
+                                        WorkoutsDiagnosticFlow.sendEvent('diagnostic', `Diagnostic_Section_End`, 'click', true);
+                                    }
+                                    _goToCurrentState();
                                 }
                             });
-                            if (isLastSubject) {
-                                WorkoutsDiagnosticFlow.getMarketingToefl().then(function (marketingObj) {
-                                    if (marketingObj && marketingObj.status && marketingObj.status === MarketingStatusEnum.DIAGNOSTIC.enum) {
-                                        WorkoutsDiagnosticFlow.getGlobalVariables().then(function (globalVariable) {
-                                            let selectedNum;
-                                            let selectedStatus;
-                                            if (globalVariable && globalVariable.abTesting) {
-                                                const abTestingNum = parseFloat(globalVariable.abTesting);
-                                                selectedNum = (abTestingNum < Math.random()) ? 1 : 0;
-                                            } else { // in case the globalVariable or the abTesting is missing
-                                                selectedNum = 1;
-                                            }
-                                            selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
-                                            WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
-                                                $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
-                                                _goToCurrentState(true);
-                                            });
-                                        });
-                                    } else {
-                                        _goToCurrentState(true);
-                                    }
-                                });
-                            } else {
-                                _goToCurrentState();
-                            }
                         });
                     });
                 },
