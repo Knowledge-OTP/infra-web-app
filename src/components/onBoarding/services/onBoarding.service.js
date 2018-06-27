@@ -45,11 +45,15 @@
                 });
             };
             onBoardingServiceObj.setPage = function (pageName) {
-                ga('set', 'page', `/${pageName}.html`);
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
             };
 
             onBoardingServiceObj.sendPage = function () {
-                ga('send', 'pageview');
+                if (ga) {
+                    ga('send', 'pageview');
+                }
             };
 
             onBoardingServiceObj.updatePage = function (pageName) {
@@ -64,12 +68,14 @@
              * @param isFb - use facebook event
              */
             onBoardingServiceObj.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
-                ga('send', {
-                    hitType: 'event',
-                    eventCategory: eventCategory,
-                    eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
-                    eventLabel: 'Toefl Campaign',
-                });
+                if (ga) {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                        eventLabel: 'Toefl Campaign',
+                    });
+                }
                 if (isFb && fbq) {
                     fbq('track', eventAction);
 

@@ -250,11 +250,15 @@
             var pendingPurchaseDefer;
 
             self.setPage = function (pageName) {
-                ga('set', 'page', `/${pageName}.html`);
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
             };
 
             self.sendPage = function () {
-                ga('send', 'pageview');
+                if (ga) {
+                    ga('send', 'pageview');
+                }
             };
 
             self.updatePage = function (pageName) {
@@ -312,9 +316,9 @@
                 if (!angular.equals(params, {}) && params.purchaseSuccess) {
                     if (+params.purchaseSuccess === 1) {
                         self.setPendingPurchase();
-                      //  znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
+                        //  znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderPending'});
                     } else {
-                       // znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
+                        // znkAnalyticsSrv.eventTrack({eventName: 'purchaseOrderCancelled'});
                     }
                     self.showPurchaseDialog();
                 } else {

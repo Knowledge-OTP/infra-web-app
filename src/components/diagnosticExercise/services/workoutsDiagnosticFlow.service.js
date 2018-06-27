@@ -341,11 +341,15 @@
                 });
             };
             workoutsDiagnosticFlowObjApi.setPage = function (pageName) {
-                ga('set', 'page', `/${pageName}.html`);
+                if (ga) {
+                    ga('set', 'page', `/${pageName}.html`);
+                }
             };
 
             workoutsDiagnosticFlowObjApi.sendPage = function () {
-                ga('send', 'pageview');
+                if (ga) {
+                    ga('send', 'pageview');
+                }
             };
 
             workoutsDiagnosticFlowObjApi.updatePage = function (pageName) {
@@ -360,16 +364,40 @@
              * @param isFb - use facebook event
              */
             workoutsDiagnosticFlowObjApi.sendEvent = function (eventCategory, eventAction, eventType, isFb) {
-                ga('send', {
-                    hitType: 'event',
-                    eventCategory: eventCategory,
-                    eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
-                    eventLabel: 'Toefl Campaign',
-                });
+                if (ga) {
+                    ga('send', {
+                        hitType: 'event',
+                        eventCategory: eventCategory,
+                        eventAction: eventType ? `${eventType}-${eventAction}` : eventAction,
+                        eventLabel: 'Toefl Campaign',
+                    });
+                }
                 if (isFb && fbq) {
                     fbq('track', eventAction);
 
                 }
+            };
+            workoutsDiagnosticFlowObjApi.setDiagnosticComplete = function () {
+                const path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.update(path, true);
+                });
+            };
+            workoutsDiagnosticFlowObjApi.isToeflDiagnosticCompleted = function () {
+                var path = StorageSrv.variables.appUserSpacePath + `/isDiagnosticComplete`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(path).then(function (isDiagnosticComplete) {
+                        return typeof(isDiagnosticComplete) === 'boolean' && isDiagnosticComplete === true;
+                    });
+                });
+            };
+            workoutsDiagnosticFlowObjApi.getBoardingProgressStatus = function () {
+                var path = StorageSrv.variables.appUserSpacePath + `/onBoardingProgress/step`;
+                return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                    return studentStorage.get(path).then(function (status) {
+                        return status;
+                    });
+                });
             };
             workoutsDiagnosticFlowObjApi.isDiagnosticCompleted = function () {
                 return workoutsDiagnosticFlowObjApi.getDiagnostic().then(function (diagnostic) {
