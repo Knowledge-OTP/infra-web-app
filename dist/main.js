@@ -5177,7 +5177,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     .catch((err) => $log.error('getGlobalVariables: Failed to get global variables. Error: ', err));
             };
             workoutsDiagnosticFlowObjApi.setReminder = (serviceId, uid, userTimeout, email) => {
-                const setReminderApi = `${reminderApi}/setReminder`;
+                const setReminderApi = `${reminderApi}/createReminder`;
                 return $http.post(setReminderApi, {serviceId, uid, userTimeout, email})
                     .then(reminder => reminder.data)
                     .catch((err) => $log.error('workoutsDiagnosticFlowObjApi.setReminder: Failed to setReminder. Error: ', err));
