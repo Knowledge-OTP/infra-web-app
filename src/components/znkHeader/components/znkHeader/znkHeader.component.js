@@ -7,7 +7,7 @@
             templateUrl: 'components/znkHeader/components/znkHeader/znkHeader.template.html',
             controllerAs: 'vm',
             controller: function ($scope, $window, purchaseService, znkHeaderSrv, OnBoardingService, ActivePanelSrv, MyProfileSrv, feedbackSrv, $rootScope,
-                UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout, MyLiveLessons, NavigationService) {
+                                  UserProfileService, $injector, PurchaseStateEnum, userGoalsSelectionService, AuthService, ENV, $timeout, MyLiveLessons, NavigationService) {
                 'ngInject';
 
                 var vm = this;
@@ -43,7 +43,7 @@
                     vm.purchaseData = purchaseData;
                 });
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
-                    vm.showheaderlinks = !(marketingObj && marketingObj.status);
+                    vm.showheaderlinks = !(marketingObj && marketingObj.status && marketingObj.status !== 7);
                 });
                 $scope.$watch(function () {
                     return vm.purchaseData;
