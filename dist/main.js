@@ -123,8 +123,6 @@
                         activePanelInit();
 
                         function activePanelInit() {
-                            getTranslations();
-
                             scope.d = {
                                 states: {
                                     NONE: 0,
@@ -140,6 +138,8 @@
                                 shareMyScreen: shareMyScreen,
                                 openHangouts: openHangouts
                             };
+
+                            getTranslations();
 
                             UserProfileService.getProfile().then(userProfile => scope.d.userProfile = userProfile);
 
