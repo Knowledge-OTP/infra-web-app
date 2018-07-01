@@ -57,7 +57,6 @@
 
                             element.on('$destroy', () => {
                                 destroyTimer();
-                                stopTrackUserPresence();
                                 ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
                                 LiveSessionSrv.unregisterFromCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
                                 CallsEventsSrv.unregisterToCurrUserCallStateChanges(listenToCallsStatus);
@@ -133,7 +132,6 @@
                                     scope.d.shareScreenBtnsEnable = true;
                                     destroyTimer();
                                     endScreenSharing();
-                                    stopTrackUserPresence();
                                     deleteStudentHangoutsPath(liveSessionData.studentId);
                                     break;
                                 case scope.d.states.LIVE_SESSION:
@@ -224,16 +222,17 @@
                             if (isStudent || isTeacher) {
                                 // Track other user presence
                                 const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
-                                PresenceService.startTrackUserPresence(uid, (newStatus) => scope.d.currentUserPresenceStatus = newStatus);
+                                scope.$watch(() => {
+                                    return PresenceService.getUserStatusSync(uid);
+                                }, (newStatus) => {
+                                    if (angular.isDefined(newStatus) && scope.d.currentUserPresenceStatus !== newStatus) {
+                                        scope.d.currentUserPresenceStatus = newStatus;
+                                    }
+                                });
                             }
                             else {
                                 $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
                             }
-                        }
-
-                        function stopTrackUserPresence() {
-                            PresenceService.stopTrackUserPresence(liveSessionData.studentId);
-                            PresenceService.stopTrackUserPresence(liveSessionData.educatorId);
                         }
 
                         // Listen to status changes in ScreenSharing
