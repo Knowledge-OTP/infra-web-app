@@ -15,53 +15,81 @@
                     scope: {},
                     link: function (scope, element) {
 
-                        var durationToDisplay,
-                            timerInterval,
-                            liveSessionData,
-                            liveSessionStatus = 0,
-                            liveSessionDuration = 0,
-                            timerSecondInterval = 1000,
-                            activePanelVisibleClassName = 'activePanel-visible',
-                            isStudent = ENV.appContext.toLowerCase() === 'student',
-                            isTeacher = ENV.appContext.toLowerCase() === 'dashboard',
-                            prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum,
-                            bodyDomElem = angular.element($window.document.body),
-                            translateNamespace = 'ACTIVE_PANEL';
+                        const timerSecondInterval = 1000;
+                        const activePanelVisibleClassName = 'activePanel-visible';
+                        const isStudent = ENV.appContext.toLowerCase() === 'student';
+                        const isTeacher = ENV.appContext.toLowerCase() === 'dashboard';
+                        let durationToDisplay;
+                        let timerInterval;
+                        let liveSessionData;
+                        let liveSessionDuration = 0;
+                        let prevLiveSessionStatus = UserLiveSessionStateEnum.NONE.enum;
 
-                        $translate([
-                            translateNamespace + '.' + 'SHOW_STUDENT_SCREEN',
-                            translateNamespace + '.' + 'SHOW_TEACHER_SCREEN',
-                            translateNamespace + '.' + 'SHARE_MY_SCREEN',
-                            translateNamespace + '.' + 'END_SCREEN_SHARING'
-                        ]).then(function (translation) {
-                            scope.d.translatedStrings = {
-                                SHOW_STUDENT_SCREEN: translation[translateNamespace + '.' + 'SHOW_STUDENT_SCREEN'],
-                                SHOW_TEACHER_SCREEN: translation[translateNamespace + '.' + 'SHOW_TEACHER_SCREEN'],
-                                SHARE_MY_SCREEN: translation[translateNamespace + '.' + 'SHARE_MY_SCREEN'],
-                                END_SCREEN_SHARING: translation[translateNamespace + '.' + 'END_SCREEN_SHARING']
+
+                        activePanelInit();
+
+                        function activePanelInit() {
+                            scope.d = {
+                                states: {
+                                    NONE: 0,
+                                    LIVE_SESSION: 1
+                                },
+                                shareScreenBtnsEnable: true,
+                                disableAllBtns: false,
+                                isTeacher: isTeacher,
+                                presenceStatusMap: PresenceService.userStatus,
+                                endScreenSharing: endScreenSharing,
+                                endSession: endLiveSession,
+                                viewOtherUserScreen: viewOtherUserScreen,
+                                shareMyScreen: shareMyScreen,
+                                openHangouts: openHangouts
                             };
-                        }).catch(function (err) {
-                            $log.debug('Could not fetch translation', err);
-                        });
 
-                        UserProfileService.getProfile().then(function (userProfile) {
-                            scope.d.userProfile = userProfile;
-                        });
+                            getTranslations();
+
+                            UserProfileService.getProfile().then(userProfile => scope.d.userProfile = userProfile);
+
+                            ScreenSharingSrv.registerToCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
+
+                            LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
+
+                            CallsEventsSrv.registerToCurrUserCallStateChanges(listenToCallsStatus);
+
+                            element.on('$destroy', () => {
+                                destroyTimer();
+                                ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
+                                LiveSessionSrv.unregisterFromCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
+                                CallsEventsSrv.unregisterToCurrUserCallStateChanges(listenToCallsStatus);
+                            });
+
+                        }
+
+                        function getTranslations() {
+                            const translateNamespace = 'ACTIVE_PANEL';
+                            $translate([
+                                `${translateNamespace}.SHOW_STUDENT_SCREEN`,
+                                `${translateNamespace}.SHOW_TEACHER_SCREEN`,
+                                `${translateNamespace}.SHARE_MY_SCREEN`,
+                                `${translateNamespace}.END_SCREEN_SHARING`
+                            ]).then(translation => {
+                                scope.d.translatedStrings = {
+                                    SHOW_STUDENT_SCREEN: translation[`${translateNamespace}.SHOW_STUDENT_SCREEN`],
+                                    SHOW_TEACHER_SCREEN: translation[`${translateNamespace}.SHOW_TEACHER_SCREEN`],
+                                    SHARE_MY_SCREEN: translation[`${translateNamespace}.SHARE_MY_SCREEN`],
+                                    END_SCREEN_SHARING: translation[`${translateNamespace}.END_SCREEN_SHARING`]
+                                };
+                            }).catch(err => {
+                                $log.debug('Could not fetch translation', err);
+                            });
+                        }
 
                         function endLiveSession() {
-                            function endSessionAndStopTrack(liveSessionData) {
-                                deleteStudentPath(liveSessionData.studentId);
-                                LiveSessionSrv.endLiveSession(liveSessionData.guid);
-                                PresenceService.stopTrackUserPresence(liveSessionData.studentId);
-                                PresenceService.stopTrackUserPresence(liveSessionData.educatorId);
-                            }
-
                             if (liveSessionData) {
-                                endSessionAndStopTrack(liveSessionData);
+                                LiveSessionSrv.endLiveSession(liveSessionData.guid);
                             } else {
-                                LiveSessionSrv.getActiveLiveSessionData().then(function (liveSessionData) {
+                                LiveSessionSrv.getActiveLiveSessionData().then(liveSessionData => {
                                     if (liveSessionData) {
-                                        endSessionAndStopTrack(liveSessionData);
+                                        LiveSessionSrv.endLiveSession(liveSessionData.guid);
                                     }
                                 });
                             }
@@ -69,7 +97,7 @@
 
                         function startTimer() {
                             $log.debug('call timer started');
-                            timerInterval = $interval(function () {
+                            timerInterval = $interval(() => {
                                 liveSessionDuration += timerSecondInterval;
                                 durationToDisplay = $filter('formatDuration')(liveSessionDuration / 1000, 'hh:MM:SS', true);
                                 angular.element(element[0].querySelector('.live-session-duration')).text(durationToDisplay);
@@ -84,7 +112,7 @@
 
                         function endScreenSharing() {
                             if (scope.d.screenShareStatus !== UserScreenSharingStateEnum.NONE.enum) {
-                                ScreenSharingSrv.getActiveScreenSharingData().then(function (screenSharingData) {
+                                ScreenSharingSrv.getActiveScreenSharingData().then(screenSharingData => {
                                     if (screenSharingData) {
                                         ScreenSharingSrv.endSharing(screenSharingData.guid);
                                     }
@@ -92,9 +120,10 @@
                             }
                         }
 
-                        function updateStatus() {
-                            scope.d.currStatus = liveSessionStatus;
+                        function updateStatus(newLiveSessionStatus) {
+                            scope.d.currStatus = newLiveSessionStatus;
                             $log.debug('ActivePanel d.currStatus: ', scope.d.currStatus);
+                            const bodyDomElem = angular.element($window.document.body);
 
                             switch (scope.d.currStatus) {
                                 case scope.d.states.NONE:
@@ -103,10 +132,14 @@
                                     scope.d.shareScreenBtnsEnable = true;
                                     destroyTimer();
                                     endScreenSharing();
+                                    deleteStudentHangoutsPath(liveSessionData.studentId);
                                     break;
                                 case scope.d.states.LIVE_SESSION:
                                     $log.debug('ActivePanel State: LIVE_SESSION');
                                     bodyDomElem.addClass(activePanelVisibleClassName);
+                                    liveSessionDuration = getRoundTime() - liveSessionData.startTime;
+                                    startTrackUserPresence();
+                                    getCalleeName();
                                     startTimer();
                                     break;
                                 default:
@@ -118,82 +151,87 @@
                             return Math.floor(Date.now() / 1000) * 1000;
                         }
 
-                        function trackUserPresenceCB(userId, newStatus) {
-                            scope.d.currentUserPresenceStatus = newStatus;
-
-                            CallsUiSrv.getCalleeName(userId).then(function (calleeName) {
+                        function getCalleeName() {
+                            const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
+                            CallsUiSrv.getCalleeName(uid).then(calleeName => {
                                 scope.d.calleeName = calleeName;
                                 scope.d.callBtnModel = {
                                     isOffline: scope.d.currentUserPresenceStatus === PresenceService.userStatus.OFFLINE,
-                                    receiverId: userId
+                                    receiverId: uid
                                 };
                             });
                         }
 
                         function openHangouts() {
-                            if (!scope.d.userProfile || !scope.d.userProfile.teacherInfo || !scope.d.userProfile.teacherInfo.hangoutsUri) {
-                                return;
+                            if (scope.d.userProfile && scope.d.userProfile.teacherInfo && scope.d.userProfile.teacherInfo.hangoutsUri) {
+                                NavigationService.navigateToUrl(scope.d.userProfile.teacherInfo.hangoutsUri);
+                                LiveSessionSrv.getActiveLiveSessionData().then(newLiveSessionData => {
+                                    if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
+                                        liveSessionData = newLiveSessionData;
+                                    }
+                                    return writeToStudentPath(liveSessionData.studentId, scope.d.userProfile);
+                                });
                             }
-                            NavigationService.navigateToUrl(scope.d.userProfile.teacherInfo.hangoutsUri);
-                            LiveSessionSrv.getActiveLiveSessionData().then(function (newLiveSessionData) {
-                                if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
-                                    liveSessionData = newLiveSessionData;
-                                }
-                                return writeToStudentPath(liveSessionData.studentId, scope.d.userProfile);
-                            });
                         }
 
                         function writeToStudentPath(studentId, educatorProfile) {
-                            InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
+                            InfraConfigSrv.getStudentStorage().then(studentStorage => {
                                 const studentHangoutsPath = getHangoutsSessionRoute(studentId);
-                                const dataToSave = {
-                                    email: educatorProfile.authEmail || educatorProfile.email,
-                                    hangoutsUri: educatorProfile.teacherInfo.hangoutsUri
-                                };
-                                return studentStorage.set(studentHangoutsPath, dataToSave);
+                                const email = educatorProfile.authEmail || educatorProfile.email;
+                                const hangoutsUri = educatorProfile.teacherInfo.hangoutsUri;
+
+                                return studentStorage.set(studentHangoutsPath, { email, hangoutsUri });
                             });
                         }
 
-                        function deleteStudentPath(studentId) {
-                            InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
-                                const studentHangoutsPath = getHangoutsSessionRoute(studentId);
-                                return studentStorage.update(studentHangoutsPath, null);
-                            });
+                        function deleteStudentHangoutsPath(studentId) {
+                            if (studentId) {
+                                InfraConfigSrv.getStudentStorage().then(studentStorage => {
+                                    const studentHangoutsPath = getHangoutsSessionRoute(studentId);
+                                    return studentStorage.update(studentHangoutsPath, null);
+                                });
+                            } else {
+                                $log.debug('deleteStudentHangoutsPath: studentId is required');
+                            }
+
                         }
 
                         function getHangoutsSessionRoute(studentId) {
                             return '/users/' + studentId + '/hangoutsSession';
                         }
 
-
                         function listenToLiveSessionStatus(newLiveSessionStatus) {
                             if (prevLiveSessionStatus !== newLiveSessionStatus) {
                                 prevLiveSessionStatus = newLiveSessionStatus;
-                                LiveSessionSrv.getActiveLiveSessionData().then(function (newLiveSessionData) {
+                                LiveSessionSrv.getActiveLiveSessionData().then(newLiveSessionData => {
                                     if (!liveSessionData || !angular.equals(liveSessionData, newLiveSessionData)) {
                                         liveSessionData = newLiveSessionData;
                                     }
 
-                                    if (isTeacher) {
-                                        PresenceService.startTrackUserPresence(liveSessionData.studentId, trackUserPresenceCB.bind(null, liveSessionData.studentId));
-                                    } else if (isStudent) {
-                                        PresenceService.startTrackUserPresence(liveSessionData.educatorId, trackUserPresenceCB.bind(null, liveSessionData.educatorId));
-                                    } else {
-                                        $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
-                                    }
-
-                                    var isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
-                                    var isConfirmed = liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum;
+                                    const isEnded = liveSessionData.status === LiveSessionStatusEnum.ENDED.enum;
+                                    const isConfirmed = liveSessionData.status === LiveSessionStatusEnum.CONFIRMED.enum;
                                     if (isEnded || isConfirmed) {
-                                        if (isConfirmed) {
-                                            liveSessionStatus = scope.d.states.LIVE_SESSION;
-                                            liveSessionDuration = getRoundTime() - liveSessionData.startTime;
-                                        } else {
-                                            liveSessionStatus = scope.d.states.NONE;
-                                        }
-                                        updateStatus();
+                                        const newLiveSessionStatus = isConfirmed ? scope.d.states.LIVE_SESSION : scope.d.states.NONE;
+                                        updateStatus(newLiveSessionStatus);
                                     }
                                 });
+                            }
+                        }
+
+                        function startTrackUserPresence() {
+                            if (isStudent || isTeacher) {
+                                // Track other user presence
+                                const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
+                                scope.$watch(() => {
+                                    return PresenceService.getUserStatusSync(uid);
+                                }, (newStatus) => {
+                                    if (angular.isDefined(newStatus) && scope.d.currentUserPresenceStatus !== newStatus) {
+                                        scope.d.currentUserPresenceStatus = newStatus;
+                                    }
+                                });
+                            }
+                            else {
+                                $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
                             }
                         }
 
@@ -212,7 +250,7 @@
                         }
 
                         function viewOtherUserScreen() {
-                            var sharerData = {
+                            const sharerData = {
                                 isTeacher: !isTeacher,
                                 uid: isTeacher ? liveSessionData.studentId : liveSessionData.educatorId
                             };
@@ -221,7 +259,7 @@
                         }
 
                         function shareMyScreen() {
-                            var viewerData = {
+                            const viewerData = {
                                 isTeacher: !isTeacher,
                                 uid: isTeacher ? liveSessionData.studentId : liveSessionData.educatorId
                             };
@@ -230,35 +268,9 @@
                         }
 
 
-                        scope.d = {
-                            states: {
-                                NONE: 0,
-                                LIVE_SESSION: 1
-                            },
-                            shareScreenBtnsEnable: true,
-                            disableAllBtns: false,
-                            isTeacher: isTeacher,
-                            presenceStatusMap: PresenceService.userStatus,
-                            endScreenSharing: endScreenSharing,
-                            endSession: endLiveSession,
-                            viewOtherUserScreen: viewOtherUserScreen,
-                            shareMyScreen: shareMyScreen,
-                            openHangouts: openHangouts
-                        };
-
-                        element.on('$destroy', function () {
-                            destroyTimer();
-                        });
-
                         function listenToCallsStatus(newCallsStatus) {
                             scope.d.disableAllBtns = newCallsStatus && newCallsStatus.status === CallsStatusEnum.PENDING_CALL.enum;
                         }
-
-                        ScreenSharingSrv.registerToCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
-
-                        LiveSessionSrv.registerToCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
-
-                        CallsEventsSrv.registerToCurrUserCallStateChanges(listenToCallsStatus);
                     }
                 };
             });
