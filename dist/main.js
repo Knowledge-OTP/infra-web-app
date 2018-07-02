@@ -151,11 +151,11 @@
 
                             element.on('$destroy', () => {
                                 destroyTimer();
+                                stopTrackUserPresence();
                                 ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
                                 LiveSessionSrv.unregisterFromCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
                                 CallsEventsSrv.unregisterToCurrUserCallStateChanges(listenToCallsStatus);
                             });
-
                         }
 
                         function getTranslations() {
@@ -226,6 +226,7 @@
                                     scope.d.shareScreenBtnsEnable = true;
                                     destroyTimer();
                                     endScreenSharing();
+                                    stopTrackUserPresence();
                                     deleteStudentHangoutsPath(liveSessionData.studentId);
                                     break;
                                 case scope.d.states.LIVE_SESSION:
@@ -316,17 +317,16 @@
                             if (isStudent || isTeacher) {
                                 // Track other user presence
                                 const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
-                                scope.$watch(() => {
-                                    return PresenceService.getUserStatusSync(uid);
-                                }, (newStatus) => {
-                                    if (angular.isDefined(newStatus) && scope.d.currentUserPresenceStatus !== newStatus) {
-                                        scope.d.currentUserPresenceStatus = newStatus;
-                                    }
-                                });
+                                PresenceService.startTrackUserPresence(uid, (newStatus) => scope.d.currentUserPresenceStatus = newStatus);
                             }
                             else {
                                 $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
                             }
+                        }
+
+                        function stopTrackUserPresence() {
+                            const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
+                            PresenceService.stopTrackUserPresence(uid);
                         }
 
                         // Listen to status changes in ScreenSharing
@@ -8395,7 +8395,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             function userTeachersChildAdded(teacher) {
                 if (angular.isDefined(teacher)) {
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
-                        if (profile){
+                        if (profile) {
                             var zinkerzTeacher = profile && profile.teacherInfo && profile.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
                             teacher.zinkerzTeacher = zinkerzTeacher;
                             teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
@@ -8412,7 +8412,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                                 }
                             });
                         } else {
-                            $log.error('InvitationService: teacher profile not found: '+ angular.toJson(teacher));
+                            $log.error('InvitationService: teacher profile not found: ' + angular.toJson(teacher));
                         }
                     });
                 }
