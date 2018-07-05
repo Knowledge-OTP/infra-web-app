@@ -101,6 +101,7 @@
                                 LiveSessionSrv.unregisterFromCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
                                 CallsEventsSrv.unregisterToCurrUserCallStateChanges(listenToCallsStatus);
                             });
+
                         }
 
                         function getTranslations() {

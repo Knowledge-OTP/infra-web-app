@@ -156,6 +156,7 @@
                                 LiveSessionSrv.unregisterFromCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
                                 CallsEventsSrv.unregisterToCurrUserCallStateChanges(listenToCallsStatus);
                             });
+
                         }
 
                         function getTranslations() {
@@ -7970,7 +7971,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
 
                     function trackUserPresenceCB(snapshot) {
                         if (snapshot && snapshot.val()){
-                            const userId = Object.keys(snapshot.val())[0];
+                            const userId = snapshot.key;
                             const newStatus = snapshot.val();
                             $timeout(() => {
                                 angular.forEach(scope.myTeachers, function (teacher) {
@@ -20157,9 +20158,6 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "                        <md-list-item md-ink-ripple aria-label=\"{{'ZNK_HEADER.MY_PROFILE' | translate}}\" ng-click=\"vm.goToMyZinkerz('usercard/studentcard')\">\n" +
     "                            <div class=\"header-modal-item header-modal-item-uppercase links\" translate=\".MY_PROFILE\"></div>\n" +
     "                        </md-list-item>\n" +
-    "                        <md-list-item md-ink-ripple class=\"header-modal-item header-modal-item-uppercase links\">\n" +
-    "                          <span ng-click=\"vm.goToMyZinkerz('scheduling/main')\" translate=\".CALENDAR\"></span>\n" +
-    "                      </md-list-item>\n" +
     "                        <md-list-item md-ink-ripple>\n" +
     "                            <a ui-sref=\"app.faq\" class=\"header-modal-item header-modal-item-uppercase links\" translate=\".WHAT_IS_THE_THIS_TEST\">\n" +
     "                            </a>\n" +

@@ -131,7 +131,7 @@
 
                     function trackUserPresenceCB(snapshot) {
                         if (snapshot && snapshot.val()){
-                            const userId = Object.keys(snapshot.val())[0];
+                            const userId = snapshot.key;
                             const newStatus = snapshot.val();
                             $timeout(() => {
                                 angular.forEach(scope.myTeachers, function (teacher) {
