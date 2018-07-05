@@ -151,6 +151,7 @@
 
                             element.on('$destroy', () => {
                                 destroyTimer();
+                                stopTrackUserPresence();
                                 ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
                                 LiveSessionSrv.unregisterFromCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
                                 CallsEventsSrv.unregisterToCurrUserCallStateChanges(listenToCallsStatus);
@@ -225,6 +226,7 @@
                                     scope.d.shareScreenBtnsEnable = true;
                                     destroyTimer();
                                     endScreenSharing();
+                                    stopTrackUserPresence();
                                     deleteStudentHangoutsPath(liveSessionData.studentId);
                                     break;
                                 case scope.d.states.LIVE_SESSION:
@@ -273,7 +275,7 @@
                                 const email = educatorProfile.authEmail || educatorProfile.email;
                                 const hangoutsUri = educatorProfile.teacherInfo.hangoutsUri;
 
-                                return studentStorage.set(studentHangoutsPath, { email, hangoutsUri });
+                                return studentStorage.set(studentHangoutsPath, {email, hangoutsUri});
                             });
                         }
 
@@ -310,22 +312,27 @@
                                 });
                             }
                         }
+                        function trackUserPresenceCallBack(snapshot) {
+                            if (snapshot && snapshot.val()) {
+                                scope.d.currentUserPresenceStatus = snapshot.val();
+                            }
+                        }
 
                         function startTrackUserPresence() {
                             if (isStudent || isTeacher) {
                                 // Track other user presence
                                 const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
-                                PresenceService.startTrackUserPresence(uid, (newStatus, userId) => {
-                                    if (uid === userId) {
-                                        scope.d.currentUserPresenceStatus = newStatus;
-                                    }
-                                });
+                                PresenceService.startTrackUserPresence(uid, trackUserPresenceCallBack);
                             }
                             else {
                                 $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
                             }
                         }
 
+                        function stopTrackUserPresence() {
+                            const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
+                            PresenceService.stopTrackUserPresence(uid, trackUserPresenceCallBack);
+                        }
 
                         // Listen to status changes in ScreenSharing
                         function listenToScreenShareStatus(screenSharingStatus) {
@@ -7957,22 +7964,26 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                         }
                         startTrackTeachersPresence.isTracking = true;
                         angular.forEach(scope.myTeachers, function (teacher) {
-                            PresenceService.startTrackUserPresence(teacher.senderUid, trackUserPresenceCB.bind(null, teacher.senderUid));
+                            PresenceService.startTrackUserPresence(teacher.senderUid, trackUserPresenceCB);
                         });
                     }
 
-                    function trackUserPresenceCB(userId, newStatus) {
-                        $timeout(function () {
-                            angular.forEach(scope.myTeachers, function (teacher) {
-                                if (teacher.senderUid === userId) {
-                                    teacher.presence = newStatus;
-                                    teacher.callBtnData = angular.copy({
-                                        receiverId: teacher.senderUid,
-                                        isOffline: teacher.presence === PresenceService.userStatus.OFFLINE
-                                    });
-                                }
+                    function trackUserPresenceCB(snapshot) {
+                        if (snapshot && snapshot.val()){
+                            const userId = Object.keys(snapshot.val())[0];
+                            const newStatus = snapshot.val();
+                            $timeout(() => {
+                                angular.forEach(scope.myTeachers, function (teacher) {
+                                    if (teacher.senderUid === userId) {
+                                        teacher.presence = newStatus;
+                                        teacher.callBtnData = angular.copy({
+                                            receiverId: teacher.senderUid,
+                                            isOffline: teacher.presence === PresenceService.userStatus.OFFLINE
+                                        });
+                                    }
+                                });
                             });
-                        });
+                        }
                     }
 
                     scope.toggleDeleteTeacher = function () {
@@ -8022,12 +8033,14 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                     InvitationService.registerListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
                     InvitationService.registerListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
 
-                    var watcherDestroy = scope.$on('$destroy', function () {
+                    scope.$on('$destroy', function () {
                         // InvitationService.offListenerCB(InvitationService.listeners.USER_TEACHERS, invitationManagerMyTeachersCB);
                         // InvitationService.offListenerCB(InvitationService.listeners.NEW_INVITATIONS, newInvitationsCB);
                         // InvitationService.offListenerCB(InvitationService.listeners.PENDING_CONFIRMATIONS, pendingConfirmationsCB);
+                        angular.forEach(scope.myTeachers, function (teacher) {
+                            PresenceService.stopTrackUserPresence(teacher.senderUid, trackUserPresenceCB);
+                        });
 
-                        watcherDestroy();
                     });
                 }
             };
