@@ -322,7 +322,7 @@
             function userTeachersChildAdded(teacher) {
                 if (angular.isDefined(teacher)) {
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
-                        if (profile){
+                        if (profile) {
                             var zinkerzTeacher = profile && profile.teacherInfo && profile.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
                             teacher.zinkerzTeacher = zinkerzTeacher;
                             teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
@@ -339,7 +339,7 @@
                                 }
                             });
                         } else {
-                            $log.error('InvitationService: teacher profile not found: '+ angular.toJson(teacher));
+                            $log.error('InvitationService: teacher profile not found: ' + angular.toJson(teacher));
                         }
                     });
                 }

@@ -100,7 +100,6 @@
                                 LiveSessionSrv.unregisterFromCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
                                 CallsEventsSrv.unregisterToCurrUserCallStateChanges(listenToCallsStatus);
                             });
-
                         }
 
                         function getTranslations() {
@@ -261,10 +260,8 @@
                             if (isStudent || isTeacher) {
                                 // Track other user presence
                                 const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
-                                scope.$watch(() => {
-                                    return PresenceService.getUserStatusSync(uid);
-                                }, (newStatus) => {
-                                    if (angular.isDefined(newStatus) && scope.d.currentUserPresenceStatus !== newStatus) {
+                                PresenceService.startTrackUserPresence(uid, (newStatus, userId) => {
+                                    if (uid === userId) {
                                         scope.d.currentUserPresenceStatus = newStatus;
                                     }
                                 });
@@ -273,6 +270,7 @@
                                 $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
                             }
                         }
+
 
                         // Listen to status changes in ScreenSharing
                         function listenToScreenShareStatus(screenSharingStatus) {

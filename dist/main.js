@@ -155,7 +155,6 @@
                                 LiveSessionSrv.unregisterFromCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
                                 CallsEventsSrv.unregisterToCurrUserCallStateChanges(listenToCallsStatus);
                             });
-
                         }
 
                         function getTranslations() {
@@ -316,10 +315,8 @@
                             if (isStudent || isTeacher) {
                                 // Track other user presence
                                 const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
-                                scope.$watch(() => {
-                                    return PresenceService.getUserStatusSync(uid);
-                                }, (newStatus) => {
-                                    if (angular.isDefined(newStatus) && scope.d.currentUserPresenceStatus !== newStatus) {
+                                PresenceService.startTrackUserPresence(uid, (newStatus, userId) => {
+                                    if (uid === userId) {
                                         scope.d.currentUserPresenceStatus = newStatus;
                                     }
                                 });
@@ -328,6 +325,7 @@
                                 $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
                             }
                         }
+
 
                         // Listen to status changes in ScreenSharing
                         function listenToScreenShareStatus(screenSharingStatus) {
@@ -8395,7 +8393,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
             function userTeachersChildAdded(teacher) {
                 if (angular.isDefined(teacher)) {
                     UserProfileService.getProfileByUserId(teacher.senderUid).then(function (profile) {
-                        if (profile){
+                        if (profile) {
                             var zinkerzTeacher = profile && profile.teacherInfo && profile.teacherInfo.accountStatus === AccountStatusEnum.ACTIVE.enum;
                             teacher.zinkerzTeacher = zinkerzTeacher;
                             teacher.zinkerzTeacherSubject = profile.zinkerzTeacherSubject;
@@ -8412,7 +8410,7 @@ angular.module('znk.infra-web-app.infraWebAppZnkExercise').run(['$templateCache'
                                 }
                             });
                         } else {
-                            $log.error('InvitationService: teacher profile not found: '+ angular.toJson(teacher));
+                            $log.error('InvitationService: teacher profile not found: ' + angular.toJson(teacher));
                         }
                     });
                 }
