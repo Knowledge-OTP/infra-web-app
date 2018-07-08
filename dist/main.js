@@ -5154,13 +5154,11 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     return !!diagnostic.isComplete;
                 });
             };
-            workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
-                return workoutsDiagnosticFlowObjApi.getMarketingToefl().then(function (marketingObj) {
-                    return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
-                });
-            };
             workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
-                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                if(ENV.firebaseAppScopeName !== 'toefl_app'){
+                    return $q.resolve(null);
+                }
+                let marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.get(marketingPath).then(function (marketing) {
                         return marketing;
@@ -14064,7 +14062,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
-        this.$get = ["InfraConfigSrv", "StorageSrv", function (InfraConfigSrv, StorageSrv) {
+        this.$get = ["InfraConfigSrv", "StorageSrv", "ENV", "$q", function (InfraConfigSrv, StorageSrv, ENV, $q) {
             'ngInject';
 
             var self = this;
@@ -14161,6 +14159,9 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
             }
 
             onBoardingServiceObj.getMarketingToefl = function () {
+                if (ENV.firebaseAppScopeName !== 'toefl_app') {
+                    return $q.resolve(null);
+                }
                 var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.get(marketingPath).then(function (marketing) {
@@ -15475,6 +15476,9 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
                 }
             };
             self.getMarketingToefl = function () {
+                if(ENV.firebaseAppScopeName !== 'toefl_app'){
+                    return $q.resolve(null);
+                }
                 var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.get(marketingPath).then(function (marketing) {

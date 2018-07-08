@@ -404,13 +404,11 @@
                     return !!diagnostic.isComplete;
                 });
             };
-            workoutsDiagnosticFlowObjApi.getMarketingToeflByStatus = function (marketingStatus) {
-                return workoutsDiagnosticFlowObjApi.getMarketingToefl().then(function (marketingObj) {
-                    return !!marketingObj && !!marketingObj.status && marketingObj.status === marketingStatus;
-                });
-            };
             workoutsDiagnosticFlowObjApi.getMarketingToefl = function () {
-                var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
+                if(ENV.firebaseAppScopeName !== 'toefl_app'){
+                    return $q.resolve(null);
+                }
+                let marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.get(marketingPath).then(function (marketing) {
                         return marketing;

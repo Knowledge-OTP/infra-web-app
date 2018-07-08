@@ -50,6 +50,9 @@
                 }
             };
             self.getMarketingToefl = function () {
+                if(ENV.firebaseAppScopeName !== 'toefl_app'){
+                    return $q.resolve(null);
+                }
                 var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.get(marketingPath).then(function (marketing) {
