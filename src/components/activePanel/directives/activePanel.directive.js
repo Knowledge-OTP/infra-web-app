@@ -57,10 +57,12 @@
 
                             element.on('$destroy', () => {
                                 destroyTimer();
+                                stopTrackUserPresence();
                                 ScreenSharingSrv.unregisterFromCurrUserScreenSharingStateChanges(listenToScreenShareStatus);
                                 LiveSessionSrv.unregisterFromCurrUserLiveSessionStateChanges(listenToLiveSessionStatus);
                                 CallsEventsSrv.unregisterToCurrUserCallStateChanges(listenToCallsStatus);
                             });
+
                         }
 
                         function getTranslations() {
@@ -131,6 +133,7 @@
                                     scope.d.shareScreenBtnsEnable = true;
                                     destroyTimer();
                                     endScreenSharing();
+                                    stopTrackUserPresence();
                                     deleteStudentHangoutsPath(liveSessionData.studentId);
                                     break;
                                 case scope.d.states.LIVE_SESSION:
@@ -179,7 +182,7 @@
                                 const email = educatorProfile.authEmail || educatorProfile.email;
                                 const hangoutsUri = educatorProfile.teacherInfo.hangoutsUri;
 
-                                return studentStorage.set(studentHangoutsPath, { email, hangoutsUri });
+                                return studentStorage.set(studentHangoutsPath, {email, hangoutsUri});
                             });
                         }
 
@@ -216,22 +219,31 @@
                                 });
                             }
                         }
+                        function trackUserPresenceCallBack(snapshot) {
+                            const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
+                            if (snapshot && snapshot.val()) {
+                                const userId = snapshot.key;
+                                if (uid === userId) {
+                                    scope.d.currentUserPresenceStatus = snapshot.val();
+                                }
+                            }
+                        }
 
                         function startTrackUserPresence() {
                             if (isStudent || isTeacher) {
                                 // Track other user presence
                                 const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
-                                PresenceService.startTrackUserPresence(uid, (newStatus, userId) => {
-                                    if (uid === userId) {
-                                        scope.d.currentUserPresenceStatus = newStatus;
-                                    }
-                                });
+                                PresenceService.startTrackUserPresence(uid, trackUserPresenceCallBack);
                             }
                             else {
                                 $log.error('listenToLiveSessionStatus appContext is not compatible with this component: ', ENV.appContext);
                             }
                         }
 
+                        function stopTrackUserPresence() {
+                            const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
+                            PresenceService.stopTrackUserPresence(uid, trackUserPresenceCallBack);
+                        }
 
                         // Listen to status changes in ScreenSharing
                         function listenToScreenShareStatus(screenSharingStatus) {
