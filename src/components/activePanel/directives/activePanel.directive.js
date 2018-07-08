@@ -220,8 +220,12 @@
                             }
                         }
                         function trackUserPresenceCallBack(snapshot) {
+                            const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
                             if (snapshot && snapshot.val()) {
-                                scope.d.currentUserPresenceStatus = snapshot.val();
+                                const userId = snapshot.key;
+                                if (uid === userId) {
+                                    scope.d.currentUserPresenceStatus = snapshot.val();
+                                }
                             }
                         }
 
