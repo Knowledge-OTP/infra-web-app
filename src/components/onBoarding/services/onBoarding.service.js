@@ -3,7 +3,7 @@
 (function (angular) {
     'use strict';
     angular.module('znk.infra-web-app.onBoarding').provider('OnBoardingService', [function () {
-        this.$get = function (InfraConfigSrv, StorageSrv) {
+        this.$get = function (InfraConfigSrv, StorageSrv, ENV, $q) {
             'ngInject';
 
             var self = this;
@@ -100,6 +100,9 @@
             }
 
             onBoardingServiceObj.getMarketingToefl = function () {
+                if (ENV.firebaseAppScopeName !== 'toefl_app') {
+                    return $q.resolve(null);
+                }
                 var marketingPath = StorageSrv.variables.appUserSpacePath + `/marketing`;
                 return InfraConfigSrv.getStudentStorage().then(function (studentStorage) {
                     return studentStorage.get(marketingPath).then(function (marketing) {
