@@ -315,10 +315,12 @@
                         }
                         function trackUserPresenceCallBack(snapshot) {
                             const uid = isTeacher ? liveSessionData.studentId : liveSessionData.educatorId;
-                            if (snapshot && snapshot.val()) {
+                            if (snapshot) {
                                 const userId = snapshot.key;
-                                if (uid === userId) {
-                                    scope.d.currentUserPresenceStatus = snapshot.val();
+                                let newStatus = snapshot.val();
+                                newStatus = newStatus ? newStatus : PresenceService.userStatus.OFFLINE;
+                                if (uid === userId && scope.d.currentUserPresenceStatus !== newStatus) {
+                                    scope.d.currentUserPresenceStatus = newStatus;
                                 }
                             }
                         }
