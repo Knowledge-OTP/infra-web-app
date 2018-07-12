@@ -740,7 +740,9 @@
             this.updateLessonSummaryFromLiveSessionData  = (lessonSummary, liveSessionData) => {
                 lessonSummary.startTime = lessonSummary.startTime || liveSessionData.startTime;
                 lessonSummary.endTime = liveSessionData.endTime;
-                lessonSummary.liveSessions.push(liveSessionData.guid);
+                if (!lessonSummary.liveSessions.includes(liveSessionData.guid)) {
+                    lessonSummary.liveSessions.push(liveSessionData.guid);
+                }
                 return lessonSummary;
             };
 
