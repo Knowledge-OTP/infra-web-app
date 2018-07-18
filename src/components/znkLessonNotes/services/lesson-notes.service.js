@@ -99,7 +99,7 @@
             this.saveLessonSummary = (lessonSummary, sendEmailIndicators) => {
                 const saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
                 return $http.post(saveLessonSummaryApi, {lessonSummary, sendEmailIndicators})
-                    .then(lessonSummary => lessonSummary)
+                    .then(lessonSummary => lessonSummary.data)
                     .catch((err) => $log.error('saveLessonSummary: Failed to save lesson summary: ',
                         lessonSummary, ' Error: ', err));
             };

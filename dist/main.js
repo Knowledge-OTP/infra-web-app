@@ -10690,6 +10690,23 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                         .then((updatedLessons) => {
                             $log.debug('_updateLessonsStatusToAttended: Lessons status successfully updated.', JSON.stringify(updatedLessons));
                         });
+                    ZnkLessonNotesSrv.getLessonSummaryById(liveSessionData.lessonSummaryId).then(lessonSummary => {
+                        if (lessonSummary) {
+                            lessonSummary.startTime = liveSessionData.startTime;
+                            if (!lessonSummary.liveSessions.includes(liveSessionData.guid)) {
+                                lessonSummary.liveSessions.push(liveSessionData.guid);
+                            }
+                            ZnkLessonNotesSrv.saveLessonSummary(lessonSummary).then(updatedLessonSummary=> {
+                                $log.debug('_handelLiveSessionConfirmed: saveLessonSummary: LessonSummary successfully updated: ', updatedLessonSummary.id);
+                            }).catch(err => {
+                                $log.debug('_handelLiveSessionConfirmed: saveLessonSummary: Error updating: ', lessonSummary.id, ' Err: ', err);
+                            });
+                        } else {
+                            $log.debug('_handelLiveSessionConfirmed: No lessonSummary.');
+                        }
+                    }).catch(err => {
+                        $log.debug('_handelLiveSessionConfirmed: getLessonSummaryById Error: ', JSON.stringify(err));
+                    });
                     LiveSessionSrv.makeAutoCall(liveSessionData.studentId, liveSessionData.guid);
                 }
 
@@ -21099,7 +21116,9 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
             this.updateLessonSummaryFromLiveSessionData  = (lessonSummary, liveSessionData) => {
                 lessonSummary.startTime = lessonSummary.startTime || liveSessionData.startTime;
                 lessonSummary.endTime = liveSessionData.endTime;
-                lessonSummary.liveSessions.push(liveSessionData.guid);
+                if (!lessonSummary.liveSessions.includes(liveSessionData.guid)) {
+                    lessonSummary.liveSessions.push(liveSessionData.guid);
+                }
                 return lessonSummary;
             };
 
@@ -21235,7 +21254,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
             this.saveLessonSummary = (lessonSummary, sendEmailIndicators) => {
                 const saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
                 return $http.post(saveLessonSummaryApi, {lessonSummary, sendEmailIndicators})
-                    .then(lessonSummary => lessonSummary)
+                    .then(lessonSummary => lessonSummary.data)
                     .catch((err) => $log.error('saveLessonSummary: Failed to save lesson summary: ',
                         lessonSummary, ' Error: ', err));
             };
