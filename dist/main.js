@@ -20724,7 +20724,7 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
                 this.saveLessonSummary = (sendEmailIndicators) => {
                     $log.debug('saving lesson & lessonSummary: ', this.lessonSummary, this.lesson);
                     ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary, this.lesson, sendEmailIndicators).then((saveLessonSummaryResponse) => {
-                        this.lesson = saveLessonSummaryResponse.lesson;
+                        this.lesson = saveLessonSummaryResponse.lesson ? saveLessonSummaryResponse.lesson : this.lesson;
                         this.isLessonUpdateNeeded = false;
                         this.lessonSummary = saveLessonSummaryResponse.lessonSummary;
                         $log.debug('lessonNotesPopup saveLessonSummary:  updatedLessonSummary: ', saveLessonSummaryResponse.lessonSummary);
