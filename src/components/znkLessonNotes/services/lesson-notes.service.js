@@ -96,10 +96,10 @@
                     studentFeedback, ' Error: ', err));
         };
 
-            this.saveLessonSummary = (lessonSummary, sendEmailIndicators) => {
+            this.saveLessonSummary = (lessonSummary, lesson, sendEmailIndicators) => {
                 const saveLessonSummaryApi = `${lessonApi}/saveLessonSummary`;
-                return $http.post(saveLessonSummaryApi, {lessonSummary, sendEmailIndicators})
-                    .then(lessonSummary => lessonSummary.data)
+                return $http.post(saveLessonSummaryApi, {lessonSummary, lesson, sendEmailIndicators})
+                    .then(lessonSummaryResponse => lessonSummaryResponse.data)
                     .catch((err) => $log.error('saveLessonSummary: Failed to save lesson summary: ',
                         lessonSummary, ' Error: ', err));
             };

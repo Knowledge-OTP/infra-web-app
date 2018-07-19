@@ -62,21 +62,12 @@
                 };
 
                 this.saveLessonSummary = (sendEmailIndicators) => {
-                    const savePromArr = [];
-                    if (this.isLessonUpdateNeeded) {
-                        $log.debug('Saving lesson: ', this.lesson);
-                        savePromArr.push(ZnkLessonNotesSrv.updateLesson(this.lesson));
-                    } else {
-                        savePromArr.push($q.resolve(this.lesson));
-                    }
-                    $log.debug('saving lessonSummary : ', this.lessonSummary);
-                    savePromArr.push(ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary, sendEmailIndicators));
-
-                    $q.all(savePromArr).then(([lesson, lessonSummary]) => {
-                        this.lesson = lesson;
+                    $log.debug('saving lesson & lessonSummary: ', this.lessonSummary, this.lesson);
+                    ZnkLessonNotesSrv.saveLessonSummary(this.lessonSummary, this.lesson, sendEmailIndicators).then((saveLessonSummaryResponse) => {
+                        this.lesson = saveLessonSummaryResponse.lesson;
                         this.isLessonUpdateNeeded = false;
-                        this.lessonSummary = lessonSummary;
-                        $log.debug('lessonNotesPopup saveLessonSummary:  updatedLessonSummary: ', lessonSummary);
+                        this.lessonSummary = saveLessonSummaryResponse.lessonSummary;
+                        $log.debug('lessonNotesPopup saveLessonSummary:  updatedLessonSummary: ', saveLessonSummaryResponse.lessonSummary);
                         this.showSpinner = false;
                         let translationsProm = $translate('LESSON_NOTES.LESSON_NOTES_POPUP.LESSON_NOTES_SAVED');
                         translationsProm.then(message => {
