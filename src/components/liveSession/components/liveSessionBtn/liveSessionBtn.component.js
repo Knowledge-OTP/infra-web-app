@@ -69,10 +69,10 @@
 
                 // click on start session execute this fn
                 this.showStartSessionPopup = () => {
-                    if (!this.isDiagnosticCompleted) {
-                        $log.debug('showStartSessionPopup: Student didn\'t complete Diagnostic test');
-                        return LiveSessionUiSrv.showIncompleteDiagnostic(this.student.name);
-                    }
+                    // if (!this.isDiagnosticCompleted) {
+                    //     $log.debug('showStartSessionPopup: Student didn\'t complete Diagnostic test');
+                    //     return LiveSessionUiSrv.showIncompleteDiagnostic(this.student.name);
+                    // }
 
                     // show wait popup to the educator while dark lunch check and getting the schedule lessons
                     LiveSessionUiSrv.showWaitPopUp();
