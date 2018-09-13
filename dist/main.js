@@ -10659,13 +10659,21 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                         if (isDarkFeaturesValid) {
                             if (liveSessionData.studentId === currUid) {
                                 LiveSessionUiSrv.showStudentConfirmationPopUp()
-                                    .then(() => {
-                                        LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                    .then((resolveReason) => {
+                                        // Making sure the user actually clicked "Accept" / "JOIN" and we did not close the popup from the code automatically
+                                        if (resolveReason === 'CANCEL') {
+                                            LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
+                                        }
                                     }, () => {
                                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                                     });
                             } else {
-                                LiveSessionUiSrv.showEducatorPendingPopUp();
+                                LiveSessionUiSrv.showEducatorPendingPopUp().then((resolveReason) => {
+                                    // Making sure the user actually clicked "CANCEL" (only button in this popup) and we did not close the popup from the code automatically
+                                    if (resolveReason === 'CANCEL') {
+                                        LiveSessionSrv.endLiveSession(liveSessionData.guid);
+                                    }
+                                });
                             }
                         } else {
                             if (liveSessionData.educatorId === currUid) {
