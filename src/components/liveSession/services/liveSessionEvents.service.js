@@ -32,8 +32,8 @@
                             if (liveSessionData.studentId === currUid) {
                                 LiveSessionUiSrv.showStudentConfirmationPopUp()
                                     .then((resolveReason) => {
-                                        // Making sure the user actually clicked "Accept" / "JOIN" and we did not close the popup from the code automatically
-                                        if (resolveReason === 'CANCEL') {
+                                        // Making sure the user actually clicked "JOIN" and we did not close the popup from the code automatically
+                                        if (resolveReason && resolveReason.toLowerCase() === 'join') {
                                             LiveSessionSrv.confirmLiveSession(liveSessionData.guid);
                                         }
                                     }, () => {
@@ -42,7 +42,7 @@
                             } else {
                                 LiveSessionUiSrv.showEducatorPendingPopUp().then((resolveReason) => {
                                     // Making sure the user actually clicked "CANCEL" (only button in this popup) and we did not close the popup from the code automatically
-                                    if (resolveReason === 'CANCEL') {
+                                    if (resolveReason && resolveReason.toLowerCase() === 'cancel') {
                                         LiveSessionSrv.endLiveSession(liveSessionData.guid);
                                     }
                                 });
