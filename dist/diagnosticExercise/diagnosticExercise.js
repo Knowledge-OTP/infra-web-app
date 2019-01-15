@@ -1486,46 +1486,46 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    </div>\n" +
     "\n" +
     "    <main class=\"content-wrapper\">\n" +
-    "        <div class=\"quicksand-25-b title\" translate=\"LIVING_SO_SOON_POPUP.TITLE\"></div>\n" +
-    "        <div class=\"quicksand-16-n sub-title\" translate=\"LIVING_SO_SOON_POPUP.SUB_TITLE\"></div>\n" +
+    "        <div class=\"quicksand-25-b title\" translate=\"LEAVING_SO_SOON_POPUP.TITLE\"></div>\n" +
+    "        <div class=\"quicksand-16-n sub-title\" translate=\"LEAVING_SO_SOON_POPUP.SUB_TITLE\"></div>\n" +
     "\n" +
     "        <div class=\"btn-group\">\n" +
     "            <button type=\"button\" id=\"btnNum1\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum1'}\"\n" +
     "                    ng-click=\"vm.setNotifyTime(10, 'min', 'btnNum1')\">\n" +
     "                <div class=\"quicksand-25-b\">10</div>\n" +
-    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LEAVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
     "            </button>\n" +
     "            <button type=\"button\" id=\"btnNum2\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum2'}\"\n" +
     "                    ng-click=\"vm.setNotifyTime(30, 'min', 'btnNum2')\">\n" +
     "                <div class=\"quicksand-25-b\">30</div>\n" +
-    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LEAVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
     "            </button>\n" +
     "            <button type=\"button\" id=\"btnNum3\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum3'}\"\n" +
     "                    ng-click=\"vm.setNotifyTime(1, 'hour', 'btnNum3')\">\n" +
     "                <div class=\"quicksand-25-b\">1</div>\n" +
-    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOUR' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LEAVING_SO_SOON_POPUP.HOUR' | translate}}</div>\n" +
     "            </button>\n" +
     "            <button type=\"button\" id=\"btnNum4\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum4'}\"\n" +
     "                    ng-click=\"vm.setNotifyTime(5, 'hour', 'btnNum4')\">\n" +
     "                <div class=\"quicksand-25-b\">5</div>\n" +
-    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LEAVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
     "            </button>\n" +
     "            <button type=\"button\" id=\"btnNum5\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum5'}\"\n" +
     "                    ng-click=\"vm.setNotifyTime(24, 'hour', 'btnNum5')\">\n" +
     "                <div class=\"quicksand-25-b\">24</div>\n" +
-    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LEAVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
     "            </button>\n" +
     "        </div>\n" +
     "        <div class=\"input-wrapper\">\n" +
     "            <input type=\"email\" name=\"email\"\n" +
     "                   ng-change=\"vm.emailErr = false\"\n" +
-    "                   placeholder=\"{{'LIVING_SO_SOON_POPUP.EMAIL' | translate}}\"\n" +
+    "                   placeholder=\"{{'LEAVING_SO_SOON_POPUP.EMAIL' | translate}}\"\n" +
     "                   ng-model=\"vm.userEmail\">\n" +
-    "            <button type=\"button\" class=\"btn-type-1 save-btn\" translate=\"LIVING_SO_SOON_POPUP.GO\"\n" +
+    "            <button type=\"button\" class=\"btn-type-1 save-btn\" translate=\"LEAVING_SO_SOON_POPUP.GO\"\n" +
     "                    ng-click=\"vm.sendReminder(vm.userTimeout, vm.userEmail)\">\n" +
     "            </button>\n" +
     "        </div>\n" +
-    "        <div class=\"error-msg\" ng-if=\"vm.emailErr\">{{'LIVING_SO_SOON_POPUP.EMAIL_ERR' | translate}}</div>\n" +
+    "        <div class=\"error-msg\" ng-if=\"vm.emailErr\">{{'LEAVING_SO_SOON_POPUP.EMAIL_ERR' | translate}}</div>\n" +
     "    </main>\n" +
     "</div>\n" +
     "");

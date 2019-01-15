@@ -451,7 +451,7 @@
     "WORKOUTS_DIAGNOSTIC_PRE_SUMMARY": {
         "READY": "Ready to see your scores?"
     },
-    "LIVING_SO_SOON_POPUP" : {
+    "LEAVING_SO_SOON_POPUP" : {
         "TITLE": "Living so Soon?",
         "SUB_TITLE": "We know that you're busy, you can set a reminder \r\nand we'll notify you to complete the diagnostic test",
         "MIN": "min",
