@@ -5289,46 +5289,46 @@ angular.module('znk.infra-web-app.diagnosticExercise').run(['$templateCache', fu
     "    </div>\n" +
     "\n" +
     "    <main class=\"content-wrapper\">\n" +
-    "        <div class=\"quicksand-25-b title\" translate=\"LIVING_SO_SOON_POPUP.TITLE\"></div>\n" +
-    "        <div class=\"quicksand-16-n sub-title\" translate=\"LIVING_SO_SOON_POPUP.SUB_TITLE\"></div>\n" +
+    "        <div class=\"quicksand-25-b title\" translate=\"LEAVING_SO_SOON_POPUP.TITLE\"></div>\n" +
+    "        <div class=\"quicksand-16-n sub-title\" translate=\"LEAVING_SO_SOON_POPUP.SUB_TITLE\"></div>\n" +
     "\n" +
     "        <div class=\"btn-group\">\n" +
     "            <button type=\"button\" id=\"btnNum1\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum1'}\"\n" +
     "                    ng-click=\"vm.setNotifyTime(10, 'min', 'btnNum1')\">\n" +
     "                <div class=\"quicksand-25-b\">10</div>\n" +
-    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LEAVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
     "            </button>\n" +
     "            <button type=\"button\" id=\"btnNum2\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum2'}\"\n" +
     "                    ng-click=\"vm.setNotifyTime(30, 'min', 'btnNum2')\">\n" +
     "                <div class=\"quicksand-25-b\">30</div>\n" +
-    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LEAVING_SO_SOON_POPUP.MIN' | translate}}</div>\n" +
     "            </button>\n" +
     "            <button type=\"button\" id=\"btnNum3\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum3'}\"\n" +
     "                    ng-click=\"vm.setNotifyTime(1, 'hour', 'btnNum3')\">\n" +
     "                <div class=\"quicksand-25-b\">1</div>\n" +
-    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOUR' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LEAVING_SO_SOON_POPUP.HOUR' | translate}}</div>\n" +
     "            </button>\n" +
     "            <button type=\"button\" id=\"btnNum4\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum4'}\"\n" +
     "                    ng-click=\"vm.setNotifyTime(5, 'hour', 'btnNum4')\">\n" +
     "                <div class=\"quicksand-25-b\">5</div>\n" +
-    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LEAVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
     "            </button>\n" +
     "            <button type=\"button\" id=\"btnNum5\" class=\"btn-type-1\" ng-class=\"{'selected': vm.selectedBtnTimeoutElm === 'btnNum5'}\"\n" +
     "                    ng-click=\"vm.setNotifyTime(24, 'hour', 'btnNum5')\">\n" +
     "                <div class=\"quicksand-25-b\">24</div>\n" +
-    "                <div class=\"quicksand-16-n timeType\">{{'LIVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
+    "                <div class=\"quicksand-16-n timeType\">{{'LEAVING_SO_SOON_POPUP.HOURS' | translate}}</div>\n" +
     "            </button>\n" +
     "        </div>\n" +
     "        <div class=\"input-wrapper\">\n" +
     "            <input type=\"email\" name=\"email\"\n" +
     "                   ng-change=\"vm.emailErr = false\"\n" +
-    "                   placeholder=\"{{'LIVING_SO_SOON_POPUP.EMAIL' | translate}}\"\n" +
+    "                   placeholder=\"{{'LEAVING_SO_SOON_POPUP.EMAIL' | translate}}\"\n" +
     "                   ng-model=\"vm.userEmail\">\n" +
-    "            <button type=\"button\" class=\"btn-type-1 save-btn\" translate=\"LIVING_SO_SOON_POPUP.GO\"\n" +
+    "            <button type=\"button\" class=\"btn-type-1 save-btn\" translate=\"LEAVING_SO_SOON_POPUP.GO\"\n" +
     "                    ng-click=\"vm.sendReminder(vm.userTimeout, vm.userEmail)\">\n" +
     "            </button>\n" +
     "        </div>\n" +
-    "        <div class=\"error-msg\" ng-if=\"vm.emailErr\">{{'LIVING_SO_SOON_POPUP.EMAIL_ERR' | translate}}</div>\n" +
+    "        <div class=\"error-msg\" ng-if=\"vm.emailErr\">{{'LEAVING_SO_SOON_POPUP.EMAIL_ERR' | translate}}</div>\n" +
     "    </main>\n" +
     "</div>\n" +
     "");
@@ -19981,6 +19981,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 ActivePanelSrv.loadActivePanel();
                 vm.expandIcon = 'expand_more';
                 vm.showheaderlinks = false;
+                vm.logoRedirect = false;
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
                 vm.showMyProfile = MyProfileSrv.showMyProfile;
@@ -20010,6 +20011,7 @@ angular.module('znk.infra-web-app.znkExerciseStatesUtility').run(['$templateCach
                 });
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     vm.showheaderlinks = !(marketingObj && marketingObj.status && marketingObj.status !== 7);
+                    vm.logoRedirect = !(marketingObj && marketingObj.status && marketingObj.status !== 7);
                 });
                 $scope.$watch(function () {
                     return vm.purchaseData;
@@ -20137,8 +20139,10 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
     "        <div class=\"znkHeader-app-logo-wrap\">\n" +
-    "            <svg-icon class=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\" name=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\" ui-sref=\"app.workouts.roadmap\"\n" +
+    "            <svg-icon ng-if=\"vm.logoRedirect\" class=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\" name=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\" ui-sref=\"app.workouts.roadmap\"\n" +
     "                ui-sref-opts=\"{reload: true}\">\n" +
+    "            </svg-icon>\n" +
+    "            <svg-icon ng-if=\"!vm.logoRedirect\" class=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\" name=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\">\n" +
     "            </svg-icon>\n" +
     "        </div>\n" +
     "\n" +

@@ -43,6 +43,7 @@
                 ActivePanelSrv.loadActivePanel();
                 vm.expandIcon = 'expand_more';
                 vm.showheaderlinks = false;
+                vm.logoRedirect = false;
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
                 vm.showMyProfile = MyProfileSrv.showMyProfile;
@@ -72,6 +73,7 @@
                 });
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     vm.showheaderlinks = !(marketingObj && marketingObj.status && marketingObj.status !== 7);
+                    vm.logoRedirect = !(marketingObj && marketingObj.status && marketingObj.status !== 7);
                 });
                 $scope.$watch(function () {
                     return vm.purchaseData;
@@ -199,8 +201,10 @@ angular.module('znk.infra-web-app.znkHeader').run(['$templateCache', function ($
     "<div class=\"app-header\" translate-namespace=\"ZNK_HEADER\">\n" +
     "    <div class=\"main-content-header\" layout=\"row\" layout-align=\"start start\">\n" +
     "        <div class=\"znkHeader-app-logo-wrap\">\n" +
-    "            <svg-icon class=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\" name=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\" ui-sref=\"app.workouts.roadmap\"\n" +
+    "            <svg-icon ng-if=\"vm.logoRedirect\" class=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\" name=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\" ui-sref=\"app.workouts.roadmap\"\n" +
     "                ui-sref-opts=\"{reload: true}\">\n" +
+    "            </svg-icon>\n" +
+    "            <svg-icon ng-if=\"!vm.logoRedirect\" class=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\" name=\"{{'ZNK_HEADER.APP_LOGO' | translate}}\">\n" +
     "            </svg-icon>\n" +
     "        </div>\n" +
     "\n" +
