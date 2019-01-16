@@ -15,6 +15,7 @@
                 ActivePanelSrv.loadActivePanel();
                 vm.expandIcon = 'expand_more';
                 vm.showheaderlinks = false;
+                vm.logoRedirect = false;
                 vm.additionalItems = znkHeaderSrv.getAdditionalItems();
                 vm.showPurchaseDialog = purchaseService.showPurchaseDialog;
                 vm.showMyProfile = MyProfileSrv.showMyProfile;
@@ -44,6 +45,7 @@
                 });
                 OnBoardingService.getMarketingToefl().then(function (marketingObj) {
                     vm.showheaderlinks = !(marketingObj && marketingObj.status && marketingObj.status !== 7);
+                    vm.logoRedirect = !(marketingObj && marketingObj.status && marketingObj.status !== 7);
                 });
                 $scope.$watch(function () {
                     return vm.purchaseData;
