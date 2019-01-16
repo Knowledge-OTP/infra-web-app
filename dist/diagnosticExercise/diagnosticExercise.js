@@ -680,6 +680,8 @@
                                                     selectedNum = 1;
                                                 }
                                                 selectedStatus = selectedNum ? MarketingStatusEnum.GET_EMAIL.enum : MarketingStatusEnum.PRE_PURCHASE.enum;
+                                                var statusMsg = selectedNum ? 'Email_Path' : 'No_Email_Path';
+                                                WorkoutsDiagnosticFlow.sendEvent('diagnostic', statusMsg, 'click', true);
                                                 WorkoutsDiagnosticFlow.setMarketingToeflStatusAndAbTest(selectedNum, selectedStatus).then(function () {
                                                     $log.debug('WorkoutsDiagnosticExerciseController setMarketingToeflAbTestAndStatus: done');
                                                     _goToCurrentState(true);
