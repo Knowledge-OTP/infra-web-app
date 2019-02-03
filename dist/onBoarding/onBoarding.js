@@ -459,7 +459,7 @@
                     });
                 }
                 if (isFb && fbq) {
-                    fbq('track', eventAction);
+                    fbq('trackCustom', eventAction);
 
                 }
             };

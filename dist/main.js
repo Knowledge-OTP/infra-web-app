@@ -5139,7 +5139,7 @@ angular.module('znk.infra-web-app.diagnostic').run(['$templateCache', function (
                     });
                 }
                 if (isFb && fbq) {
-                    fbq('track', eventAction);
+                    fbq('trackCustom', eventAction);
 
                 }
             };
@@ -14183,7 +14183,7 @@ angular.module('znk.infra-web-app.notification').run(['$templateCache', function
                     });
                 }
                 if (isFb && fbq) {
-                    fbq('track', eventAction);
+                    fbq('trackCustom', eventAction);
 
                 }
             };
@@ -15518,7 +15518,7 @@ angular.module('znk.infra-web-app.promoCode').run(['$templateCache', function ($
                     eventLabel: 'Toefl Campaign',
                 });
                 if (isFb && fbq) {
-                    fbq('track', eventAction);
+                    fbq('trackCustom', eventAction);
 
                 }
             };
