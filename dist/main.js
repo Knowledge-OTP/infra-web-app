@@ -10774,7 +10774,7 @@ angular.module('znk.infra-web-app.liveLessons').run(['$templateCache', function 
                                         scheduledLesson.lessonSummaryId = scheduledLesson.lessonSummaryId || lessonSummary.id;
                                         let promToReturn;
                                         if (liveSessionData.educatorId === currUid) {
-                                            promToReturn = ZnkLessonNotesUiSrv.openLessonNotesPopup(scheduledLesson, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
+                                            //promToReturn = ZnkLessonNotesUiSrv.openLessonNotesPopup(scheduledLesson, lessonSummary, UserTypeContextEnum.EDUCATOR.enum);
                                         } else {
                                             promToReturn = ZnkLessonNotesUiSrv.openLessonRatingPopup(scheduledLesson, lessonSummary);
                                         }
